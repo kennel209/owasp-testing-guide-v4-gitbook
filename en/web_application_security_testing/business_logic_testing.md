@@ -49,47 +49,47 @@ Every application has a different business process, application specific logic a
 
 **Business Logic exploits can be broken into the following categories**:
 
-[Test business logic data validation (OTG-BUSLOGIC-001)](web_application_security_testing/test_business_logic_data_validation_otg-buslogic-001.md)
+[Test business logic data validation (OTG-BUSLOGIC-001)](./test_business_logic_data_validation_otg-buslogic-001.html)
 
 In business logic data validation testing, we verify that the application does not allow users to insert “unvalidated” data into the system/application. This is important because without this safeguard attackers may be able to insert “unvalidated” data/information into the application/system at “handoff points” where the application/system believes that the data/information is “good” and has been valid since the “entry points” performed data validation as part of the business logic workflow.
 
 
-[Test Ability to forge requests (OTG-BUSLOGIC-002)](web_application_security_testing/test_ability_to_forge_requests_otg-buslogic-002.md)
+[Test Ability to forge requests (OTG-BUSLOGIC-002)](./test_ability_to_forge_requests_otg-buslogic-002.html)
 
 In forged and predictive parameter request testing, we verify that the application does not allow users to submit or alter data to any component of the system that they should not have access to, are accessing at that particular time or in that particular manner. This is important because without this safeguard attackers may be able to “fool/trick” the application into letting them into sections of thwe application of system that they should not be allowed in at that particular time, thus circumventing the applications business logic workflow.
 
 
-[Test Integrity Checks (OTG-BUSLOGIC-003)](web_application_security_testing/test_integrity_checks_otg-buslogic-003.md)
+[Test Integrity Checks (OTG-BUSLOGIC-003)](./test_integrity_checks_otg-buslogic-003.html)
 
 In integrity check and tamper evidence testing, we verify that the application does not allow users to destroy the integrity of any part of the system or its data. This is important because without these safe guards attackers may break the business logic workflow and change of compromise the application/system data or cover up actions by altering information including log files.
 
 
-[Test for Process Timing (OTG-BUSLOGIC-004)](web_application_security_testing/test_for_process_timing_otg-buslogic-004.md)
+[Test for Process Timing (OTG-BUSLOGIC-004)](./test_for_process_timing_otg-buslogic-004.html)
 
 In process timing testing, we verify that the application does not allow users to manipulate a system or guess its behavior based on input or output timing. This is important because without this safeguard in place attackers may be able to monitor processing time and determine outputs based on timing, or circumvent the application’s business logic by not completing transactions or actions in a timely manner.
 
 
-[Test Number of Times a Function Can be Used Limits (OTG-BUSLOGIC-005)](web_application_security_testing/test_number_of_times_a_function_can_be_used_limits_otg-buslogic-005.md)
+[Test Number of Times a Function Can be Used Limits (OTG-BUSLOGIC-005)](./test_number_of_times_a_function_can_be_used_limits_otg-buslogic-005.html)
 
 In function limit testing, we verify that the application does not allow users to exercise portions of the application or its functions more times than required by the business logic workflow. This is important because without this safeguard in place attackers may be able to use a function or portion of the application more times than permissible per the business logic to gain additional benefits.
 
 
-[Testing for the Circumvention of Work Flows (OTG-BUSLOGIC-006)](web_application_security_testing/testing_for_the_circumvention_of_work_flows_otg-buslogic-006.md)
+[Testing for the Circumvention of Work Flows (OTG-BUSLOGIC-006)](./testing_for_the_circumvention_of_work_flows_otg-buslogic-006.html)
 
 In circumventing workflow and bypassing correct sequence testing, we verify that the application does not allow users to perform actions outside of the “approved/required” business process flow. This is important because without this safeguard in place attackers may be able to bypass or circumvent workflows and “checks” allowing them to prematurely enter or skip “required” sections of the application potentially allowing the action/transaction to be completed without successfully completing the entire business process, leaving the system with incomplete backend tracking information.
 
 
-[Test Defenses Against Application Mis-use (OTG-BUSLOGIC-007)](web_application_security_testing/test_defenses_against_application_mis-use_otg-buslogic-007.md)
+[Test Defenses Against Application Mis-use (OTG-BUSLOGIC-007)](./test_defenses_against_application_mis-use_otg-buslogic-007.html)
 
 In application mis-use testing, we verify that the application does not allow users to manipulate the application in an unintended manner.
 
 
-[Test Upload of Unexpected File Types (OTG-BUSLOGIC-008)](web_application_security_testing/test_upload_of_unexpected_file_types_otg-buslogic-008.md)
+[Test Upload of Unexpected File Types (OTG-BUSLOGIC-008)](./test_upload_of_unexpected_file_types_otg-buslogic-008.html)
 
 In unexpected file upload testing, we verify that the application does not allow users to upload file types that the system is not expecting or wanted per the business logic requirements. This is important because without these safeguards in place attackers may be able to submit unexpected files such as .exe or .php that could be saved to the system and then executed against the application or system.
 
 
-[Test Upload of Malicious Files (OTG-BUSLOGIC-009)](web_application_security_testing/test_upload_of_malicious_files_otg-buslogic-009.md)
+[Test Upload of Malicious Files (OTG-BUSLOGIC-009)](./test_upload_of_malicious_files_otg-buslogic-009.html)
 
 In malicious file upload testing, we verify that the application does not allow users to upload files to the system that are malicious or potentially malicious to the system security. This is important because without these safeguards in place attackers may be able to upload files to the system that may spread viruses, malware or even exploits such as shellcode when executed.
 
