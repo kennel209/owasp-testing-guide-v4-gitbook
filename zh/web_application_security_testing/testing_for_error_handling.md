@@ -1,4 +1,4 @@
-# Testing for Error Handling
+# 错误处理测试
 
-* [Analysis of Error Codes (OTG-ERR-001)](./analysis_of_error_codes_otg-err-001.html)
-* [Analysis of Stack Traces (OTG-ERR-002)](./analysis_of_stack_traces_otg-err-002.html)
+* [错误码分析 (OTG-ERR-001)](./analysis_of_error_codes_otg-err-001.html)
+* [栈追踪分析 (OTG-ERR-002)](./analysis_of_stack_traces_otg-err-002.html)

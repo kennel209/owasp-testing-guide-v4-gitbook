@@ -1,4 +1,4 @@
-# Session Management Testing
+# 会话管理测试
 
 
 
@@ -14,11 +14,11 @@ There are a number of ways in which a web application may interact with a user. 
 This chapter covers the following topics:
 <br>
 
-* [Testing for Bypassing Session Management Schema (OTG-SESS-001)](./testing_for_bypassing_session_management_schema_otg-sess-001.html)
-* [Testing for Cookies attributes (OTG-SESS-002)](./testing_for_cookies_attributes_otg-sess-002.html)
-* [Testing for Session Fixation (OTG-SESS-003)](./testing_for_session_fixation_otg-sess-003.html)
-* [Testing for Exposed Session Variables (OTG-SESS-004)](./testing_for_exposed_session_variables_otg-sess-004.html)
-* [Testing for Cross Site Request Forgery (CSRF) (OTG-SESS-005)](./testing_for_cross_site_request_forgery_csrf_otg-sess-005.html)
-* [Testing for logout functionality (OTG-SESS-006)](./testing_for_logout_functionality_otg-sess-006.html)
-* [Test Session Timeout (OTG-SESS-007)](./test_session_timeout_otg-sess-007.html)
-* [Testing for Session puzzling (OTG-SESS-008)](./testing_for_session_puzzling_otg-sess-008.html)
+* [会话管理绕过测试 (OTG-SESS-001)](./testing_for_bypassing_session_management_schema_otg-sess-001.html)
+* [Cookies属性测试 (OTG-SESS-002)](./testing_for_cookies_attributes_otg-sess-002.html)
+* [会话固定测试 (OTG-SESS-003)](./testing_for_session_fixation_otg-sess-003.html)
+* [会话令牌泄露测试 (OTG-SESS-004)](./testing_for_exposed_session_variables_otg-sess-004.html)
+* [跨站点请求伪造（CSRF）测试 (OTG-SESS-005)](./testing_for_cross_site_request_forgery_csrf_otg-sess-005.html)
+* [登出功能测试 (OTG-SESS-006)](./testing_for_logout_functionality_otg-sess-006.html)
+* [会话超时测试 (OTG-SESS-007)](./test_session_timeout_otg-sess-007.html)
+* [会话令牌重载测试 (OTG-SESS-008)](./testing_for_session_puzzling_otg-sess-008.html)
