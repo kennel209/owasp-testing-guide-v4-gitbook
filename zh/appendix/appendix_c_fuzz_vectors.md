@@ -1,30 +1,30 @@
-# Appendix C: Fuzz Vectors
+# 附录 C: 模糊测试向量
 
 
-The following are fuzzing vectors which can be used with [WebScarab](https://www.owasp.org/index.php/WebScarab), [JBroFuzz](https://www.owasp.org/index.php/JBroFuzz), [WSFuzzer](https://www.owasp.org/index.php/WSFuzzer), [ZAP](https://www.owasp.org/index.php/ZAP) or another fuzzer.
-Fuzzing is the "kitchen sink" approach to testing the response of an application to parameter manipulation. Generally one looks for error conditions that are generated in an application as a result of fuzzing. This is the simple part of the discovery phase. Once an error has been discovered identifying and exploiting a potential vulnerability is where skill is required.
+下面是可以用于[WebScarab](https://www.owasp.org/index.php/WebScarab), [JBroFuzz](https://www.owasp.org/index.php/JBroFuzz), [WSFuzzer](https://www.owasp.org/index.php/WSFuzzer), [ZAP](https://www.owasp.org/index.php/ZAP)或者其它漏洞检测工具的漏洞检测向量。
+漏洞检测是一种"混合情况"的方法，用来测试参数被操作时应用程序的反应。一般来说，我们寻找一个应用程序产生的错误情况，来作为漏洞检测的结果。这是发现阶段最简单的部分。一旦一个错误被发现，指出它并利用一个潜在的漏洞就需要技术了。
 
 
-### Fuzz Categories
+### 模糊测试分类
 
-In the case of stateless network protocol fuzzing (like HTTP(S)) two broad categories exist:
+在无状态的网络协议（比如HTTP（S））中存在两大类别：
 
-* Recursive fuzzing
-* Replacive fuzzing
-
-
-We examine and define each category in the sub-sections that follow.
+* 递归漏洞检测
+* 可替换漏洞检测
 
 
-#### Recursive fuzzing
+我们在下面的子章节中分析和定义每种类别。
 
-Recursive fuzzing can be defined as the process of fuzzing a part of a request by iterating through all the possible combinations of a set alphabet. Consider the case of:
+
+#### 递归漏洞检测
+
+递归漏洞检测可以被定义为检测一个字母表中的所有可能组合构成的请求的过程。考虑这个例子：
 
 ```
 http://www.example.com/8302fa3b
 ```
 
-Selecting "8302fa3b" as a part of the request to be fuzzed against the set hexadecimal alphabet (i.e. {0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f}) falls under the category of recursive fuzzing. This would generate a total of 16^8 requests of the form:
+选择`8302fa3b`作为在例如从`{0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f}`这样的16进制数字符集中构成的请求的一部分来进行针对检测。这将产生总共16^8个如下格式的请求：
 
 ```
 http://www.example.com/00000000
@@ -34,31 +34,31 @@ http://www.example.com/11000fff
 http://www.example.com/ffffffff
 ```
 
-#### Replacive fuzzing
+#### 可替换漏洞检测
 
-Replacive fuzzing can be defined as the process of fuzzing part of a request by means of replacing it with a set value. This value is known as a fuzz vector. In the case of:
+可替换漏洞检测可以被定义为通过替换值对部分请求进行检测的过程。这个值我们称为漏洞检测向量。比如下面的例子：
 
 ```
 http://www.example.com/8302fa3b
 ```
 
 
-Testing against Cross Site Scripting (XSS) by sending the following fuzz vectors:
+发送如下漏洞检测向量以测试跨站脚本攻击：
 
 ```
 http://www.example.com/>"><script>alert("XSS")</script>&
 http://www.example.com/'';!--"<XSS>=&{()}
 ```
 
-This is a form of replacive fuzzing. In this category, the total number of requests is dependent on the number of fuzz vectors specified.
+这就是一种可替换漏洞攻击。在这个类别中，请求的总数依赖于指定的漏洞检测向量的数量。
 
 
-The remainder of this appendix presents a number of fuzz vector categories.
+本附录接下来将描述一系列的漏洞检测向量类别。
 
 
-### Cross Site Scripting (XSS)
+### 跨站脚本攻击(XSS)
 
-For details on XSS: [Cross-site Scripting (XSS)](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29)
+XSS详情请见: [跨站脚本攻击 (XSS)](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29)
 
 ```
  >"><script>alert("XSS")</script>&
@@ -85,16 +85,16 @@ For details on XSS: [Cross-site Scripting (XSS)](https://www.owasp.org/index.php
  <IMG SRC="jav&amp;#x0D;ascript:alert(<WBR>'XSS');">
 ```
 
-### Buffer Overflows and Format String Errors
+### 缓冲区溢出和格式化字符串错误
 
-#### Buffer Overflows (BFO)
-A buffer overflow or memory corruption attack is a programming condition which allows overflowing of valid data beyond its prelocated storage limit in memory.
-
-
-For details on Buffer Overflows: [Testing for Buffer Overflow ](https://www.owasp.org/index.php/Testing_for_Buffer_Overflow_%28OWASP-DV-014%29)
+#### 缓冲区溢出(BFO)
+缓冲区溢出或者内存坍塌攻击需要通过编程实现，它使得合法数据从内存的有限预分配存储空间中溢出。
 
 
-Note that attempting to load such a definition file within a fuzzer application can potentially cause the application to crash.
+缓冲区溢出详情请见: [缓冲区溢出测试 ](https://www.owasp.org/index.php/Testing_for_Buffer_Overflow_%28OWASP-DV-014%29)
+
+
+注意，尝试在一个漏洞检测程序中加载这样的定义文件可能会导致程序崩溃。
 
 ```
  A x 5
@@ -111,15 +111,15 @@ Note that attempting to load such a definition file within a fuzzer application 
  A x 12288
 ```
 
-#### Format String Errors (FSE)
+#### 格式化字符串错误(FSE)
 
-Format string attacks are a class of vulnerabilities that involve supplying language specific format tokens to execute arbitrary code or crash a program. Fuzzing for such errors has as an objective to check for unfiltered user input.
-
-
-An excellent introduction on FSE can be found in the USENIX paper entitled: [Detecting Format String Vulnerabilities with Type Qualifiers](http://research.microsoft.com/pubs/74359/01-shankar.pdf)
+格式化字符串攻击是一类与提供语言特殊格式标记相关的漏洞格式化字符串攻击是一类与提供语言特殊格式标记相关的漏洞，它可以执行二义性的代码或者令程序崩溃。检测这样的错误需要客观的检查未过滤的用户输入。
 
 
-Note that attempting to load such a definition file within a fuzzer application can potentially cause the application to crash.
+关于FSE的精彩介绍可以在一篇名为 [Detecting Format String Vulnerabilities with Type Qualifiers](http://research.microsoft.com/pubs/74359/01-shankar.pdf)的USENIX论文中找到。
+
+
+注意，尝试在一个漏洞检测程序中加载这样的定义文件可能会导致程序崩溃。
 
 ```
  %s%p%x%d
@@ -142,9 +142,9 @@ Note that attempting to load such a definition file within a fuzzer application 
  %x x 257
 ```
 
-#### Integer Overflows (INT)
+#### 整数溢出(INT)
 
-Integer overflow errors occur when a program fails to account for the fact that an arithmetic operation can result in a quantity either greater than a data type's maximum value or less than its minimum value. If a tester can cause the program to perform such a memory allocation, the program can be potentially vulnerable to a buffer overflow attack.
+整数溢出错误发生在当一个程序没有估计到一个算数操作会导致一个值大于数据类型的最大值，或者小于数据类型的最小值的时候。如果一个攻击者可以使得程序执行这样一个内存分配，那幺这个程序就有可能容易受到缓冲区溢出漏洞攻击。
 
 ```
  -1
@@ -161,24 +161,24 @@ Integer overflow errors occur when a program fails to account for the fact that 
  0x100000
 ```
 
-### SQL Injection
+### SQL注入
 
-This attack can affect the database layer of an application and is typically present when user input is not filtered for SQL statements.
-
-
-For details on Testing SQL Injection: [Testing for SQL Injection](https://www.owasp.org/index.php/Testing_for_SQL_Injection_%28OWASP-DV-005%29)
+这种攻击可以影响一个应用程序的数据库层，它典型的表现在当用户输入的SQL语句没有被过滤的时候。
 
 
-SQL Injection is classified in the following two categories, depending on the exposure of database information (passive) or the alteration of database information (active).
-
-* Passive SQL Injection
-* Active SQL Injection
+SQL注入详情请见: [SQL注入测试](https://www.owasp.org/index.php/Testing_for_SQL_Injection_%28OWASP-DV-005%29)
 
 
-Active SQL Injection statements can have a detrimental effect on the underlying database if successfully executed.
+SQL注入分为以下两类,依据是暴露数据库信息（被动）还是修改数据库信息（主动）。
+
+* 被动SQL注入
+* 主动SQL注入
 
 
-#### Passive SQL Injection (SQP)
+主动SQL注入语句如果被执行将对底层的数据库造成有害的影响。
+
+
+#### 被动SQL注入(SQP)
 
 ```
  '||(elt(-3+5,bin(15),ord(10),hex(char(45))))
@@ -238,7 +238,7 @@ Active SQL Injection statements can have a detrimental effect on the underlying 
  ' and 1=( if((load_file(char(110,46,101,120,116))<>char(39,39)),1,0));
 ```
 
-#### Active SQL Injection (SQI)
+#### 主动SQL注入(SQI)
 
 ```
  '; exec master..xp_cmdshell 'ping 10.10.1.2'--
@@ -253,9 +253,9 @@ Active SQL Injection statements can have a detrimental effect on the underlying 
  + char(0x65) + char(0x74) + char(0x65) + char(0x72),char(0x64)
 ```
 
-### LDAP Injection
+### LDAP注入
 
-For details on LDAP Injection: [Testing for LDAP Injection](https://www.owasp.org/index.php/Testing_for_LDAP_Injection_%28OWASP-DV-006%29)
+LDAP注入详情请见: [LDAP注入测试](https://www.owasp.org/index.php/Testing_for_LDAP_Injection_%28OWASP-DV-006%29)
 
 ```
  |
@@ -280,9 +280,9 @@ For details on LDAP Injection: [Testing for LDAP Injection](https://www.owasp.or
  *)(uid=*))(|(uid=*
 ```
 
-### XPATH Injection
+### XPATH注入
 
-For details on XPATH Injection: [Testing for XPath Injection](https://www.owasp.org/index.php/Testing_for_XPath_Injection_%28OWASP-DV-010%29)
+XPATH注入详情请见: [XPATH注入测试](https://www.owasp.org/index.php/Testing_for_XPath_Injection_%28OWASP-DV-010%29)
 
 ```
  '+or+'1'='1
@@ -297,9 +297,9 @@ For details on XPATH Injection: [Testing for XPath Injection](https://www.owasp.
  x'+or+name()='username'+or+'x'='y
 ```
 
-### XML Injection
+### XML注入
 
-Details on XML Injection here: [Testing for XML Injection](https://www.owasp.org/index.php/Testing_for_XML_Injection_%28OWASP-DV-008%29)
+XML注入详情请见: [XML注入](https://www.owasp.org/index.php/Testing_for_XML_Injection_%28OWASP-DV-008%29)
 
 ```
  <![CDATA[<script>var n=0;while(true){n++;}</script>]]>
