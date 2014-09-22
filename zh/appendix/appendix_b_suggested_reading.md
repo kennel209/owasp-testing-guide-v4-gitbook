@@ -1,6 +1,6 @@
-# Appendix B: Suggested Reading
+# 附录 B: 推荐读物
 
-### Whitepapers
+### 白皮书
 
 * The Economic Impacts of Inadequate Infrastructure for Software Testing - http://www.nist.gov/director/planning/upload/report02-3.pdf
 
@@ -24,7 +24,7 @@
 
 * *The Security of Applications Reloaded*(broken link) - http://www.atstake.com/research/reports/acrobat/atstake_app_reloaded.pdf
 
-### Books
+### 书籍
 
 * The Art of Software Security Testing: Identifying Software Security Flaws, by Chris Wysopal, Lucas Nelson, Dino Dai Zovi, Elfriede Dustin, published by Addison-Wesley, ISBN 0321304861 (2006)
 
@@ -80,7 +80,7 @@
 * Writing Secure Code, by Mike Howard and David LeBlanc, published by Microsoft Press, ISBN 0735617228 (2004) http://www.microsoft.com/learning/en/us/book.aspx?ID=5957&locale=en-us
 
 
-### Useful Websites
+### 常用网站
 
 * Build Security In - https://buildsecurityin.us-cert.gov/bsi/home.html
 
@@ -128,7 +128,7 @@
 * Web Security – Articles - http://www.acunetix.com/websitesecurity/articles/
 
 
-### Videos
+### 视频
 
 * OWASP Appsec Tutorial Series - https://www.owasp.org/index.php/OWASP_Appsec_Tutorial_Series
 
@@ -137,7 +137,7 @@
 * Videos by Imperva - http://www.imperva.com/resources/videos.asp
 
 
-### Deliberately Insecure Web Applications
+### 学习用不安全的软件
 
 * OWASP Vulnerable Web Applications Directory Project - https://www.owasp.org/index.php/OWASP_Vulnerable_Web_Applications_Directory_Project#tab=Main
 
