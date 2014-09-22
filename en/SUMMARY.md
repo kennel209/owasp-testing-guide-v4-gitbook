@@ -1,7 +1,7 @@
 # Summary
 
-* [Foreword](README.md)
-* [Frontispiece](frontispiece/README.md)
+* [Frontispiece](README.md)
+* [Foreword](frontispiece/README.md)
 * [Introduction](introduction/README.md)
 * [The OWASP Testing Framework](the_owasp_testing_framework/README.md)
 * [Web Application Security Testing](web_application_security_testing/README.md)

@@ -1,286 +1,81 @@
-# 说明
+# 前序 [Eoin Keary], OWASP Global Board
 
-### 欢迎使用 OWASP 测试指南 4.0
-
-“OWASP 的宗旨:技术的开放与协作”<br>
-我们意识到这份新的测试指南4.0将会成为实施web应用渗透测的标准。
--- [Matteo Meucci](https://www.owasp.org/index.php/User:Mmeucci)
+软件的不安全问题也许是我们这个时代最为重要的技术挑战。安全问题是目前制约信息技术发展的关键。
 
 
-OWASP 感谢每一个作者,修订人员以及编辑人员,没有他们的努力,这份测试指南也没有今天。如果你有任何意见或建议,请发 E-mail 到测试指南邮箱:
-
-> http://lists.owasp.org/mailman/listinfo/owasp-testing
-
-或者 E-mail 给该指南的策划者:
-[Andrew Muller](mailto:andrew.muller@owasp.org)
-[Matteo Meucci](mailto:matteo.meucci@owasp.org)
+在OWASP团队,我们努力使不安全软件成为这个世界上不正常、不规范的产品,而这份OWASP测试指南正是实现这个目标的重要一步。通过科学的的理论方法来进行软件测试是非常关键的。我们需要可以重复的一致性的过程来测试web应用程序。没有标准的世界是混乱的世界。
 
 
-### Version 4.0
-
-OWASP测试指南第四版比起第3版在三个方面更加改善了：
+毫无疑问的是没有进行安全测试就无法建立一个安全的应用环境。然而,许多的软件开发组织的标准软件开发流程中却并不包含安全测试这一步骤。
 
 
-1. 这份指南整合了另外两个旗舰级的OWASP文档：开发者指南和代码评估指南。我们重新编排了章节和测试顺序，目的就是通过测试和代码评估来达到开发者指南中描述的安全控制。
-
-2. 所有章节都被改进，并扩充至87个测试案例（v3版本是64个），包括4项新的章节：
-    - 身份鉴别管理测试 <br>
-    - 错误处理 <br>
-    - 密码学 <br>
-    - 客户端测试 <br><br>
-
-3. 在指南中我们希望大家不仅仅简单应用测试案例，更加鼓励安全测试人员整合和发现更多的相关测试案例。如果发现的测试案例能广泛应用，我们鼓励大家分享他们，并回馈测试指南。这将建立起更加丰富的安全知识，并将指南发展过程迭代化，而不是仅仅单次发展。
+由于攻击者能够利用无数的方法来攻破应用程序,而安全测试不可能测试全部的攻击方法,所以安全测试其自身并非是衡量应用安全最为有效的方法。但是,安全测试具有独特的能力绝对说服反对者确实存在安全问题。
 
 
-### 版权和许可
-
-Copyright (c) 2014 The OWASP Foundation.
-
-本文档由[Creative Commons 2.5 License](http://creativecommons.org/licenses/by-sa/2.5/)许授权。请阅读并理解该文档的许可和版权。
+总体而言,OWASP 的各个指南是对开发及维系安全的应用程序很好的出发点。[开发者指南](https://www.owasp.org/index.php/Building_Guide) 能指导你如何设计和开发安全的应用程序,而 [代码检测指南](https://www.owasp.org/index.php/Code_Review_Guide) 则会告诉你如何为代码作安全检测,而 [测试指南](https://www.owasp.org/index.php/Testing_Guide) 会指导你如何验证你的应用程序的安全性。我极力推荐你使用这些指南在你的应用程序开发。
 
 
-### 修订历史
+### 为什么需要OWASP?
 
-测试指南第四版将于2014年发布。这份测试指南由 Dan Cuthbert 作为第一位编辑于 2003 年第一次发布。2005年这份测试指南移交给 Eoin Keary 并转变成 Wiki 超文本系统。Matteo Meucci 现在接管这份测试指南,成为 OWASP 测试指南项目负责人。Andrew Muller 自2012年起成为该项目共同负责人。
-
-**2014 年**
-- OWASP 测试指南第 4 版
-
-**2008 年 9 月 15 日**
-- OWASP 测试指南第 3 版
-
-**2006 年 12 月 25 日**
-- OWASP 测试指南第 2 版
-
-**2004 年 7 月 14 日**
-- OWASP WEB 应用安全渗透指引列表第 1.1 版
-
-**2004 年 12 月**
-- OWASP 测试指南第 1 版
+写成一本这样的指南是艰巨的工作,因为它汇集了数百位世界各地的专家的专业技能。测试安全漏洞有许多不同的方式,但是这本指南却在怎样快捷、准确、有效地测试方面获得了权威人士的一致同意。
 
 
-### 编辑
-
-**Andrew Muller**: 自 2013 年, OWASP 测试指南项目负责人。<BR>
-
-**Matteo Meucci**: 自 2007 年, OWASP 测试指南项目负责人。<BR>
-
-**Eoin Keary**: 2005-2007 OWASP 测试指南项目负责人。<BR>
-
-**Daniel Cuthbert**: 2003-2005 OWASP 测试指南项目负责人。
+这本指南完全免费地向公众开放十分重要。安全问题不应该是躲在暗处,以至于只有少数人能操作。许多现有的安全指南只是详细地阐述了问题的严重性,但并没有提供足够的信息来让人们找到、诊断或者解决安全问题。创建这本指南的目的是使需要它的人能掌握这些专业知识。
 
 
-### 第四版作者
-
-* Matteo Meucci
-* Pavol Luptak
-* Marco Morana
-* Giorgio Fedon
-* Stefano Di Paola
-* Gianrico Ingrosso
-* Giuseppe Bonfà
-* Andrew Muller
-* Robert Winkel
-* Roberto Suggi Liverani
-* Robert Smith
-* Tripurari Rai
-* Thomas Ryan
-* Tim Bertels
-* Cecil Su
-* Aung KhAnt
-* Norbert Szetei
-* Michael Boman
-* Wagner Elias
-* Kevin Horvat
-* Tom Brennan
-* Juan Galiana Lara
-* Sumit Siddharth
-* Mike Hryekewicz
-* Simon Bennetts
-* Ray Schippers
-* Raul Siles
-* Jayanta Karmakar
-* Brad Causey
-* Vicente Aguilera
-* Ismael Gonçalves
-* David Fern
-* Tom Eston
-* Kevin Horvath
-* Rick Mitchell
-* Eduardo Castellanos
-* Simone Onofri
-* Harword Sheen
-* Amro AlOlaqi
-* Suhas Desai
-* Ryan Dewhurst
-* Zaki Akhmad
-* Davide Danelon
-* Alexander Antukh
-* Thomas Kalamaris
-* Alexander Vavousis
-* Clerkendweller
-* Christian Heinrich
-* Babu Arokiadas
-* Rob Barnes
-* Ben Walther
+这本指南必须能在开发者和软件测试者中推广起来。全世界似乎没有足够的应用安全专家来对所有问题做重要批示。应用安全最开始的责任肯定是落在软件开发者的肩上。如果开发者没有测试他的软件的话,软件中没有安全代码也并不奇怪。
 
 
-### 第四版审核人员
+保证信息及时更新是这本指南至关重要的方面。通过采用 Wiki 方式,OWASP 团队能逐渐发展和扩大这本指南中的信息,这样才能跟上应用安全威胁快速发展的步伐。
 
-* Davide Danelon
-* Andrea Rosignoli
-* Irene Abezgauz
-* Lode Vanstechelman
-* Sebastien Gioria
-* Yiannis Pavlosoglou
-* Aditya Balapure
 
-### 第三版作者
+这份手册是我们广大会员和项目志愿者热情和能量的结晶。它一定会使世界更加美好。
 
-* Anurag Agarwwal
-* Daniele Bellucci
-* Ariel Coronel
-* Stefano Di Paola
-* Giorgio Fedon
-* Adam Goodman
-* Christian Heinrich
-* Kevin Horvath
-* Gianrico Ingrosso
-* Roberto Suggi Liverani
-* Kuza55
-* Pavol Luptak
-* Ferruh Mavituna
-* Marco Mella
-* Matteo Meucci
-* Marco Morana
-* Antonio Parata
-* Cecil Su
-* Harish Skanda Sureddy
-* Mark Roxberry
-* Andrew Van der Stock
 
-### 第三版审核人员
+### 裁剪和优先级
 
-* Marco Cova
-* Kevin Fuller
-* Matteo Meucci
-* Nam Nguyen
-* Rick Mitchell
+你需要将这份指南应用于你的组织之中，你可能需要裁剪相关信息来匹配组织的技术能力、实施过程和组织结构。
 
-### 第二版作者
 
-* Vicente Aguilera
-* Mauro Bregolin
-* Tom Brennan
-* Gary	Burns
-* Luca Carettoni
-* Dan Cornell
-* Mark Curphey
-* Daniel Cuthbert
-* Sebastien Deleersnyder
-* Stephen DeVries
-* Stefano Di Paola
-* David	Endler
-* Giorgio Fedon
-* Javier Fernández-Sanguino
-* Glyn Geoghegan
-* Stan Guzik
-* Madhura Halasgikar
-* Eoin Keary
-* David Litchfield
-* Andrea Lombardini
-* Ralph M. Los
-* Claudio Merloni
-* Matteo Meucci
-* Marco	Morana
-* Laura Nunez
-* Gunter Ollmann
-* Antonio Parata
-* Yiannis Pavlosoglou
-* Carlo Pelliccioni
-* Harinath Pudipeddi
-* Alberto Revelli
-* Mark Roxberry
-* Tom Ryan
-* Anush Shetty
-* Larry Shields
-* Dafydd Studdard
-* Andrew van der Stock
-* Ariel	Waissbein
-* Jeff Williams
-* Tushar Vartak
+通常组织中下列不同的角色可能需要这份指南：
 
-### 第二版审核人员
+* 开发者需要这份指南确保他们能够写出安全的代码。这些测试应该成为实例代码的一部分。
 
-* Vicente Aguilera
-* Marco Belotti
-* Mauro Bregolin
-* Marco Cova
-* Daniel Cuthbert
-* Paul Davies
-* Stefano Di Paola
-* Matteo G.P. Flora
-* Simona Forti
-* Darrell Groundy
-* Eoin Keary
-* James Kist
-* Katie McDowell
-* Marco Mella
-* Matteo Meucci
-* Syed Mohamed A.
-* Antonio Parata
-* Alberto Revelli
-* Mark Roxberry
-* Dave Wichers
+* 软件测试人员和QA人员应该使用这份指南扩充他们的测试案例，期望更早能够捕捉到漏洞，从而节约时间和精力。
 
-### 商标
+* 安全专家需要使用这份指南与技术结合来确保没有遗漏安全漏洞。
 
-* Java,Java Web 服务器,Sun Microsystems 有限公司 JSP 注册商标
-* Merriam-Webster 有限公司 Merriam-Webster 注册商标
-* 微软公司 Microsoft 注册商标
-* Carnegie Mellon 大学服务商标 Octave
-* VeriSign 有限公司安全认证注册商标 VeriSign 和 Thawte
-* 美国 VISA 注册商标 Visa
-* OWASP 基金会注册商标 OWASP
+* 项目经历需要思考这份指南的意义，以确保能够界定设计和编码中的BUG是安全问题。
 
-所有其他产品和公司的名称可能是其各自所有者的商标。长期使用本文档,不影响任何商标或服务标志的有效性。
 
-### 致谢与译者声明
+应用安全测试最重要的方面可能就是让你时刻牢记你必须在有限的时间内尽可能多地覆盖应用程序的各个方面。郑重提醒:请不要简单的看几眼这本书就开始测试,理想的做法是:通过建立一些安全威胁模型来决定你的公司最关心的安全问题是什幺。你最终应该拥有一张包含优先次序的待测试的安全清单。
 
-#### 第四版
 
-由[风镰月舞](mailto:kennel209@gmail.com)结合第三版翻译内容，自行翻译，纯属自娱自乐。由于译者水平有限,并不保证译文完全正确,请参照英文版以准。
+你最好将这份指南看作是一系列寻找不同类型安全漏洞的技术指引。但并不是所有的技术都是同等重要的,请不要将这本指南当成一本核对清单来使用。新漏洞的出现总是证明事无巨细，但是这份指南会是一个很好的开始。
 
-#### 第三版
 
-本指南为业界首套系统的介绍应用安全测试的指导性文档。
+### 自动化工具
 
-数十位自愿者经过半年的辛苦工作,终于完成 OWASP 测试指南的翻译及校对。
+有相当数量的公司在销售安全分析和测试工具。请记住这些工具的局限性以便能够更好地使用它们。 请查阅Michael Howard的文章 [2006 OWASP AppSec Conference in Seattle](https://www.owasp.org/index.php/OWASP_AppSec_Seattle_2006/Agenda)。
+> 工具无法使软件更加安全！他们只能缩小整个过程，并帮助加强策略！
 
-##### OWASP 测试指南中文版修订
 
-| 项目进展                | 时间            | 主要参与人 |
-|-------------------------|-----------------|------------|
-| OWASP 测试指南中文 V0.1 | 2009.7-2009.10  | FrankAaron |
-| OWASP 测试指南中文 V0.2 | 2009.10-2009.11 | RIP        |
-| OWASP 测试指南中文 V0.3 | 2009.11-2009.1  | Eric       |
+这些工具是通用的,他们的覆盖面不完全——它们并不是专门针对您的自定义代码设计的。这意味着,即使它们可以找到部分一般性问题,但是它们对你的应用程序没有足够的了解,无法对可能存在的大多数安全漏洞进行侦测。此外,根据我们的经验,最严重的安全问题往往不具有代表性,而是深度隐藏在你的业务逻辑和定制应用设计中。
 
-##### 翻译及校对人员(排名不分先后)
 
-* 程琼 (Microsoft)
-* Frank Fan (DBAPPSECURITY)
-* 贺佳琳 (Microsoft)
-* 李伟荣 (Microsoft)
-* 沈巍 (Microsoft)
-* 王超 (Microsoft)
-* 韦炜 (Microsoft)
-* 张柏明 (Microsoft)
-* 趙嘉言 (Microsoft)
-* Aaron (DBAPPSECURITY)
-* RIP (OWASP China Chair)
+自动化工具在检测速度方面并不一定比手动检测快。实际运行的工具也许并不会花费特别多的时间,但是在工具运行前后所花费的时间很多。如果当前最主要的任务是尽可能快地发现和消除最严重的安全漏洞,那幺针对不同的安全弱点选择最具有效果的技术十分重要。在某些特定的问题上,自动化工具是十分有效的。明智地选择并使用自动化工具能够有效支持你的整个开发过程以开发出安全性更高的代码。
 
-##### 声明
 
-* 由于译者及校对人员水平有限,并不保证译文完全正确,请参照英文版以准。
-* 非常感谢您的支持,有任何问题,请及时邮件到 RIP@OWASP.ORG。
+### 呼吁帮助
 
+如果你正在从事软件开发、设计或者测试工作,我强烈建议你熟悉这份文档中的安全测试指引。这份手册是是测试当今软件问题的极好的指引，当然它还不够完善。如果您发现错误,请在讨论页中添加你的标注或自行对文档进行改动。你的意见将帮助到成千上万正在使用这份指南的人们。
+
+
+欢迎任何个人或者团体[加入我们](https://www.owasp.org/index.php/Membership),这样我们才能够继续创作出像这份测试指南以及所有 OWASP 其它著作一样的材料。
+
+
+感谢所有过去以及未来为这份指南做出贡献的人们,你们的工作将有助于推进世界各地的应用程序安全。
+
+--[Eoin Keary], OWASP Board Member, April 19, 2013
+
+[Eoin Keary]: https://www.owasp.org/index.php/Eoin_Keary
