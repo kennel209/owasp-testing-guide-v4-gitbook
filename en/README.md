@@ -56,7 +56,8 @@ This guide is best viewed as a set of techniques that you can use to find differ
 
 ### The Role of Automated Tools
 
-There are a number of companies selling automated security analysis and testing tools. Remember the limitations of these tools so that you can use them for what they're good at. As Michael Howard put it at the [2006 OWASP AppSec Conference in Seattle](https://www.owasp.org/index.php/OWASP_AppSec_Seattle_2006/Agenda), "Tools do not make software secure! They help scale the process and help enforce policy."
+There are a number of companies selling automated security analysis and testing tools. Remember the limitations of these tools so that you can use them for what they're good at. As Michael Howard put it at the [2006 OWASP AppSec Conference in Seattle](https://www.owasp.org/index.php/OWASP_AppSec_Seattle_2006/Agenda).
+> "Tools do not make software secure! They help scale the process and help enforce policy."
 
 
 Most importantly, these tools are generic - meaning that they are not designed for your custom code, but for applications in general. That means that while they can find some generic problems, they do not have enough knowledge of your application to allow them to detect most flaws. In my experience, the most serious security issues are the ones that are not generic, but deeply intertwined in your business logic and custom application design.
