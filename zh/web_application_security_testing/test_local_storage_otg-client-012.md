@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 
 Local Storage also known as Web Storage or Offline Storage is a mechanism to store data as key/value pairs tied to a domain and enforced by the same origin policy (SOP). There are two objects, localStorage that is persistent and is intended to survive browser/system reboots and sessionStorage that is temporary and will only exists until the window or tab is closed.
 
@@ -10,7 +10,7 @@ Local Storage also known as Web Storage or Offline Storage is a mechanism to sto
 On average browsers allow to store in this storage around 5MB per domain, that compared to the 4KB of cookies is a big difference, but the key difference from the security perspective is that the data stored in these two objects is kept in the client and never sent to the server, this also improves network performance as data do not need to travel over the wire back and forth.
 
 
-### localStorage
+#### localStorage
 
 Access to the storage is normally done using the setItem and getItem functions. The storage can be read from javascript which means with a single XSS an attacker would be able to extract all the data from the storage. Also malicious data can be loaded into the storage via JavaScript so the application needs to have the controls in place to treat untrusted data. Check if there are more than one application in the same domain like example.foo/app1 and example.foo/app2 because those will share the  same  storage.
 
@@ -18,16 +18,16 @@ Access to the storage is normally done using the setItem and getItem functions. 
 Data stored in this object will persist after the window is closed, it is a bad idea to store sensitive data or session identifiers on this object as these can be accesed via JavaScript. Session IDs stored in cookies can mitigate this risk using the httpOnly flag.
 
 
-### sessionStorage
+#### sessionStorage
 
 Main difference with localStorage is that the data stored in this object is only accessible until the tab/window is closed which is a perfect candidate for data that doesn't need to persist between sessions. It shares most of the properties and the getItem/setItem methods, so manual testing needs to be undertaken to look for these methods and identify in which parts of the code the storage is accessed.
 
-##How to Test
-### Black Box testing
+###How to Test
+#### Black Box testing
 Black box testing for issues within the Local Storage code is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.
 
 
-### Gray Box testing
+#### Gray Box testing
 
 First of all, we need to check whether the Local Storage is used.
 
@@ -90,13 +90,13 @@ URL PoC:
 ![File:Storage-xss.png](https://www.owasp.org/images/7/72/Storage-xss.png)
 
 
-##Tools
+###Tools
 * **Firebug** -  http://getfirebug.com/
 * **Google Chrome Developer Tools** - https://developers.google.com/chrome-developer-tools/
 * **OWASP Zed Attack Proxy (ZAP)** - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
 ZAP is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications. It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing. ZAP provides automated scanners as well as a set of tools that allow you to find security vulnerabilities manually.
 
-## References
+### References
 
 **OWASP Resources**
 * **OWASP HTML5 Security Cheat Sheet**: https://www.owasp.org/index.php/HTML5_Security_Cheat_Sheet

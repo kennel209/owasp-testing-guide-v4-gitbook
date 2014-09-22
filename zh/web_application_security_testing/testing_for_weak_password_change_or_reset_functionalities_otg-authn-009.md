@@ -3,18 +3,18 @@
 
 
 
-## Summary
+### Summary
 
 The password change and reset function of an application is a self-service password change or reset mechanism for users. This self-service mechanism allows users to quickly change or reset their password without an administrator intervening. When passwords are changed they are typically changed within the application. When passwords are reset they are either rendered within the application or emailed to the user. This may indicate that the passwords are stored in plain text or in a decryptable format.
 
 
-## Test objectives
+### Test objectives
 
 1. Determine the resistance of the application to subversion of the account change process allowing someone to change the password of an account.
 2. Determine the resistance of the passwords reset functionality against guessing or bypassing.
 
 
-## How to Test
+### How to Test
 
 For both password change and password reset it is important to check:
 1.  if users, other than administrators, can change or reset passwords for accounts other than their own.
@@ -22,7 +22,7 @@ For both password change and password reset it is important to check:
 3.  if the password change or reset process is vulnerable to [CSRF](https://www.owasp.org/index.php/Testing_for_CSRF_%28OWASP-SM-005%29).
 
 
-### Test Password Reset
+#### Test Password Reset
 
 In addition to the previous checks it is important to verify the following:
 
@@ -43,7 +43,7 @@ The best security is achieved if passwords are randomly generated with a secure 
 To limit denial-of-service attacks the application should email a link to the user with a random token, and only if the user visits the link then the reset procedure is completed. This ensures that the current password will still be valid until the reset has been confirmed.
 <br><br>
 
-### Test Password Change
+#### Test Password Change
 
 In addition to the previous test it is important to verify:
 
@@ -53,12 +53,12 @@ The most insecure scenario here is if the application permits the change of the 
 See also [Testing for Weak password policy](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29) paragraph of this guide.
 
 
-## References
+### References
 
 * [OWASP Forgot Password Cheat Sheet](https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet)
 * [OWASP Periodic Table of Vulnerabilities - Insufficient Password Recovery](https://www.owasp.org/index.php/OWASP_Periodic_Table_of_Vulnerabilities_-_Insufficient_Password_Recovery)
 
 
-## Remediation
+### Remediation
 
 The password change or reset function is a sensitive function and requires some form of protection, such as requiring users to re-authenticate or presenting the user with confirmation screens during the process.

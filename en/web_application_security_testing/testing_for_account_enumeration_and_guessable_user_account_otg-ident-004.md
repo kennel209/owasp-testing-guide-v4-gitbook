@@ -1,6 +1,6 @@
 # Testing for Account Enumeration and Guessable User Account (OTG-IDENT-004)
 
-## Summary
+### Summary
 The scope of this test is to verify if it is possible to collect a set of valid usernames by interacting with the authentication mechanism of the application. This test will be useful for brute force testing, in which the tester verifies if, given a valid username, it is possible to find the corresponding password.
 
 
@@ -13,11 +13,11 @@ The tester should interact with the authentication mechanism of the application 
 In some cases, a message is received that reveals if the provided credentials are wrong because an invalid username or an invalid password was used. Sometimes, testers can enumerate the existing users by sending a username and an empty password.
 
 
-## How to Test
+### How to Test
 In black box testing, the tester knows nothing about the specific application, username, application logic, error messages on log in page, or password recovery facilities. If the application is vulnerable, the tester receives a response message that reveals, directly or indirectly, some information useful for enumerating users.
 
 
-### HTTP Response message
+#### HTTP Response message
 
 **Testing for Valid user/right password**
 
@@ -76,7 +76,7 @@ The above responses let the client understand that for the first request they ha
 Looking at the second server response, the tester understand in the same way that they don't hold a valid username. So they can interact in the same manner and create a list of valid user ID looking at the server answers.
 
 
-### Other ways to enumerate users
+#### Other ways to enumerate users
 
 Testers can enumerate users in several ways, such as: <br>
 
@@ -143,7 +143,7 @@ When we request a user within the directory that does not exist, we don't always
 <br>
 <br>
 
-### Guessing Users
+#### Guessing Users
 In some cases the user IDs are created with specific policies of administrator or company. For example we can view a user with a user ID created in sequential order:<br>
 ```
 		CN000100<br>
@@ -172,7 +172,7 @@ Again, we can guess a username from the information received from an LDAP query 
 **Attention:** by enumerating user accounts, you risk locking out accounts after a predefined number of failed probes (based on application policy). Also, sometimes, your IP address can be banned by dynamic rules on the application firewall or Intrusion Prevention System.
 
 
-### Gray Box testing
+#### Gray Box testing
 **Testing for Authentication error messages**<br>
 
 Verify that the application answers in the same manner for every client request that produces a failed authentication. For this issue the Black Box testing and  Gray Box testing have the same concept based on the analysis of messages or error codes received from web application.<br>
@@ -185,19 +185,19 @@ For Example: <br>
  Credentials submitted are not valid
 
 
-## Tools
+### Tools
 * WebScarab: [OWASP_WebScarab_Project](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * CURL: http://curl.haxx.se/
 * PERL: http://www.perl.org
 * Sun Java Access & Identity Manager users enumeration tool: http://www.aboutsecurity.net
 
 
-## References
+### References
 * Marco Mella, *Sun Java Access & Identity Manager Users enumeration: http://www.aboutsecurity.net<br>*
 * *Username Enumeration Vulnerabilities: http://www.gnucitizen.org/blog/username-enumeration-vulnerabilities<br>*
 
 
-## Remediation
+### Remediation
 
 Ensure the application returns consistent generic error messages in response to invalid account name, password or other user credentials entered during the log in process.
 

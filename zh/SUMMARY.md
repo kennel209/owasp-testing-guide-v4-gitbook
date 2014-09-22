@@ -1,7 +1,7 @@
 # Summary
 
 * [序](README.md)
-* [卷首语](frontispiece/README.md)
+* [说明](frontispiece/README.md)
 * [简介](introduction/README.md)
 * [OWASP测试框架](the_owasp_testing_framework/README.md)
 * [Web应用安全测试](web_application_security_testing/README.md)

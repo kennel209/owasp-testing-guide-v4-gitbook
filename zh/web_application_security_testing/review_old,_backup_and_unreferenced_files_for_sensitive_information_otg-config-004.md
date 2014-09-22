@@ -1,7 +1,7 @@
 # Review Old, Backup and Unreferenced Files for Sensitive Information (OTG-CONFIG-004)
 
 
-## Summary
+### Summary
 While most of the files within a web server are directly handled by the server itself, it isn't uncommon to find unreferenced or forgotten files that can be used to obtain important information about the infrastructure or the credentials.
 
 
@@ -25,7 +25,7 @@ Generally, exposing server side code is a bad idea. Not only are you unnecessari
 Other causes of unreferenced files are due to design or configuration choices when they allow diverse kind of application-related files such as data files, configuration files, log files, to be stored in file system directories that can be accessed by the web server. These files have normally no reason to be in a file system space that could be accessed via web, since they should be accessed only at the application level, by the application itself (and not by the casual user browsing around).
 
 
-### Threats
+#### Threats
 
 Old, backup and unreferenced files present various threats to the security of a web application:
 
@@ -39,17 +39,17 @@ Old, backup and unreferenced files present various threats to the security of a 
 * File system snapshots may contain copies of the code that contain vulnerabilities that have been fixed in more recent versions. For example */.snapshot/monthly.1/view.php* may contain a directory traversal vulnerability that has been fixed in */view.php* but can still be exploited by anyone who finds the old version.
 
 
-## How to Test
-### Black Box Testing
+### How to Test
+#### Black Box Testing
 
 Testing for unreferenced files uses both automated and manual techniques, and typically involves a combination of the following:
 
-#### Inference from the naming scheme used for published content
+##### Inference from the naming scheme used for published content
 
 Enumerate all of the application’s pages and functionality. This can be done manually using a browser, or using an application spidering tool. Most applications use a recognizable naming scheme, and organize resources into pages and directories using words that describe their function. From the naming scheme used for published content, it is often possible to infer the name and location of unreferenced pages. For example, if a page *viewuser.asp* is found, then look also for *edituser.asp*, *adduser.asp* and *deleteuser.asp*. If a directory */app/user* is found, then look also for */app/admin* and */app/manager*.
 
 
-#### Other clues in published content
+##### Other clues in published content
 
 Many web applications leave clues in published content that can lead to the discovery of hidden pages and functionality. These clues often appear in the source code of HTML and JavaScript files. The source code for all published content should be manually reviewed to identify clues about other pages and functionality. For example:
 
@@ -92,7 +92,7 @@ Disallow: /include
 ```
 
 
-#### Blind guessing
+##### Blind guessing
 
 In its simplest form, this involves running a list of common file names through a request engine in an attempt to guess files and directories that exist on the server. The following netcat wrapper script will read a wordlist from stdin and perform a basic guessing attack:
 
@@ -123,7 +123,7 @@ The basic guessing attack should be run against the webroot, and also against al
 Note: Windows file copying operations generate file names prefixed with “Copy of “ or localized versions of this string, hence they do not change file extensions. While “Copy of ” files typically do not disclose source code when accessed, they might yield valuable information in case they cause errors when invoked.
 
 
-#### Information obtained through server vulnerabilities and misconfiguration
+##### Information obtained through server vulnerabilities and misconfiguration
 
 The most obvious way in which a misconfigured server may disclose unreferenced pages is through directory listing. Request all enumerated directories to identify any which provide a directory listing.
 
@@ -134,7 +134,7 @@ Numerous vulnerabilities have been found in individual web servers which allow a
 * IIS WebDAV directory listing vulnerabilities.
 
 
-#### Use of publicly available information
+##### Use of publicly available information
 
 Pages and functionality in Internet-facing web applications that are not referenced from within the application itself may be referenced from other public domain sources. There are various sources of these references:
 * Pages that used to be referenced may still appear in the archives of Internet search engines. For example, *1998results.asp* may no longer be linked from a company’s website, but may remain on the server and in search engine databases. This old script may contain vulnerabilities that could be used to compromise the entire site. The *site:* Google search operator may be used to run a query only against the domain of choice, such as in: *site:www.example.com*. Using search engines in this way has lead to a broad array of techniques which you may find useful and that are described in the *Google Hacking* section of this Guide. Check it to hone your testing skills via Google. Backup files are not likely to be referenced by any other files and therefore may have not been indexed by Google, but if they lie in browsable directories the search engine might know about them.
@@ -142,7 +142,7 @@ Pages and functionality in Internet-facing web applications that are not referen
 * Content that is not referenced from within a target application may be linked to by third-party websites. For example, an application which processes online payments on behalf of third-party traders may contain a variety of bespoke functionality which can (normally) only be found by following links within the web sites of its customers.
 
 
-#### File name filter bypass
+##### File name filter bypass
 
 Because blacklist filters are based on regular expressions, one can sometimes take advantage of obscure OS file name expansion features in which work in ways the developer didn't expect. The tester can sometimes exploit differences in ways that file names are parsed by the application, web server, and underlying  OS and it's file name conventions.
 
@@ -160,19 +160,19 @@ Example: Windows 8.3 filename expansion
 ```
 
 
-### Gray Box Testing
+#### Gray Box Testing
 
 Performing gray box testing against old and backup files requires examining the files contained in the directories belonging to the set of web directories served by the web server(s) of the web application infrastructure. Theoretically the examination should be performed by hand to be thorough. However, since in most cases copies of files or backup files tend to be created by using the same naming conventions, the search can be easily scripted. For example, editors leave behind backup copies by naming them with a recognizable extension or ending and humans tend to leave behind files with a “.old” or similar predictable extensions. A good strategy is that of periodically scheduling a background job checking for files with extensions likely to identify them as copy or backup files, and performing manual checks as well on a longer time basis.
 
 
-## Tools
+### Tools
 
 * Vulnerability assessment tools tend to include checks to spot web directories having standard names (such as “admin”, “test”, “backup”, etc.), and to report any web directory which allows indexing. If you can’t get any directory listing, you should try to check for likely backup extensions. Check for example Nessus (http://www.nessus.org), Nikto2(http://www.cirt.net/code/nikto.shtml) or its new derivative Wikto (http://www.sensepost.com/research/wikto/), which also supports Google hacking based strategies.
 * Web spider tools: wget (http://www.gnu.org/software/wget/,   http://www.interlog.com/~tcharron/wgetwin.html); Sam Spade (http://www.samspade.org); Spike proxy includes a web site crawler function (http://www.immunitysec.com/spikeproxy.html); Xenu (http://home.snafu.de/tilman/xenulink.html); curl (http://curl.haxx.se). Some of them are also included in standard Linux distributions.
 * Web development tools usually include facilities to identify broken links and unreferenced files.
 
 
-## Remediation
+### Remediation
 To guarantee an effective protection strategy, testing should be compounded by a security policy which clearly forbids dangerous practices, such as:
 
 

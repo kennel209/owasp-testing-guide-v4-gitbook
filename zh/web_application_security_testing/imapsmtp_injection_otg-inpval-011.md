@@ -1,6 +1,6 @@
 # IMAP/SMTP Injection (OTG-INPVAL-011)
 
-## Summary
+### Summary
 This threat affects all applications that communicate with mail servers (IMAP/SMTP), generally webmail applications. The aim of this test is to verify the capacity to inject arbitrary IMAP/SMTP commands into the mail servers, due to input data not being properly sanitized.
 
 
@@ -27,14 +27,14 @@ Some examples of attacks using the IMAP/SMTP Injection technique are:
 * Relay/SPAM
 
 
-## How to Test
+### How to Test
 The standard attack patterns are:
 * Identifying vulnerable parameters
 * Understanding the data flow and deployment structure of the client
 * IMAP/SMTP command injection
 
 
-### Identifying vulnerable parameters
+#### Identifying vulnerable parameters
 In order to detect vulnerable parameters, the tester has to analyze the application's ability in handling input. Input validation testing requires the tester to send bogus, or malicious, requests to the server and analyse the response. In a secure application, the response should be an error with some corresponding action telling the client that something has gone wrong. In a vulnerable application, the malicious request may be processed by the back-end application that will answer with a "HTTP 200 OK" response message.
 
 
@@ -122,7 +122,7 @@ On the other hand, the last situation (S3) is not revelant in this paragraph.
 * Type of possible injection (IMAP/SMTP)
 <br>
 
-### Understanding the data flow and deployment structure of the client
+#### Understanding the data flow and deployment structure of the client
 
 After identifying all vulnerable parameters (for example, "passed_id"), the tester needs to determine what level of injection is possible and then design a testing plan to further exploit the application.
 
@@ -159,7 +159,7 @@ If the application does not return descriptive error messages, the tester needs 
 * Type, value, and number of parameters expected by the affected IMAP/SMTP commands
 <br>
 
-### IMAP/SMTP command injection
+#### IMAP/SMTP command injection
 
 Once the tester has identified vulnerable parameters and has analyzed the context in which they are executed, the next stage is exploiting the functionality.
 
@@ -215,7 +215,7 @@ Footer = V101 FETCH 4791
 * Arbitrary IMAP/SMTP command injection
 <br>
 
-## References
+### References
 **Whitepapers**<br>
 * RFC 0821 “Simple Mail Transfer Protocol”.
 * RFC 3501 “Internet Message Access Protocol - Version 4rev1”.

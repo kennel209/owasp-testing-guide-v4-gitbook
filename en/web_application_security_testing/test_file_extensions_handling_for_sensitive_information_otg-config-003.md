@@ -1,7 +1,7 @@
 # Test File Extensions Handling for Sensitive Information (OTG-CONFIG-003)
 
 
-## Summary
+### Summary
 File extensions are commonly used in web servers to easily determine which technologies, languages and plugins must be used to fulfill the web request. While this behavior is consistent with RFCs and Web Standards, using standard file extensions provides the penetration tester useful information about the underlying technologies used in a web appliance and greatly simplifies the task of determining the attack scenario to be used on particular technologies. In addition, mis-configuration of web servers could easily reveal confidential information about access credentials.
 
 
@@ -10,8 +10,8 @@ Extension checking is often used to validate files to be uploaded, which can lea
 
 Determining how web servers handle requests corresponding to files having different extensions may help in understanding web server behavior depending on the kind of files that are accessed. For example, it can help to understand which file extensions are returned as text or plain versus those that cause execution on the server side. The latter are indicative of technologies, languages or plugins that are used by web servers or application servers, and may provide additional insight on how the web application is engineered. For example, a “.pl” extension is usually associated with server-side Perl support. However, the file extension alone may be deceptive and not fully conclusive. For example, Perl server-side resources might be renamed to conceal the fact that they are indeed Perl related. See the next section on “web server components” for more on identifying server side technologies and components.
 
-## How to Test
-### Forced browsing
+### How to Test
+#### Forced browsing
 
 Submit http[s] requests involving different file extensions and verify how they are handled. The verification should be on a per web directory basis. Verify directories that allow script execution. Web server directories can be identified by vulnerability scanners, which look for the presence of well-known directories. In addition, mirroring the web site structure allows the tester to reconstruct the tree of web directories served by the application.
 
@@ -57,7 +57,7 @@ The list given above details only a few examples, since file extensions are too 
 To identify files having a given extensions a mix of techniques can be employed. THese techniques can include Vulnerability Scanners, spidering and mirroring tools, manually inspecting the application (this overcomes limitations in automatic spidering), querying search engines (see [Testing: Spidering and googling](https://www.owasp.org/index.php/Testing:_Spidering_and_googling)). See also [Testing for Old, Backup and Unreferenced Files](https://www.owasp.org/index.php/Testing_for_Old,_Backup_and_Unreferenced_Files_%28OWASP-CM-006%29) which deals with the security issues related to "forgotten" files.
 
 
-### File Upload
+#### File Upload
 
 Windows 8.3 legacy file handling can sometimes be used to defeat file upload filters
 
@@ -74,7 +74,7 @@ SHELL~1.PHP will be expanded and returned by the OS shell, then processed by the
 ```
 
 
-### Gray Box testing
+#### Gray Box testing
 
 Performing white box testing against file extensions handling amounts to checking the configurations of web servers or application servers taking part in the web application architecture, and verifying how they are instructed to serve different file extensions.
 
@@ -82,7 +82,7 @@ Performing white box testing against file extensions handling amounts to checkin
 If the web application relies on a load-balanced, heterogeneous infrastructure, determine whether this may introduce different behavior.
 
 
-## Tools
+### Tools
 
 Vulnerability scanners, such as Nessus and Nikto check for the existence of well-known web directories. They may allow the tester to download the web site structure, which is helpful when trying to determine the configuration of web directories and how individual file extensions are served. Other tools that can be used for this purpose include:
 * wget - http://www.gnu.org/software/wget

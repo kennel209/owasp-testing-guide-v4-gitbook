@@ -1,7 +1,7 @@
 # Enumerate Applications on Webserver (OTG-INFO-004)
 
 
-## Summary
+### Summary
 A paramount step in testing for web application vulnerabilities is to find out which particular applications are hosted on a web server. Many applications have known vulnerabilities and known attack strategies that can be exploited in order to gain remote control or to exploit data. In addition, many applications are often misconfigured or not updated, due to the perception that they are only used "internally" and therefore no threat exists.<br/>
 
 With the proliferation of virtual web servers, the traditional 1:1-type relationship between an IP address and a web server is losing much of its original significance. It is not uncommon to have multiple web sites or applications whose symbolic names resolve to the same IP address. This scenario is not limited to hosting environments, but also applies to ordinary corporate environments as well.
@@ -19,14 +19,14 @@ Other issues affecting the scope of the assessment are represented by web applic
 To address these issues, it is necessary to perform web application discovery.
 
 
-## Test Objectives
+### Test Objectives
 
 Enumerate the applications within scope that exist on a web server
 
 
-## How to Test
+### How to Test
 
-### Black Box Testing
+#### Black Box Testing
 Web application discovery is a process aimed at identifying web applications on a given infrastructure. The latter is usually specified as a set of IP addresses (maybe a net block), but may consist of a set of DNS symbolic names or a mix of the two.
 This information is handed out prior to the execution of an assessment, be it a classic-style penetration test or an application-focused assessment. In both cases, unless the rules of engagement specify otherwise (e.g., “test only the application located at the URL http://www.example.com/”), the assessment should strive to be the most comprehensive in scope, i.e. it should identify all the applications accessible through the given target. The following examples examine a few techniques that can be employed to achieve this goal.
 
@@ -221,11 +221,11 @@ For instance, considering the previous example regarding *www.owasp.org*, the te
 Googling techniques are explained in [Testing: Spiders, Robots, and Crawlers](https://www.owasp.org/index.php/Testing:_Spiders,_Robots,_and_Crawlers_%28OWASP-IG-001%29).
 
 
-### Gray Box Testing
+#### Gray Box Testing
 Not applicable. The methodology remains the same as listed in Black Box testing no matter how much information the tester starts with.
 
 
-##Tools
+###Tools
 * DNS lookup tools such as *nslookup*, *dig* and similar.
 * Search engines (Google, Bing and other major search engines).
 * Specialized DNS-related web-based search service: see text.
@@ -234,6 +234,6 @@ Not applicable. The methodology remains the same as listed in Black Box testing 
 * Nikto - http://www.cirt.net/nikto2
 
 
-## References
+### References
 **Whitepapers**
 [1] RFC 2616 – Hypertext Transfer Protocol – HTTP 1.1

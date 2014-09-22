@@ -1,7 +1,7 @@
 # Test Session Timeout (OTG-SESS-007)
 
 
-## Summary
+### Summary
 In this phase testers check that the application automatically logs out a user when that user has been idle for a certain amount of time, ensuring that it is not possible to “reuse” the same session and that no sensitive data remains stored in the browser cache.
 
 
@@ -19,9 +19,9 @@ Both actions must be implemented carefully, in order to avoid introducing weakne
 
 The most common scenario for this kind of attack is a public computer that is used to access some private information (e.g., web mail, online bank account). If the user moves away from the computer without explicitly logging out and the session timeout is not implemented on the application, then an attacker could access to the same account by simply pressing the “back” button of the browser.
 
-##How to Test
+###How to Test
 
-### Black Box testing
+#### Black Box testing
 The same approach seen in the [Testing for logout functionality (OTG-SESS-006)](https://www.owasp.org/index.php/Testing_for_logout_functionality_%28OTG-SESS-006%29) section can be applied when measuring the timeout log out.
 <br>
 
@@ -34,7 +34,7 @@ Then, if the timeout is configured, testers need to understand whether the timeo
 As a general rule, everything should be checked server-side and it should not be possible, by re-setting the session cookies to previous values, to access the application again.
 <br>
 
-### Gray Box Testing
+#### Gray Box Testing
 <br>
 The tester needs to check that:
 * The log out function effectively destroys all session token, or at least renders them unusable,
@@ -45,6 +45,6 @@ The tester needs to check that:
 Note that the most important thing is for the application to invalidate the session on the server side. Generally this means that the code must invoke the appropriate methods, e.g. HttpSession.invalidate() in Java and Session.abandon() in .NET. Clearing the cookies from the browser is advisable, but is not strictly necessary, since if the session is properly invalidated on the server, having the cookie in the browser will not help an attacker.
 
 
-## References
+### References
 **OWASP Resources**
 * [Session Management Cheat Sheet](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet)

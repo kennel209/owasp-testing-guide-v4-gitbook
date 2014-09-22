@@ -1,12 +1,12 @@
 # Testing for CSS Injection (OTG-CLIENT-005)
 
 
-## Summary
+### Summary
 
 A CSS Injection vulnerability involves the ability to inject arbitrary CSS code in the context of a trusted web site, and this will be rendered inside the victim's browser. The impact of such a vulnerability may vary on the basis of the supplied CSS payload: it could lead to Cross-Site Scripting in particular circumstances, to data exfiltration in the sense of extracting sensitive data or to UI modifications.
 
 
-## How to Test
+### How to Test
 Such a vulnerability occurs when the application allows to supply user-generated CSS or it is possible to somehow interfere with the legit stylesheets. Injecting code in the CSS context gives the attacker the possibility to execute JavaScript in certain conditions as well as extracting sensitive values through CSS selectors and functions able to generate HTTP requests. Actually, giving the users the possibility to customize their own personal pages by using custom CSS files results in a considerable risk, and should be definitely avoided.
 
 
@@ -55,11 +55,11 @@ input[name=csrf_token][value=^a] {
 Much more modern attacks involving a combination of SVG, CSS and HTML5 have been proven feasible, therefore we recommend to see the References section for details.
 
 
-### Black Box testing
+#### Black Box testing
 We are referring to client-side testing, therefore black box testing is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed. However, it may happen that the user is given a certain degree of freedom in terms of possibilities to supply HTML code; in that case it is required to test whether no CSS injections are possible: tags like "link" and "style" should be disallowed, as well as attributes "style".
 
 
-### Gray Box testing
+#### Gray Box testing
 **Testing for CSS Injection vulnerabilities:**<br>
 Manual testing needs to be conducted and the JavaScript code analyzed in order to understand whether the attackers can inject its own content in CSS context. In particular we should be interested in how the website returns CSS rules on the basis of the inputs.
 
@@ -93,7 +93,7 @@ It is recommended that testers use the jQuery function css(property, value) in s
 ```
 
 
-## References
+### References
 **OWASP Resources**
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS Wiki - https://code.google.com/p/domxsswiki/wiki/CssText

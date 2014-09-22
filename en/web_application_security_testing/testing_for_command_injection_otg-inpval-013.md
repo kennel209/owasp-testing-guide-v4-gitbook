@@ -1,14 +1,14 @@
 # Testing for Command Injection (OTG-INPVAL-013)
 
 
-## Summary
+### Summary
 This article describes how to test an application for OS command injection. The tester will try to inject an OS command through an HTTP request to the application.
 
 
 OS command injection is a technique used via a web interface in order to execute OS commands on a web server. The user supplies operating system commands through a web interface in order to execute OS commands.  Any web interface that is not properly sanitized is subject to this exploit.  With the ability to execute OS commands, the user can upload malicious programs or even obtain passwords.  OS command injection is preventable when security is emphasized during the design and development of applications.
 
 
-## How to Test
+### How to Test
 When viewing a file in a web application, the file name is often shown in the URL.  Perl allows piping data from a process into an open statement.  The user can simply append the Pipe symbol “|” onto the end of the file name.
 
 
@@ -117,19 +117,19 @@ Directory of c:\
 In this case, we have successfully performed an OS injection attack.
 
 
-##Tools
+###Tools
 
 * OWASP [WebScarab](https://www.owasp.org/index.php/OWASP_WebScarab_Project)<br>
 * OWASP [WebGoat](https://www.owasp.org/index.php/OWASP_WebGoat_Project)
 
-## References
+### References
 
 **White papers**<br>
 * http://www.securityfocus.com/infocus/1709<br>
 
-## Remediation
-###Sanitization
+### Remediation
+####Sanitization
 The URL and form data needs to be sanitized for invalid characters.  A “blacklist” of characters is an option but it may be difficult to think of all of the characters to validate against. Also there may be some that were not discovered as of yet.  A “white list” containing only allowable characters should be created to validate the user input.  Characters that were missed, as well as undiscovered threats, should be eliminated by this list.<br>
 
-###Permissions
+####Permissions
 The web application and its components should be running under strict permissions that do not allow operating system command execution. Try to verify all these informations to test from a Gray Box point of view<br>

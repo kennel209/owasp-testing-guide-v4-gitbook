@@ -1,11 +1,11 @@
 # Testing for Client Side Resource Manipulation (OTG-CLIENT-006)
 
 
-## Summary
+### Summary
 A ClientSide Resource Manipulation vulnerability is an input validation flaw that occurs when an application accepts an user controlled input which specifies the path of a resource (for example the source of an iframe, js, applet or the handler of an XMLHttpRequest). Specifically, such a vulnerability consists in the ability to control the URLs which link to some resources present in a web page. The impact may vary on the basis of the type of the element whose URL is controlled by the attacker, and it is usually adopted to conduct Cross-Site Scripting attacks.
 
 
-## How to Test
+### How to Test
 Such a vulnerability occurs when the application employs user controlled URLs for referencing external/internal resources. In these circumstances it is possible to interfere with the expected application's behavior in the sense of making it load and render malicious objects.
 
 
@@ -75,11 +75,11 @@ header('Access-Control-Allow-Origin: http://www.victim.com');
 ```
 
 
-### Black Box testing
+#### Black Box testing
 Black box testing for  Client Side Resource Manipulation is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.
 
 
-### Gray Box testing
+#### Gray Box testing
 **Testing for Client Side Resource Manipulation vulnerabilities:**<br>
 To manually check for this type of vulnerability we have to identify whether the application employs inputs without correctly validating them; these are under the control of the user which could be able to specify the url of some resources. Since there are many resources that could be included into the application (for example images, video, object, css, frames etc.),  client side scripts which handle the associated URLs should be investigated for potential issues.
 
@@ -103,11 +103,11 @@ The most interesting ones are those that allow to an attacker to include client 
 When trying to check for this kind of issues, consider that some characters are treated differently by different browsers.
 Moreover always consider the possibility to try absolute URLs variants as described here: http://kotowicz.net/absolute/
 
-##Tools
+###Tools
 
 * DOMinator - https://dominator.mindedsecurity.com/
 
-## References
+### References
 **OWASP Resources**
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS.com - http://www.domxss.com

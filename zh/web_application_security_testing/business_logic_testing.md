@@ -1,6 +1,6 @@
 # Business Logic Testing
 
-## Summary
+### Summary
 
 Testing for business logic flaws in a multi-functional dynamic web application requires thinking in unconventional methods. If an application's authentication mechanism is developed with the intention of performing steps 1, 2, 3 in that specific order to authenticate a user. What happens if the user goes from step 1 straight to step 3? In this simplistic example, does the application provide access by failing open; deny access, or just error out with a 500 message?
 
@@ -14,7 +14,7 @@ The classification of business logic flaws has been under-studied; although expl
 Testing of business logic flaws is similar to the test types used by functional testers that focus on logical or finite state testing. These types of tests require that security professionals think a bit differently, develop abused and misuse cases and use many of the testing techniques embraced by functional testers. Automation of business logic abuse cases is not possible and remains a manual art relying on the skills of the tester and their knowledge of the complete business process and its rules.
 
 
-##Business Limits and Restrictions
+###Business Limits and Restrictions
 
 Consider the rules for the business function being provided by the application. Are there any limits or restrictions on people's behavior? Then consider whether the application enforces those rules. It's generally pretty easy to identify the test and analysis cases to verify the application if you're familiar with the business. If you are a third-party tester, then you're going to have to use your common sense and ask the business if different operations should be allowed by the application.
 
@@ -22,7 +22,7 @@ Consider the rules for the business function being provided by the application. 
 Sometimes, in very complex applications, the tester will not have a full understanding of every aspect of the application initially. In these situations, it is best to have the client walk the tester through the application, so that they may gain a better understanding of the limits and intended functionality of the application, before the actual test begins. Additionally, having a direct line to the developers (if possible) during testing will help out greatly, if any questions arise regarding the application's functionality.
 
 
-##Description of the Issue
+###Description of the Issue
 
 Automated tools find it hard to understand context, hence it's up to a person to perform these kinds of tests. The following two examples will illustrate how understanding the functionality of the application, the developer's intentions, and some creative "out-of-the-box" thinking can break the application's logic. The first example starts with a simplistic parameter manipulation, whereas the second is a real world example of a multi-step process leading to completely subvert the application.
 
@@ -42,7 +42,7 @@ Holding/locking resources and keeping others from purchases these items online m
 What if a user was able to start a transaction linked to their club/loyalty account and then after points have been added to their account cancel out of the transaction?  Will the points/credits still be applied to their account?
 
 
-##Business Logic Test Cases
+###Business Logic Test Cases
 
 Every application has a different business process, application specific logic and can be manipulated in an infinite number of combinations. This section provides some common examples of business logic issues but in no way a complete list of all issues.
 
@@ -94,7 +94,7 @@ In unexpected file upload testing, we verify that the application does not allow
 In malicious file upload testing, we verify that the application does not allow users to upload files to the system that are malicious or potentially malicious to the system security. This is important because without these safeguards in place attackers may be able to upload files to the system that may spread viruses, malware or even exploits such as shellcode when executed.
 
 
-## Tools
+### Tools
 
 While there are tools for testing and verifying that business processes are functioning correctly in valid situations these tools are incapable of detecting logical vulnerabilities. For example, tools have no means of detecting if a user is able to circumvent the business process flow through editing parameters, predicting resource names or escalating privileges to access restricted resources nor do they have any mechanism to help the human testers to suspect this state of affairs.
 
@@ -147,7 +147,7 @@ Make HTTP requests from your browser and browse the response (HTTP headers and s
 Firebug Lite is not a substitute for Firebug, or Chrome Developer Tools. It is a tool to be used in conjunction with these tools. Firebug Lite provides the rich visual representation we are used to see in Firebug when it comes to HTML elements, DOM elements, and Box Model shading. It provides also some cool features like inspecting HTML elements with your mouse, and live editing CSS properties.
 
 
-##References
+###References
 
 **Whitepapers**<br>
 

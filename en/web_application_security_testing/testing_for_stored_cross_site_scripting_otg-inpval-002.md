@@ -1,6 +1,6 @@
 # Testing for Stored Cross Site Scripting (OTG-INPVAL-002)
 
-## Summary
+### Summary
 Stored [Cross-site Scripting (XSS)]() is the most dangerous type of Cross Site Scripting. Web applications that allow users to store data are potentially exposed to this type of attack. This chapter illustrates examples of stored cross site scripting injection and related exploitation scenarios.
 
 
@@ -30,9 +30,9 @@ This type of attack can also be exploited with browser exploitation frameworks s
 
 Stored XSS is particularly dangerous in application areas where users with high privileges have access. When the administrator visits the vulnerable page, the attack is automatically executed by their browser. This might expose sensitive information such as session authorization tokens.
 
-## How to Test
+### How to Test
 
-### Black Box testing
+#### Black Box testing
 
 The process for identifying stored XSS vulnerabilities is similar to the process described during the [testing for reflected XSS](https://www.owasp.org/index.php/Testing_for_Reflected_Cross_site_scripting_%28OTG-INPVAL-001%29).
 
@@ -171,7 +171,7 @@ Content-Type: text/html
 Also consider that Internet Explorer does not handle MIME types in the same way as Mozilla Firefox or other browsers do. For instance, Internet Explorer handles TXT files with HTML content as HTML content. For further information about MIME handling, refer to the whitepapers section at the bottom of this chapter.
 
 
-### Gray Box testing
+#### Gray Box testing
 Gray Box testing is similar to Black box testing. In gray box testing, the pen-tester has partial knowledge of the application. In this case, information regarding user input, input validation controls, and data storage might be known by the pen-tester.
 
 
@@ -199,7 +199,7 @@ The following table summarizes some special variables and functions to look at w
 
 <b>Note</b>: The table above is only a summary of the most important parameters but, all user input parameters should be investigated.
 
-## Tools
+### Tools
 * **[OWASP CAL9000](https://www.owasp.org/index.php/OWASP_CAL9000_Project)**
 CAL9000 includes a sortable implementation of RSnake's XSS Attacks, Character Encoder/Decoder, HTTP Request Generator and Response Evaluator, Testing Checklist, Automated Attack Editor and much more.
 * **PHP Charset Encoder(PCE)** - http://h4k.in/encoding
@@ -222,7 +222,7 @@ Greasemonkey script that allow users to easily test any web application for cros
 ZAP is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications. It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing. ZAP provides automated scanners as well as a set of tools that allow you to find security vulnerabilities manually.
 
 
-## References
+### References
 **OWASP Resources**<br>
 * [XSS Filter Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet)
 

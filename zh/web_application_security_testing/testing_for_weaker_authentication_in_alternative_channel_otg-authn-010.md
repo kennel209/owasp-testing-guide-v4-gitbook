@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 
 Even if the primary authentication mechanisms do not include any vulnerabilities, it may be that vulnerabilities exist in alternative legitimate authentication user channels for the same user accounts. Tests should be undertaken to identify alternative channels and, subject to test scoping, identify vulnerabilities.
 
@@ -36,7 +36,7 @@ Note that the focus of this test is on alternative channels; some authentication
 Even if the scope of the test does not allow the alternative channels to be tested, their existence should be documented. These may undermine the degree of assurance in the authentication mechanisms and may be a precursor to additional testing.
 
 
-## Example
+### Example
 
 The primary website is:
 ```
@@ -51,14 +51,14 @@ However, a separate mobile-optimized website exists that does not use Transport 
  http://m.example.com/myaccount/
 ```
 
-## How to Test
+### How to Test
 
-### Understand the primary mechanism
+#### Understand the primary mechanism
 
 Fully test the website's primary authentication functions. This should identify how accounts are issued, created or changed and how passwords are recovered, reset, or changed. Additionally knowledge of any elevated privilege authentication and authentication protection measures should be known. These precursors are necessary to be able to compare with any alternative channels.
 
 
-### Identify other channels
+#### Identify other channels
 
 Other channels can be found by using the following methods:
 
@@ -70,7 +70,7 @@ Other channels can be found by using the following methods:
 For each possible channel confirm whether user accounts are shared across these, or provide access to the same or similar functionality.
 
 
-### Enumerate authentication functionality
+#### Enumerate authentication functionality
 
 For each alternative channel where user accounts or functionality are shared, identify if all the authentication functions of the primary channel are available, and if anything extra exists. It may be useful to create a grid like the one below:
 
@@ -89,16 +89,16 @@ In this example, mobile has an extra function "change password" but does not off
 While enumerating these it is worth taking note of how session management is undertaken, in case there is overlap across any channels (e.g. cookies scoped to the same parent domain name, concurrent sessions allowed across channels, but not on the same channel).
 
 
-### Review and test
+#### Review and test
 
 Alternative channels should be mentioned in the testing report, even if they are marked as "information only" and/or "out of scope". In some cases the test scope might include the alternative channel (e.g. because it is just another path on the target host name), or may be added to the scope after discussion with the owners of all the channels. If testing is permitted and authorized, all the other authentication tests in this guide should then be performed, and compared against the primary channel.
 
 
-## Related Test Cases
+### Related Test Cases
 
 The test cases for all the other authentication tests should be utilized.
 
 
-## Remediation
+### Remediation
 
 Ensure a consistent authentication policy is applied across all channels so that they are equally secure.

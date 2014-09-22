@@ -1,11 +1,11 @@
 # Test RIA cross domain policy (OTG-CONFIG-008)
 
 
-## Summary
+### Summary
 Rich Internet Applications (RIA) have adopted Adobe's crossdomain.xml policy files to allow for controlled cross domain access to data and service consumption using technologies such as Oracle Java, Silverlight, and Adobe Flash. Therefore, a domain can grant remote access to its services from a different domain. However, often the policy files that describe the access restrictions are poorly configured. Poor configuration of the policy files enables Cross-site Request Forgery attacks, and may allow third parties to access sensitive data meant for the user.
 
 
-### What are cross-domain policy files?
+#### What are cross-domain policy files?
 A cross-domain policy file specifies the permissions that a web client such as Java, Adobe Flash, Adobe Reader, etc. use to access data across different domains. For Silverlight, Microsoft adopted a subset of the Adobe's crossdomain.xml, and additionally created it's own cross-domain policy file: clientaccesspolicy.xml.
 
 
@@ -15,7 +15,7 @@ Whenever a web client detects that a resource has to be requested from other dom
 Master policy files are located at the domain's root. A client may be instructed to load a different policy file but it will always check the master policy file first to ensure that the master policy file permits the requested policy file.
 
 
-#### Crossdomain.xml vs. Clientaccesspolicy.xml
+##### Crossdomain.xml vs. Clientaccesspolicy.xml
 Most RIA applications support crossdomain.xml. However in the case of Silverlight, it will only work if the crossdomain.xml specifies that access is allowed from any domain. For more granular control with Silverlight, clientaccesspolicy.xml must be used.
 
 
@@ -40,18 +40,18 @@ An example of an overly permissive policy file:
 ```
 
 
-### How can cross domain policy files can be abused?
+#### How can cross domain policy files can be abused?
 * Overly permissive cross-domain policies.
 * Generating server responses that may be treated as cross-domain policy files.
 * Using file upload functionality to upload files that may be treated as cross-domain policy files.
 
 
-### Impact of abusing cross-domain access
+#### Impact of abusing cross-domain access
 * Defeat CSRF protections.
 * Read data restricted or otherwise protected by cross-origin policies.
 
 
-## How to Test
+### How to Test
 **Testing for RIA policy files weakness:** <br>
 To test for RIA policy file weakness the tester should try to retrieve the policy files crossdomain.xml and clientaccesspolicy.xml from the application's root, and from every folder found.<br><br>
 For example, if the application's URL is http://www.owasp.org, the tester should try to download the files http://www.owasp.org/crossdomain.xml and http://www.owasp.org/clientaccesspolicy.xml.
@@ -70,13 +70,13 @@ Example:
 * A weak settings in the policies.<br>
 
 
-##Tools
+###Tools
 * Nikto
 * OWASP Zed Attack Proxy Project
 * W3af
 
 
-## References
+### References
 **Whitepapers**<br>
 * UCSD: "Analyzing the Crossdomain Policies of Flash Applications" - http://cseweb.ucsd.edu/~hovav/dist/crossdomain.pdf
 * Adobe: "Cross-domain policy file specification" - http://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html

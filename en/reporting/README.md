@@ -3,7 +3,7 @@
 Performing the technical side of the assessment is only half of the overall assessment process. The final product is the production of a well written and informative report. A report should be easy to understand and should highlight all the risks found during the assessment phase. The report should appeal to both executive management and technical staff.
 The report needs to have three major sections. It should be created in a manner that allows each separate section to be printed and given to the appropriate teams, such as the developers or system managers. The recommended sections are outlined below.
 
-## 1. Executive Summary
+### 1. Executive Summary
 The executive summary sums up the overall findings of the assessment and gives business managers and system owners a high level view of the vulnerabilities discovered. The language used should be more suited to people who are not technically aware and should include graphs or other charts which show the risk level. Keep in mind that executives will likely only have time to read this summary and will want two questions answered in plain language:
 1. *What's wrong?*
 2. *How do I fix it?*
@@ -11,25 +11,25 @@ The executive summary sums up the overall findings of the assessment and gives b
 You have one page to answer these questions.
 The executive summary should plainly state that the vulnerabilities and their severity is an **input** to their organizational risk management process, not an outcome or remediation. It is safest to explain that tester does not understand the threats faced by the organization or business consequences if the vulnerabilities are exploited. This is the job of the risk professional who calculates risk levels based on this and other information. Risk management will typically be part of the organization's IT Security Governance, Risk and Compliance (GRC) regime and this report will simply provide an input to that process.
 
-## 2. Test Parameters
+### 2. Test Parameters
 
 The Introduction should outline the parameters of the security testing, the findings and remediation. Some suggested section headings include:
-### 2.1  Project Objective:
+#### 2.1  Project Objective:
 This section outlines the project objectives and the expected outcome of the assessment.
-### 2.2 Project Scope:
+#### 2.2 Project Scope:
 This section outlines the agreed scope.
-### 2.3 Project Schedule
+#### 2.3 Project Schedule
 This section outlines when the testing commenced and when it was completed.
-### 2.4 Targets:
+#### 2.4 Targets:
 This section lists the number of applications or targeted systems.
-### 2.5 Limitations:
+#### 2.5 Limitations:
 This section outlines every limitation which was faced throughout the assessment. For example, limitations of project-focused tests, limitation in the security testing methods, performance or technical issues that the tester come across during the course of assessment, etc.
-### 2.6 Findings Summary
+#### 2.6 Findings Summary
 This section outlines the vulnerabilities that were discovered during testing.
-### 2.7 Remediation Summary
+#### 2.7 Remediation Summary
 This section outlines the action plan for fixing the vulnerabilities that were discovered during testing.
 
-## 3. Findings
+### 3. Findings
 
 The last section of the report includes detailed technical information about the vulnerabilities found and the actions needed to resolve them. This section is aimed at a technical level and should include all the necessary information for the technical teams to understand the issue and resolve it. Each finding should be clear and concise and give the reader of the report a full understanding of the issue at hand.
 The findings section should include:
@@ -164,10 +164,10 @@ The following is the list of controls that were tested during the assessment:
 | OTG-CLIENT-011|Test Web Messaging | | | |
 | OTG-CLIENT-012|Test Local Storage | | | |
 
-## Appendix
+### Appendix
 
 This section is often used to describe the commercial and open-source tools that were used in conducting the assessment. When custom scripts or code are utilized during the assessment, it should be disclosed in this section or noted as attachment. Customers appreciate when the methodology used by the consultants is included. It gives them an idea of the thoroughness of the assessment and what areas were included.
 
-## References
+### References
 
 Industry standard vulnerability severity and risk rankings (CVSS) [1] – http://www.first.org/cvss

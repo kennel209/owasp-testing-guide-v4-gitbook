@@ -1,6 +1,6 @@
 # Testing for Cross Site Request Forgery (CSRF) (OTG-SESS-005)
 
-##Summary
+###Summary
 
 [CSRF](https://www.owasp.org/index.php/CSRF) is an attack which forces an end user to execute unwanted actions on a web application in which he/she is currently authenticated. With a little help of social engineering (like sending a link via email or chat), an attacker may force the users of a web application to execute actions of the attacker's choosing. A successful CSRF exploit can compromise end user data and operation, when it targets a normal user. If the targeted end user is the administrator account, a CSRF attack can compromise the entire web application.
 
@@ -133,9 +133,9 @@ Self-vulnerable applications, i.e., applications that are used both as attack ve
 
 
 
-## How to Test
+### How to Test
 
-### Black Box Testing
+#### Black Box Testing
 
 For a black box test the tester must know URLs in the restricted (authenticated) area. If they possess valid credentials, they can assume both roles – the attacker and the victim. In this case, testers know the URLs to be tested just by browsing around the application.
 
@@ -152,7 +152,7 @@ Either way, a test case can be constructed as follows:
 * observe the result, i.e. check if the web server executed the request.
 
 
-### Gray Box Testing
+#### Gray Box Testing
 
 Audit the application to ascertain if its session management is vulnerable. If session management relies only on client side values (information available to the browser), then the application is vulnerable. "Client side values” mean cookies and HTTP authentication credentials (Basic Authentication and other forms of HTTP authentication; not form-based authentication, which is an application-level authentication). For an application to not be vulnerable, it must include session-related information in the URL, in a form of unidentifiable or unpredictable by the user ([3] uses the term *secret* to refer to this piece of information).
 
@@ -160,7 +160,7 @@ Audit the application to ascertain if its session management is vulnerable. If s
 Resources accessible via HTTP GET requests are easily vulnerable, though POST requests can be automated via Javascript and are vulnerable as well; therefore, the use of POST alone is not enough to correct the occurrence of CSRF vulnerabilities.
 
 
-## Tools
+### Tools
 * WebScarab Spider http://www.owasp.org/index.php/Category:OWASP_WebScarab_Project
 * CSRF Tester http://www.owasp.org/index.php/Category:OWASP_CSRFTester_Project
 * Cross Site Requester http://yehg.net/lab/pr0js/pentest/cross_site_request_forgery.php (via img)
@@ -168,7 +168,7 @@ Resources accessible via HTTP GET requests are easily vulnerable, though POST re
 * Pinata-csrf-tool http://code.google.com/p/pinata-csrf-tool/
 
 
-##References
+###References
 **Whitepapers**<br>
 * Peter W: "Cross-Site Request Forgeries" - http://www.tux.org/~peterw/csrf.txt
 * Thomas Schreiber: "Session Riding" - http://www.securenet.de/papers/Session_Riding.pdf
@@ -176,7 +176,7 @@ Resources accessible via HTTP GET requests are easily vulnerable, though POST re
 * Cross-site Request Forgery FAQ - http://www.cgisecurity.com/articles/csrf-faq.shtml
 * A Most-Neglected Fact About Cross Site Request Forgery (CSRF) - [http://yehg.net/lab/pr0js/view.php/A_Most-Neglected_Fact_About_CSRF.pdf ](http://yehg.net/lab/pr0js/view.php/A_Most-Neglected_Fact_About_CSRF.pdf)
 
-## Remediation
+### Remediation
 
 The following countermeasures are divided among recommendations to users and to developers.
 
@@ -204,23 +204,23 @@ Other countermeasures, while they do not resolve the issue, contribute to make i
 * The same is true with intermediate confirmation pages (such as: “Are you sure you really want to do this?” type of pages). They can be bypassed by an attacker, although they will make their work a bit more complex. Therefore, do not rely solely on these measures to protect your application.
 * Automatic log out mechanisms somewhat mitigate the exposure to these vulnerabilities, though it ultimately depends on the context (a user who works all day long on a vulnerable web banking application is obviously more at risk than a user who uses the same application occasionally).
 
-## Related Security Activities
+### Related Security Activities
 
-### Description of CSRF Vulnerabilities
+#### Description of CSRF Vulnerabilities
 
 See the OWASP article on [CSRF](https://www.owasp.org/index.php/CSRF) Vulnerabilities.
 
 
-### How to Avoid CSRF Vulnerabilities
+#### How to Avoid CSRF Vulnerabilities
 
 See the [OWASP Development Guide](https://www.owasp.org/index.php/Category:OWASP_Guide_Project) article on how to [Avoid CSRF]() Vulnerabilities.
 
 
-### How to Review Code for CSRF Vulnerabilities
+#### How to Review Code for CSRF Vulnerabilities
 
 See the [OWASP Code Review Guide](https://www.owasp.org/index.php/Category:OWASP_Code_Review_Project) article on how to [Review Code for CSRF](https://www.owasp.org/index.php/Reviewing_code_for_Cross-Site_Request_Forgery_issues) Vulnerabilities.
 
 
-### How to Prevent CSRF Vulnerabilites
+#### How to Prevent CSRF Vulnerabilites
 
 See the [OWASP CSRF Prevention Cheat Sheet](http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet) for prevention measures.

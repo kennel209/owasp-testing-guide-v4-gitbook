@@ -1,17 +1,17 @@
 # Map execution paths through application (OTG-INFO-007)
 
 
-## Summary
+### Summary
 
 Before commencing security testing, understanding the structure of the application is paramount. Without a thorough understanding of the layout of the application, it is unlkely that it will be tested thoroughly.
 
 
-## Test Objectives
+### Test Objectives
 
 Map the target application and understand the principal workflows.
 
 
-## How to Test
+### How to Test
 
 In black box testing it is extremely difficult to test the entire code base. Not just because the tester has no view of the code paths through the application, but even if they did, to test all code paths would be very time consuming. One way to reconcile this is to document what code paths were discovered and tested.
 
@@ -36,7 +36,7 @@ To demonstrate code coverage to the application owner, the tester can start with
 Ensuring sufficient code coverage for the application owner is far easier with the gray and white box approach to testing. Information solicited by and provided to the tester will ensure the minimum requirements for code coverage are met.
 
 
-### Example
+#### Example
 
 ** Automatic Spidering **
 
@@ -53,7 +53,7 @@ The automatic spider is a tool used to automatically discover new resources (URL
 * Spider all in Scope - The seed list contains all the URIs the user has selected as being 'In Scope'.
 
 
-## Tools
+### Tools
 
 * [Zed Attack Proxy (ZAP)](https://code.google.com/p/zaproxy/)
 
@@ -62,7 +62,7 @@ The automatic spider is a tool used to automatically discover new resources (URL
 * [Diagramming software](http://en.wikipedia.org/wiki/Diagramming_software)
 
 
-## References
+### References
 
 
 **Whitepapers**

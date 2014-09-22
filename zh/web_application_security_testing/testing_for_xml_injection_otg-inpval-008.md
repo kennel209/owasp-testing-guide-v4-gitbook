@@ -1,13 +1,13 @@
 # Testing for XML Injection (OTG-INPVAL-008)
 
-## Summary
+### Summary
 XML Injection testing is when a tester tries to inject an XML doc to the application. If the XML parser fails to contextually validate data, then the test will yield a positive result.
 
 
 This section describes practical examples of XML Injection. First, an XML style communication will be defined and its working principles explained. Then, the discovery method in which we try to insert XML metacharacters. Once the first step is accomplished, the tester will have some information about the XML structure, so it will be possible to try to inject XML data and tags (Tag Injection).
 
 
-## How to Test
+### How to Test
 Let's suppose there is a web application using an XML style communication in order to perform user registration. This is done by creating and adding a new <user> node in an xmlDb file.
 
 
@@ -82,7 +82,7 @@ which will be added to the xmlDB:
 </users>
 ```
 
-### Discovery
+#### Discovery
 The first step in order to test an application for the presence of a XML Injection vulnerability consists of trying to insert XML metacharacters.
 
 
@@ -289,7 +289,7 @@ Other useful tests are the following:
 ```
 
 
-### Tag Injection
+#### Tag Injection
 
 Once the first step is accomplished, the tester will have some information about the structure of the XML document. Then, it is possible to try to inject XML data and tags. We will show an example of how this can lead to a privilege escalation attack.
 
@@ -392,10 +392,10 @@ In this case, the final XML database is:
 The original *userid* node has been commented out, leaving only the injected one. The document now complies with its DTD rules.<br>
 
 
-## Tools
+### Tools
 * XML Injection Fuzz Strings (from wfuzz tool) - https://wfuzz.googlecode.com/svn/trunk/wordlist/Injections/XML.txt
 
-## References
+### References
 **Whitepapers**<br>
 * [1] Alex Stamos: "Attacking Web Services" - http://www.owasp.org/images/d/d1/AppSec2005DC-Alex_Stamos-Attacking_Web_Services.ppt<br>
 * Gregory Steuck, "XXE (Xml eXternal Entity) attack", http://www.securityfocus.com/archive/1/297714

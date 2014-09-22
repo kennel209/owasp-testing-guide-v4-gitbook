@@ -1,16 +1,16 @@
 # Identify application entry points (OTG-INFO-006)
 
 
-## Summary
+### Summary
 Enumerating the application and its attack surface is a key precursor before any thorough testing can be undertaken, as it allows the tester to identify likely areas of weakness. This section aims to help identify and map out areas within the application that should be investigated once enumeration and mapping have been completed.
 
 
-## Test Objectives
+### Test Objectives
 
 Understand how requests are formed and typical responses from the application
 
 
-## How to Test
+### How to Test
 
 Before any testing begins, the tester should always get a good understanding of the application and how the user and browser communicates with it.  As the tester walks through the application, they should pay special attention to all HTTP requests (GET and POST Methods, also known as Verbs), as well as every parameter and form field that is passed to the application.  In addition, they should pay attention to when GET requests are used and when POST requests are used to pass parameters to the application.  It is very common that GET requests are used, but when sensitive information is passed, it is often done within the body of a POST request.
 
@@ -43,12 +43,12 @@ Below are some points of interests for all requests and responses.  Within the r
 *Also note where any interesting headers are used. For example, "Server: BIG-IP" indicates that the site is load balanced. Thus, if a site is load balanced and one server is incorrectly configured, then the tester might have to make multiple requests to access the vulnerable server, depending on the type of load balancing used.
 
 
-### Black Box Testing
+#### Black Box Testing
 **Testing for application entry points:** <br>
 The following are two examples on how to check for application entry points.<br>
 
 
-####EXAMPLE 1
+#####EXAMPLE 1
 This example shows a GET request that would purchase an item from an online shopping application.
 ```
  GET https://x.x.x.x/shoppingApp/buyme.asp?CUSTOMERID=100&ITEM=z101a&PRICE=62.50&IP=x.x.x.x
@@ -61,7 +61,7 @@ This example shows a GET request that would purchase an item from an online shop
 Here the tester would note all the parameters of the request such as CUSTOMERID, ITEM, PRICE, IP, and the Cookie (which could just be encoded parameters or used for session state).
 
 
-####EXAMPLE 2
+#####EXAMPLE 2
 This example shows a POST request that would log you into an application.
 ```
  POST https://x.x.x.x/KevinNotSoGoodApp/authenticate.asp?service=login
@@ -80,12 +80,12 @@ Body of the POST message:
 In this example the tester would note all the parameters as they have before but notice that the parameters are passed in the body of the message and not in the URL.  Additionally, note that there is a custom cookie that is being used.
 
 
-### Gray Box Testing
+#### Gray Box Testing
 
 Testing for application entry points via a Gray Box methodology would consist of everything already identified above with one addition.  In cases where there are external sources from which the application receives data and processes it (such as SNMP traps, syslog messages, SMTP, or SOAP messages from other servers) a meeting with the application developers could identify any functions that would accept or expect user input and how they are formatted.  For example, the developer could help in understanding how to formulate a correct SOAP request that the application would accept and where the web service resides (if the web service or any other function hasn't already been identified during the black box testing).
 
 
-## Tools
+### Tools
 
 **Intercepting Proxy:**<br>
 
@@ -101,7 +101,7 @@ Testing for application entry points via a Gray Box methodology would consist of
 * [Tamper Data for Firefox](https://addons.mozilla.org/en-US/firefox/addon/966)
 
 
-## References
+### References
 
 **Whitepapers**<br>
 

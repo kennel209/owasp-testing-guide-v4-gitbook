@@ -1,18 +1,18 @@
 # Conduct Search Engine Discovery and Reconnaissance for Information Leakage (OTG-INFO-001)
 
-## Summary
+### Summary
 There are direct and indirect elements to search engine discovery and reconnaissance. Direct methods relate to searching the indexes and the associated content from caches. Indirect methods relate to gleaning sensitive design and configuration information by searching forums, newsgroups, and tendering websites.
 
 
 Once a search engine robot has completed crawling, it commences indexing the web page based on tags and associated attributes, such as *`<TITLE>`*, in order to return the relevant search results [1]. If the robots.txt file is not updated during the lifetime of the web site, and inline HTML meta tags that instruct robots not to index content have not been used, then it is possible for indexes to contain web content not intended to be included in by the owners. Website owners may use the previously mentioned robots.txt, HTML meta tags, authentication, and tools provided by search engines to remove such content.
 
 
-## Test Objectives
+### Test Objectives
 
 To understand what sensitive design and configuration information of the application/system/organization is exposed both directly (on the organization's website) or indirectly (on a third party website).
 
 
-## How to Test
+### How to Test
 
 Use a search engine to search for:
 * Network diagrams and configurations
@@ -23,7 +23,7 @@ Use a search engine to search for:
 * Development, test, UAT and staging versions of the website
 
 
-### Search operators
+#### Search operators
 Using the advanced "site:" search operator, it is possible to restrict search results to a specific domain [2]. Do not limit testing to just one search engine provider as they may generate different results depending on when they crawled content and their own algorithms. Consider using the following search engines:
 
 * Baidu
@@ -59,7 +59,7 @@ cache:owasp.org
 ![Image:Google_cache_Operator_Search_Results_Example_20121219.jpg||border](https://www.owasp.org/images/3/3f/Google_cache_Operator_Search_Results_Example_20121219.jpg)
 
 
-### Google Hacking Database
+#### Google Hacking Database
 
 The Google Hacking Database is list of useful search queries for Google. Queries are put in several categories:
 * Footholds
@@ -74,21 +74,21 @@ The Google Hacking Database is list of useful search queries for Google. Queries
 * Sensitive Online Shopping Info
 
 
-## Tools
+### Tools
 * FoundStone SiteDigger - http://www.mcafee.com/uk/downloads/free-tools/sitedigger.aspx <br>
 * Google Hacker - http://yehg.net/lab/pr0js/files.php/googlehacker.zip<br>
 * Stach & Liu's Google Hacking Diggity Project - http://www.stachliu.com/resources/tools/google-hacking-diggity-project/ <br>
 * PunkSPIDER - http://punkspider.hyperiongray.com/ <br>
 
 
-## References
+### References
 **Web**<br>
 [1] "Google Basics: Learn how Google Discovers, Crawls, and Serves Web Pages" - https://support.google.com/webmasters/answer/70897 <br>
 [2] "Operators and More Search Help" - https://support.google.com/websearch/answer/136861?hl=en <br>
 [3] "Google Hacking Database" - http://www.exploit-db.com/google-dorks/ <br>
 
 
-## Remediation
+### Remediation
 Carefully consider the sensitivity of design and configuration information before it is posted online.
 
 Periodically review the sensitivity of existing design and configuration information that is posted online.

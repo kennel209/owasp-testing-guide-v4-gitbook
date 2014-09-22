@@ -1,7 +1,7 @@
 # Testing for incubated vulnerabilities (OTG-INPVAL-015)
 
 
-## Summary
+### Summary
 Also often refered to as persistent attacks, incubated testing is a complex testing method that needs more than one data validation vulnerability to work. Incubated vulnerabilities are typically used to conduct "watering hole" attacks against users of legitimate web applications.
 
 Incubated vulnerabilities have the following characteristics:
@@ -26,15 +26,15 @@ This type of asynchronous attack covers a great spectrum of attack vectors, amon
 * Misconfigured servers allowing installation of Java packages or similar web site components (i.e. Tomcat, or web hosting consoles such as Plesk, CPanel, Helm, etc.)
 
 
-## How to Test
+### How to Test
 
-### Black Box testing
+#### Black Box testing
 
-#### File Upload Example
+##### File Upload Example
 Verify the content type allowed to upload to the web application and the resultant URL for the uploaded file. Upload a file that will exploit a component in the local user workstation when viewed or downloaded by the user. Send your victim an email or other kind of alert in order to lead him/her to browse the page. The expected result is the exploit will be triggered when the user browses the resultant page or downloads and executes the file from the trusted site.
 
 
-#### XSS Example on a Bulletin Board
+##### XSS Example on a Bulletin Board
 
 1. Introduce *JavaScript* code as the value for the vulnerable field, for instance:
 ```
@@ -50,7 +50,7 @@ Verify the content type allowed to upload to the web application and the resulta
 4. Use cookies obtained to impersonate users at the vulnerable site.
 
 
-#### SQL Injection Example
+##### SQL Injection Example
 Usually, this set of examples leverages XSS attacks by exploiting a SQL-injection vulnerability. The first thing to test is whether the target site has a SQL injection vulnerability. This is described in Section 4.2 [Testing for SQL Injection](https://www.owasp.org/index.php/Testing_for_SQL_Injection_%28OTG-INPVAL-006%29). For each SQL-injection vulnerability, there is an underlying set of constraints describing the kind of queries that the attacker/pen-tester is allowed to do.
 
 
@@ -69,7 +69,7 @@ The tester then has to match the XSS attacks he has devised with the entries tha
 2. Now, each user browsing the site will silently send his cookies to the *attackers.site* (steps b.2 to b.4).
 
 
-#### Misconfigured Server
+##### Misconfigured Server
 Some web servers present an administration interface that may allow an attacker to upload active components of her choice to the site. This could be the case with an Apache Tomcat server that doesn’t enforce strong credentials to access its Web Application Manager (or if the pen testers have been able to obtain valid credentials for the administration module by other means).
 
 
@@ -79,7 +79,7 @@ In this case, a WAR file can be uploaded and a new web application deployed at t
 As should also be obvious, the ability to change web page contents at the server, via any vulnerabilities that may be exploitable at the host which will give the attacker webroot write permissions, will also be useful towards planting such an incubated attack on the web server pages (actually, this is a known infection-spread method for some web server worms).
 
 
-### Gray Box testing
+#### Gray Box testing
 Gray/white testing techniques will be the same as previously discussed.
 * Examining input validation is key in mitigating against this vulnerability. If other systems in the enterprise use the same persistence layer they may have weak input validation and the data may be persisited via a "back door".
 
@@ -88,14 +88,14 @@ Gray/white testing techniques will be the same as previously discussed.
 * See the [Data Validation](https://www.owasp.org/index.php/Data_Validation_(Code_Review)#Data_validation_strategy) section of the Code review guide.
 
 
-## Tools
+### Tools
 
 * XSS-proxy - http://sourceforge.net/projects/xss-proxy
 * Paros - http://www.parosproxy.org/index.shtml
 * Burp Suite - http://portswigger.net/burp/proxy.html
 * Metasploit - http://www.metasploit.com/
 
-## References
+### References
 Most of the references from the Cross-site scripting section are valid. As explained above, incubated attacks are executed when combining exploits such as XSS or SQL-injection attacks.
 
 

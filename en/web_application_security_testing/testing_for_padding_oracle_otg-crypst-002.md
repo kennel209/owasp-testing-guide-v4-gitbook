@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 <br>
 A padding oracle is a function of an application which decrypts encrypted data provided by the client, e.g. internal session state stored on the client, and leaks the state of the validity of the padding after decryption. The existence of a padding oracle allows an attacker to decrypt encrypted data and encrypt arbitrary data without knowledge of the key used for these cryptographic operations. This can lead to leakage of sensible data or to privilege escalation vulnerabilities, if integrity of the encrypted data is assumed by the application.
 
@@ -25,8 +25,8 @@ The padding oracle attack enables an attacker to decrypt encrypted data without 
 
 A padding oracle attack also enables an attacker to encrypt arbitrary plain texts without knowledge of the used key and cipher. If the application assumes that integrity and authenticity of the decrypted data is given, an attacker could be able to manipulate internal session state and possibly gain higher privileges.
 
-##How to Test
-### Black Box Testing
+###How to Test
+#### Black Box Testing
 **Testing for padding oracle vulnerabilities:** <br>
 First the possible input points for padding oracles must be identified. Generally the following conditions must be met:
 
@@ -64,7 +64,7 @@ Compare the responses carefully. Search especially for exceptions and messages w
 A secure implementation will check for integrity and cause only two responses: ok and failed. There are no side channels which can be used to determine internal error states.
 
 
-### Grey Box Testing
+#### Grey Box Testing
 **Testing for padding oracle vulnerabilities:** <br>
 Verify that all places where encrypted data from the client, that should only be known by the server, is decrypted. The following conditions should be met by such code:
 
@@ -72,7 +72,7 @@ Verify that all places where encrypted data from the client, that should only be
 2. All error states while decryption and further processing are handled uniformly.
 
 
-##Tools
+###Tools
 * PadBuster - [https://github.com/GDSSecurity/PadBuster](https://github.com/GDSSecurity/PadBuster)
 * python-paddingoracle - [https://github.com/mwielgoszewski/python-paddingoracle](https://github.com/mwielgoszewski/python-paddingoracle)
 * Poracle - [https://github.com/iagox86/Poracle](https://github.com/iagox86/Poracle)
@@ -82,7 +82,7 @@ Verify that all places where encrypted data from the client, that should only be
 * Visualization of the decryption process - [http://erlend.oftedal.no/blog/poet/](http://erlend.oftedal.no/blog/poet/)
 
 
-## References
+### References
 **Whitepapers**<br>
 * Wikipedia - Padding oracle attack - [http://en.wikipedia.org/wiki/Padding_oracle_attack](http://en.wikipedia.org/wiki/Padding_oracle_attack)
 * Juliano Rizzo, Thai Duong, "Practical Padding Oracle Attacks" - [http://www.usenix.org/event/woot10/tech/full_papers/Rizzo.pdf](http://www.usenix.org/event/woot10/tech/full_papers/Rizzo.pdf)

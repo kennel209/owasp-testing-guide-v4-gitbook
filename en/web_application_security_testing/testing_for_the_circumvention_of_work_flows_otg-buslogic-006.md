@@ -1,6 +1,6 @@
 # Testing for the Circumvention of Work Flows (OTG-BUSLOGIC-006)
 
-## Summary
+### Summary
 
 Workflow vulnerabilities involve any type of vulnerability that allows the attacker to misuse an application/system in a way that will allow them to circumvent (not follow) the designed/intended workflow.
 
@@ -14,35 +14,35 @@ The application’s business logic must require that the user complete specific 
 The applications business process must have checks to ensure that the user's transactions/actions are proceeding in the correct/acceptable order and if a transaction triggers some sort of action, that action will be “rolled back” and removed if the transaction is not successfully completed.
 
 
-## Examples
+### Examples
 
-### Example 1
+#### Example 1
 
 Many of us receive so type of “club/loyalty points” for purchases from grocery stores and gas stations. Suppose a user was able to start a transaction linked to their account and then after points have been added to their club/loyalty account cancel out of the transaction or remove items from their “basket” and tender. In this case the system either should not apply points/credits to the account until it is tendered or points/credits should be “rolled back” if the point/credit increment does not match the final tender. With this in mind, an attacker may start transactions and cancel them to build their point levels without actually buy anything.
 
 
-### Example 2
+#### Example 2
 
 An electronic bulletin board system may be designed to ensure that initial posts do not contain profanity based on a list that the post is compared against. If a word on a "black" the list is found in the user entered text the submission is not posted. But, once a submission is posted the submitter can access, edit, and change the submission contents to include words included on the profanity/black list since on edit the posting is never compared again. Keeping this in mind, attackers may open an initial blank or minimal discussion then add in whatever they like as an update.
 
 
-## How to Test
+### How to Test
 
-### Generic Testing Method
+#### Generic Testing Method
 
 • Review the project documentation and use exploratory testing looking for methods to skip or go to steps in the application process in a different order from the designed/intended business logic flow.
 
 • For each method develop a misuse case and try to circumvent or perform an action that is "not acceptable" per the the business logic workflow.
 
 
-### Testing Method 1
+#### Testing Method 1
 
 •	Start a transaction going through the application past the points that triggers credits/points to the users account.
 
 •	Cancel out of the transaction or reduce the final tender so that the point values should be decreased and check the points/ credit system to ensure that the proper points/credits were recorded.
 
 
-### Testing Method 2
+#### Testing Method 2
 
 •	On a content management or bulletin board system enter and save valid initial text or values.
 
@@ -50,7 +50,7 @@ An electronic bulletin board system may be designed to ensure that initial posts
 
 
 
-## Related Test Cases
+### Related Test Cases
 
 [ Testing Directory traversal/file include (OTG-AUTHZ-001)](https://www.owasp.org/index.php/Testing_Directory_traversal/file_include_%28OTG-AUTHZ-001%29)
 
@@ -76,7 +76,7 @@ An electronic bulletin board system may be designed to ensure that initial posts
 [Test Upload of Malicious Files (OTG-BUSLOGIC-009)](https://www.owasp.org/index.php/Test_Upload_of_Malicious_Files_%28OTG-BUSLOGIC-009%29)
 
 
-## References
+### References
 
 OWASP Detail Misuse Cases - https://www.owasp.org/index.php/Detail_misuse_cases
 
@@ -88,6 +88,6 @@ Assets and Flaws – Vulnerability Detection to Fix - http://www.ntobjectives.co
 CWE-840: Business Logic Errors - http://cwe.mitre.org/data/definitions/840.html
 
 
-## Remediation
+### Remediation
 
 The application must be self-aware and have checks in place ensuring that the users complete each step in the work flow process in the correct order and prevent attackers from circumventing/skipping/or repeating any steps/processes in the workflow. Test for workflow vulnerabilities involves developing business logic abuse/misuse cases with the goal of successfully completing the business process while not completing the correct steps in the correct order.

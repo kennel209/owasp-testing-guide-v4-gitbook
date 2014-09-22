@@ -1,13 +1,13 @@
 # MySQL Testing
 
-## Summary
+### Summary
 [SQL Injection](https://www.owasp.org/index.php/SQL_Injection) vulnerabilities occur whenever input is used in the construction of a SQL query without being adequately constrained or sanitized. The use of dynamic SQL (the construction of SQL queries by concatenation of strings) opens the door to these vulnerabilities. SQL injection allows an attacker to access the SQL servers. It allows for the execution of SQL code under the privileges of the user used to connect to the database.
 
 
 *MySQL server* has a few particularities so that some exploits need to be specially customized for this application. That's the subject of this section.
 
 
-## How to Test
+### How to Test
 When an SQL injection vulnerability is found in an application backed by a MySQL database, there are a number of attacks that could be performed depending on the MySQL version and user privileges on DBMS.
 
 
@@ -27,7 +27,7 @@ From now on, we will assume that there is a classic SQL injection vulnerability,
  http://www.example.com/page.php?id=2
 ```
 
-### The Single Quotes Problem
+#### The Single Quotes Problem
 Before taking advantage of MySQL features, it has to be taken in consideration how strings could be represented in a statement, as often web applications escape single quotes.
 
 
@@ -54,7 +54,7 @@ Let's suppose we want to know the value of a field named 'password' in a record,
     password LIKE CHAR(65,37)
 
 
-### Multiple mixed queries:
+#### Multiple mixed queries:
 
 MySQL library connectors do not support multiple queries separated by **';**' so there's no way to inject multiple non-homogeneous SQL commands inside a single SQL injection vulnerability like in Microsoft SQL Server.
 
@@ -64,9 +64,9 @@ For example the following injection will result in an error:
  1 ; update tablename set code='javascript code' where 1 --
 ```
 
-### Information gathering
+#### Information gathering
 
-#### Fingerprinting MySQL
+##### Fingerprinting MySQL
 
 Of course, the first thing to know is if there's MySQL DBMS as a back end database. MySQL server has a feature that is used to let other DBMS ignore a clause in MySQL dialect. When a comment block *('/**/')* contains an exclamation mark *('/*! sql here*/')* it is interpreted by MySQL, and is considered as a normal comment block by other DBMS as explained in [MySQL manual](http://dev.mysql.com/doc/refman/5.0/en/comments.html).
 
@@ -81,7 +81,7 @@ Example:
 If MySQL is present, the clause inside the comment block will be interpreted.
 
 
-#### Version
+##### Version
 
 There are three ways to gain this information:
 1. By using the global variable @@version
@@ -110,7 +110,7 @@ A string like this:
  5.0.22-log
 ```
 
-#### Login User
+##### Login User
 
 There are two kinds of users MySQL Server relies upon.
 1. [[USER()](http://dev.mysql.com/doc/refman/5.0/en/information-functions.html)]: the user connected to the MySQL Server.
@@ -136,7 +136,7 @@ A string like this:
  user@hostname
 ```
 
-#### Database name in use
+##### Database name in use
 
 There is the native function DATABASE()
 
@@ -155,7 +155,7 @@ A string like this:
  dbname
 ```
 
-#### INFORMATION_SCHEMA
+##### INFORMATION_SCHEMA
 From MySQL 5.0 a view named [[INFORMATION_SCHEMA](http://dev.mysql.com/doc/refman/5.0/en/information-schema.html)] was created.
 It allows us to get all informations about databases, tables, and columns, as well as procedures and functions.
 
@@ -180,9 +180,9 @@ Here is a summary of some interesting Views.
 All of this information could be extracted by using known techniques as described in SQL Injection section.
 
 
-### Attack vectors
+#### Attack vectors
 
-#### Write in a File
+##### Write in a File
 
 If the connected user has **FILE** privileges and single quotes are not escaped, the 'into outfile' clause can be used to export query results in a file.
 ```
@@ -209,7 +209,7 @@ Where */var/www/root/test.jsp* will contain:
 <%jsp code here%>
 ```
 
-#### Read from a File
+##### Read from a File
 
 Load_file is a native function that can read a file when allowed by the file system permissions. If a connected user has **FILE** privileges, it could be used to get the files' content. Single quotes escape sanitization can by bypassed by using previously described techniques.
 ```
@@ -221,7 +221,7 @@ Load_file is a native function that can read a file when allowed by the file sys
 The whole file will be available for exporting by using standard techniques.
 
 
-### Standard SQL Injection Attack
+#### Standard SQL Injection Attack
 
 In a standard SQL injection you can have results displayed directly in a page as normal output or as a MySQL error.
 By using already mentioned SQL Injection attacks and the already described MySQL features, direct SQL injection could be easily accomplished at a level depth depending primarily on the MySQL version the pentester is facing.
@@ -230,12 +230,12 @@ By using already mentioned SQL Injection attacks and the already described MySQL
 A good attack is to know the results by forcing a function/procedure or the server itself to throw an error. A list of errors thrown by MySQL and in particular native functions could be found on [MySQL Manual](http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html).
 
 
-### Out of band SQL Injection
+#### Out of band SQL Injection
 
 Out of band injection could be accomplished by using the `'into outfile'` clause.
 
 
-### Blind SQL Injection
+#### Blind SQL Injection
 For blind SQL injection, there is a set of useful function natively provided by MySQL server.
 
 * String Length:
@@ -251,14 +251,14 @@ For a complete list, refer to the MySQL manual at http://dev.mysql.com/doc/refma
 
 
 
-## Tools
+### Tools
 * Francois Larouche: Multiple DBMS SQL Injection tool - http://www.sqlpowerinjector.com/index.htm<br>
 * ilo--, Reversing.org - [sqlbftools](http://packetstormsecurity.org/files/43795/sqlbftools-1.2.tar.gz.html)
 * Bernardo Damele A. G.: sqlmap, automatic SQL injection tool - http://sqlmap.org/
 * Muhaimin Dzulfakar: MySqloit, MySql Injection takeover tool - http://code.google.com/p/mysqloit/
 * http://sqlsus.sourceforge.net/
 
-## References
+### References
 **Whitepapers**<br>
 * Chris Anley: "Hackproofing MySQL" - http://www.databasesecurity.com/mysql/HackproofingMySQL.pdf
 

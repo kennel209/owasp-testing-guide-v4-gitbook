@@ -1,14 +1,14 @@
 # Testing for Browser cache weakness (OTG-AUTHN-006)
 
 
-## Summary
+### Summary
 In this phase the tester checks that the application correctly instructs the browser to not remember sensitive data.
 
 
 Browsers can store information for purposes of caching and history. Caching is used to improve performance, so that previously displayed information doesn't need to be downloaded again. History mechanisms are used for user convenience, so the user can see exactly what they saw at the time when the resource was retrieved. If sensitive information is displayed to the user (such as their address, credit card details, Social Security Number, or username), then this information could be stored for purposes of caching or history, and therefore retrievable through examining the browser's cache or by simply pressing the browser's "Back" button.
 <br>
 
-## How to Test
+### How to Test
 
 **Browser History**<br>
 
@@ -64,15 +64,15 @@ The exact location where that information is stored depends on the client operat
     - C:\Documents and Settings\<user_name>\Local Settings\Temporary Internet Files
 
 
-## Gray Box testing
+### Gray Box testing
 The methodology for testing is equivalent to the black box case, as in both scenarios testers have full access to the server response headers and to the HTML code. However, with gray box testing, the tester may have access to account credentials that will allow them to test sensitive pages that are accessible only to authenticated users.
 <br>
 
-##Tools
+###Tools
 * [OWASP Zed Attack Proxy](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
 * Firefox add-on [CacheViewer2](https://addons.mozilla.org/en-US/firefox/addon/cacheviewer2/?src=api)
 <br>
 
-## References
+### References
 **Whitepapers**<br>
 * [Caching in HTTP](http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html)

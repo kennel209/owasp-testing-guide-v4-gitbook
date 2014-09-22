@@ -1,7 +1,7 @@
 # Testing for Session Fixation (OTG-SESS-003)
 
 
-## Brief Summary
+### Brief Summary
 When an application does not renew its session cookie(s) after a successful user authentication, it could be possible to find a session fixation vulnerability and force a user to utilize a cookie known by the attacker. In that case, an attacker could steal the user session (session hijacking).
 
 
@@ -15,8 +15,8 @@ In the generic exploit of session fixation vulnerabilities, an attacker creates 
 
 Furthermore, the issue described above is problematic for sites that issue a session identifier over HTTP and then redirect the user to a HTTPS log in form. If the session identifier is not reissued upon authentication, the attacker can eavesdrop and steal the identifier and then use it to hijack the session.
 
-## How to Test
-### Black Box Testing
+### How to Test
+#### Black Box Testing
 **Testing for Session Fixation vulnerabilities:** <br>
 The first step is to make a request to the site to be tested (example www.example.com). If the tester requests the following:
 ```
@@ -86,7 +86,7 @@ As no new cookie has been issued upon a successful authentication the tester kno
 The tester can send a valid session identifier to a user (possibly using a social engineering trick), wait for them to authenticate, and subsequently verify that privileges have been assigned to this cookie.
 
 
-### Gray Box Testing
+#### Gray Box Testing
 Talk with developers and understand if they have implemented a session token renew after a user successful authentication.
 
 
@@ -94,12 +94,12 @@ Talk with developers and understand if they have implemented a session token ren
 The application should always first invalidate the existing session ID before authenticating a user, and if the authentication is successful, provide another sessionID.
 
 
-## Tools
+### Tools
 * JHijack - a numeric session hijacking tool - http://yehg.net/lab/pr0js/files.php/jhijackv0.2beta.zip
 * OWASP WebScarab: [OWASP_WebScarab_Project](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 
 
-## References
+### References
 **Whitepapers**<br>
 * [Session Fixation](https://www.owasp.org/index.php/Session_Fixation)
 * ACROS Security: http://www.acrossecurity.com/papers/session_fixation.pdf

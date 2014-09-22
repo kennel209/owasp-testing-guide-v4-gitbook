@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 "Clickjacking" (which is a subset of the "UI redressing") is a malicious technique that consists of deceiving a web user into interacting (in most cases by clicking) with something different to what the user believes they are interacting with. This type of attack, that can be used alone or in combination with other attacks, could potentially send unauthorized commands or reveal confidential information while the victim is interacting on seemingly harmless web pages. The term "Clickjacking" was coined by Jeremiah Grossman and Robert Hansen in 2008.
 
 
@@ -24,7 +24,7 @@ Once the victim is surfing on the fictitious web page, he thinks that he is inte
 The power of this method is due to the fact that the actions performed by the victim are originated from the authentic target web page (hidden but authentic). Consequently some of the anti-CSRF protections, that are deployed by the developers to protect the web page from CSRF attacks, could be bypassed.
 
 
-###How to Test
+####How to Test
 As mentioned above, this type of attack is often designed to allow an attacker site to induce user's actions on the target site even if anti-CSRF tokens are being used. So it's important, like for the CSRF attack, to individuate web pages of the target site that it take input from the user.
 
 
@@ -51,7 +51,7 @@ To do this you need to create a simple web page that includes a frame containing
 If you can see both the text "Website is vulnerable to clickjacking!" at the top of the page and your target web page successfully loaded into the frame, then your site is vulnerable and has no type of protection against Clickjacking attacks. Now you can directly create a "proof of concept" to demonstrate that an attacker could exploit this vulnerability.
 
 
-###Bypass Clickjacking protection:
+####Bypass Clickjacking protection:
 In case in which you only see the target site or the text "Website is vulnerable to clickjacking!" but nothing in the iframe this mean that the target probably has some form of protection against clickjacking. It’s important to note that this isn’t a guarantee that the page is totally immune to clickjacking.
 
 
@@ -63,7 +63,7 @@ Methods to protect a web page from clickjacking can be divided in two macro-cate
 In some circumstances, every single type of defense could be bypassed. Following are presented the main methods of protection from these attacks and techniques to bypass them.
 
 
-####Client side protection: Frame Busting
+#####Client side protection: Frame Busting
 The most common client side method, that has been developed to protect a web page from clickjacking, is called Frame Busting and it consists of a script in each page that should not be framed. The aim of this technique is to prevent a site from functioning when it is loaded inside a frame.
 
 
@@ -250,7 +250,7 @@ Example:
 ```
 
 
-####Server side protection: X-Frame-Options
+#####Server side protection: X-Frame-Options
 An alternative approach to client side frame busting code was implemented by Microsoft and it consists of an header based defense. This new "X-FRAME-OPTIONS" header is sent from the server on HTTP responses and is used to mark web pages that shouldn't be framed. This header can take the values DENY, SAMEORIGIN, ALLOW-FROM origin, or non-standard ALLOWALL. Recommended value is DENY.
 
 
@@ -280,7 +280,7 @@ Web proxies are known for adding and stripping headers. In the case in which a w
 Also in this case, since the "X-FRAME-OPTIONS" has to be implemented in every page of the website, the developers may have not protected the mobile version of the website.
 
 
-###Create a "proof of concept"
+####Create a "proof of concept"
 Once we have discovered that the site we are testing is vulnerable to clickjacking attack, we can proceed with the development of a "proof of concept" to demonstrate the vulnerability. It is important to note that, as mentioned previously, these attacks can be used in conjunction with other forms of attacks (for example CSRF attacks) and could lead to overcome anti-CSRF tokens.
 In this regard we can imagine that, for example, the target site allows to authenticated and authorized users to make a transfer of money to another account.
 
@@ -421,10 +421,10 @@ With the help of CSS (note the #clickjacking block) we can mask and suitably pos
 The example presented uses only basic clickjacking technique, but with advanced technique is possible to force user filling form with values defined by the attacker.
 
 
-##Tools
+###Tools
 * Context Information Security: "Clickjacking Tool" - http://www.contextis.com/research/tools/clickjacking-tool/
 
-## References
+### References
 **OWASP Resources**
 * [Clickjacking](https://www.owasp.org/index.php/Clickjacking)
 

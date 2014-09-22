@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 
 This section describes how to test for format string attacks that can be used to crash a program or to execute harmful code. The problem stems from the use of unfiltered user input as the format string parameter in certain C functions that perform formatting, such as printf().
 
@@ -24,8 +24,8 @@ This situation tends to become precarious since a user who can supply format spe
 **Denial of Service:** If the adversary is not in a position to supply malicious code for execution, the vulnerable application can be crashed by supplying a sequence of %x followed by %n.
 
 
-##How to Test
-### Black Box testing
+###How to Test
+#### Black Box testing
 The key to testing format string vulnerabilities is supplying format type specifiers in application input.
 
 
@@ -72,7 +72,7 @@ On the other hand, when the same code is compiled without “%s” as an argumen
 ![image:IDA Pro 2.gif](https://www.owasp.org/images/4/4e/IDA_Pro_2.gif)
 
 
-### Gray Box testing
+#### Gray Box testing
 
 While performing code reviews, nearly all format string vulnerabilities can be detected by use of static code analysis tools. Subjecting the code shown in (1) to ITS4, which is a static code analysis tool, gives the following output.
 
@@ -97,11 +97,11 @@ vsnprintf
 There can be several formatting functions that are specific to the development platform. These should also be reviewed for absence of format strings once their argument usage has been understood.
 
 
-##Tools
+###Tools
 * ITS4: "A static code analysis tool for identifying format string vulnerabilities using source code" - http://www.cigital.com/its4
 * An exploit string builder for format bugs - http://seclists.org/lists/pen-test/2001/Aug/0014.html
 
-##References
+###References
 **Whitepapers**<br>
 * Format functions manual page - http://www.die.net/doc/linux/man/man3/fprintf.3.html
 * Tim Newsham: "A paper on format string attacks" - http://comsec.theclerk.com/CISSP/FormatString.pdf

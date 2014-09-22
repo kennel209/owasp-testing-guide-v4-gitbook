@@ -1,6 +1,6 @@
 # Testing for LDAP Injection (OTG-INPVAL-006)
 
-##  Summary
+###  Summary
 The Lightweight Directory Access Protocol (LDAP) is used to store information about users, hosts, and many other objects. [LDAP injection](https://www.owasp.org/index.php/LDAP_injection) is a server side attack, which could allow sensitive information about users and hosts represented in an LDAP structure to be disclosed, modified, or inserted. This is done by manipulating input parameters afterwards passed to internal search, add, and modify functions.
 
 
@@ -54,10 +54,10 @@ A successful exploitation of an LDAP injection vulnerability could allow the tes
 * Add or modify Objects inside LDAP tree structure.
 
 
-## How to Test
+### How to Test
 
 
-### Example 1: Search Filters
+#### Example 1: Search Filters
 
 Let's suppose we have a web application using a search
 filter like the following one:
@@ -88,7 +88,7 @@ A tester could use a trial-and-error approach, by inserting in the parameter
 the application for errors.
 
 
-### Example 2: Login
+#### Example 2: Login
 
 If a web application uses LDAP to check user credentials during the login process and it is vulnerable to LDAP injection, it is possible to bypass the authentication check by injecting an always true LDAP query (in a similar way to SQL
 and XPATH injection ).
@@ -111,10 +111,10 @@ the search filter will results in:
 which is correct and always true. This way, the tester will gain logged-in status as the first user in LDAP tree.
 
 
-## Tools
+### Tools
 Softerra LDAP Browser - http://www.ldapadministrator.com/
 
-## References
+### References
 **Whitepapers**<br>
 Sacha Faust: "LDAP Injection: Are Your Applications Vulnerable?" - http://www.networkdls.com/articles/ldapinjection.pdf<br>
 Bruce Greenblatt: "LDAP Overview" - http://www.directory-applications.com/ldap3_files/frame.htm<br>

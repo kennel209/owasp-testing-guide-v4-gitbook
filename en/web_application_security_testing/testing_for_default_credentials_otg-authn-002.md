@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 <br>
 Nowadays web applications often make use of popular open source or commercial software that can be installed on servers with minimal configuration or customization by the server administrator. Moreover, a lot of hardware appliances (i.e. network routers and database servers) offer web-based configuration or administrative interfaces.
 
@@ -20,8 +20,8 @@ The root cause of this problem can be identified as:
 * Applications that do not force the user to change the default credentials after the first log in.
 
 <br>
-## How to Test
-### Testing for default credentials of common applications
+### How to Test
+#### Testing for default credentials of common applications
 
 In black box testing the tester knows nothing about the application and its underlying infrastructure. In reality this is often not true, and some information about the application is known. We suppose that you have identified, through the use of the techniques described in this Testing Guide under the chapter [Information Gathering](https://www.owasp.org/index.php/Testing_Information_Gathering), at least one or more common applications that may contain accessible administrative interfaces.<br>
 
@@ -47,7 +47,7 @@ Since these types of default credentials are often bound to administrative accou
 * Look for account names and passwords written in comments in the source code. Also look in backup directories for source code (or backups of source code) that may contain interesting comments and code.
 
 
-### Testing for default password of new accounts
+#### Testing for default password of new accounts
 
 It can also occur that when a new account is created in an application the account is assigned a default password. This password could have some standard characteristics making it predictable. If the user does not change it on first usage (this often happens if the user is not forced to change it) or if the user has not yet logged on to the application, this can lead an attacker to gain unauthorized access to the application.<br>
 
@@ -64,7 +64,7 @@ The following steps can be applied to test for these types of default credential
 
 
 <br>
-### Gray Box testing
+#### Gray Box testing
 <br>
 The following steps rely on an entirely Gray Box approach. If only some of this information is available to you, refer to black box testing to fill the gaps.
 * Talk to the IT personnel to determine which passwords they use for administrative access and how administration of the application is undertaken.
@@ -75,14 +75,14 @@ The following steps rely on an entirely Gray Box approach. If only some of this 
 * Examine the password policy and, if the application generates its own passwords for new users, check the policy in use for this procedure.
 
 
-##Tools
+###Tools
 * Burp Intruder: http://portswigger.net/burp/intruder.html
 * THC Hydra: http://www.thc.org/thc-hydra/
 * Brutus: http://www.hoobie.net/brutus/
 * Nikto 2: http://www.cirt.net/nikto2
 
 
-## References
+### References
 **Whitepapers**<br>
 * CIRT http://www.cirt.net/passwords
 * Government Security - Default Logins and Passwords for Networked Devices http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php

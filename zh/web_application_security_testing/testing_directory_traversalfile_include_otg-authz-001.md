@@ -1,7 +1,7 @@
 # Testing Directory traversal/file include (OTG-AUTHZ-001)
 
 
-## Summary
+### Summary
 Many web applications use and manage files as part of their daily operation. Using input validation methods that have not been well designed or deployed, an aggressor could exploit the system in order to read or write files that are not intended to be accessible. In particular situations, it could be possible to execute arbitrary code or system commands.
 
 Traditionally, web servers and web applications implement authentication mechanisms to control access to files and resources. Web servers try to confine users' files inside a "root directory" or "web document root", which represents a physical directory on the file system. Users have to consider this directory as the base directory into the hierarchical structure of the web application.
@@ -21,9 +21,9 @@ During an assessment, to discover path traversal and file include flaws, testers
 * (**b**) **Testing Techniques** (a methodical evaluation of each attack technique used by an attacker to exploit the vulnerability)
 <br>
 
-## How to Test
-### Black Box testing
-#### Input Vectors Enumeration
+### How to Test
+#### Black Box testing
+##### Input Vectors Enumeration
 In order to determine which part of the application is vulnerable to input validation bypassing, the tester needs to enumerate all parts of the application that accept content from the user. This also includes HTTP GET and POST queries and common options like file uploads and HTML forms.
 
 
@@ -48,7 +48,7 @@ Cookie: USER=1826cc8f:PSTYLE=GreenDotRed
 <br>
 
 
-#### Testing Techniques
+##### Testing Techniques
 
 The next stage of testing is analyzing the input validation functions present in the web application. Using the previous example, the dynamic page called *getUserProfile.jsp* loads static information from a file and shows the content to users. An attacker could insert the malicious string "*../../../../etc/passwd*" to include the password hash file of a Linux/UNIX system. Obviously, this kind of attack is possible only if the validation checkpoint fails; according to the file system privileges, the web application itself must be able to read the file.
 
@@ -168,7 +168,7 @@ spaces
 	- Refers to the first disc drive on the machine.<br>```\\.\CdRom0\```
 
 
-### Gray Box testing
+#### Gray Box testing
 When the analysis is performed with a Gray Box approach, testers have to follow the same methodology as in Black Box Testing. However, since they can review the source code, it is possible to search the input vectors (*stage (**a**) of the testing*) more easily and accurately. During a source code review, they can use simple tools (such as the *grep* command) to search for one or more common patterns within the application code: inclusion functions/methods, filesystem operations, and so on.
 
 ```
@@ -211,7 +211,7 @@ file= ..\..\boot.ini
 <br>
 
 
-## Tools
+### Tools
 * DotDotPwn - The Directory Traversal Fuzzer - http://dotdotpwn.sectester.net
 * Path Traversal Fuzz Strings (from WFuzz Tool) - http://code.google.com/p/wfuzz/source/browse/trunk/wordlist/Injections/Traversal.txt
 * Web Proxy ([*Burp Suite*](http://portswigger.net), [*Paros*](http://www.parosproxy.org/index.shtml),  [*WebScarab*](http://www.owasp.org/index.php/OWASP_WebScarab_Project), [*Zed Attack Proxy (ZAP)*](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) )
@@ -219,7 +219,7 @@ file= ..\..\boot.ini
 * String searcher "grep" - http://www.gnu.org/software/grep/
 
 
-## References
+### References
 **Whitepapers**
 * phpBB Attachment Mod Directory Traversal HTTP POST Injection - http://archives.neohapsis.com/archives/fulldisclosure/2004-12/0290.html
 * Windows File Pseudonyms: Pwnage and Poetry - http://www.slideshare.net/BaronZor/windows-file-pseudonyms

@@ -1,6 +1,6 @@
 # Testing for Privilege Escalation (OTG-AUTHZ-003)
 
-## Summary
+### Summary
 This section describes the issue of escalating privileges from one stage to another. During this phase, the tester should verify that it is not possible for a user to modify his or her privileges or roles inside the application in ways that could allow privilege escalation attacks.
 
 Privilege escalation occurs when a user gets access to more resources or functionality than they are normally allowed, and such elevation or changes should have been prevented by the application. This is usually caused by a flaw in the application. The result is that the application performs actions with more privileges than those intended by the developer or system administrator.
@@ -12,7 +12,7 @@ The degree of escalation depends on what privileges the attacker is authorized t
 Usually, people refer to *vertical escalation* when it is possible to access resources granted to more privileged accounts (e.g., acquiring administrative privileges for the application), and to *horizontal escalation* when it is possible to access resources granted to a similarly configured account (e.g., in an online banking application, accessing information related to a different user).
 
 
-## How to test
+### How to test
 **Testing for role/privilege manipulation** <br>
 In every portion of the application where a user can create information in the database (e.g., making a payment, adding a contact, or sending a message), can receive information (statement of account, order details, etc.), or delete information (drop users, messages, etc.), it is necessary to record that functionality. The tester should try to access such functions as another user in order to verify if it is possible to access a function that should not be permitted by the user's role/privilege (but might be permitted as another user).
 
@@ -68,11 +68,11 @@ The server gives an implicit trust to the user. It believes that the user will a
 In this condition, verify that it is not possible to escalate privileges by modifying the parameter values. In this particular example, by modifying the `PVValid` value from '-1' to '0' (no error conditions), it may be possible to authenticate as administrator to the server.
 <br><br>
 
-## References
+### References
 **Whitepapers**<br>
 * Wikipedia - Privilege Escalation: http://en.wikipedia.org/wiki/Privilege_escalation<br>
 
 
-## Tools
+### Tools
 * OWASP WebScarab: [OWASP WebScarab Project](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)

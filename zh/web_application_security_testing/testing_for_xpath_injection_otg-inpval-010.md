@@ -1,6 +1,6 @@
 # Testing for XPath Injection (OTG-INPVAL-010)
 
-## Summary
+### Summary
 XPath is a language that has been designed and developed primarily to address parts of an XML document. In XPath injection testing, we test if it is possible to inject XPath syntax into a request interpreted by the application, allowing an attacker to execute user-controlled XPath queries. When successfully exploited, this vulnerability may allow an attacker to bypass authentication mechanisms or access information without proper authorization.
 
 
@@ -10,7 +10,7 @@ Web applications heavily use databases to store and access the data they need fo
 Since, from a conceptual point of view, XPath is very similar to SQL in its purpose and applications, an interesting result is that XPath injection attacks follow the same logic as [SQL Injection](https://www.owasp.org/index.php/SQL_Injection) attacks. In some aspects, XPath is even more powerful than standard SQL, as its whole power is already present in its specifications, whereas a large number of the techniques that can be used in a SQL Injection attack depend on the characteristics of the SQL dialect used by the target database. This means that XPath injection attacks can be much more adaptable and ubiquitous. Another advantage of an XPath injection attack is that, unlike SQL, no ACLs are enforced, as our query can access every part of the XML document.<br>
 
 
-## How to Test
+### How to Test
 The XPath attack pattern was first published by Amit Klein [1] and is very similar to the usual SQL Injection. In order to get a first grasp of the problem, let's imagine a login page that manages the authentication to an application in which the user must enter his/her username and password. Let's assume that our database is represented by the following XML file:
 
 ```
@@ -64,7 +64,7 @@ If there is no knowledge about the XML data internal details and if the applicat
 <br>
 
 
-## References
+### References
 **Whitepapers**<br>
 * [1] Amit Klein: "Blind XPath Injection" - http://www.modsecurity.org/archive/amit/blind-xpath-injection.pdf
 * [2] XPath 1.0 specifications - http://www.w3.org/TR/xpath

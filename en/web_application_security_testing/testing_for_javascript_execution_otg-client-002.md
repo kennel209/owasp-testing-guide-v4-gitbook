@@ -1,11 +1,11 @@
 # Testing for JavaScript Execution (OTG-CLIENT-002)
 
 
-## Summary
+### Summary
 A JavaScript Injection vulnerability is a subtype of Cross Site Scripting (XSS) that involves the ability to inject arbitrary JavaScript code that is executed by the application inside the victim's browser. This vulnerability can have many consequences, like disclosure of a user's session cookies that could be used to impersonate the victim, or, more generally, it can allow the attacker to modify the page content seen by the victims or the application behavior.
 
 
-## How to Test
+### How to Test
 Such vulnerability occurs when the application lacks of a proper user supplied input and output validation. JavaScript is used to dynamically populate web pages, this injection occur during this content processing phase and consequently affect the victim.
 
 
@@ -22,11 +22,11 @@ This implies that an attacker could inject JavaScript code simply by submitting 
 ```
 
 
-### Black Box testing
+#### Black Box testing
 Black box testing for  JavaScript Execution is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.<br>
 
 
-### Gray Box testing
+#### Gray Box testing
 **Testing for JavaScript Execution vulnerabilities:**
 
 For example, looking at the following URL:
@@ -54,7 +54,7 @@ else
 The above code contains a source '`location.hash`' that is controlled by the attacker that can inject directly in the '`message`' value a JavaScript Code to take the control of the user browser.
 
 
-## References
+### References
 **OWASP Resources**
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS.com - http://www.domxss.com

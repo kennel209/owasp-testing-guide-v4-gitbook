@@ -1,22 +1,22 @@
 # Review Webpage Comments and Metadata for Information Leakage (OTG-INFO-005)
 
 
-## Summary
+### Summary
 
 It is very common, and even recommended, for programmers to include detailed comments and metadata on their source code. However, comments and metadata included into the HTML code might reveal internal information that should not be available to potential attackers. Comments and metadata review should be done in order to determine if any information is being leaked.
 
 
-## Test Objectives
+### Test Objectives
 
 Review webpage comments and metadata to better understand the application and to find any information leakage.
 
 
-## How to Test
+### How to Test
 
 HTML comments are often used by the developers to include debugging information about the application. Sometimes they forget about the comments and they leave them on in production. Testers should look for HTML comments which start with "<!--" and end with "-->".
 
 
-### Black Box Testing
+#### Black Box Testing
 
 Check HTML source code for comments containing sensitive information that can help the attacker gain more insight about the application. It might be SQL code, usernames and passwords, internal IP addresses, or debugging information.
 
@@ -96,11 +96,11 @@ Although most web servers manage search engine indexing via the robots.txt file,
 The Platform for Internet Content Selection (PICS) and Protocol for Web Description Resources (POWDER) provide infrastructure for associating meta data with Internet content.
 
 
-### Gray Box Testing
+#### Gray Box Testing
 Not applicable.
 
 
-##Tools
+###Tools
 
 * Wget
 * Browser "view source" function
@@ -108,7 +108,7 @@ Not applicable.
 * Curl
 
 
-## References
+### References
 **Whitepapers**
 
 [1] http://www.w3.org/TR/1999/REC-html401-19991224 HTML version 4.01

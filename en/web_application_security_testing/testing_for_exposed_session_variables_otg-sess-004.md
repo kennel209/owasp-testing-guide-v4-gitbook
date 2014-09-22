@@ -1,7 +1,7 @@
 # Testing for Exposed Session Variables (OTG-SESS-004)
 
 
-## Summary
+### Summary
 
 The Session Tokens (Cookie, SessionID, Hidden Field), if exposed, will usually enable an attacker to impersonate a victim and access the application illegitimately.  It is important that they are protected from eavesdropping at all times, particularly whilst in transit between the client browser and the application servers.
 <br>
@@ -19,7 +19,7 @@ Using a personal proxy, it is possible to ascertain the following about each req
 Each time Session ID data is passed between the client and the server, the protocol, cache, and privacy directives and body should be examined. Transport security here refers to Session IDs passed in GET or POST requests, message bodies, or other means over valid HTTP requests.
 
 
-##How to Test
+###How to Test
 
 **Testing for Encryption & Reuse of Session Tokens vulnerabilities:** <br>
 Protection from eavesdropping is often provided by SSL encryption, but may incorporate other tunneling or encryption. It should be noted that encryption or cryptographic hashing of the Session ID should be considered separately from transport encryption, as it is the Session ID itself being protected, not the data that may be represented by it.
@@ -96,7 +96,7 @@ All interaction between the Client and Application should be tested at least aga
 * If POST is used, can it be interchanged with GET?
 
 
-## References
+### References
 **Whitepapers**<br>
 * RFCs 2109 & 2965 – HTTP State Management Mechanism [D. Kristol, L. Montulli] - http://www.ietf.org/rfc/rfc2965.txt, http://www.ietf.org/rfc/rfc2109.txt
 * RFC 2616 – Hypertext Transfer Protocol -- HTTP/1.1 - http://www.ietf.org/rfc/rfc2616.txt

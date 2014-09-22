@@ -1,19 +1,19 @@
 # Fingerprint Web Server (OTG-INFO-002)
 
-## Summary
+### Summary
 Web server fingerprinting is a critical task for the penetration tester. Knowing the version and type of a running web server allows testers to determine known vulnerabilities and the appropriate exploits to use during testing.
 
 
 There are several different vendors and versions of web servers on the market today. Knowing the type of web server that is being tested significantly helps in the testing process and can also change the course of the test. This information can be derived by sending the web server specific commands and analyzing the output, as each version of web server software may respond differently to these commands. By knowing how each type of web server responds to specific commands and keeping this information in a web server fingerprint database, a penetration tester can send these commands to the web server, analyze the response, and compare it to the database of known signatures. Please note that it usually takes several different commands to accurately identify the web server, as different versions may react similarly to the same command. Rarely do different versions react the same to all HTTP commands. So by sending several different commands, the tester can increase the accuracy of their guess.
 
 
-## Test Objectives
+### Test Objectives
 Find the version and type of a running web server to determine known vulnerabilities and the appropriate exploits to use during testing.
 
 
-## How to Test
+### How to Test
 
-### Black Box testing
+#### Black Box testing
 The simplest and most basic form of identifying a web server is to look at the Server field in the HTTP response header. Netcat is used in this experiment.
 
 
@@ -103,7 +103,7 @@ Content-Type: text/HTML; charset=iso-8859-1
 In this case, the server field of that response is obfuscated. The tester cannot know what type of web server is running based on such information.
 
 
-### Protocol Behavior
+#### Protocol Behavior
 More refined techniques take in consideration various characteristics of the several web servers available on the market. Below is a list of some methodologies that allow testers to deduce the type of web server in use.
 
 **HTTP header field ordering**
@@ -280,14 +280,14 @@ Your browser sent a query this server could not understand.
 ```
 
 
-## Tools
+### Tools
 * httprint - http://net-square.com/httprint.html
 * httprecon - http://www.computec.ch/projekte/httprecon/
 * Netcraft - http://www.netcraft.com
 * Desenmascarame - http://desenmascara.me
 
 
-### Automated Testing
+#### Automated Testing
 Rather than rely on manual banner grabbing and analysis of the web server headers, a tester can use automated tools to achieve the same results. There are many tests to carry out in order to accurately fingerprint a web server. Luckily, there are tools that automate these tests. "*httprint*" is one of such tools. httprint uses a signature dictionary that allows it to recognize the type and the version of the web server in use.<br>
 
 An example of running httprint is shown below:<br><br>
@@ -295,7 +295,7 @@ An example of running httprint is shown below:<br><br>
 ![Image:httprint.jpg](https://www.owasp.org/images/2/24/Httprint.jpg)
 
 
-### Online Testing
+#### Online Testing
 Online tools can be used if the tester wishes to test more stealthily and doesn't wish to directly connect to the target website. An example of an online tool that often delivers a lot of information about target Web Servers, is [Netcraft](http://www.netcraft.com). With this tool we can retrieve information about operating system, web server used, Server Uptime, Netblock Owner, history of change related to Web server and O.S.<br>
 An example is shown below:
 <br><br>
@@ -308,13 +308,13 @@ An example is shown below:
 While this project is still being developed, you can test a [Spanish Proof of Concept of this idea](http://desenmascara.me/).
 
 
-## References
+### References
 **Whitepapers**<br>
 * Saumil Shah: "An Introduction to HTTP fingerprinting" - http://www.net-square.com/httprint_paper.html
 * Anant Shrivastava : "Web Application Finger Printing" - http://anantshri.info/articles/web_app_finger_printing.html
 
 
-## Remediation
+### Remediation
 
 Protect the presentation layer web server behind a hardened reverse proxy.
 

@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 Often called "secret" questions and answers, security questions and answers are often used to recover forgotten passwords (see [Testing for weak password change or reset functionalities (OTG-AUTHN-009)](https://www.owasp.org/index.php/Testing_for_weak_password_change_or_reset_functionalities_%28OTG-AUTHN-009%29)), or as extra security on top of the password.
 <br>
 <br>
@@ -29,7 +29,7 @@ The problem with having users to generate their own questions is that it allows 
 * "My password is M3@t$p1N"
 
 <br>
-## How to Test
+### How to Test
 **Testing for weak pre-generated questions:**
 <br>
 Try to obtain a list of security questions by creating a new account or by following the “I don’t remember my password”-process. Try to generate as many questions as possible to get a good idea of the type of security questions that are asked. If any of the security questions fall in the categories described above, they are vulnerable to being attacked (guessed, brute-forced, available on social media, etc.).
@@ -59,6 +59,6 @@ The next step is to assess the strength of the security questions. Could the ans
 
 The key to successfully exploiting and bypassing a weak security question scheme is to find a question or set of questions which give the possibility of easily finding the answers. Always look for questions which can give you the greatest statistical chance of guessing the correct answer, if you are completely unsure of any of the answers. In the end, a security question scheme is only as strong as the weakest question.
 <br><br>
-## References
+### References
 * [The Curse of the Secret Question](http://www.schneier.com/essay-081.html)
 <br>

@@ -1,20 +1,20 @@
 # Testing for Cross Site Flashing (OTG-CLIENT-008)
 
 
-## Summary
+### Summary
 ActionScript is the language, based on ECMAScript, used by Flash applications when dealing with interactive needs. There are three versions of the ActionScript language.  ActionScript 1.0 and ActionScript 2.0 are very similar with ActionScript 2.0 being an extension of ActionScript 1.0. ActionScript 3.0, introduced with Flash Player 9, is a rewrite of the language to support object orientated design.
 
 
 ActionScript, like every other language, has some implementation patterns which could lead to security issues. In particular, since Flash applications are often embedded in browsers, vulnerabilities like DOM based Cross-Site Scripting (XSS) could be present in flawed Flash applications.
 
 
-## How to Test
+### How to Test
 Since the first publication of "Testing Flash Applications" [1], new versions of Flash player
 were released in order to mitigate some of the attacks which will be described.
 Nevertheless, some issues still remain exploitable because they are the result of insecure
 programming practices.
 
-### Decompilation
+#### Decompilation
 Since SWF files are interpreted by a virtual machine embedded in the player itself,
 they can be potentially decompiled and analysed.
 The most known and free ActionScript 2.0 decompiler is flare.
@@ -33,7 +33,7 @@ Decompilation helps testers because it allows for source code assisted, or white
 The [OWASP Flash Security Project](http://www.owasp.org/index.php/Category:OWASP_Flash_Security_Project) maintains a list of current disassemblers, decompilers and other Adobe Flash related testing tools.
 
 
-### Undefined Variables FlashVars
+#### Undefined Variables FlashVars
 
 FlashVars are the variables that the SWF developer planned on receiving from the web page. FlashVars are typically passed in from the Object or Embed tag within the HTML.  For instance:
 
@@ -117,7 +117,7 @@ The above code could be attacked by requesting:
 ```
 
 
-### Unsafe Methods
+#### Unsafe Methods
 When an entry point is identified, the data it represents could be used by unsafe methods. If the data is not filtered/validated using the right regexp it could lead to some security issue.
 
 
@@ -142,7 +142,7 @@ htmlText
 ```
 
 
-### The Test
+#### The Test
 In order to exploit a vulnerability, the swf file should be hosted on the victim's host, and the techniques of reflected XSS must be used. That is forcing the browser to load a pure swf file directly in the location bar (by redirection or social engineering) or by loading it through an iframe from an evil page:
 ```
  <iframe src='http://victim/path/to/file.swf'></iframe>
@@ -150,7 +150,7 @@ In order to exploit a vulnerability, the swf file should be hosted on the victim
 This is because in this situation the browser will self-generate an HTML page as if it were hosted by the victim host.
 
 
-### XSS
+#### XSS
 
 **GetURL (AS2) / NavigateToURL (AS3):**
 
@@ -220,7 +220,7 @@ since the internal JavaScript which is executed by the browser will be something
  eval('try { __flash__toXML('+__root.callback+') ; } catch (e) { "<undefined/>"; }')
 ```
 
-### HTML Injection
+#### HTML Injection
 
 TextField Objects can render minimal HTML by setting:
 ```
@@ -254,7 +254,7 @@ Note: since release Flash Player 9.0.124.0 of Flash player XSS is no longer expl
 be accomplished.
 
 
-### Cross-Site Flashing
+#### Cross-Site Flashing
 
 Cross-Site Flashing (XSF) is a vulnerability which has a similar impact as XSS.
 
@@ -271,7 +271,7 @@ XSF Occurs when from different domains:
 It could be performed by forcing a flawed SWF to load an external evil flash file. This attack could result in XSS or in the modification of the GUI in order to fool a user to insert credentials on a fake flash form. XSF could be used in the presence of Flash HTML Injection or external SWF files when loadMovie* methods are used.
 
 
-### Open redirectors
+#### Open redirectors
 
 SWFs have the capability to navigate the browser.  If the SWF takes the destination in as a FlashVar, then the SWF may be used as an open redirector.  An open redirector is any piece of website functionality on a trusted website that an attacker can use to redirect the end-user to a malicious website.  These are frequently used within phishing attacks.  Similar to cross-site scripting, the attack involves a user clicking on a malicious link.
 
@@ -296,7 +296,7 @@ This would navigate the browser to the malicious URL provided by the attacker.  
 Developers should avoid taking full URLs as FlashVars.  If they only plan to navigate within their own website, then they should use relative URLs or verify that the URL begins with a trusted domain and protocol.
 
 
-### Attacks and Flash Player Version
+#### Attacks and Flash Player Version
 
 Since May 2007, three new versions of Flash player were released by Adobe. Every new version restricts some of the attacks previously described.
 
@@ -315,7 +315,7 @@ Cross-Site Scripting and Cross-Site Flashing are the expected results on a flawe
 
 
 
-##Tools
+###Tools
 * Adobe SWF Investigator: http://labs.adobe.com/technologies/swfinvestigator/
 
 * SWFScan: http://h30499.www3.hp.com/t5/Following-the-Wh1t3-Rabbit/SWFScan-FREE-Flash-decompiler/ba-p/5440167
@@ -332,7 +332,7 @@ Cross-Site Scripting and Cross-Site Flashing are the expected results on a flawe
 
 * Debugger Version of Flash Plugin/Player: http://www.adobe.com/support/flash/downloads.html
 
-## References
+### References
 **OWASP**<br>
 * OWASP Flash Security Project: The OWASP Flash Security project has even more references than what is listed below: http://www.owasp.org/index.php/Category:OWASP_Flash_Security_Project
 

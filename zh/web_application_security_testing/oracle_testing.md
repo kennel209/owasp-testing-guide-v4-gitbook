@@ -1,13 +1,13 @@
 # Oracle Testing
 
-## Summary
+### Summary
 
 Web based PL/SQL applications are enabled by the PL/SQL Gateway, which is is the component that translates web requests into database queries. Oracle has developed a number of software implementations, ranging from the early web listener product to the Apache mod_plsql module to the XML Database (XDB) web server. All have their own quirks and issues, each of which will be thoroughly investigated in this chapter. Products that use the PL/SQL Gateway include, but are not limited to, the Oracle HTTP Server, eBusiness Suite, Portal, HTMLDB, WebDB and Oracle Application Server.
 <br>
 
-## How to Test
+### How to Test
 
-### How the PL/SQL Gateway works
+#### How the PL/SQL Gateway works
 
 Essentially the PL/SQL Gateway simply acts as a proxy server taking the user's web request and passes it on to the database server where it is executed.
 
@@ -155,7 +155,7 @@ Clearly, this is dangerous, so Oracle introduced a PLSQL Exclusion list to preve
 This will return a blank HTML page with a 200 OK response if the database server is still vulnerable to this flaw (CVE-2006-0265)
 
 
-### Testing the PL/SQL Gateway For Flaws
+#### Testing the PL/SQL Gateway For Flaws
 
 Over the years, the Oracle PL/SQL Gateway has suffered from a number of flaws, including access to admin pages (CVE-2002-0561),  buffer overflows (CVE-2002-0559), directory traversal bugs, and vulnerabilities that allow attackers to bypass the Exclusion List and go on to access and execute arbitrary PL/SQL packages in the database server.
 
@@ -360,7 +360,7 @@ Note that the output won’t be displayed. This can be leveraged to exploit any 
  ```
 
 
-### Assessing Custom PL/SQL Web Applications
+#### Assessing Custom PL/SQL Web Applications
 
 During black box security assessments, the code of the custom PL/SQL application is not available, but it still needs to be assessed for security vulnerabilities.
 
@@ -393,12 +393,12 @@ returns an error or a 404, then there might be a SQL injection flaw. This can be
 If this request returns books by Charles Dickens, you've confirmed the presence of the SQL injection vulnerability.
 
 
-## Tools
+### Tools
 * SQLInjector - http://www.databasesecurity.com/sql-injector.htm<BR>
 * Orascan (Oracle Web Application VA scanner), NGS SQuirreL (Oracle RDBMS VA Scanner) - http://www.nccgroup.com/en/our-services/security-testing-audit-compliance/information-security-software/ngs-orascan/
 
 
-## References
+### References
 **Whitepapers**<br>
 * Hackproofing Oracle Application Server (A Guide to Securing Oracle 9) - http://www.itsec.gov.cn/docs/20090507151158287612.pdf<BR>
 * Oracle PL/SQL Injection - http://www.databasesecurity.com/oracle/oracle-plsql-2.pdf<BR>

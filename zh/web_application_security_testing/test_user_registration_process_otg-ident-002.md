@@ -1,18 +1,18 @@
 # Test User Registration Process (OTG-IDENT-002)
 
 
-## Summary
+### Summary
 
 Some websites offer a user registration process that automates (or semi-automates) the provisioning of system access to users. The identity requirements for access vary from positive identification to none at all, depending on the security requirements of the system. Many public applications completely automate the registration and provisioning process because the size of the user base makes it impossible to manage manually. However, many corporate applications will provision users manually, so this test case may not apply.
 
 
-## Test objectives
+### Test objectives
 
 1. Verify that the identity requirements for user registration are aligned with business and security requirements.
 2. Validate the registration process.
 
 
-## How to test
+### How to test
 
 Verify that the identity requirements for user registration are aligned with business and security requirements:
 1. Can anyone register for access?
@@ -27,7 +27,7 @@ Validate the registration process:
 2. Can the exchange of identity information be manipulated during registration?
 
 
-### Example
+#### Example
 
 In the WordPress example below, the only identification requirement is an email address that is accessible to the registrant.
 
@@ -39,16 +39,16 @@ In contrast, in the Google example below the identification requirements include
 ![File:Google_registration_page.jpg|700px](https://www.owasp.org/images/thumb/9/92/Google_registration_page.jpg/700px-Google_registration_page.jpg)
 
 
-## Tools
+### Tools
 
 A HTTP proxy can be a useful tool to test this control.
 
 
-## References
+### References
 
 * [User Registration Design](http://mashable.com/2011/06/09/user-registration-design/)
 
 
-## Remediation
+### Remediation
 
 Implement identification and verification requirements that correspond to the security requirements of the information the credentials protect.

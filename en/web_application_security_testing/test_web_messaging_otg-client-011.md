@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 
 Web Messaging (also known as Cross Document Messaging) allows applications running on different domains to communicate in a secure manner. Before the introduction of web messaging the communication of different origins (between iframes, tabs and windows) was restricted by the same origin policy and enforced by the browser, however developers used multiple hacks in order to accomplish these tasks, most of them were mainly insecure.
 
@@ -38,7 +38,7 @@ if(event.origin === 'chat.example.com') {
 ```
 
 
-### Origin Security Concept
+#### Origin Security Concept
 The origin is made up of a scheme, host name and port and identifies uniquely the domain sending or receiving the message, it does not include the path or the fragment part of the url. For instance, https://example.com/ will be considered different from http://example.com because the schema in the first case is https and in the second http, same applies to web servers running in the same domain but different port.
 
 
@@ -48,16 +48,16 @@ From a security perspective we should check whether the code is filtering and pr
 In the case the website failed to add security controls to restrict the domains or origins that can send messages to a website most likely will introduce a security risk so it is very interesting part of the code from a penetration testing point of view. We should scan the code for message event listeners, and get the callback function from the addEventListener method to further analysis as domains must be always be verified prior data manipulation.
 
 
-### event.data Input Validation
+#### event.data Input Validation
 
 Input validation is also important, even though the website is accepting messages from trusted domains only, it needs to treat the data as external untrusted data and apply  the same level of security controls to it. We should analyze the code and look for insecure methods, in particular if data is being evaluated via ```eval()``` or inserted into the DOM via the ```innerHTML``` property as that would create a DOM-based XSS vulnerability.
 
-##How to Test
-### Black Box testing
+###How to Test
+#### Black Box testing
 Black box testing for vulnerabilities on Web Messaging is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.<br>
 
 
-### Gray Box testing
+#### Gray Box testing
 
 Manual testing needs to be conducted and the JavaScript code analyzed looking for how Web Messaging is implemented. In particular we should be interested in how the website is restricting messages from untrusted domain and how the data is handled even for trusted domains. Below are some examples:
 
@@ -115,11 +115,11 @@ function callback(e) {
 This code will lead to Cross-Site Scripting (XSS) vulnerabilities as data is not being treated properly, a more secure approach would be to use the property textContent instead of innetHTML.
 
 
-##Tools
+###Tools
 * **OWASP Zed Attack Proxy (ZAP)** - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
 ZAP is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications. It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing. ZAP provides automated scanners as well as a set of tools that allow you to find security vulnerabilities manually.
 
-## References
+### References
 **OWASP Resources**
 * **OWASP HTML5 Security Cheat Sheet**: https://www.owasp.org/index.php/HTML5_Security_Cheat_Sheet
 

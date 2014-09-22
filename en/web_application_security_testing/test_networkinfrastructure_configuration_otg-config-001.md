@@ -1,6 +1,6 @@
 # Test Network/Infrastructure Configuration (OTG-CONFIG-001)
 
-## Summary
+### Summary
 The intrinsic complexity of interconnected and heterogeneous web server infrastructure, which can include hundreds of web applications, makes configuration management and review a fundamental step in testing and deploying every single application.
 It takes only a single vulnerability to undermine the security of the entire infrastructure, and even small and seemingly unimportant problems may evolve into severe risks for another application on the same server. In order to address these problems, it is of utmost importance to perform an in-depth review of configuration and known security issues, after having mapped the entire architecture.
 
@@ -23,9 +23,9 @@ The following steps need to be taken to test the configuration management infras
 After having mapped the different elements that make up the infrastructure (see [Map Network and Application Architecture](https://www.owasp.org/index.php/Map_Network_and_Application_Architecture_%28OTG-INFO-012%29)) it is possible to review the configuration of each element founded and test for any known vulnerabilities.
 
 
-## How to Test
+### How to Test
 
-### Known Server Vulnerabilities
+#### Known Server Vulnerabilities
 Vulnerabilities found in the different areas of the application architecture, be it in the web server or in the back end  database, can severely compromise the application itself. For example, consider a server vulnerability that allows a remote, unauthenticated user to upload files to the web server or even to replace files. This vulnerability could compromise the application, since a rogue user may be able to replace the application itself or introduce code that would affect the back end servers, as its application code would be run just like any other application.
 
 
@@ -44,7 +44,7 @@ This is why reviewing vulnerabilities is best done when the tester is provided w
 It is also worthwhile to note that vendors will sometimes silently fix vulnerabilities and make the fixes available with new software releases. Different vendors will have different release cycles that determine the support they might provide for older releases. A tester with detailed information of the software versions used by the architecture can analyse the risk associated to the use of old software releases that might be unsupported in the short term or are already unsupported. This is critical, since if a vulnerability were to surface in an old software version that is no longer supported, the systems personnel might not be directly aware of it. No patches will be ever made available for it and advisories might not list that version as vulnerable as it is no longer supported. Even in the event that they are aware that the vulnerability is present and the system is vulnerable, they will need to do a full upgrade to a new software release, which might introduce significant downtime in the application architecture or might force the application to be re-coded due to incompatibilities with the latest software version.
 
 
-### Administrative tools
+#### Administrative tools
 
 Any web server infrastructure requires the existence of administrative tools to maintain and update the information used by the application. This information includes static content (web pages, graphic files), application source code, user authentication databases, etc. Administrative tools will differ depending on the site, technology, or software used. For example, some web servers will be managed using administrative interfaces which are, themselves, web servers (such as the iPlanet web server) or will be administrated by plain text configuration files (in the Apache case[3]) or use operating-system GUI tools (when using Microsoft’s IIS server or ASP.Net). I
 
@@ -61,7 +61,7 @@ After having mapped the administrative interfaces used to manage the different p
 Some companies choose not to manage all aspects of their web server applications, but may have other parties managing the content delivered by the web application. This external company might either provide only parts of the content (news updates or promotions) or might manage the web server completely (including content and code). It is common to find administrative interfaces available from the Internet in these situations, since using the Internet is cheaper than providing a dedicated line that will connect the external company to the application infrastructure through a management-only interface. In this situation, it is very important to test if the administrative interfaces can be vulnerable to attacks.
 
 
-## References
+### References
 * [1] WebSEAL, also known as Tivoli Authentication Manager, is a reverse proxy from IBM which is part of the Tivoli framework.
 * [2] Such as Symantec’s Bugtraq, ISS’ X-Force, or NIST’s National Vulnerability Database (NVD).
 * [3] There are some GUI-based administration tools for Apache (like NetLoony) but they are not in widespread use yet.

@@ -1,7 +1,7 @@
 # Testing for logout functionality (OTG-SESS-006)
 
 
-## Summary
+### Summary
 Session termination is an important part of the session lifecycle. Reducing to a minimum the lifetime of the session tokens decreases the likelihood of a successful session hijacking attack. This can be seen as a control against preventing other attacks like Cross Site Scripting and Cross Site Request Forgery. Such attacks have been known to rely on a user having an authenticated session present. Not having a secure session termination only increases the attack surface for any of these attacks.
 
 
@@ -26,7 +26,7 @@ Users of web browsers often don't mind that an application is still open and jus
 
 The usage of a single sign-on (SSO) system instead of an application-specific authentication scheme often causes the coexistence of multiple sessions which have to be terminated separately. For instance, the termination of the application-specific session does not terminate the session in the SSO system. Navigating back to the SSO portal offers the user the possibility to log back in to the application where the log out was performed just before. On the other side a log out function in a SSO system does not necessarily cause session termination in connected applications.
 
-## How to Test
+### How to Test
 **Testing for log out user interface:**<br>
 Verify the appearance and visibility of the log out functionality in the user interface. For this purpose, view each page from the perspective of a user who has the intention to log out from the web application.
 
@@ -66,10 +66,10 @@ Perform a log out in the tested application. Verify if there is a central portal
 It is expected that the invocation of a log out function in a web application connected to a SSO system or in the SSO system itself causes global termination of all sessions. An authentication of the user should be required to gain access to the application after log out in the SSO system and connected application.
 
 
-##Tools
+###Tools
 * "Burp Suite - Repeater" - http://portswigger.net/burp/repeater.html
 
-## References
+### References
 **Whitepapers**
 * "The FormsAuthentication.SignOut method does not prevent cookie reply attacks in ASP.NET applications" - http://support.microsoft.com/default.aspx?scid=kb;en-us;900111
 * "Cookie replay attacks in ASP.NET when using forms authentication" - https://www.vanstechelman.eu/content/cookie-replay-attacks-in-aspnet-when-using-forms-authentication

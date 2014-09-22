@@ -1,7 +1,7 @@
 # Test HTTP Strict Transport Security (OTG-CONFIG-007)
 
 
-## Summary
+### Summary
 The HTTP Strict Transport Security (HSTS) header is a mechanism that web sites have to communicate to the web browsers that all traffic exchanged with a given domain must always be sent over https, this will help protect the information from being passed over unencrypted requests.<br>
 
 
@@ -27,7 +27,7 @@ The use of this header by web applications must be checked to find if the follow
 * Users who mistakenly entered an address in the browser putting HTTP instead of HTTPS, or users who click on a link in a web application which mistakenly indicated the http protocol.
 
 
-## How to Test
+### How to Test
 Testing for the presence of HSTS header can be done by checking for the existence of the HSTS header in the server's response in an interception proxy, or by using curl as follows: <br>
 ```
     $ curl -s -D- https://domain.com/ | grep Strict
@@ -38,7 +38,7 @@ Result expected:<br>
     Strict-Transport-Security: max-age=...
 ```
 
-## References
+### References
 * OWASP HTTP Strict Transport Security - https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
 * OWASP Appsec Tutorial Series - Episode 4: Strict Transport Security - http://www.youtube.com/watch?v=zEV3HOuM_Vw
 * HSTS Specification: http://tools.ietf.org/html/rfc6797

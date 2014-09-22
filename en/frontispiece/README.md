@@ -1,6 +1,6 @@
 # Frontispiece
 
-## Welcome to the OWASP Testing Guide 4.0
+### Welcome to the OWASP Testing Guide 4.0
 
 “Open and collaborative knowledge: that is the OWASP way.”<br>
 With V4 we realized a new guide that will be the standard de-facto  guide to perform Web Application Penetration Testing.
@@ -16,7 +16,7 @@ Or drop an e-mail to the project leaders:
 [Matteo Meucci](mailto:matteo.meucci@owasp.org)
 
 
-## Version 4.0
+### Version 4.0
 
 The OWASP Testing Guide version 4 improves on version 3 in three ways:
 
@@ -32,14 +32,14 @@ The OWASP Testing Guide version 4 improves on version 3 in three ways:
 3. This version of the Testing Guide encourages the community not to simply accept the test cases outlined in this guide. We encourage security testers to integrate with other software testers and devise test cases specific to the target application. As we find test cases that have wider applicability we encourage the security testing community to share them and contribute them to the Testing Guide. This will continue to build the application security body of knowledge and allow the development of the Testing Guide to be an iterative rather than monolithic process.
 
 
-## Copyright and License
+### Copyright and License
 
 Copyright (c) 2014 The OWASP Foundation.
 
 This document is released under the [Creative Commons 2.5 License](http://creativecommons.org/licenses/by-sa/2.5/). Please read and understand the license and copyright conditions.
 
 
-## Revision History
+### Revision History
 
 The Testing Guide v4 will be released in 2014. The Testing guide originated in 2003 with Dan Cuthbert as one of the original editors. It was handed over to Eoin Keary in 2005 and transformed into a wiki. Matteo Meucci has taken on the Testing guide and is now the lead of the OWASP Testing Guide Project. From 2012 Andrew Muller co-leadership the project with Matteo Meucci.
 
@@ -59,7 +59,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 - "The OWASP Testing Guide", Version 1.0
 
 
-## Editors
+### Editors
 
 **Andrew Muller**: OWASP Testing Guide Lead since 2013.<BR>
 
@@ -70,7 +70,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 **Daniel Cuthbert**: OWASP Testing Guide 2003-2005 Lead.
 
 
-## v4 Authors
+### v4 Authors
 
 * Matteo Meucci
 * Pavol Luptak
@@ -125,7 +125,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 * Ben Walther
 
 
-## v4 Reviewers
+### v4 Reviewers
 
 * Davide Danelon
 * Andrea Rosignoli
@@ -135,7 +135,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 * Yiannis Pavlosoglou
 * Aditya Balapure
 
-## v3 Authors
+### v3 Authors
 
 * Anurag Agarwwal
 * Daniele Bellucci
@@ -159,7 +159,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 * Mark Roxberry
 * Andrew Van der Stock
 
-## v3 Reviewers
+### v3 Reviewers
 
 * Marco Cova
 * Kevin Fuller
@@ -167,7 +167,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 * Nam Nguyen
 * Rick Mitchell
 
-## v2 Authors
+### v2 Authors
 
 * Vicente Aguilera
 * Mauro Bregolin
@@ -210,7 +210,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 * Jeff Williams
 * Tushar Vartak
 
-## v2 Reviewers
+### v2 Reviewers
 
 * Vicente Aguilera
 * Marco Belotti
@@ -233,7 +233,7 @@ The Testing Guide v4 will be released in 2014. The Testing guide originated in 2
 * Mark Roxberry
 * Dave Wichers
 
-## Trademarks
+### Trademarks
 
 * Java, Java Web Server, and JSP are registered trademarks of Sun Microsystems, Inc.
 * Merriam-Webster is a trademark of Merriam-Webster, Inc.

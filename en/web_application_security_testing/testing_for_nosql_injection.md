@@ -1,7 +1,7 @@
 # Testing for NoSQL injection
 
 
-## Summary
+### Summary
 <br>
 NoSQL databases provide looser consistency restrictions than traditional SQL databases. By requiring fewer relational constraints and consistency checks, NoSQL databases often offer performance and scaling benefits. Yet these databases are still potentially vulnerable to injection attacks, even if they aren't using the traditional SQL syntax. Because these NoSQL injection attacks may execute within a procedural[http://en.wikipedia.org/wiki/Procedural_programming] language , rather than in the declarative[http://en.wikipedia.org/wiki/Declarative_programming] SQL language, the potential impacts are greater than traditional SQL injection.
 <br>
@@ -19,7 +19,7 @@ NoSQL injection attacks may execute in different areas of an application than tr
 Additional timing attacks may be relevant to the lack of concurrency checks within a NoSQL database. These are not covered under injection testing. At the time of writing MongoDB is the most widely used NoSQL database, and so all examples will feature MongoDB APIs.
 <br>
 
-## How to Test
+### How to Test
 **Testing for NoSQL injection vulnerabilities in MongoDB:** <br>
 The MongoDB API expects BSON (Binary JSON) calls, and includes a secure BSON query assembly tool. However, according to MongoDB documentation - unserialized JSON and JavaScript expressions are permitted in several alternative query parameters.[http://docs.mongodb.org/manual/faq/developers/#javascript] The most commonly used API call allowing arbitrary JavaScript input is the $where operator.
 
@@ -38,7 +38,7 @@ Optionally JavaScript is also evaluated to allow more advanced conditions.
 ```
 
 
-### Example 1
+#### Example 1
 
 If an attacker were able to manipulate the data passed into the $where operator, that attacker could include arbitrary JavaScript to be evaluated as part of the MongoDB query. An example vulnerability is exposed in the following code, if user input is passed directly into the MongoDB query without sanitization.
 
@@ -60,7 +60,7 @@ This input `0;var date=new Date(); do{curDate = new Date();}while(curDate-date<1
 `function() { return obj.credits - obj.debits < 0;var date=new Date(); do{curDate = new Date();}while(curDate-date<10000); }`
 
 
-### Example 2
+#### Example 2
 
 Even if the input used within queries is completely sanitized or parameterized, there is an alternate path in which one might trigger NoSQL injection. Many NoSQL instances have their own reserved variable names, independent of the application programming language.
 
@@ -76,7 +76,7 @@ Even if a query depended on no user input, such as the following example, an att
 One way to potentially assign data to PHP variables is via HTTP Parameter Pollution (see: [Testing_for_HTTP_Parameter_pollution_(OTG-INPVAL-004)]()). By creating a variable named `$where` via parameter pollution, one could trigger a MongoDB error indicating that the query is no longer valid. Any value of `$where` other than the string "$where" itself, should suffice to demonstrate vulnerability. An attacker would develop a full exploit by inserting the following: `"$where: function() { //arbitrary JavaScript here }"`
 
 <br>
-## References
+### References
 **Whitepapers**<br>
 Bryan Sullivan from Adobe: "Server-Side JavaScript Injection" - https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf
 

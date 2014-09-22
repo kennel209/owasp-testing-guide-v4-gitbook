@@ -1,12 +1,12 @@
 # MS Access Testing
 
-## Summary
+### Summary
 As explained in the generic [SQL injection](https://www.owasp.org/index.php/SQL_injection) section, SQL injection vulnerabilities occur whenever user-supplied input is used during the construction of a SQL query without being adequately constrained or sanitized. This class of vulnerabilities allows an attacker to execute SQL code under the privileges of the user that is used to connect to the database. In this section, relevant SQL injection techniques that utilize specific features of [Microsoft Access](http://en.wikipedia.org/wiki/Microsoft_Access) will be discussed.
 
 
-## How to Test
+### How to Test
 
-### Fingerprinting
+#### Fingerprinting
 
 Fingerprinting the specific database technology while testing SQL-powered application is the first step to properly asses potential vulnerabilities. A common approach involves injecting standard SQL injection attack patterns (e.g. single quote, double quote, ...) in order to trigger database exceptions. Assuming that the application does not handle exceptions with custom pages, it is possible to fingerprint the underline DBMS by observing error messages.
 
@@ -27,7 +27,7 @@ or
 In all cases, we have a confirmation that we're testing an application using MS Access database.
 
 
-### Basic Testing
+#### Basic Testing
 
 Unfortunately, MS Access doesn't support typical operators that are traditionally used during SQL injection testing, including:
 
@@ -70,7 +70,7 @@ There are also many other functions that can be used while testing SQL injection
 Some of these operators are essential to exploit blind SQL injections. For other advanced operators, please refer to the documents in the references.
 
 
-#### Attributes Enumeration
+##### Attributes Enumeration
 
 In order to enumerate the column of a database table, it is possible to use a common error-based technique.
 In short, we can obtain the attributes name by analyzing error messages and repeating the query with different selectors. For example,
@@ -83,7 +83,7 @@ In the error message received, it is possible to observe the name of the next co
 method until we obtain the name of all attributes. If we don't know the name of the first attribute, we can still insert a fictitious column name and obtain the name of the first attribute within the error message.
 
 
-#### Obtaining Database Schema
+##### Obtaining Database Schema
 
 Various system tables exist by default in MS Access that can be potentially used to obtain table names and columns. Unfortunately, in the default configuration of recent MS Access database releases, these tables are not accessible. Nevertheless, it is always worth trying:
 
@@ -109,7 +109,7 @@ where `name` is the *.mdb* filename and `table` is a valid database table.
 In case of password protected databases, multiple software utilities can be used to crack the password. Please refer to the references.
 
 
-### Blind SQL Injection Testing
+#### Blind SQL Injection Testing
 
 [Blind SQL Injection](https://www.owasp.org/index.php/Blind_SQL_Injection) vulnerabilities are by no means the most easily exploitable SQL injections while testing real-life applications. In case of recent versions of MS Access, it is also not feasible to execute shell commands or read/write arbitrary files.
 
@@ -163,7 +163,7 @@ As mentioned, this method allows to infer the value of arbitrary strings within 
 Time-based blind SQL injections are also possible by abusing [heavy queries](http://technet.microsoft.com/it-it/library/cc512676%28en-us%29.aspx).
 
 
-## References
+### References
 
 * http://nibblesec.org/files/MSAccessSQLi/MSAccessSQLi.html
 * http://packetstormsecurity.com/files/65967/Access-Through-Access.pdf.html

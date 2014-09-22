@@ -1,7 +1,7 @@
 # Test HTTP Methods (OTG-CONFIG-006)
 
 
-## Summary
+### Summary
 HTTP offers a number of methods that can be used to perform actions on the web server. Many of theses methods are designed to aid developers in deploying and testing HTTP applications. These HTTP methods can be used for nefarious purposes if the web server is misconfigured. Additionally, Cross Site Tracing (XST), a form of cross site scripting using the server's HTTP TRACE method, is examined.<br>
 
 While GET and POST are by far the most common methods that are used to access information provided by a web server, the Hypertext Transfer Protocol (HTTP) allows several other (and somewhat less known) methods. RFC  2616 (which describes HTTP version 1.1 which is the standard today) defines the following eight methods:
@@ -27,7 +27,7 @@ Some of these methods can potentially pose a security risk for a web application
 If an application needs one or more of these methods, such as REST Web Services (which may require PUT or DELETE), it is important to check that their usage is properly limited to trusted users and safe conditions.
 
 
-### Arbitrary HTTP Methods
+#### Arbitrary HTTP Methods
 
 Arshan Dabirsiaghi (see links) discovered that many web application frameworks allowed well chosen or arbitrary HTTP methods to bypass an environment level access control check:
 
@@ -39,7 +39,7 @@ Arshan Dabirsiaghi (see links) discovered that many web application frameworks a
 In many cases, code which explicitly checked for a "GET" or "POST" method would be safe.
 
 
-## How to Test
+### How to Test
 
 **Discover the Supported Methods** <br>
 To perform this test, the tester needs some way to figure out which HTTP methods are supported by the web server that is being examined. The OPTIONS HTTP method provides the tester with the most direct and effective way to do that. RFC 2616 states that, "The OPTIONS method represents a request for information about the  communication options available on the request/response chain identified by the Request-URI".
@@ -101,7 +101,7 @@ An attacker has two ways to successfully launch a Cross Site Tracing attack:
 More detailed information, together with code samples, can be found in the original whitepaper written by Jeremiah Grossman.<br>
 
 
-### Testing for arbitrary HTTP methods
+#### Testing for arbitrary HTTP methods
 
 Find a page to visit that has a security constraint such that it would normally force a 302 redirect to a log in page or forces a log in directly. The test URL in this example works like this, as do many web applications. However, if a tester obtains a "200" response that is not a log in page, it is possible to bypass authentication and thus authorization.
 
@@ -130,7 +130,7 @@ If the tester feels that the system is vulnerable to this issue, they should iss
 With some luck, using the above three commands - modified to suit the application under test and testing requirements - a new user would be created, a password assigned, and made an administrator.
 
 
-### Testing for HEAD access control bypass
+#### Testing for HEAD access control bypass
 
 Find a page to visit that has a security constraint such that it would normally force a 302 redirect to a log in page or forces a log in directly. The test URL in this example works like this, as do many web applications. However, if the tester obtains a "200" response that is not a login page, it is possible to bypass authentication and thus authorization.
 
@@ -167,12 +167,12 @@ If the tester thinks that the system is vulnerable to this issue, they should is
 With some luck, using the above three commands - modified to suit the application under test and testing requirements - a new user would be created, a password assigned, and made an administrator, all using blind request submission.
 
 
-## Tools
+### Tools
 * NetCat - http://nc110.sourceforge.net
 * cURL - http://curl.haxx.se/
 
 
-## References
+### References
 **Whitepapers**<br>
 * RFC 2616: "Hypertext Transfer Protocol -- HTTP/1.1"
 * RFC 2109 and RFC 2965: "HTTP State Management Mechanism"

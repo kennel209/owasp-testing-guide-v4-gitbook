@@ -1,14 +1,14 @@
 # Test Defenses Against Application Mis-use (OTG-BUSLOGIC-007)
 
 
-## Summary
+### Summary
 The misuse and invalid use of of valid functionality can identify attacks attempting to enumerate the web application, identify weaknesses, and exploit vulnerabilities. Tests should be undertaken to determine whether there are application-layer defensive mechanisms in place to protect the application.
 
 
 The lack of active defenses allows an attacker to hunt for vulnerabilities without any recourse. The application's owner will thus not know their application is under attack.
 
 
-## Example
+### Example
 
 An authenticated user undertakes the following (unlikely) sequence of actions:
 1. Attempt to access a file ID their roles is not permitted to download
@@ -28,7 +28,7 @@ The application is monitoring for misuse and responds after the 5th event with e
 If the application does not respond in any way and the attacker can continue to abuse functionality and submit clearly malicious content at the application, the application has failed this test case. In practice the discrete example actions in the example above are unlikely to occur like that. It is much more probable that a fuzzing tool is used to identify weaknesses in each parameter in turn. This is what a security tester will have undertaken too.
 
 
-## How to Test
+### How to Test
 
 This test is unusual in that the result can be drawn from all the other tests performed against the web application. While performing all the other tests, take note of measures that might indicate the application has in-built self-defense:
 
@@ -65,17 +65,17 @@ These defenses work best in authenticated parts of the application, although rat
 Not all the above need to be monitored by the application, but there is a problem if none of them are. By testing the web application, doing the above type of actions, was any response taken against the tester? If not, the tester should report that the application appears to have no application-wide active defenses against misuse. Note it is sometimes possible that all responses to attack detection are silent to the user (e.g. logging changes, increased monitoring, alerts to administrators and and request proxying), so confidence in this finding cannot be guaranteed. In practice, very few applications (or related infrastructure such as a web application firewall) are detecting these types of misuse.
 
 
-## Related Test Cases
+### Related Test Cases
 
 All other test cases are relevant.
 
 
-## Tools
+### Tools
 
 The tester can use many of the tools used for the other test cases.
 
 
-## References
+### References
 
 * [Resilient Software](https://buildsecurityin.us-cert.gov/swa/resilient.html), Software Assurance, US Department Homeland Security
 * [IR 7684](http://csrc.nist.gov/publications/nistir/ir7864/nistir-7864.pdf) Common Misuse Scoring System (CMSS), NIST
@@ -85,6 +85,6 @@ The tester can use many of the tools used for the other test cases.
 * Watson C, Coates M, Melton J and Groves G, [Creating Attack-Aware Software Applications with Real-Time Defenses](http://www.crosstalkonline.org/storage/issue-archives/2011/201109/201109-Watson.pdf), CrossTalk The Journal of Defense Software Engineering, Vol. 24, No. 5, Sep/Oct 2011
 
 
-## Remediation
+### Remediation
 
 Build inactive defenses against application misuse.

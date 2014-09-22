@@ -1,11 +1,11 @@
 # Testing for Client Side URL Redirect (OTG-CLIENT-004)
 
 
-## Summary
+### Summary
 This section describes how to check for Client Side URL Redirection, also known as Open Redirection. It is an input validation flaw that exists when an application accepts an user controlled input which specifies a link that leads to an external URL that could be malicious. This kind of vulnerability could be used to accomplish a phishing attack or redirect a victim to an infection page.
 
 
-## How to Test
+### How to Test
 This vulnerability occurs when an application accepts untrusted input that contains an URL value without sanitizing it. This URL value could cause the web application to redirect the user to another page as, for example, a malicious page controlled by the attacker.
 
 
@@ -25,11 +25,11 @@ The victim that visits target.site will be automatically redirected to fake-targ
 Moreover open redirections could also be used to maliciously craft an URL that would bypass the application’s access control checks and then forward the attacker to privileged functions that they would normally not be able to access.
 
 
-### Black Box testing
+#### Black Box testing
 Black box testing for Client Side URL Redirect is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.
 <br>
 
-### Gray Box testing
+#### Gray Box testing
 **Testing for Client Side URL Redirect vulnerabilities:**<br>
 When testers have to manually check for this type of vulnerability they have to identify if there are client side redirections implemented in the client side code (for example in the JavaScript code).
 <br>
@@ -70,10 +70,10 @@ Moreover always consider the possibility to try absolute URLs variants as descri
 <br>
 
 
-##Tools
+###Tools
 * DOMinator - https://dominator.mindedsecurity.com/
 
-## References
+### References
 **OWASP Resources**
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS.com - http://www.domxss.com

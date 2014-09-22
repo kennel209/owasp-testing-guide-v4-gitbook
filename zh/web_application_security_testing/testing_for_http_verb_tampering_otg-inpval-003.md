@@ -1,7 +1,7 @@
 # Testing for HTTP Verb Tampering (OTG-INPVAL-003)
 
 
-## Summary
+### Summary
 The HTTP specification includes request methods other than the standard GET and POST requests. A standards compliant web server may respond to these alternative methods in ways not anticipated by developers. Although the common description is 'verb' tampering, the HTTP 1.1 standard refers to these request types as different HTTP 'methods.'
 <br>
 
@@ -41,11 +41,11 @@ As long as the web application being tested does not specifically call for any n
 If methods such as HEAD or OPTIONS are required for your application, this increases the burden of testing substantially. Each action within the system will need to be verified that these alternate methods do not trigger actions without proper authentication or reveal information about the contents or workings web application. If possible, limit alternate HTTP method usage to a single page that contains no user actions, such the default landing page (example: index.html).
 
 <br>
-## How to Test
+### How to Test
 
 As the HTML standard does not support request methods other than GET or POST, we will need to craft custom HTTP requests to test the other methods. We highly recommend using a tool to do this, although we will demonstrate how to do manually as well.<br>
 
-### Manual HTTP verb tampering testing
+#### Manual HTTP verb tampering testing
 
 This example is written using the netcat package from openbsd (standard with most Linux distributions). You may also use telnet (included with Windows) in a similar fashion.
 
@@ -120,7 +120,7 @@ An example of a failed test (ie, the server supports OPTIONS despite no need for
 ![File:OPTIONS_verb_tampering.png](https://www.owasp.org/images/3/3b/OPTIONS_verb_tampering.png)
 
 
-### Automated HTTP verb tampering testing
+#### Automated HTTP verb tampering testing
 If you are able to analyze your application via simple HTTP status codes (200 OK, 501 Error, etc) - then the following bash script will test all available HTTP methods.
 ```
 #!/bin/bash
@@ -138,6 +138,6 @@ done
 Code copied verbatim from the Penetration Testing Lab blog [http://pentestlab.wordpress.com/2012/12/20/http-methods-identification/]
 
 
-## References
+### References
 **Whitepapers**
 * Arshan Dabirsiaghi: “Bypassing URL Authentication and Authorization with HTTP Verb Tampering” - http://www.aspectsecurity.com/research-presentations/bypassing-vbaac-with-http-verb-tampering

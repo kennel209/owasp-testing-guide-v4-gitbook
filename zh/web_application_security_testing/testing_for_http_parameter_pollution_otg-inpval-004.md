@@ -1,7 +1,7 @@
 # Testing for HTTP Parameter pollution (OTG-INPVAL-004)
 
 
-## Summary
+### Summary
 <br>
 Supplying multiple HTTP parameters with the same name may cause an application to interpret values in unanticipated ways. By exploiting these effects, an attacker may be able to bypass input validation, trigger application errors or modify internal variables values. As HTTP Parameter Pollution (in short *HPP*) affects a building block of all web technologies, server and client side attacks exist.
 <br>
@@ -13,7 +13,7 @@ Current HTTP standards do not include guidance on how to interpret multiple inpu
 By itself, this is not necessarily an indication of vulnerability. However, if the developer is not aware of the problem, the presence of duplicated parameters may produce an anomalous behavior in the application that can be potentially exploited by an attacker. As often in security, unexpected behaviors are a usual source of weaknesses that could lead to HTTP Parameter Pollution attacks in this case. To better introduce this class of vulnerabilities and the outcome of HPP attacks, it is interesting to analyze some real-life examples that have been discovered in the past.
 
 
-### Input Validation and filters bypass
+#### Input Validation and filters bypass
 In 2009, immediately after the publication of the first research on HTTP Parameter Pollution, the technique received attention from the security community as a possible way to bypass web application firewalls.
 
 
@@ -23,7 +23,7 @@ One of these flaws, affecting *ModSecurity SQL Injection Core Rules*, represents
 Another HPP vulnerability turned out to affect *Apple Cups*, the well-known printing system used by many UNIX systems. Exploiting HPP, an attacker could easily trigger a Cross-Site Scripting vulnerability using the following URL: `http://127.0.0.1:631/admin/?kerberos=onmouseover=alert(1)&kerberos`. The application validation checkpoint could be bypassed by adding an extra `kerberos` argument having a valid string (e.g. empty string). As the validation checkpoint would only consider the second occurrence, the first `kerberos` parameter was not properly sanitized before being used to generate dynamic HTML content. Successful exploitation would result in Javascript code execution under the context of the hosting web site.
 <br>
 
-### Authentication bypass
+#### Authentication bypass
 An even more critical HPP vulnerability was discovered in *Blogger*, the popular blogging platform. The bug allowed malicious users to take ownership of the victim’s blog by using the following HTTP request:
 
 ```
@@ -36,7 +36,7 @@ security_token=attackertoken&blogID=attackerblogidvalue&blogID=victimblogidvalue
 The flaw resided in the authentication mechanism used by the web application, as the security check was performed on the first `blogID` parameter, whereas the actual operation used the second occurrence.
 <br>
 
-###Expected Behavior by Application Server
+####Expected Behavior by Application Server
 <br>
 The following table illustrates how different web technologies behave in presence of multiple occurrences of the same HTTP parameter.
 
@@ -62,12 +62,12 @@ Given the URL and querystring: `http://example.com/?color=red&color=blue`
 (source: [Media:AppsecEU09_CarettoniDiPaola_v0.8.pdf](https://www.owasp.org/images/b/ba/AppsecEU09_CarettoniDiPaola_v0.8.pdf) )
 
 
-## How to Test
+### How to Test
 
 Luckily, because the assignment of HTTP parameters is typically handled via the web application server, and not the application code itself, testing the response to parameter pollution should be standard across all pages and actions. However, as in-depth business logic knowledge is necessary, testing HPP requires manual testing. Automatic tools can only partially assist auditors as they tend to generate too many false positives. In addition, HPP can manifest itself in client-side and server-side components.
 
 
-### Server-side HPP
+#### Server-side HPP
 <br>
 To test for HPP vulnerabilities, identify any form or action that allows user-supplied input. Query string parameters in HTTP GET requests are easy to tweak in the navigation bar of the browser. If the form action submits data via POST, the tester will need to use an intercepting proxy to tamper with the POST data as it is sent to the server.
 Having identified a particular input parameter to test, one can edit the GET or POST data by intercepting the request, or change the query string after the response page loads. To test for HPP vulnerabilities simply append the same parameter to the GET or POST data but with a different value assigned.
@@ -104,7 +104,7 @@ A more in-depth analysis would require three HTTP requests for each HTTP paramet
 Crafting a full exploit from a parameter pollution weakness is beyond the scope of this text. See the references for examples and details.
 
 
-### Client-side HPP
+#### Client-side HPP
 <br>
 Similarly to server-side HPP, manual testing is the only reliable technique to audit web applications in order to detect parameter pollution vulnerabilities affecting client-side components. While in the server-side variant the attacker leverages a vulnerable web application to access protected data or perform actions that either not permitted or not supposed to be executed, client-side attacks aim at subverting client-side components and technologies.
 
@@ -121,12 +121,12 @@ Similarly to server-side HPP, pollute each HTTP parameter with `%26HPP_TEST` and
 In particular,  pay attention to responses having HPP vectors within `data`, `src`, `href` attributes or forms actions. Again, whether or not this default behavior reveals a potential vulnerability depends on the specific input validation, filtering and application business logic. In addition, it is important to notice that this vulnerability can also affect query string parameters used in XMLHttpRequest (XHR), runtime attribute creation and other plugin technologies (e.g. Adobe Flash’s flashvars variables).
 
 
-## Tools
+### Tools
 OWASP ZAP HPP Passive/Active Scanners [https://code.google.com/p/zap-extensions/wiki/V1Extensions]
 
 HPP Finder (Chrome Plugin) [https://chrome.google.com/webstore/detail/hpp-finder]
 
-## References
+### References
 **Whitepapers**<br>
 HTTP Parameter Pollution - Luca Carettoni, Stefano di Paola [https://www.owasp.org/images/b/ba/AppsecEU09_CarettoniDiPaola_v0.8.pdf]
 

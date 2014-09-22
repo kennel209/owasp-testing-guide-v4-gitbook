@@ -1,8 +1,8 @@
 # Appendix A: Testing Tools
 
-## Open Source Black Box Testing tools
+### Open Source Black Box Testing tools
 
-### General Testing
+#### General Testing
 
 * **[OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)**
 
@@ -68,17 +68,17 @@
     - Vega is a free and open source scanner and testing platform to test the security of web applications. Vega can help you find and validate SQL Injection, Cross-Site Scripting (XSS), inadvertently disclosed sensitive information, and other vulnerabilities. It is written in Java, GUI based, and runs on Linux, OS X, and Windows.
 
 
-### Testing for specific vulnerabilities
+#### Testing for specific vulnerabilities
 
-#### Testing for DOM XSS
+##### Testing for DOM XSS
 * DOMinator Pro - https://dominator.mindedsecurity.com
 
 
-#### Testing AJAX
+##### Testing AJAX
 * **[OWASP Sprajax Project](https://www.owasp.org/index.php/Category:OWASP_Sprajax_Project)**
 
 
-#### Testing for SQL Injection
+##### Testing for SQL Injection
 * **[OWASP SQLiX](https://www.owasp.org/index.php/Category:OWASP_SQLiX_Project)**
 * Sqlninja: a SQL Server Injection & Takeover Tool - http://sqlninja.sourceforge.net
 * Bernardo Damele A. G.: sqlmap, automatic SQL injection tool - http://sqlmap.org/
@@ -91,16 +91,16 @@
 * MySql Blind Injection Bruteforcing, Reversing.org - sqlbftools - http://packetstormsecurity.org/files/43795/sqlbftools-1.2.tar.gz.html
 
 
-#### Testing Oracle
+##### Testing Oracle
 * TNS Listener tool (Perl) - http://www.jammed.com/%7Ejwa/hacks/security/tnscmd/tnscmd-doc.html
 * Toad for Oracle - http://www.quest.com/toad
 
 
-#### Testing SSL
+##### Testing SSL
 * Foundstone SSL Digger - http://www.mcafee.com/us/downloads/free-tools/ssldigger.aspx
 
 
-#### Testing for Brute Force Password
+##### Testing for Brute Force Password
 * THC Hydra - http://www.thc.org/thc-hydra/
 * John the Ripper - http://www.openwall.com/john/
 * Brutus - http://www.hoobie.net/brutus/
@@ -108,7 +108,7 @@
 * Ncat - http://nmap.org/ncat/
 
 
-#### Testing Buffer Overflow
+##### Testing Buffer Overflow
 *  OllyDbg - http://www.ollydbg.de
 	- "A windows based debugger used for analyzing buffer overflow vulnerabilities"
 * Spike - http://www.immunitysec.com/downloads/SPIKE2.9.tgz
@@ -119,17 +119,17 @@
 	- A rapid exploit development and Testing frame work
 
 
-#### Fuzzer
+##### Fuzzer
 * **[OWASP WSFuzzer](https://www.owasp.org/index.php/Category:OWASP_WSFuzzer_Project)**
 * Wfuzz - http://www.darknet.org.uk/2007/07/wfuzz-a-tool-for-bruteforcingfuzzing-web-applications/
 
 
-#### Googling
+##### Googling
 * Stach & Liu's Google Hacking Diggity Project - http://www.stachliu.com/resources/tools/google-hacking-diggity-project/
 * Foundstone Sitedigger (Google cached fault-finding) - http://www.mcafee.com/us/downloads/free-tools/sitedigger.aspx
 
 
-## Commercial Black Box Testing tools
+### Commercial Black Box Testing tools
 * NGS Typhon III - http://www.nccgroup.com/en/our-services/security-testing-audit-compliance/information-security-software/ngs-typhon-iii/
 * NGSSQuirreL - http://www.nccgroup.com/en/our-services/security-testing-audit-compliance/information-security-software/ngs-squirrel-vulnerability-scanners/
 * IBM AppScan - http://www-01.ibm.com/software/awdtools/appscan/
@@ -152,9 +152,9 @@
 * Cenzic Hailstorm - http://www.cenzic.com/downloads/datasheets/Cenzic-datasheet-Hailstorm-Technology.pdf
 
 
-## Source Code Analyzers
+### Source Code Analyzers
 
-### Open Source / Freeware
+#### Open Source / Freeware
 * **[Owasp Orizon](https://www.owasp.org/index.php/Category:OWASP_Orizon_Project)**
 * **[OWASP LAPSE](https://www.owasp.org/index.php/Category:OWASP_LAPSE_Project)**
 * **[OWASP O2 Platform](https://www.owasp.org/index.php/OWASP_O2_Platform)**
@@ -171,7 +171,7 @@
 * phpcs-security-audit - https://github.com/Pheromone/phpcs-security-audit
 
 
-### Commercial
+#### Commercial
 
 * Armorize CodeSecure - http://www.armorize.com/index.php?link_id=codesecure
 * Parasoft C/C++ test - http://www.parasoft.com/jsp/products/cpptest.jsp/index.htm
@@ -186,11 +186,11 @@
 * Armorize CodeSecure - http://www.armorize.com/codesecure/
 
 
-## Acceptance Testing Tools
+### Acceptance Testing Tools
 Acceptance testing tools are used to validate the functionality of web applications.  Some follow a scripted approach and typically make use of a Unit Testing framework to construct test suites and test cases.  Most, if not all, can be adapted to perform security specific tests in addition to functional tests.
 
 
-### Open Source Tools
+#### Open Source Tools
 
 * WATIR - http://wtr.rubyforge.org
 	- A Ruby based web testing framework that provides an interface into Internet Explorer.
@@ -217,26 +217,26 @@ Acceptance testing tools are used to validate the functionality of web applicati
 	- Mature and popular tool, but the use of JavaScript could hamper certain security tests.
 
 
-## Other Tools
+### Other Tools
 
-### Runtime Analysis
+#### Runtime Analysis
 
 * Rational PurifyPlus - http://www-01.ibm.com/software/awdtools/purify/
 * Seeker by Quotium - http://www.quotium.com/prod/security.php
 
 
-### Binary Analysis
+#### Binary Analysis
 
 * BugScam IDC Package - http://sourceforge.net/projects/bugscam
 * Veracode - http://www.veracode.com
 
 
-### Requirements Management
+#### Requirements Management
 
 * Rational Requisite Pro - http://www-306.ibm.com/software/awdtools/reqpro
 
 
-### Site Mirroring
+#### Site Mirroring
 * wget - http://www.gnu.org/software/wget, http://www.interlog.com/~tcharron/wgetwin.html
 * curl - http://curl.haxx.se
 * Sam Spade - http://www.samspade.org

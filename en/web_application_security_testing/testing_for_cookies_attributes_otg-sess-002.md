@@ -1,7 +1,7 @@
 # Testing for Cookies attributes (OTG-SESS-002)
 
 
-## Summary
+### Summary
 Cookies are often a key attack vector for malicious users (typically targeting other users) and the application should always take due diligence to protect cookies.  This section looks at how an application can take the necessary precautions when assigning cookies, and how to test that these attributes have been correctly configured.
 
 
@@ -33,9 +33,9 @@ For example, if a cookie is set by an application at app.mydomain.com with no do
 
 * expires - This attribute is used to set persistent cookies, since the cookie does not expire until the set date is exceeded.  This persistent cookie will be used by this browser session and subsequent sessions until the cookie expires.  Once the expiration date has exceeded, the browser will delete the cookie.  Alternatively, if this attribute is not set, then the cookie is only valid in the current browser session and the cookie will be deleted when the session ends.
 
-## How to Test
+### How to Test
 
-### Black Box Testing
+#### Black Box Testing
 **Testing for cookie attribute vulnerabilities:** <br>
 
 By using an intercepting proxy or traffic intercepting browser plug-in, trap all responses where a cookie is set by the application (using the Set-cookie directive) and inspect the cookie for the following:
@@ -51,7 +51,7 @@ By using an intercepting proxy or traffic intercepting browser plug-in, trap all
 * Expires Attribute - If this attribute is set to a time in the future verify that the cookie does not contain any sensitive information.  For example, if a cookie is set to "; expires=Sun, 31-Jul-2016 13:45:29 GMT" and it is currently July 31st 2014, then the tester should inspect the cookie.  If the cookie is a session token that is stored on the user's hard drive then an attacker or local user (such as an admin) who has access to this cookie can access the application by resubmitting this token until the expiration date passes.
 
 
-## Tools
+### Tools
 
 **Intercepting Proxy:**
 
@@ -66,7 +66,7 @@ http://www.bayden.com/TamperIE/
 https://addons.mozilla.org/en-US/firefox/addon/966
 
 
-## References
+### References
 **Whitepapers**<br>
 
 * RFC 2965 - HTTP State Management Mechanism - http://tools.ietf.org/html/rfc2965

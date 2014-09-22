@@ -1,7 +1,7 @@
 # Testing for bypassing authentication schema (OTG-AUTHN-004)
 
 
-## Summary
+### Summary
 
 While most applications require authentication to gain access to private information or to execute tasks, not every authentication method is able to provide adequate security. Negligence, ignorance, or simple understatement of security threats often result in authentication schemes that can be bypassed by simply skipping the log in page and directly calling an internal page that is supposed to be accessed only after authentication has been performed.
 
@@ -15,8 +15,8 @@ Problems related to the authentication schema can be found at different stages o
 * In the application deployment phase, there may be issues during the application setup (installation and configuration activities) due to a lack in required technical skills or due to the lack of good documentation.
 
 
-## How to Test
-### Black Box testing
+### How to Test
+#### Black Box testing
 There are several methods of bypassing the authentication schema that is used by a web application:
 * Direct page request ([forced browsing](https://www.owasp.org/index.php/Forced_browsing))
 * Parameter modification
@@ -24,7 +24,7 @@ There are several methods of bypassing the authentication schema that is used by
 * SQL injection
 
 <br>
-#### Direct page request
+##### Direct page request
 
 If a web application implements access control only on the log in page, the authentication schema could be bypassed.  For example, if a user directly requests a different page via forced browsing, that page may not check the credentials of the user before granting access. Attempt to directly access a protected page through the address bar in your browser to test using this method.
 
@@ -32,7 +32,7 @@ If a web application implements access control only on the log in page, the auth
 <center>![Image:basm-directreq.jpg](https://www.owasp.org/images/7/7f/Basm-directreq.jpg)</center>
 
 
-#### Parameter Modification
+##### Parameter Modification
 
 Another problem related to authentication design is when the application verifies a successful log in on the basis of a fixed value parameters. A user could modify these parameters to gain access to the protected areas without providing valid credentials. In the example below, the "authenticated" parameter is changed to a value of "yes", which allows the user to gain access.  In this example, the parameter is in the URL, but a proxy could also be used to modify the parameter, especially when the parameters are sent as form elements in a POST request or when the parameters are stored in a cookie.
 
@@ -60,7 +60,7 @@ Content-Type: text/html; charset=iso-8859-1
 <center>![Image:basm-parammod.jpg](https://www.owasp.org/images/8/8c/Basm-parammod.jpg)</center>
 
 
-#### Session ID Prediction
+##### Session ID Prediction
 
 Many web applications manage authentication by using session identifiers (session IDs). Therefore, if session ID generation is predictable, a malicious user could be able to find a valid session ID and gain unauthorized access to the application, impersonating a previously authenticated user.
 
@@ -77,7 +77,7 @@ In the following figure, values inside cookies change only partially, so it's po
 <center>![Image:basm-sessid2.jpg](https://www.owasp.org/images/f/f4/Basm-sessid2.jpg)</center>
 
 
-#### SQL Injection (HTML Form Authentication)
+##### SQL Injection (HTML Form Authentication)
 
 SQL Injection is a widely known attack technique. This section is not going to describe this technique in detail as there are several sections in this guide that explain injection techniques beyond the scope of this section.
 
@@ -91,7 +91,7 @@ The following figure shows that with a simple SQL injection attack, it is someti
 <center>![Image:basm-sqlinj2.gif](https://www.owasp.org/images/d/d1/Basm-sqlinj2.gif)</center>
 
 
-### Gray Box Testing
+#### Gray Box Testing
 
 If an attacker has been able to retrieve the application source code by exploiting a previously discovered vulnerability (e.g., directory traversal), or from a web repository (Open Source Applications), it could be possible to perform refined attacks against the implementation of the authentication process.
 
@@ -121,13 +121,13 @@ In PHP, a comparison between a string value and a boolean value (1 - "TRUE") is 
  a:2:{s:11:"autologinid";b:1;s:6:"userid";s:1:"2";}
 ```
 
-## Tools
+### Tools
 * [WebScarab](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * [WebGoat](https://www.owasp.org/index.php/OWASP_WebGoat_Project)
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
 
 
-## References
+### References
 **Whitepapers**<br>
 * Mark Roxberry: "PHPBB 2.0.13 vulnerability"
 * David Endler: "Session ID Brute Force Exploitation and Prediction" - http://www.cgisecurity.com/lib/SessionIDs.pdf

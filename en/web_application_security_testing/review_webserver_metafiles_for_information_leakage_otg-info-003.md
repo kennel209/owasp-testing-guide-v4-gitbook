@@ -1,18 +1,18 @@
 # Review Webserver Metafiles for Information Leakage (OTG-INFO-003)
 
 
-## Summary
+### Summary
 This section describes how to test the robots.txt file for information leakage of the web application's directory or folder path(s).  Furthermore, the list of directories that are to be avoided by Spiders, Robots, or Crawlers can also be created as a dependency for [Map execution paths through application (OTG-INFO-007)](https://www.owasp.org/index.php/Map_execution_paths_through_application_%28OTG-INFO-007%29)
 
 
-## Test Objectives
+### Test Objectives
 1. Information leakage of the web application's directory or folder path(s).
 
 2. Create the list of directories that are to be avoided by Spiders, Robots, or Crawlers.
 
 
-## How to Test
-### robots.txt
+### How to Test
+#### robots.txt
 Web Spiders, Robots, or Crawlers retrieve a web page and then recursively traverse hyperlinks to retrieve further web content. Their accepted behavior is specified by the *Robots Exclusion Protocol* of the robots.txt file in the web root directory [1].
 <br>
 
@@ -123,7 +123,7 @@ Web site owners can use the Google "Analyze robots.txt" function to analyse the 
 3. Choose between the available methods and follow the on screen instruction.<br>
 
 
-### META Tag
+#### META Tag
 
 <META> tags are located within the HEAD section of each HTML Document and should be consistent across a web site in the likely event that the robot/spider/crawler start point does not begin from a document link other than webroot i.e. a ["deep link"](http://en.wikipedia.org/wiki/Deep_linking).
 
@@ -147,7 +147,7 @@ For example, the robots.txt file from facebook.com has a "Disallow: /ac.php" [en
 The above might be considered a fail since "INDEX,FOLLOW" is the default `<META>` Tag specified by the "Robots Exclusion Protocol" yet "Disallow: /ac.php" is listed in robots.txt.
 
 
-## Tools
+### Tools
 
 * Browser (View Source function)
 * curl
@@ -155,7 +155,7 @@ The above might be considered a fail since "INDEX,FOLLOW" is the default `<META>
 * [rockspider](https://github.com/cmlh/rockspider/releases)
 
 
-## References
+### References
 **Whitepapers**<br>
 * [1] "The Web Robots Pages" - http://www.robotstxt.org/
 * [2] "Block and Remove Pages Using a robots.txt File" - https://support.google.com/webmasters/answer/156449

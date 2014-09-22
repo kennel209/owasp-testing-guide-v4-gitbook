@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 
 Account lockout mechanisms are used to mitigate brute force password guessing attacks. Accounts are typically locked after 3 to 5 unsuccessful login attempts and can only be unlocked after a predetermined period of time, via a self-service unlock mechanism, or intervention by an administrator. Account lockout mechanisms require a balance between protecting accounts from unauthorized access and protecting users from being denied authorized access.<br>
 
@@ -19,13 +19,13 @@ Without a strong lockout mechanism, the application may be susceptible to brute 
 * Opportunities for further attacks: authenticated sections of a web application could contain vulnerabilities that are not present in the public section of the web application and could contain advanced functionality that is not available to public users.
 
 
-## Test objectives
+### Test objectives
 
 1. Evaluate the account lockout mechanism's ability to mitigate brute force password guessing.
 2. Evaluate the unlock mechanism's resistance to unauthorized account unlocking.
 
 
-## How to Test
+### How to Test
 
 Typically, to test the strength of lockout mechanisms, you will need access to an account that you are willing or can afford to lock. If you have only one account with which you can log on to the web application, perform this test at the end of you test plan to avoid that you cannot continue your testing due to a locked account.<br>
 <br>
@@ -63,12 +63,12 @@ Factors to consider when implementing an account lockout mechanism:
     3. Via a self-service mechanism: As stated before, this self-service mechanism must be secure enough to avoid that the attacker can unlock accounts himself.
 
 
-## References
+### References
 
 See the OWASP article on [Brute Force](https://www.owasp.org/index.php/Brute_force_attack) Attacks.
 
 
-## Remediation
+### Remediation
 
 Apply account unlock mechanisms depending on the risk level. In order from lowest to highest assurance:
 

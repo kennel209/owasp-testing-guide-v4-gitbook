@@ -1,18 +1,18 @@
 # Fingerprint Web Application (OTG-INFO-009)
 
-## Summary
+### Summary
 
 There is nothing new under the sun, and nearly every web application that one may think of developing has already been developed. With the vast number of free and open source software projects that are actively developed and deployed around the world, it is very likely that an application security test will face a target site that is entirely or partly dependent on these well known applications (e.g. Wordpress, phpBB, Mediawiki, etc). Knowing the web application components that are being tested significantly helps in the testing process and will also drastically reduce the effort required during the test. These well known web applications have known HTML headers, cookies, and directory structures that can be enumerated to identify the application.
 
 
-## Test Objectives
+### Test Objectives
 
 Identify the web application and version to determine known vulnerabilities and the appropriate exploits to use during testing.
 
 
-## How to Test
+### How to Test
 
-### Cookies
+#### Cookies
 A relatively reliable way to identify a web application is by the application-specific cookies.
 
 Consider the following HTTP-request:
@@ -31,7 +31,7 @@ Host: blog.owasp.org
 The cookie *CAKEPHP* has automatically been set, which gives information about the framework being used. List of common cookies names is presented in Cpmmon Application Identifiers section. However, it is possible to change the name of the cookie.
 
 
-### HTML source code
+#### HTML source code
 This technique is based on finding certain patterns in the HTML page source code. Often one can find a lot of information which helps a tester to recognize a specific web application. One of the common markers are HTML comments that directly lead to application disclosure. More often certain application-specific paths can be found, i.e. links to application-specific css and/or js folders. Finally, specific script variables might also point to a certain application.
 
 From the meta tag below, one can easily learn the application used by a website and its version. The comment, specific paths and script variables can all help an attacker to quickly determine an instance of an application.
@@ -42,7 +42,7 @@ From the meta tag below, one can easily learn the application used by a website 
 
 More frequently such information is placed between `<head></head>` tags, in `<meta>` tags or at the end of the page. Nevertheless, it is recommended to check the whole document since it can be useful for other purposes such as inspection of other useful comments and hidden fields.
 
-### Specific files and folders
+#### Specific files and folders
 Apart from information gathered from HTML sources, there is another approach which greatly helps an attacker to determine the application with high accuracy. Every application has its own specific file and folder structure on the server. It has been pointed out that one can see the specific path from the HTML page source but sometimes they are not explicitly presented there and still reside on the server.
 
 In order to uncover them a technique known as dirbusting is used. Dirbusting is brute forcing a target with predictable folder and file names and monitoring HTTP-responses to emumerate server contents. This information can be used both for finding default files and attacking them, and for fingerprinting the web application. Dirbusting can be done in several ways, the example below shows a successful dirbusting attack against a WordPress-powered target with the help of defined list and intruder functionality of Burp Suite.
@@ -59,8 +59,8 @@ Tip: before starting dirbusting, it is recommended to check the robots.txt file 
 
 Specific files and folders are different for each specific application. It is recommended to install the corresponding application during penetration tests in order to have better understanding of what infrastructure is presented and what files might be left on the server. However, several good file lists already exist and one good example is FuzzDB wordlists of predictable files/folders (http://code.google.com/p/fuzzdb/).
 
-## Common Application Identifiers
-### Cookies
+### Common Application Identifiers
+#### Cookies
 
 | Framework    | Cookie name                       |
 |--------------|-----------------------------------|
@@ -86,7 +86,7 @@ Specific files and folders are different for each specific application. It is re
 | VIVVO        | VivvoSessionId                    |
 
 
-### HTML source code
+#### HTML source code
 
 | Application | Keyword                                                                      |
 |-------------|------------------------------------------------------------------------------|
@@ -99,11 +99,11 @@ Specific files and folders are different for each specific application. It is re
 
 
 
-## Tools
+### Tools
 A list of general and well-known tools is presented below. There are also a lot of other utilities, as well as framework-based fingerprinting tools.
 
 
-### WhatWeb
+#### WhatWeb
 Website:  http://www.morningstarsecurity.com/research/whatweb <br>
 Currently one of the best fingerprinting tools on the market. Included in a default [Kali Linux] build.
 Language: Ruby
@@ -123,7 +123,7 @@ Sample output is presented on a screenshot below:
 
 
 
-### BlindElephant
+#### BlindElephant
 Website: https://community.qualys.com/community/blindelephant <br>
 This great tool works on the principle of static file checksum based version difference thus providing a very high quality of fingerprinting.
 Language: Python
@@ -159,7 +159,7 @@ Best Guess: 7.14
 ```
 
 
-### Wappalyzer
+#### Wappalyzer
 Website: http://wappalyzer.com <br>
 Wapplyzer is a Firefox Chrome plug-in. It works only on regular expression matching and doesn't need anything other than the page to be loaded on browser. It works completely at the browser level and gives results in the form of icons. Although sometimes it has false positives, this is very handy to have notion of what technologies were used to construct a target website immediately after browsing a page.
 
@@ -169,26 +169,26 @@ Sample output of a plug-in is presented on a screenshot below.
 ![Image:Owasp-wappalyzer.png](https://www.owasp.org/images/a/a7/Owasp-wappalyzer.png)
 
 
-## References
+### References
 **Whitepapers**<br>
 * Saumil Shah: "An Introduction to HTTP fingerprinting" - http://www.net-square.com/httprint_paper.html
 * Anant Shrivastava : "Web Application Finger Printing" - http://anantshri.info/articles/web_app_finger_printing.html
 
 
-## Remediation
+### Remediation
 The general advice is to use several of the tools described above and check logs to better understand what exactly helps an attacker to disclose the web framework. By performing multiple scans after changes have been made to hide framework tracks, it's possible to achieve a better level of security and to make sure of the framework can not be detected by automatic scans. Below are some specific recommendations by framework marker location and some additional interesting approaches.
 
 
-### HTTP headers
+#### HTTP headers
 Check the configuration and disable or obfuscate all HTTP-headers that disclose information the technologies used. Here is an interesting article about HTTP-headers obfuscation using Netscaler:
 http://grahamhosking.blogspot.ru/2013/07/obfuscating-http-header-using-netscaler.html
 
 
-### Cookies
+#### Cookies
 It is recommended to change cookie names by making changes in the corresponding configuration files.
 
 
-### HTML source code
+#### HTML source code
 Manually check the contents of the HTML code and remove everything that explicitly points to the framework.
 
 General guidelines:
@@ -199,7 +199,7 @@ General guidelines:
 * Do not use default scripts on the page or obfuscate them if they must be used.
 
 
-### Specific files and folders
+#### Specific files and folders
 General guidelines:
 * Remove any unnecessary or unused files on the server. This implies text files disclosing information about versions and installation too.
 * Restrict access to other files in order to achieve 404-response when accessing them from outside. This can be done, for example, by modifying htaccess file and adding RewriteCond or RewriteRule there. An example of such restriction for two common WordPress folders is presented below.
@@ -213,7 +213,7 @@ RewriteRule $ /http://your_website [R=404,L]
 However, these are not the only ways to restrict access. In order to automate this process, certain framework-specific plugins exist. One example for WordPress is StealthLogin (http://wordpress.org/plugins/stealth-login-page).
 
 
-### Additional approaches
+#### Additional approaches
 General guidelines:
 * Checksum management
     - The purpose of this approach is to beat checksum-based scanners and not let them disclose files by their hashes. Generally, there are two approaches in checksum management:

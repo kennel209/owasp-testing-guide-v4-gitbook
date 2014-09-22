@@ -1,7 +1,7 @@
 # Enumerate Infrastructure and Application Admin Interfaces (OTG-CONFIG-005)
 
 
-## Summary
+### Summary
 
 Administrator interfaces may be present in the application or on the application server to allow certain users to undertake privileged activities on the site. Tests should be undertaken to reveal if and how this privileged functionality can be accessed by an unauthorized or standard user.
 
@@ -17,8 +17,8 @@ An application may require an administrator interface to enable a privileged use
 In many instances, such interfaces do not have sufficient controls to protect them from unauthorized access. Testing is aimed at discovering these administrator interfaces and accessing functionality intended for the privileged users.
 
 
-## How to Test
-### Black Box Testing
+### How to Test
+#### Black Box Testing
 The following section describes vectors that may be used to test for the presence of administrative interfaces. These techniques may also be used to test for related issues including privilege escalation, and are described elsewhere in this guide(for example [Testing for bypassing authorization schema (OTG-AUTHZ-002)](https://www.owasp.org/index.php/Testing_for_Bypassing_Authorization_Schema_%28OTG-AUTHZ-002%29) and [Testing for Insecure Direct Object References (OTG-AUTHZ-004)](https://www.owasp.org/index.php/Testing_for_Insecure_Direct_Object_References_%28OTG-AUTHZ-004%29) in greater detail.
 
 
@@ -40,7 +40,7 @@ or in a cookie:
 Once an administrative interface has been discovered, a combination of the above techniques may be used to attempt to bypass authentication. If this fails, the tester may wish to attempt a brute force attack. In such an instance the tester should be aware of the potential for administrative account lockout if such functionality is present.
 
 
-### Gray Box Testing
+#### Gray Box Testing
 A more detailed examination of the server and application components should be undertaken to ensure hardening (i.e. administrator pages are not accessible to everyone through the use of IP filtering or other controls), and where applicable, verification that all components do not use default credentials or configurations.
 <br>
 
@@ -48,12 +48,12 @@ Source code should be reviewed to ensure that the authorization and authenticati
 <br>
 
 
-## Tools
+### Tools
 * [Dirbuster](https://www.owasp.org/index.php/Category:OWASP_DirBuster_Project)  This currently inactive OWASP project is still a great tool for brute forcing directories and files on the server.
 * [THC-HYDRA](https://www.thc.org/thc-hydra/)  is a tool that allows brute-forcing of many interfaces, including form-based HTTP authentication.
 * A brute forcer is much better when it uses a good dictionary, for example the [netsparker](https://www.netsparker.com/blog/web-security/svn-digger-better-lists-for-forced-browsing/)  dictionary.
 
 
-## References
+### References
 * Default Password list: http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php
 * Default Password list: http://www.cirt.net/passwords

@@ -1,7 +1,7 @@
 # Testing for HTTP Splitting/Smuggling (OTG-INPVAL-016)
 
 
-## Summary
+### Summary
 This section illustrates examples of attacks that leverage specific features of the HTTP protocol, either by exploiting weaknesses of the web application or peculiarities in the way different agents interpret HTTP messages.
 <br>
 
@@ -15,9 +15,9 @@ The first attack exploits a lack of input sanitization which allows an intruder 
 
 In the second attack, the attacker exploits the fact that some specially crafted HTTP messages can be parsed and interpreted in different ways depending on the agent that receives them. HTTP smuggling requires some level of knowledge about the different agents that are handling the HTTP messages (web server, proxy, firewall) and therefore will be included only in the Gray Box testing section.
 
-## How to Test
-### Black Box testing
-#### HTTP Splitting
+### How to Test
+#### Black Box testing
+##### HTTP Splitting
 Some web applications use part of the user input to generate the values of some headers of their responses. The most straightforward example is provided by redirections in which the target URL depends on some user-submitted value. Let's say for instance that the user is asked to choose whether he/she prefers a standard or advanced web interface. The choice will be passed as a parameter that will be used in the response header to trigger the redirection to the corresponding page.
 
 
@@ -79,12 +79,12 @@ It must be noted that a successful exploitation of this vulnerability in a real 
 For a more detailed discussion about this attack and other information about possible scenarios and applications, check the papers referenced at the bottom of this section.
 
 
-### Gray Box testing
-#### HTTP Splitting
+#### Gray Box testing
+##### HTTP Splitting
 A successful exploitation of HTTP Splitting is greatly helped by knowing some details of the web application and of the attack target. For instance, different targets can use different methods to decide when the first HTTP message ends and when the second starts. Some will use the message boundaries, as in the previous example. Other targets will assume that different messages will be carried by different packets. Others will allocate for each message a number of chunks of predetermined length: in this case, the second message will have to start exactly at the beginning of a chunk and this will require the tester to use padding between the two messages. This might cause some trouble when the vulnerable parameter is to be sent in the URL, as a very long URL is likely to be truncated or filtered. A gray box scenario can help the attacker to find a workaround: several application servers, for instance, will allow the request to be sent using POST instead of GET.
 
 
-#### HTTP Smuggling
+##### HTTP Smuggling
 As mentioned in the introduction, HTTP Smuggling leverages the different ways that a particularly crafted HTTP message can be parsed and interpreted by different agents (browsers, web caches, application firewalls). This relatively new kind of attack was first discovered by Chaim Linhart, Amit Klein, Ronen Heled and Steve Orrin in 2005. There are several possible applications and we will analyze one of the most spectacular: the bypass of an application firewall. Refer to the original whitepaper (linked at the bottom of this page) for more detailed information and other scenarios.
 
 
@@ -127,7 +127,7 @@ While in the aforementioned case the technique exploits a bug of a web server, t
 Note that HTTP Smuggling does *not* exploit any vulnerability in the target web application. Therefore, it might be somewhat tricky, in a pen-test engagement, to convince the client that a countermeasure should be looked for anyway.
 
 
-## References
+### References
 **Whitepapers**
 * Amit Klein, "Divide and Conquer: HTTP Response Splitting, Web Cache Poisoning Attacks, and Related Topics" - http://www.packetstormsecurity.org/papers/general/whitepaper_httpresponse.pdf
 * Chaim Linhart, Amit Klein, Ronen Heled, Steve Orrin: "HTTP Request Smuggling" - http://www.watchfire.com/news/whitepapers.aspx

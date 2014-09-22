@@ -1,7 +1,7 @@
 # Testing for Bypassing Session Management Schema (OTG-SESS-001)
 
 
-## Summary
+### Summary
 In order to avoid continuous authentication for each page of a website or service, web applications implement various mechanisms to store and validate credentials for a pre-determined timespan. These mechanisms are known as Session Management and while they are important in order to increase the ease of use and user-friendliness of the application, they can be exploited by a penetration tester to gain access to a user account, without the need to provide correct credentials.
 
 
@@ -27,9 +27,9 @@ Usually the main steps of the attack pattern are the following:
 
 Another pattern of attack consists of overflowing a cookie. Strictly speaking, this attack has a different nature, since here testers are not trying to recreate a perfectly valid cookie. Instead, the goal is to overflow a memory area, thereby interfering with the correct behavior of the application and possibly injecting (and remotely executing) malicious code.
 
-## How to Test
+### How to Test
 
-### Black Box Testing and Examples
+#### Black Box Testing and Examples
 
 All interaction between the client and application should be tested at least against the following criteria:
 * Are all Set-Cookie directives tagged as Secure?
@@ -43,7 +43,7 @@ All interaction between the client and application should be tested at least aga
 * What HTTP/1.0 Cache-Control settings are used to protect Cookies?
 
 
-#### Cookie collection
+##### Cookie collection
 
 The first step required to manipulate the cookie is to understand how the application creates and manages cookies. For this task, testers have to try to answer the following questions:
 
@@ -58,7 +58,7 @@ Find out which parts of the application need a cookie. Access a page, then try a
 A spreadsheet mapping each cookie to the corresponding application parts and the related information can be a valuable output of this phase.
 
 
-#### Session Analysis
+##### Session Analysis
 
 The session tokens (Cookie, SessionID or Hidden Field) themselves should be examined to ensure their quality from a security perspective.  They should be tested against criteria such as their randomness, uniqueness, resistance to statistical and cryptographic analysis and information leakage.<br>
 
@@ -105,7 +105,7 @@ The following areas should be addressed during the single and multiple Session I
 * What obvious patterns are present in the Session ID as a whole, or individual portions?
 
 
-#### Session ID Predictability and Randomness
+##### Session ID Predictability and Randomness
 
 Analysis of the variable areas (if any) of the Session ID should be undertaken to establish the existence of any recognizable or predictable patterns. These analyses may be performed manually and with bespoke or OTS statistical or cryptanalytic tools to deduce any patterns in the Session ID content. Manual checks should include comparisons of Session IDs issued for the same login conditions – e.g., the same username, password, and IP address.
 
@@ -125,7 +125,7 @@ In analyzing Session ID sequences, patterns or cycles, static elements and clien
 * Can the next ID be deduced, given full knowledge of the generation algorithm and previous IDs?
 
 
-#### Cookie reverse engineering
+##### Cookie reverse engineering
 
 Now that the tester has enumerated the cookies and has a general idea of their use, it is time to have a deeper look at cookies that seem interesting. Which cookies is the tester interested in? A cookie, in order to provide a secure method of session management, must combine several characteristics, each of which is aimed at protecting the cookie from a different class of attacks.
 
@@ -177,7 +177,7 @@ Even when no delimiters are used, having enough samples can help. As an example,
 ```
 
 
-#### Brute Force Attacks
+##### Brute Force Attacks
 Brute force attacks inevitably lead on from questions relating to predictability and randomness. The variance within the Session IDs must be considered together with application session duration and timeouts.  If the variation within the Session IDs is relatively small, and Session ID validity is long, the likelihood of a successful brute-force attack is much higher.
 
 
@@ -187,7 +187,7 @@ A long Session ID (or rather one with a great deal of variance) and a shorter va
 * Do delays between connection attempts with different Session IDs mitigate the risk of this attack?
 
 
-### Gray Box testing and example
+#### Gray Box testing and example
 If the tester has access to the session management schema implementation, they can check for the following:
 * Random Session Token
 The Session ID or Cookie issued to the client should not be easily predictable (don't use linear algorithms based on predictable variables such as the  client IP address). The use of cryptographic algorithms with key length of 256 bits is encouraged (like AES).
@@ -205,13 +205,13 @@ More information here: [Testing for cookies attributes](https://www.owasp.org/in
 
 
 
-##Tools
+###Tools
 * OWASP Zed Attack Proxy Project (ZAP) - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project - features a session token analysis mechanism.
 * Burp Sequencer - http://www.portswigger.net/suite/sequencer.html
 * Foundstone CookieDigger - http://www.mcafee.com/us/downloads/free-tools/cookiedigger.aspx
 * YEHG's JHijack - https://www.owasp.org/index.php/JHijack
 
-##References
+###References
 **Whitepapers**<br>
 * RFC 2965 “HTTP State Management Mechanism”
 * RFC 1750 “Randomness Recommendations for Security”
@@ -229,23 +229,23 @@ More information here: [Testing for cookies attributes](https://www.owasp.org/in
 * Session Hijacking in Webgoat Lesson - http://yehg.net/lab/pr0js/training/view/owasp/webgoat/WebGoat_SessionMan_SessionHijackingWithJHijack/
 
 
-## Related Security Activities
+### Related Security Activities
 
-### Description of Session Management Vulnerabilities
+#### Description of Session Management Vulnerabilities
 
 See the OWASP articles on [Session Management Vulnerabilities](https://www.owasp.org/index.php/Category:Session_Management_Vulnerability).
 
 
-### Description of Session Management Countermeasures
+#### Description of Session Management Countermeasures
 
 See the OWASP articles on [Session Management Countermeasures](https://www.owasp.org/index.php/Category:Session_Management).
 
 
-### How to Avoid Session Management Vulnerabilities
+#### How to Avoid Session Management Vulnerabilities
 
 See the [OWASP Development Guide](https://www.owasp.org/index.php/Category:OWASP_Guide_Project) article on how to [Avoid Session Management](https://www.owasp.org/index.php/Session_Management) Vulnerabilities.
 
 
-### How to Review Code for Session Management| Vulnerabilities
+#### How to Review Code for Session Management| Vulnerabilities
 
 See the [OWASP Code Review Guide](https://www.owasp.org/index.php/Category:OWASP_Code_Review_Project) article on how to [Review Code for Session Management](https://www.owasp.org/index.php/Codereview-Session-Management) Vulnerabilities.

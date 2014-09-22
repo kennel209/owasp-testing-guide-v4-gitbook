@@ -5,7 +5,7 @@ The following are fuzzing vectors which can be used with [WebScarab](https://www
 Fuzzing is the "kitchen sink" approach to testing the response of an application to parameter manipulation. Generally one looks for error conditions that are generated in an application as a result of fuzzing. This is the simple part of the discovery phase. Once an error has been discovered identifying and exploiting a potential vulnerability is where skill is required.
 
 
-## Fuzz Categories
+### Fuzz Categories
 
 In the case of stateless network protocol fuzzing (like HTTP(S)) two broad categories exist:
 
@@ -16,7 +16,7 @@ In the case of stateless network protocol fuzzing (like HTTP(S)) two broad categ
 We examine and define each category in the sub-sections that follow.
 
 
-### Recursive fuzzing
+#### Recursive fuzzing
 
 Recursive fuzzing can be defined as the process of fuzzing a part of a request by iterating through all the possible combinations of a set alphabet. Consider the case of:
 
@@ -34,7 +34,7 @@ http://www.example.com/11000fff
 http://www.example.com/ffffffff
 ```
 
-### Replacive fuzzing
+#### Replacive fuzzing
 
 Replacive fuzzing can be defined as the process of fuzzing part of a request by means of replacing it with a set value. This value is known as a fuzz vector. In the case of:
 
@@ -56,7 +56,7 @@ This is a form of replacive fuzzing. In this category, the total number of reque
 The remainder of this appendix presents a number of fuzz vector categories.
 
 
-## Cross Site Scripting (XSS)
+### Cross Site Scripting (XSS)
 
 For details on XSS: [Cross-site Scripting (XSS)](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29)
 
@@ -85,9 +85,9 @@ For details on XSS: [Cross-site Scripting (XSS)](https://www.owasp.org/index.php
  <IMG SRC="jav&amp;#x0D;ascript:alert(<WBR>'XSS');">
 ```
 
-## Buffer Overflows and Format String Errors
+### Buffer Overflows and Format String Errors
 
-### Buffer Overflows (BFO)
+#### Buffer Overflows (BFO)
 A buffer overflow or memory corruption attack is a programming condition which allows overflowing of valid data beyond its prelocated storage limit in memory.
 
 
@@ -111,7 +111,7 @@ Note that attempting to load such a definition file within a fuzzer application 
  A x 12288
 ```
 
-### Format String Errors (FSE)
+#### Format String Errors (FSE)
 
 Format string attacks are a class of vulnerabilities that involve supplying language specific format tokens to execute arbitrary code or crash a program. Fuzzing for such errors has as an objective to check for unfiltered user input.
 
@@ -142,7 +142,7 @@ Note that attempting to load such a definition file within a fuzzer application 
  %x x 257
 ```
 
-### Integer Overflows (INT)
+#### Integer Overflows (INT)
 
 Integer overflow errors occur when a program fails to account for the fact that an arithmetic operation can result in a quantity either greater than a data type's maximum value or less than its minimum value. If a tester can cause the program to perform such a memory allocation, the program can be potentially vulnerable to a buffer overflow attack.
 
@@ -161,7 +161,7 @@ Integer overflow errors occur when a program fails to account for the fact that 
  0x100000
 ```
 
-## SQL Injection
+### SQL Injection
 
 This attack can affect the database layer of an application and is typically present when user input is not filtered for SQL statements.
 
@@ -178,7 +178,7 @@ SQL Injection is classified in the following two categories, depending on the ex
 Active SQL Injection statements can have a detrimental effect on the underlying database if successfully executed.
 
 
-### Passive SQL Injection (SQP)
+#### Passive SQL Injection (SQP)
 
 ```
  '||(elt(-3+5,bin(15),ord(10),hex(char(45))))
@@ -238,7 +238,7 @@ Active SQL Injection statements can have a detrimental effect on the underlying 
  ' and 1=( if((load_file(char(110,46,101,120,116))<>char(39,39)),1,0));
 ```
 
-### Active SQL Injection (SQI)
+#### Active SQL Injection (SQI)
 
 ```
  '; exec master..xp_cmdshell 'ping 10.10.1.2'--
@@ -253,7 +253,7 @@ Active SQL Injection statements can have a detrimental effect on the underlying 
  + char(0x65) + char(0x74) + char(0x65) + char(0x72),char(0x64)
 ```
 
-## LDAP Injection
+### LDAP Injection
 
 For details on LDAP Injection: [Testing for LDAP Injection](https://www.owasp.org/index.php/Testing_for_LDAP_Injection_%28OWASP-DV-006%29)
 
@@ -280,7 +280,7 @@ For details on LDAP Injection: [Testing for LDAP Injection](https://www.owasp.or
  *)(uid=*))(|(uid=*
 ```
 
-## XPATH Injection
+### XPATH Injection
 
 For details on XPATH Injection: [Testing for XPath Injection](https://www.owasp.org/index.php/Testing_for_XPath_Injection_%28OWASP-DV-010%29)
 
@@ -297,7 +297,7 @@ For details on XPATH Injection: [Testing for XPath Injection](https://www.owasp.
  x'+or+name()='username'+or+'x'='y
 ```
 
-## XML Injection
+### XML Injection
 
 Details on XML Injection here: [Testing for XML Injection](https://www.owasp.org/index.php/Testing_for_XML_Injection_%28OWASP-DV-008%29)
 

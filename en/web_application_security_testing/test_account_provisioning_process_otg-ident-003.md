@@ -1,17 +1,17 @@
 # Test Account Provisioning Process (OTG-IDENT-003)
 
 
-## Summary
+### Summary
 
 The provisioning of accounts presents an opportunity for an attacker to create a valid account without application of the proper identification and authorization process.
 
 
-## Test objectives
+### Test objectives
 
 Verify which accounts may provision other accounts and of what type.
 
 
-## How to test
+### How to test
 
 Determine which roles are able to provision users and what sort of accounts they can provision.
 
@@ -23,7 +23,7 @@ Determine which roles are able to provision users and what sort of accounts they
 * How are the files or resources owned by the de-provisioned user managed? Are they deleted? Is access transferred?
 
 
-### Example
+#### Example
 
 In WordPress, only a user's name and email address are required to provision the user, as shown below:
 
@@ -35,6 +35,6 @@ De-provisioning of users requires the administrator to select the users to be de
 ![File:Wordpress_authandusers.png|800px](https://www.owasp.org/images/thumb/6/63/Wordpress_authandusers.png/800px-Wordpress_authandusers.png)
 
 
-## Tools
+### Tools
 
 While the most thorough and accurate approach to completing this test is to conduct it manually, HTTP proxy tools could be also useful.

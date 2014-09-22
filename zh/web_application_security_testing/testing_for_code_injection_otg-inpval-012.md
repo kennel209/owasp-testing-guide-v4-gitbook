@@ -1,17 +1,17 @@
 # Testing for Code Injection (OTG-INPVAL-012)
 
-## Summary
+### Summary
 
 This section describes how a tester can check if it is possible to enter code as input on a web page and have it executed by the web server.
 
 
 In [Code Injection](https://www.owasp.org/index.php/Code_Injection) testing, a tester submits input that is processed by the web server as dynamic code or as an included file.  These tests can target various server-side scripting engines, e.g.., ASP or PHP. Proper input validation and secure coding practices need to be employed to protect against these attacks.
 
-## How to Test
+### How to Test
 
-### Black Box testing
+#### Black Box testing
 
-####Testing for PHP Injection vulnerabilities
+#####Testing for PHP Injection vulnerabilities
 
 Using the querystring, the tester can inject code (in this example, a malicious URL) to be processed as part of the included file:
 ```
@@ -23,9 +23,9 @@ Using the querystring, the tester can inject code (in this example, a malicious 
 The malicious URL is accepted as a parameter for the PHP page, which will later use the value in an included file.
 
 
-### Gray Box testing
+#### Gray Box testing
 
-####Testing for ASP Code Injection vulnerabilities
+#####Testing for ASP Code Injection vulnerabilities
 
 Examine ASP code for user input used in execution functions. Can the user enter commands into the Data input field?  Here, the ASP code will save the input to a file and then execute it:
 ```
@@ -53,7 +53,7 @@ Examine ASP code for user input used in execution functions. Can the user enter 
  %>)))
 ```
 
-## References
+### References
 
 * Security Focus - http://www.securityfocus.com
 

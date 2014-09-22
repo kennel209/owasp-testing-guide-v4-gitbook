@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 Sensitive data must be protected when it is transmitted through the network. If data is transmitted over HTTPS or encrypted in another way the protection mechanism must not have limitations or vulnerabilities, as explained in the broader article [Testing for Weak SSL/TLS Ciphers, Insufficient Transport Layer Protection (OTG-CRYPST-001)](https://www.owasp.org/index.php?title=Testing_for_Weak_SSL/TLS_Ciphers,_Insufficient_Transport_Layer_Protection_%28OTG-CRYPST-001%29) [1] and in other OWASP documentation [2], [3], [4], [5].
 
 
@@ -14,11 +14,11 @@ As a rule of thumb if data must be protected when it is stored, this data must a
 If the application transmits sensitive information via unencrypted channels - e.g. HTTP - it is considered a security risk. Some examples are Basic authentication which sends authentication credentials in plain-text over HTTP, form based authentication credentials sent via HTTP, or plain-text transmission of any other information considered sensitive due to regulations, laws, organizational policy or application business logic.
 
 
-## How to Test
+### How to Test
 Various types of information that must be protected, could be transmitted by the application in clear text. It is possible to check if this information is transmitted over HTTP instead of HTTPS, or whether weak cyphers are used. See more information about insecure transmission of credentials [Top 10 2013-A6-Sensitive Data Exposure](https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure) [3] or insufficient transport layer protection in general [Top 10 2010-A9-Insufficient Transport Layer Protection](https://www.owasp.org/index.php/Top_10_2010-A9-Insufficient_Transport_Layer_Protection) [2].
 
 
-### Example 1: Basic Authentication over HTTP
+#### Example 1: Basic Authentication over HTTP
 A typical example is the usage of Basic Authentication over HTTP. When using Basic Authentication, user credentials are encoded rather than encrypted, and are sent as HTTP headers. In the example below the tester uses curl [5] to test for this issue. Note how the application uses Basic authentication, and HTTP rather than HTTPS
 
 ```
@@ -35,7 +35,7 @@ Content-Type: text/html
 ```
 
 
-### Example 2: Form-Based Authentication Performed over HTTP
+#### Example 2: Form-Based Authentication Performed over HTTP
 Another typical example is authentication forms which transmit user authentication credentials over HTTP. In the example below one can see HTTP being used in the "action" attribute of the form. It is also possible to see this issue by examining the HTTP traffic with an interception proxy.
 
 ```
@@ -47,7 +47,7 @@ Another typical example is authentication forms which transmit user authenticati
 ```
 
 
-### Example 3: Cookie Containing Session ID Sent over HTTP
+#### Example 3: Cookie Containing Session ID Sent over HTTP
 The Session ID Cookie must be transmitted over protected channels. If the cookie does not have the secure flag set [6] it is permitted for the application to transmit it unencrypted. Note below the setting of the cookie is done without the Secure flag, and the entire log in process is performed in HTTP and not HTTPS.
 
 
@@ -104,10 +104,10 @@ Date: Tue, 25 Dec 2013 00:00:00 GMT
 ```
 
 
-##Tools
+###Tools
 * [5] [curl](http://curl.haxx.se/) can be used to check manually for pages
 
-##References
+###References
 **OWASP Resources**
 * [1] [OWASP Testing Guide - Testing for Weak SSL/TLS Ciphers, Insufficient Transport Layer Protection (OTG-CRYPST-001)](https://www.owasp.org/index.php/Testing_for_Weak_SSL/TLS_Ciphers,_Insufficient_Transport_Layer_Protection_%28OTG-CRYPST-001%29)
 * [2] [OWASP TOP 10 2010 - Insufficient Transport Layer Protection](https://www.owasp.org/index.php/Top_10_2010-A9-Insufficient_Transport_Layer_Protection)

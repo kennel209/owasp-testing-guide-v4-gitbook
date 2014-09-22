@@ -1,7 +1,7 @@
 # Testing for SSI Injection (OTG-INPVAL-009)
 
 
-## Summary
+### Summary
 
 Web servers usually give developers the ability to add small pieces of dynamic code inside static HTML pages, without having to deal with full-fledged server-side or client-side languages. This feature is incarnated by the **[Server-Side Includes](https://www.owasp.org/index.php/Server-Side_Includes_%28SSI%29_Injection)** (**SSI**). In SSI injection testing, we test if it is possible to inject into the application data that will be interpreted by SSI mechanisms. A successful exploitation of this vulnerability allows an attacker to inject code into HTML pages or even perform remote code execution.
 
@@ -44,9 +44,9 @@ As in every bad input validation situation, problems arise when the user of a we
 
 This is a vulnerability very similar to a classical scripting language injection vulnerability. One mitigation is that the web server needs to be configured to allow SSI. On the other hand, SSI injection vulnerabilities are often simpler to exploit, since SSI directives are easy to understand and, at the same time, quite powerful, e.g., they can output the content of files and execute system commands.<br>
 
-## How to Test
+### How to Test
 
-### Black Box testing
+#### Black Box testing
 
 The first thing to do when testing in a Black Box fashion is finding if the web server actually supports SSI directives. Often, the answer is yes, as SSI support is quite common. To find out we just need to discover which kind of web server is running on our target, using classic information gathering techniques.<br>
 
@@ -91,7 +91,7 @@ User-Agent: <!--#include virtual="/proc/version"-->
 ```
 
 
-### Gray Box testing
+#### Gray Box testing
 
 If we have access to the application source code, we can quite easily find out:<br>
 1. If SSI directives are used. If they are, then the web server is going to have SSI support enabled, making SSI injection at least a potential issue to investigate.<br>
@@ -102,13 +102,13 @@ If we have access to the application source code, we can quite easily find out:<
 Performing these steps is mostly a matter of using grep to find the right keywords inside the source code (SSI directives, CGI environment variables, variables assignment involving user input, filtering functions and so on).
 
 
-## Tools
+### Tools
 * Web Proxy Burp Suite - http://portswigger.net
 * Paros - http://www.parosproxy.org/index.shtml
 * [WebScarab](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * String searcher: grep - http://www.gnu.org/software/grep
 
-## References
+### References
 **Whitepapers**<br>
 * Apache Tutorial: "Introduction to Server Side Includes" - http://httpd.apache.org/docs/1.3/howto/ssi.html<br>
 * Apache: "Module mod_include" - http://httpd.apache.org/docs/1.3/mod/mod_include.html<br>

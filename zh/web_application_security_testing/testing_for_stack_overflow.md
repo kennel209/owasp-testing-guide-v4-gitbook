@@ -1,7 +1,7 @@
 # Testing for Stack overflow
 
 
-## Summary
+### Summary
 
 [Stack overflows](https://www.owasp.org/index.php/Stack_overflow) occur when variable size data is copied into fixed length buffers located on the program stack without any bounds checking. Vulnerabilities of this class are generally considered to be of high severity since their exploitation would mostly permit arbitrary code execution or Denial of Service. Rarely found in interpreted platforms, code written in C and similar languages is often ridden with instances of this vulnerability. In fact almost every platform is vulnerable to stack overflows with the following notable exceptions:
 * J2EE – as long as native methods or system calls are not invoked
@@ -11,8 +11,8 @@
 
 Stack overflow vulnerabilities often allow an attacker to directly take control of the instruction pointer and, therefore, alter the execution of the program and execute arbitrary code. Besides  overwriting the instruction pointer, similar results can also be obtained by overwriting other variables and structures, like Exception Handlers, which are located on the stack.
 
-## How to Test
-### Black Box testing
+### How to Test
+#### Black Box testing
 The key to testing an application for stack overflow vulnerabilities is supplying overly large input data as compared to what is expected. However, subjecting the application to arbitrarily large data is not sufficient. It becomes necessary to inspect the application’s execution flow and responses to ascertain whether an overflow has actually been triggered or not. Therefore, the steps required to locate and validate stack overflows would be to attach a debugger to the target application or process, generate malformed input for the application, subject the application to malformed input, and inspect responses in a debugger. The debugger allows the tester to view the execution flow and the state of the registers when the vulnerability gets triggered.
 
 
@@ -55,7 +55,7 @@ This clearly demonstrates how input data can be used to overwrite the instructio
 As mentioned previously, other methods of testing such vulnerabilities include reverse engineering the application binaries, which is a complex and tedious process, and using fuzzing techniques.
 
 
-### Gray Box testing
+#### Gray Box testing
 
 When reviewing code for stack overflows, it is advisable to search for calls to insecure library functions like gets(), strcpy(), strcat() etc which do not validate the length of source strings and blindly copy data into fixed size buffers.
 
@@ -122,14 +122,14 @@ In this case the information contained in path could be greater than 40 bytes be
 Apart from manually reviewing code for stack overflows, static code analysis tools can also be of great assistance. Although they tend to generate a lot of false positives and would barely be able to locate a small portion of defects, they certainly help in reducing the overhead associated with finding low hanging fruits, like strcpy() and sprintf() bugs. A variety of tools like RATS, Flawfinder and ITS4 are available for analyzing C-style languages.
 
 
-## Tools
+### Tools
 * OllyDbg: "A windows based debugger used for analyzing buffer overflow vulnerabilities" - http://www.ollydbg.de
 * Spike, A fuzzer framework that can be used to explore vulnerabilities and perform length testing - http://www.immunitysec.com/downloads/SPIKE2.9.tgz
 * Brute Force Binary Tester (BFB), A proactive binary checker - http://bfbtester.sourceforge.net/
 * Metasploit, A rapid exploit development and Testing frame work - http://www.metasploit.com
 
 
-##References
+###References
 **Whitepapers**<br>
 * Aleph One: "Smashing the Stack for Fun and Profit" - http://insecure.org/stf/smashstack.html
 * The Samba trans2open stack overflow vulnerability - http://www.securityfocus.com/archive/1/317615

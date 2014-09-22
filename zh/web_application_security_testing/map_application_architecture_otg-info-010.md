@@ -1,16 +1,16 @@
 # Map Application Architecture (OTG-INFO-010)
 
 
-## Summary
+### Summary
 The  complexity of interconnected and heterogeneous web server infrastructure  can include hundreds of web applications and makes configuration management and review a fundamental step in testing and deploying every single application. In fact it takes only a single vulnerability to undermine the security of the entire infrastructure, and even small and seemingly unimportant problems may evolve into severe risks for another application on the same server.
 
 
 To address these problems, it is of utmost importance to perform an in-depth review of configuration and known security issues. Before performing an in-depth review it is necessary to map the network and application architecture. The different elements that make up the infrastructure need to be determined to understand how they interact with a web application and how they affect security.
 
 
-## How to Test
+### How to Test
 
-### Map the application architecture
+#### Map the application architecture
 
 The application architecture needs to be mapped through some test to determine what different components are used to build the web application. In small setups, such as a simple CGI-based application, a single server might be used that runs the web server which executes the C, Perl, or Shell CGIs application, and perhaps also the authentication mechanism.
 
@@ -61,6 +61,6 @@ Authentication back ends (such as LDAP directories, relational databases, or RAD
 The use of a back end database can be determined simply by navigating an application. If there is highly dynamic content generated “on the fly," it is probably being extracted from some sort of database by the application itself. Sometimes the way information is requested might give insight to the existence of a database back-end. For example, an online shopping application that uses numeric identifiers (‘id’) when browsing the different articles in the shop.  However, when doing a blind application test, knowledge of the underlying database is usually only available when a vulnerability surfaces in the application, such as poor exception handling or susceptibility to SQL injection.
 
 
-## References
+### References
 * [1] WebSEAL, also known as Tivoli Authentication Manager, is a reverse proxy from IBM which is part of the Tivoli framework.
 * [2] There are some GUI-based administration tools for Apache (like NetLoony) but they are not in widespread use yet.

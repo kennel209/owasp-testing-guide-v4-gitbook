@@ -2,7 +2,7 @@
 
 
 
-## Summary
+### Summary
 
 Sensitive data must be protected when it is transmitted through the network. Such data can include user credentials and credit cards. As a rule of thumb, if data must be protected when it is stored, it must be protected also during transmission.
 
@@ -13,7 +13,7 @@ HTTP is a clear-text protocol and it is normally secured via an SSL/TLS tunnel, 
 Even if high grade ciphers are today supported and normally used, some misconfiguration in the server can be used to force the use of a weak cipher - or at worst no encryption - permitting to an attacker to gain access to the supposed secure communication channel. Other misconfiguration can be used for a Denial of Service attack.
 
 
-## Common Issues
+### Common Issues
 A vulnerability occurs if the HTTP protocol is used to transmit sensitive information [2] (e.g. credentials transmitted over HTTP [3]).
 
 When the SSL/TLS service is present it is good but it increments the attack surface and the following vulnerabilities exist:
@@ -28,11 +28,11 @@ Other vulnerabilities linked to this are:
 * The presence of mixed HTTPS and HTTP content in the same page, which can be used to Leak information.
 
 
-###Sensitive data transmitted in clear-text
+####Sensitive data transmitted in clear-text
 The application should not transmit sensitive information via unencrypted channels. Typically it is possible to find basic authentication over HTTP, input password or session cookie sent via HTTP and, in general, other information considered by regulations, laws or organization policy.
 
 
-###Weak SSL/TLS Ciphers/Protocols/Keys
+####Weak SSL/TLS Ciphers/Protocols/Keys
 Historically, there have been limitations set in place by the U.S. government to allow cryptosystems to be exported only for key sizes of at most 40 bits, a key length which could be broken and would allow the decryption of communications. Since then cryptographic export regulations have been relaxed the maximum key size is 128 bits.
 
 
@@ -51,7 +51,7 @@ It is possible (for example, by means of configuration directives) to specify wh
 3. Upon receipt of the ServerHelloDone message, the client verifies the validity of the server's digital certificate.
 
 
-###SSL certificate validity – client and server
+####SSL certificate validity – client and server
 
 When accessing a web application via the HTTPS protocol, a secure channel is established between the client and the server. The identity of one (the server) or both parties (client and server) is then established by means of digital certificates. So, once the cipher suite is determined, the “SSL Handshake” continues with the exchange of the certificates:
 1. The server sends its Certificate message and, if client authentication is required, also sends a CertificateRequest message to the client.
@@ -77,20 +77,20 @@ Let's examine each check more in detail.
 * What if the name on the certificate and the name of the server do not match? If this happens, it might sound suspicious. For a number of reasons, this is not so rare to see. A system may host a number of name-based virtual hosts, which share the same IP address and are identified by means of the HTTP 1.1 Host: header information. In this case, since the SSL handshake checks the server certificate before the HTTP request is processed, it is not possible to assign different certificates to each virtual server. Therefore, if the name of the site and the name reported in the certificate do not match, we have a condition which is typically signaled by the browser. To avoid this, IP-based virtual servers must be used. [33] and [34] describe techniques to deal with this problem and allow name-based virtual hosts to be correctly referenced.
 
 
-###Other vulnerabilities
+####Other vulnerabilities
 The presence of a new service, listening in a separate tcp port may introduce vulnerabilities such as infrastructure vulnerabilities if the software is not up to date [4]. Furthermore,  for the correct protection of data during transmission the Session Cookie must use the Secure flag [5] and some directives should be sent to the browser to accept only secure traffic (e.g. HSTS [6], CSP).
 
 
 Also there are some attacks that can be used to intercept traffic if the web server exposes the application on both HTTP and HTTPS [6], [7] or in case of mixed HTTP and HTTPS resources in the same page.
 
 
-## How to Test
+### How to Test
 
-###Testing for sensitive data transmitted in clear-text
+####Testing for sensitive data transmitted in clear-text
 Various types of information which must be protected can be also transmitted in clear text. It is possible to check if this information is transmitted over HTTP instead of HTTPS. Please refer to specific tests for full details, for credentials [3] and other kind of data [2].
 
 
-####Example 1. Basic Authentication over HTTP
+#####Example 1. Basic Authentication over HTTP
 A typical example is the usage of Basic Authentication over HTTP because with Basic Authentication, after log in, credentials are encoded - and not encrypted - into HTTP Headers.
 
 ```
@@ -113,7 +113,7 @@ Invalid login credentials!
 ```
 
 
-###Testing for Weak SSL/TLS Ciphers/Protocols/Keys vulnerabilities
+####Testing for Weak SSL/TLS Ciphers/Protocols/Keys vulnerabilities
 The large number of available cipher suites and quick progress in cryptanalysis makes testing an SSL server a non-trivial task.
 
 At the time of writing these criteria are widely recognized as minimum checklist:
@@ -146,7 +146,7 @@ Some tools and scanners both free (e.g. SSLAudit [28] or SSLScan [29]) and comme
 Sometimes the SSL/TLS enabled service is not directly accessible and the tester can access it only via a HTTP proxy using CONNECT method [36]. Most of the tools will try to connect to desired tcp port to start SSL/TLS handshake. This will not work since desired port is accessible only via HTTP proxy. The tester can easily circumvent this by using relaying software such as socat [37].
 
 
-####Example 2. SSL service recognition via nmap
+#####Example 2. SSL service recognition via nmap
 
 The first step is to identify ports which have SSL/TLS wrapped services. Typically tcp ports with SSL for web and mail services are -  but not limited to - 443 (https), 465 (ssmtp), 585 (imap4-ssl), 993 (imaps), 995 (ssl-pop).
 
@@ -177,7 +177,7 @@ Nmap done: 1 IP address (1 host up) scanned in 131.38 seconds
 ```
 
 
-####Example 3. Checking for Certificate information, Weak Ciphers and SSLv2 via nmap
+#####Example 3. Checking for Certificate information, Weak Ciphers and SSLv2 via nmap
 Nmap has two scripts for checking Certificate information, Weak Ciphers and SSLv2 [31].
 
 ```
@@ -291,7 +291,7 @@ Nmap done: 1 IP address (1 host up) scanned in 8.64 seconds
 ```
 
 
-####Example 4 Checking for Client-initiated Renegotiation and Secure Renegotiation via openssl (manually)
+#####Example 4 Checking for Client-initiated Renegotiation and Secure Renegotiation via openssl (manually)
 
 Openssl [30] can be used for testing manually SSL/TLS. In this example the tester tries to initiate a renegotiation by client [m] connecting to server with openssl. The tester then writes the fist line of an HTTP request and types “R” in a new line. He then waits for renegotiaion and completion of the HTTP request and checks if secure renegotiaion is supported by looking at the  server output. Using manual requests it is also possible to see if Compression is enabled for TLS and to check for CRIME [13], for ciphers and for other vulnerabilities.
 
@@ -374,7 +374,7 @@ read:errno=0
 Even if the HEAD is not permitted, Client-intiated renegotiaion is permitted.
 
 
-####Example 5. Testing supported Cipher Suites, BEAST and CRIME attacks via TestSSLServer
+#####Example 5. Testing supported Cipher Suites, BEAST and CRIME attacks via TestSSLServer
 
 TestSSLServer [32] is a script which permits the tester to check the cipher suite and also for BEAST and CRIME attacks. BEAST (Browser Exploit Against SSL/TLS)  exploits a vulnerability of CBC in TLS 1.0. CRIME (Compression Ratio Info-leak Made Easy) exploits a vulnerability of TLS Compression, that should be disabled. What is interesting is that the first fix for BEAST was the use of RC4, but this is now discouraged due to a crypto-analytical attack to RC4 [15].
 
@@ -436,7 +436,7 @@ CRIME status: protected
 ```
 
 
-####Example 6.  Testing SSL/TLS vulnerabilities with sslyze
+#####Example 6.  Testing SSL/TLS vulnerabilities with sslyze
 Sslyze [33] is a python script which permits mass scanning and XML output. The following is an example of a regular scan. It is one of the most complete and versatile tools for SSL/TLS testing.
 
 ```
@@ -563,7 +563,7 @@ Sslyze [33] is a python script which permits mass scanning and XML output. The f
 ```
 
 
-####Example 7.  Testing SSL/TLS with testssl.sh
+#####Example 7.  Testing SSL/TLS with testssl.sh
 Testssl.sh [38] is a Linux shell script which provides clear output to facilitate good decision making. It can not only check web servers but also services on other ports, supports STARTTLS, SNI, SPDY and does a few check on the HTTP header as well.
 
 
@@ -571,7 +571,7 @@ It's a very easy to use tool. Here's some sample output (without colors):
 ```
 user@myhost: % testssl.sh owasp.org
 
-########################################################
+#########################################################
 testssl.sh v2.0rc3  (https://testssl.sh)
 ($Id: testssl.sh,v 1.97 2014/04/15 21:54:29 dirkw Exp $)
 
@@ -581,7 +581,7 @@ testssl.sh v2.0rc3  (https://testssl.sh)
 
  Note you can only check the server against what is
  available (ciphers/protocols) locally on your machine
-########################################################
+#########################################################
 
 Using "OpenSSL 1.0.2-beta1 24 Feb 2014" on
       "myhost:/<mypath>/bin/openssl64"
@@ -667,7 +667,7 @@ The interesting thing is if a tester looks at the sources they learn how feature
 Additionally it provides a prototype (via "testssl.sh -V") of mapping to RFC cipher suite names to OpenSSL ones. The tester needs the file mapping-rfc.txt in same directory.
 
 
-####Example 8.  Testing SSL/TLS with SSL Breacher
+#####Example 8.  Testing SSL/TLS with SSL Breacher
 This tool [99] is combination of several other tools plus some additional checks in complementing most comprehensive SSL tests.
 It supports the following checks:
 ```
@@ -700,7 +700,7 @@ pentester@r00ting: % breacher.sh https://localhost/login.php
 
 
 Host Info:
-####
+#####
 Host : localhost
 Port : 443
 Path : /login.php
@@ -708,7 +708,7 @@ Path : /login.php
 
 
 Certificate Info:
-####
+#####
 Type: Domain Validation Certificate (i.e. NON-Extended Validation Certificate)
 Expiration Date: Sat Nov 09 07:48:47 SGT 2019
 Signature Hash Algorithm: SHA1withRSA
@@ -721,15 +721,15 @@ Total certificate chain: 1
 
 (Use -Djavax.net.debug=ssl:handshake:verbose for debugged output.)
 
-####
+#####
 
 Certificate Validation:
-####
+#####
 [!] Signed using Insufficient public key length 1024 bits
     (Refer to http://www.keylength.com/ for details)
 [!] Certificate Signer: Self-signed/Untrusted CA  - verified with Firefox & Java ROOT CAs.
 
-####
+#####
 
 Loading module: Hut3 Cardiac Arrest ...
 
@@ -889,7 +889,7 @@ Checking localhost:443 for Heartbleed bug (CVE-2014-0160) ...
 [!] Vulnerability Status: VULNERABLE
 
 
-####
+#####
 
 Loading module: CCS Injection script by TripWire VERT ...
 
@@ -907,7 +907,7 @@ Checking localhost:443 for OpenSSL ChangeCipherSpec (CCS) Injection bug (CVE-201
 [!] Vulnerability Status: Possible
 
 
-####
+#####
 
 Checking localhost:443 for HTTP Compression support against BREACH vulnerability (CVE-2013-3587) ...
 
@@ -938,7 +938,7 @@ Content-Type: text/html
 <link rel="stylesheet" type="text/css" href="http://somesite/test.css">
 
 
-####
+#####
 
 Checking localhost:443 for correct use of Strict Transport Security (STS) response header (RFC6797) ...
 
@@ -969,7 +969,7 @@ Content-Type: text/html
 <link rel="stylesheet" type="text/css" href="http://somesite/test.css">
 
 
-####
+#####
 
 Checking localhost for HTTP support against HTTPS Stripping attack ...
 
@@ -978,7 +978,7 @@ Checking localhost for HTTP support against HTTPS Stripping attack ...
 [!] Vulnerability Status: VULNERABLE
 
 
-####
+#####
 
 Checking localhost:443 for HTTP elements embedded in SSL page ...
 
@@ -991,7 +991,7 @@ Checking localhost:443 for HTTP elements embedded in SSL page ...
  - http://othersite/test.js
  - http://somesite/test.css
 
-####
+#####
 
 Checking localhost:443 for ROBUST use of anti-caching mechanism ...
 
@@ -1008,7 +1008,7 @@ Robust Solution:
 	- Ref: https://www.owasp.org/index.php/Testing_for_Browser_cache_weakness_(OTG-AUTHN-006)
 	       http://msdn.microsoft.com/en-us/library/ms533020(v=vs.85).aspx
 
-####
+#####
 
 Checking localhost:443 for Surf Jacking vulnerability (due to Session Cookie missing secure flag) ...
 
@@ -1028,7 +1028,7 @@ Content-Length: 193
 Connection: close
 Content-Type: text/html
 
-####
+#####
 
 Checking localhost:443 for ECDHE/DHE ciphers against FORWARD SECRECY support ...
 
@@ -1037,7 +1037,7 @@ Checking localhost:443 for ECDHE/DHE ciphers against FORWARD SECRECY support ...
 [*] Attackers will NOT be able to decrypt sniffed SSL packets even if they have compromised private keys.
 [*] Vulnerability Status: No
 
-####
+#####
 
 Checking localhost:443 for RC4 support (CVE-2013-2566) ...
 
@@ -1047,7 +1047,7 @@ Checking localhost:443 for RC4 support (CVE-2013-2566) ...
 
 
 
-####
+#####
 
 Checking localhost:443 for TLS 1.1 support ...
 
@@ -1059,7 +1059,7 @@ Checking localhost:443 for TLS 1.2 support ...
 
 
 
-####
+#####
 
 Loading module: sslyze by iSecPartners ...
 
@@ -1075,7 +1075,7 @@ Checking localhost:443 for Session Renegotiation support (CVE-2009-3555,CVE-2011
 [*] Vulnerability Status: No
 
 
-####
+#####
 
 Loading module: TestSSLServer by Thomas Pornin ...
 
@@ -1086,7 +1086,7 @@ Checking localhost:443 for SSL version 2 support ...
 [*] Vulnerability Status: No
 
 
-####
+#####
 
 Checking localhost:443 for LANE (LOW,ANON,NULL,EXPORT) weak ciphers support ...
 
@@ -1111,7 +1111,7 @@ Supported LANE cipher suites:
 [!] Vulnerability Status: VULNERABLE
 
 
-####
+#####
 
 Checking localhost:443 for GCM/CCM ciphers support against Lucky13 attack (CVE-2013-0169) ...
 
@@ -1130,7 +1130,7 @@ Supported GCM cipher suites against Lucky13 attack:
 [*] Vulnerability Status: No
 
 
-####
+#####
 
 Checking localhost:443 for TLS Compression support against CRIME (CVE-2012-4929) & TIME attack  ...
 
@@ -1139,7 +1139,7 @@ Checking localhost:443 for TLS Compression support against CRIME (CVE-2012-4929)
 [*] Vulnerability Status: No
 
 
-####
+#####
 
 [+] Breacher finished scanning in 12 seconds.
 [+] Get your latest copy at http://yehg.net/
@@ -1147,7 +1147,7 @@ Checking localhost:443 for TLS Compression support against CRIME (CVE-2012-4929)
 
 ```
 
-###Testing SSL certificate validity – client and server
+####Testing SSL certificate validity – client and server
 Firstly upgrade the browser because CA certs expire and in every release of the browser these are renewed. Examine the validity of the certificates used by the application. Browsers will issue a warning when encountering expired certificates, certificates issued by untrusted CAs, and certificates which do not match name wise with the site to which they should refer.
 
 
@@ -1157,7 +1157,7 @@ By clicking on the padlock that appears in the browser window when visiting an H
 These checks must be applied to all visible SSL-wrapped communication channels used by the application. Though this is the usual https service running on port 443, there may be additional services involved depending on the web application architecture and on deployment issues (an HTTPS administrative port left open, HTTPS services on non-standard ports, etc.). Therefore, apply these checks to all SSL-wrapped ports which have been discovered. For example, the nmap scanner features a scanning mode (enabled by the –sV command line switch) which identifies SSL-wrapped services. The Nessus vulnerability scanner has the capability of performing SSL checks on all SSL/TLS-wrapped services.
 
 
-####Example 1. Testing for certificate validity (manually)
+#####Example 1. Testing for certificate validity (manually)
 Rather than providing a fictitious example, this guide includes an anonymized real-life example to stress how frequently one stumbles on https sites whose certificates are inaccurate with respect to naming. The following screenshots refer to a regional site of a high-profile IT company.
 
 We are visiting a .it site and the certificate was issued to a .com site. Internet Explorer warns that the name on the certificate does not match the name of the site.
@@ -1172,11 +1172,11 @@ The message issued by Firefox is different. Firefox complains because it cannot 
 
 *Warning issued by Mozilla Firefox*
 
-###Testing for other vulnerabilities
+####Testing for other vulnerabilities
 As mentioned previously, there are other types of vulnerabilities that are not related with the SSL/TLS protocol used, the cipher suites or Certificates. Apart from other vulnerabilities discussed in other parts of this guide, a vulnerability exists  when the server provides the website both with the HTTP and HTTPS protocols, and permits an attacker to force a victim into using a non-secure channel instead of a secure one.
 
 
-####Surf Jacking
+#####Surf Jacking
 The Surf Jacking attack [7] was first presented by Sandro Gauci and permits to an attacker to hijack an HTTP session even when the victim’s connection is encrypted using SSL or TLS.
 
 
@@ -1195,19 +1195,19 @@ To test if a website is vulnerable carry out the following tests:
 2. Check if cookies do not have the “Secure” flag
 
 
-####SSL Strip
+#####SSL Strip
 Some applications supports both HTTP and HTTPS, either for usability or so users can type both addresses and get to the site. Often users go into an HTTPS website from link or a redirect. Typically personal banking sites have a similar configuration with an iframed log in or a form with action attribute over HTTPS but the page under HTTP.
 
 
 An attacker in a privileged position - as described in SSL strip [8] - can intercept traffic when the user is in the http site and manipulate it to get a Man-In-The-Middle attack under HTTPS. An application is vulnerable if it supports both HTTP and HTTPS.
 
 
-###Testing via HTTP proxy
+####Testing via HTTP proxy
 
 Inside corporate environments testers can see services that are not directly accessible and they can access them only via HTTP proxy using the CONNECT method [36]. Most of the tools will not work in this scenario because they try to connect to the desired tcp port to start the SSL/TLS handshake. With the help of relaying software such as socat [37] testers can enable those tools for use with services behind an HTTP proxy.
 
 
-####Example 8. Testing via HTTP proxy
+#####Example 8. Testing via HTTP proxy
 
 To connect to destined.application.lan:443 via proxy 10.13.37.100:3128 run socat as follows:
 ```
@@ -1224,13 +1224,13 @@ $ openssl s_client -connect localhost:9999
 All connections to localhost:9999 will be effectively relayed by socat via proxy to destined.application.lan:443.
 
 
-## Configuration Review
+### Configuration Review
 
-###Testing for Weak SSL/TLS Cipher Suites
+####Testing for Weak SSL/TLS Cipher Suites
 Check the configuration of the web servers that provide https services. If the web application provides other SSL/TLS wrapped services, these should be checked as well.
 
 
-####Example 9. Windows Server
+#####Example 9. Windows Server
 Check the configuration on a Microsoft Windows Server (2000, 2003 and 2008) using the registry key:
 ```
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\
@@ -1238,14 +1238,14 @@ HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\
 that has some sub-keys including Ciphers, Protocols and KeyExchangeAlgorithms.
 
 
-####Example 10: Apache
+#####Example 10: Apache
 To check the cipher suites and protocols supported by the Apache2 web server, open the ssl.conf file and search for the SSLCipherSuite, SSLProtocol, SSLHonorCipherOrder,SSLInsecureRenegotiation and SSLCompression directives.
 
 
-###Testing SSL certificate validity – client and server
+####Testing SSL certificate validity – client and server
 Examine the validity of the certificates used by the application at both server and client levels. The usage of certificates is primarily at the web server level, however, there may be additional communication paths protected by SSL (for example, towards the DBMS). Testers should check the application architecture to identify all SSL protected channels.
 
-##Tools
+###Tools
 * [21][Qualys SSL Labs - SSL Server Test|https://www.ssllabs.com/ssltest/index.html]: internet facing scanner
 * [27] [Tenable - Nessus Vulnerability Scanner|http://www.tenable.com/products/nessus]: includes some plugins to test different SSL related vulnerabilities, Certificates and the presence of HTTP Basic authentication without SSL.
 * [32] [TestSSLServer|http://www.bolet.org/TestSSLServer/]: a java scanner - and also windows executable - includes tests for cipher suites, CRIME and BEAST
@@ -1259,7 +1259,7 @@ Examine the validity of the certificates used by the application at both server 
 * [38] [testssl.sh| https://testssl.sh/ ]
 
 
-## References
+### References
 **OWASP Resources**
 * [5] [OWASP Testing Guide - Testing for cookie attributes (OTG-SESS-002)|https://www.owasp.org/index.php/Testing_for_cookies_attributes_(OTG-SESS-002)]
 * [4] [OWASP Testing Guide - Test Network/Infrastructure Configuration (OTG-CONFIG-001)|https://www.owasp.org/index.php/Test_Network/Infrastructure_Configuration_(OTG-CONFIG-001)]

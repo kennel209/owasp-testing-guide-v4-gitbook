@@ -1,7 +1,7 @@
 # Testing for bypassing authorization schema (OTG-AUTHZ-002)
 
 
-## Summary
+### Summary
 This kind of test focuses on verifying how the authorization schema has been implemented for each role or privilege to get access to reserved functions and resources.
 
 
@@ -16,7 +16,7 @@ Try to access the application as an administrative user and track all the admini
 * Is it possible to use these administrative functions as a user with a different role and for whom that action should be denied?
 
 
-## How to test
+### How to test
 **Testing for access to administrative functions** <br>
 For example, suppose that the 'AddUser.jsp' function is part of the administrative menu of the application, and it is possible to access it by requesting the following URL:
 ```
@@ -40,6 +40,6 @@ What happens if a non-administrative user tries to execute that request? Will th
 For example analyze an application that uses a shared directory to store temporary PDF files for different users. Suppose that documentABC.pdf should be accessible only by the user test1 with roleA. Verify if user test2 with roleB can access that resource.
 <br><br>
 
-## Tools
+### Tools
 * OWASP WebScarab: [OWASP WebScarab Project](https://www.owasp.org/index.php/OWASP_WebScarab_Project)<br>
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)

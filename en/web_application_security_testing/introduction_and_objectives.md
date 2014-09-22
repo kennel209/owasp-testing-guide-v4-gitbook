@@ -2,23 +2,23 @@
 
 This section describes the OWASP web application security testing methodology and explains how to test for evidence of vulnerabilities within the application due to deficiencies with identified security controls.
 
-## What is Web Application Security Testing?
+### What is Web Application Security Testing?
 A security test is a method of evaluating the security of a computer system or network by methodically validating and verifying the effectiveness of application security controls. A web application security test focuses only on evaluating the security of a web application. The process involves an active analysis of the application for any weaknesses, technical flaws, or vulnerabilities. Any security issues that are found will be presented to the system owner, together with an assessment of the impact, a proposal for mitigation or a technical solution.
 
 
-## What is a Vulnerability?
+### What is a Vulnerability?
 A vulnerability is a flaw or weakness in a system's design, implementation, operation or management that could be exploited to compromise the system's security objectives.
 
 
-## What is a Threat?
+### What is a Threat?
 A threat is anything (a malicious external attacker, an internal user, a system instability, etc) that may harm the assets owned by an application (resources of value, such as the data in a database or in the file system) by exploiting a vulnerability.
 
 
-## What is a Test?
+### What is a Test?
 A test is an action to demonstrate that an application meets the security requirements of its stakeholders.
 
 
-## The Approach in Writing this Guide
+### The Approach in Writing this Guide
 
 The OWASP approach is open and collaborative:
 * Open: every security expert can participate with his or her experience in the project. Everything is free.
@@ -35,7 +35,7 @@ This approach tends to create a defined Testing Methodology that will be:
 The problems to be addressed are fully documented and tested. It is important to use a method to test all known vulnerabilities and document all the security test activities.<br>
 
 
-## What is the OWASP testing methodology?
+### What is the OWASP testing methodology?
 
 Security testing will never be an exact science where a complete list of all possible issues that should be tested can be defined. Indeed, security testing is only an appropriate technique for testing the security of web applications under certain circumstances. The goal of this project is to collect all the possible testing techniques, explain these techniques, and keep the guide updated. The OWASP Web Application Security Testing method is based on the black box approach. The tester knows nothing or has very little information about the application to be tested.
 

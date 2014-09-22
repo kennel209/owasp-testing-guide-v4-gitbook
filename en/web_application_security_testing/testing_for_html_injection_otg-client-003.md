@@ -1,11 +1,11 @@
 # Testing for HTML Injection (OTG-CLIENT-003)
 
 
-## Summary
+### Summary
 HTML injection is a type of injection issue that occurs when a user is able to control an input point and is able to inject arbitrary HTML code into a vulnerable web page. This vulnerability can have many consequences, like disclosure of a user's session cookies that could be used to impersonate the victim, or, more generally, it can allow the attacker to modify the page content seen by the victims.
 
 
-## How to Test
+### How to Test
 This vulnerability occurs when the user input is not correctly sanitized and the output is not encoded. An injection allows the attacker to send a malicious HTML page to a victim. The targeted browser will not be able to distinguish (trust) the legit from the malicious parts and consequently will parse and execute all as legit in the victim context.
 
 
@@ -46,11 +46,11 @@ In both examples, an input like the following:
 will add to the page the image tag that will execute an arbitrary JavaScript code inserted by the malicious user in the HTML context.
 
 
-### Black Box testing
+#### Black Box testing
 Black box testing for  HTML Injection is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.<br>
 
 
-### Gray Box testing
+#### Gray Box testing
 
 Testing for HTML Injection vulnerabilities:
 For example, looking at the following URL:
@@ -81,7 +81,7 @@ $(window).bind("hashchange",setMessage)
 It is possible to inject HTML code.
 
 
-## References
+### References
 **OWASP Resources**
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS.com - http://www.domxss.com

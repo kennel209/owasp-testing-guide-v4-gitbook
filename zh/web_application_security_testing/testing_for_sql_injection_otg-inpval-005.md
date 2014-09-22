@@ -1,7 +1,7 @@
 # Testing for SQL Injection (OTG-INPVAL-005)
 
 
-## Summary
+### Summary
 An [SQL injection](https://www.owasp.org/index.php/SQL_injection) attack consists of insertion or &quot;injection&quot; of either a partial or complete SQL query via the data input or transmitted from the client (browser) to the web application. A successful SQL injection attack can read sensitive data from the database, modify database data (insert/update/delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file existing on the DBMS file system or write files into the file system, and, in some cases, issue commands to the operating system. SQL injection attacks are a type of injection attack, in which SQL commands are injected into data-plane input in order to affect the execution of predefined SQL commands.
 
 
@@ -42,9 +42,9 @@ About the techniques to exploit SQL injection flaws there are five commons techn
 * Time delay: use database commands (e.g. sleep) to delay answers in conditional queries. It useful when attacker doesn’t have some kind of answer (result, output, or error) from the application.
 
 
-## How to Test
+### How to Test
 
-### Detection Techniques
+#### Detection Techniques
 The first step in this test is to understand when the application interacts with a DB Server in order to access some data. Typical examples of cases when an application needs to talk to a DB include:
 
 * Authentication forms: when authentication is performed using a web form, chances are that the user credentials are checked against a database that contains all usernames and passwords (or, better, password hashes).
@@ -78,7 +78,7 @@ varchar value 'test' to a column of data type int.
 Monitor all the responses from the web server and have a look at the HTML/javascript source code. Sometimes the error is present inside them but for some reason (e.g. javascript error, HTML comments, etc) is not presented to the user. A full error message, like those in the examples, provides a wealth of information to the tester in order to mount a successful injection attack. However, applications often do not provide so much detail: a simple '500 Server Error' or a custom error page might be issued, meaning that we need to use blind injection techniques. In any case, it is very important to test each field separately: only one variable must vary while all the other remain constant, in order to precisely understand which parameters are vulnerable and which are not.
 
 
-#### Standard SQL Injection Testing
+##### Standard SQL Injection Testing
 
 Example 1 (classical SQL Injection):
 
@@ -226,7 +226,7 @@ http://www.example.com/product.php?id=10; INSERT INTO users (…)
 This way is possible to execute many queries in a row and independent of the first query.
 
 
-#### Fingerprinting the Database
+##### Fingerprinting the Database
 
 Even the SQL language is a standard, every DBMS has its peculiarity and differs from each other in many aspects like special commands, functions to retrieve data such as users names and databases, features, comments line etc.
 
@@ -280,9 +280,9 @@ Oracle: ‘test’||’ing’
 PostgreSQL: ‘test’||’ing’
 
 
-### Exploitation Techniques
+#### Exploitation Techniques
 
-#### Union Exploitation Technique
+##### Union Exploitation Technique
 
 The UNION operator is used in SQL injections to join a query, purposely forged by the tester, to the original query. The result of the forged query will be joined to the result of the original query, allowing the tester to obtain the values of columns of other tables. Suppose for our examples that the query executed from the server is the following:
 
@@ -353,7 +353,7 @@ http://www.example.com/product.php?id=99999 UNION SELECT 1,1,null--
 ```
 
 
-#### Boolean Exploitation Technique
+##### Boolean Exploitation Technique
 
 The Boolean exploitation technique is very useful when the tester finds a [Blind SQL Injection](https://www.owasp.org/index.php/Blind_SQL_Injection) situation, in which nothing is known on the outcome of an operation. For example, this behavior happens in cases where the programmer has created a custom error page that does not reveal anything on the structure of the query or on the database. (The page does not return a SQL error, it may just return a HTTP 500, 404, or redirect). <br>
 
@@ -448,7 +448,7 @@ The query returns either true or false. If we obtain true, then we have complete
 The blind SQL injection attack needs a high volume of queries. The tester may need an automatic tool to exploit the vulnerability.
 
 
-#### Error based Exploitation technique
+##### Error based Exploitation technique
 
 An Error based exploitation technique is useful when the tester for some reason can’t exploit the SQL injection vulnerability using other technique such as UNION. The Error based technique consists in forcing the database to perform some operation in which the result will be an error. The point here is to try to extract some data from the database and show it in the error message. This exploitation technique can be different from DBMS to DBMS (check DBMS specific section).
 
@@ -488,7 +488,7 @@ ORA-292257: host SCOTT unknown
 Then the tester can manipulate the parameter passed to GET_HOST_NAME() function and the result will be shown in the error message.
 
 
-#### Out of band Exploitation technique
+##### Out of band Exploitation technique
 
 This technique is very useful when the tester find a [Blind SQL Injection](https://www.owasp.org/index.php/Blind_SQL_Injection) situation, in which nothing is known on the outcome of an operation. The technique consists of the use of DBMS functions to perform an out of band connection and deliver the results of the injected query as part of the request to the tester’s server. Like the error based techniques, each DBMS has its own functions. Check for specific DBMS section.
 
@@ -527,7 +527,7 @@ Host: testerserver.com
 Connection: close
 ```
 
-#### Time delay Exploitation technique
+##### Time delay Exploitation technique
 
 The Boolean exploitation technique is very useful when the tester find a [Blind SQL Injection](https://www.owasp.org/index.php/Blind_SQL_Injection) situation, in which nothing is known on the outcome of an operation. This technique consists in sending an injected query and in case the conditional is true, the tester can monitor the time taken to for the server to respond. If there is a delay, the tester can assume the result of the conditional query is true. This exploitation technique can be different from DBMS to DBMS (check DBMS specific section).
 
@@ -559,7 +559,7 @@ http://www.example.com/product.php?id=10 AND IF(version() like ‘5%’, sleep(1
 In this example the tester if checking whether the MySql version is 5.x or not, making the server to delay the answer by 10 seconds. The tester can increase the delay time and monitor the responses. The tester also doesn’t need to wait for the response. Sometimes he can set a very high value (e.g. 100) and cancel the request after some seconds.
 
 
-#### Stored Procedure Injection
+##### Stored Procedure Injection
 
 When using dynamic SQL within a stored procedure, the application must properly sanitize the user input to eliminate the risk of code injection. If not sanitized, the user could enter malicious SQL that will be executed within the stored procedure.
 
@@ -607,14 +607,14 @@ User input:
 This will result in the report running and all users’ passwords being updated.
 
 
-#### Automated Exploitation
+##### Automated Exploitation
 
 Most of the situation and techniques presented here can be performed in a automated way using some tools. In this article the tester can find information how to perform an automated auditing using SQLMap:
 
 https://www.owasp.org/index.php/Automated_Audit_using_SQLMap
 
 
-##Tools
+###Tools
 * SQL Injection Fuzz Strings (from wfuzz tool) - https://wfuzz.googlecode.com/svn/trunk/wordlist/Injections/SQL.txt
 * [OWASP SQLiX](https://www.owasp.org/index.php/Category:OWASP_SQLiX_Project)
 * Francois Larouche: Multiple DBMS SQL Injection tool - [SQL Power Injector](http://www.sqlpowerinjector.com/index.htm)<br>
@@ -627,7 +627,7 @@ https://www.owasp.org/index.php/Automated_Audit_using_SQLMap
 * [bsqlbf, a blind SQL injection tool](https://code.google.com/p/bsqlbf-v2/) in Perl
 
 
-## References
+### References
 
 * [Top 10 2013-A1-Injection](https://www.owasp.org/index.php/Top_10_2013-A1-Injection)
 * [SQL Injection](https://www.owasp.org/index.php/SQL_Injection)
