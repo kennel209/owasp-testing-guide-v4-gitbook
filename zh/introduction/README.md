@@ -1,255 +1,248 @@
-# Testing Guide Introduction
+# 测试指南简介
 
-### The OWASP Testing Project
-The OWASP Testing Project has been in development for many years. The aim of the project is to help people understand the *what*, *why*, *when*, *where*, and *how* of testing web applications. The project has delivered a complete testing framework, not merely a simple checklist or prescription of issues that should be addressed. Readers can use this framework as a template to build their own testing programs or to qualify other people’s processes. The Testing Guide describes in detail both the general testing framework and the techniques required to implement the framework in practice.
+### OWASP 测试项目
+OWASP测试项目已经发展了许多年。通过这个项目，我们希望帮助人们了解自己的Web应用程序，*什么是测试*，*为什么要测试*，*什么时间*，*在哪里* 以及 *如何测试* WEB应用程序。这个项目是发布一个完整的测试框架，而不是仅仅提供一个简单的漏洞检查列表或者问题的简单药方。人们可以根据需要建立自己的或符合其它进程的测试程序。测试指南详细的介绍了一般测试框架以及实践中该框架的实施技术。
 
-Writing the Testing Guide has proven to be a difficult task. It was a challenge to obtain consensus and develop content that allowed people to apply the concepts described in the guide, while also enabling them to work in their own environment and culture. It was also a challenge to change the focus of web application testing from penetration testing to testing integrated in the software development life cycle.
+创作这份测试指南是一项艰巨的任务。要获取大家的一致认可同时发展内容是一个极具挑战的任务。这不仅需要使人们接受这里所描述的概念，同时使他们能够真正将这些概念应用于自己的环境和文化中。同时，这也是对将目前Web应用测试重点，将渗透测试转变为测试集成于软件开发生命周期过程中的挑战。
 
-However, the group is very satisfied with the results of the project. Many industry experts and security professionals, some of whom are responsible for software security at some of the largest companies in the world, are validating the testing framework. This framework helps organizations test their web applications in order to build reliable and secure software. The framework does not simply highlighting areas of weakness, although the latter is certainly a by product of many of the OWASP guides and checklists. As such, hard decisions had top be made about the appropriateness of certain testing techniques and technologies. The group fully understands that not everyone will agree upon all of these decisions. However, OWASP is able to take the high ground and change culture over time through awareness and education based on consensus and experience.
+然而，我们已经达到非常满意的结果。许多业内专家和世界上一些大型公司的软件安全负责人共同验证了这个测试框架。这个测试框架帮助各类组织能够有效针对Web应用程序进行测试以便建立安全可靠软件，而不是简单地强调脆弱点。虽然后者无疑是许多OWASP指南和清单的一个副产品。因此，对于某些测试方法和技术，我们作出了艰难的选择，因为我们都明白并这些方法和技术并不是适用于每一个人。然而，随着时间的推移，OWASP能够在丰富的经验和协商一致的基础上通过宣传和教育达到更高的层次并进行文化变革。
 
-The rest of this guide is organized as follows:
-This introduction covers the pre-requisites of testing web applications and the scope of testing. It also covers the principles of successful testing and testing techniques.
-Chapter 3 presents the OWASP Testing Framework and explains its techniques and tasks in relation to the various phases of the software development life cycle.
-Chapter 4 covers how to test for specific vulnerabilities (e.g., SQL Injection) by code inspection and penetration testing.
+本指南其余部分的编排如下：<br>
+本介绍部分涉及测试Web应用程序的先决条件：测试的范围，成功的测试的原则和测试技术。
+第3章介绍了OWASP测试框架，并说明与软件开发生命周期各个阶段有关的技术和任务。
+第4章涉及如何对代码的具体脆弱性（例如，SQL注入）进行检查和渗透测试。
 
-#### Measuring Security: the Economics of Insecure Software
-A basic tenet of software engineering is that you can't control what you can't measure [1]. Security testing is no different. Unfortunately, measuring security is a notoriously difficult process. This topic will not be covered in detail here, as it would take a guide on its own (for an introduction, see [2]).
+#### 安全衡量：不安全软件带来的经济损失
+软件工程的基本原则就是你无法控制那些你无法衡量的[1]。安全测试也一样。不幸的是，安全衡量是一个非常困难的过程。这里我们将不会详细涉及这一话题，因为它自己提供一个指导（详细介绍请参见[2]）。
 
-One aspect that should be emphasized is that security measurements are about both the specific technical issues (e.g., how prevalent a certain vulnerability is) and how these issues affect the economics of software. Most technical people will at least understand the basic issues, or they may have a deeper understanding of the vulnerabilities. Sadly, few are able to translate that technical knowledge into monetary terms and quantify the potential cost of vulnerabilities to the application owner's business. Until this happens, CIOs will not be able to develop an accurate return on security investment and, subsequently, assign appropriate budgets for software security.<br/>
-While estimating the cost of insecure software may appear a daunting task, there has been a significant amount of work in this direction. For example, in June 2002, the US National Institute of Standards (NIST) published a survey on the cost of insecure software to the US economy due to inadequate software testing [3]. Interestingly, they estimate that a better testing infrastructure would save more than a third of these costs, or about $22 billion a year. More recently, the links between economics and security have been studied by academic researchers. See [4] for more information about some of these efforts.
+然而我们需要强调的是，安全衡量标准是关于具体的技术问题（例如，某个漏洞是如何普遍）和这些问题给软件带来的经济影响两大方面。我们发现，大多数技术人员至少能够基本理解安全弱点问题所在，甚至对安全弱点有着更深入的了解。但是可悲的是很少有人能够把这种技术知识转化为货币计算，从而量化应用程序所存在安全漏洞给所有者带来的潜在损失。我们认为直有发生这种情况，CIO们才会制定出一个准确的安全投资回报率，并分配适当的软件安全预算。
 
-While estimating the cost of insecure software may appear a daunting task, there has been a significant amount of work in this direction. For example, in June 2002, the US National Institute of Standards (NIST) published a survey on the cost of insecure software to the US economy due to inadequate software testing [3]. Interestingly, they estimate that a better testing infrastructure would save more than a third of these costs, or about $22 billion a year. More recently, the links between economics and security have been studied by academic researchers. See [4] for more information about some of these efforts.
+虽然对不安全软件带来的损失进行估算是一项艰巨的任务，然而最近却已经出现了大量此方面的工作方向。例如，在2002年6月，美国国家标准局（NIST）发表了一份调查报告：由缺乏软件测试而导致的不安全软件给美国经济带来的损失[3]。有趣的是，他们估计，更好的测试基础设施将节省三分之一以上的费用，或约220亿美元一年。最近，学术研究机构也开展了对经济和安全之间联系的研究。（详细信息请参见[4]了解其中的一些努力）。
 
-The framework described in this document encourages people to measure security throughout the entire development process. They can then relate the cost of insecure software to the impact it has on the business, and consequently develop appropriate business processes and assign resources to manage the risk. Remember that measuring and testing web applications is even more critical than for other software, since web applications are exposed to millions of users through the Internet.
+本文档中所描述的测试框架鼓励人们对整个发展进程进行安全衡量。人们可以将不安全软件所带来的经济损失与自身业务相联系，从而制定出适当的商业决策（资源）来进行风险管理。请记住：Web应用安全衡量和测试，甚至比其它软件更为重要，因为Web应用程序通过互联网广泛传播给数以百万计的用户使用。
 
-#### What is Testing?
-During the development life cycle of a web application many things need to be tested, but what does testing actually mean? The Merriam-Webster Dictionary describes testing as:
-* To put to test or proof.
-* To undergo a test.
-* To be assigned a standing or evaluation based on tests.
+#### 什么是测试？
+在Web应用生命循环发展期间，很多内容都需要测试。我们所说的测试到底是什么意思？Merriam-Webster字典中对测试的介绍如下：
+* 进行检测或证明
+* 实施测试测
+* 在测试的基础上明确其规格和评估结果
 
-For the purposes of this document testing is a process of comparing the state of a system or application against a set of criteria. In the security industry people frequently test against a set of mental criteria that are neither well defined nor complete. As a result of this, many outsiders regard security testing as a black art. The aim of this document is to change that perception and to make it easier for people without in-depth security knowledge to make a difference in testing.
+在这份文档中，测试指的是将一套系统/应用程序的状况与一系列标准进行对比的过程。在安全界，人们采用的测试标准往往既没有明确的定义没有完整的架构。出于这个原因和其它原因，许多外界人员将安全测试作为一种黑色艺术。本文档的目的在于改变传统观念，使人们可以在没有深入的安全知识背景的情况下更加轻松地测试。
 
-#### Why Perform Testing?
-This document is designed to help organizations understand what comprises a testing program, and to help them identify the steps that need to be undertaken to build and operate a testing program on web applications. The guide gives a broad view of the elements required to make a comprehensive web application security program. This guide can be used as a reference guide and as a methodology to help determine the gap between existing practices and industry best practices. This guide allows organizations to compare themselves against industry peers, to understand the magnitude of resources required to test and maintain software, or to prepare for an audit. This chapter does not go into the technical details of how to test an application, as the intent is to provide a typical security organizational framework. The technical details about how to test an application, as part of a penetration test or code review, will be covered in the remaining parts of this document.
+#### 为什么要实施测试？
+本文档旨在帮助各类组织了解测试项目内容，并帮助他们确定他们需要构建及操作用于测试Web应用程序的步骤。它的目的是对全面的WEB应用安全计划所需的各种因素有一个全面的了解。本指南可作为参考方法来帮助您衡量您现有的做法和行业最佳做法的差距。本指南允许各组织与其同行进行比较，了解进行软件测试和维护或者进行审计所需资源的规模。本章不对如何测试一个应用程序的技术细节进行详细讨论，旨在提供一个典型的安全组织框架。对应用程序进行测试的技术细节，将作为渗透测试或代码审查部分，将在余下的章节进行详细讨论。
 
-#### When to Test?
-Most people today don’t test software until it has already been created and is in the deployment phase of its life cycle (i.e., code has been created and instantiated into a working web application). This is generally a very ineffective and cost-prohibitive practice. One of the best methods to prevent security bugs from appearing in production applications is to improve the Software Development Life Cycle (SDLC) by including security in each of its phases. An SDLC is a structure imposed on the development of software artefacts. If an SDLC is not currently being used in your environment, it is time to pick one! The following figure shows a generic SDLC model as well as the (estimated) increasing cost of fixing security bugs in such a model.
+#### 什么时候测试？
+大多数人都会在软件建立以及进入生命周期中的部署阶段（即代码已创建或已实例化为一个正在工作的Web应用程序）才开始对软件进行测试。这是一种无效的成本高昂的测试行为。最佳的方法之一是将安全测试融入到软件开发生命周期（SDLC）每一个阶段以防止安全漏洞的出现。软件开发生命周期是指软件设计的构建块程。如果软件开发生命周期并不适用于你目前正在使用的开发环境，现在正是时候挑选一个！下图显示一个通用软件开发生命周期模型，以及在这样一种模式下修复安全漏洞所增加的费用（估计数）。
 
 <center>![Image:SDLC.jpg](https://www.owasp.org/images/8/84/SDLC.jpg)<br>
-*Figure 1: Generic SDLC Model* </center>
+*图1:通用软件开发生命周期模型* </center>
 
-Companies should inspect their overall SDLC to ensure that security is an integral part of the development process. SDLCs should include security tests to ensure security is adequately covered and controls are effective throughout the development process.
+软件开发公司应对其总体软件开发生命周期进行检查，确保安全是开发进程中不可分割的一部分。软件开发生命周期应包含安全测试内容以确保在整个开发进程安全被充分涵盖并得到有效控制。
 
-#### What to Test?
-It can be helpful to think of software development as a combination of people, process, and technology. If these are the factors that "create" software, then it is logical that these are the factors that must be tested. Today most people generally test the technology or the software itself.
+#### 测试什么？
+将软件开发当作是人、过程和技术相结合的整体的想法是有益的。如果这些都是“创造”软件的因素，那幺我们认为必须对所有这些因素进行测试。然而目前大多数测试工程师所测试的仅仅是技术或软件本身。
 
-An effective testing program should have components that test:<br>
-- *People* – to ensure that there is adequate education and awareness;<br>
-- *Process* – to ensure that there are adequate policies and standards and that people know how to follow these policies;<br>
-- *Technology* – to ensure that the process has been effective in its implementation.
+一个有效的测试计划应包括以下测试部分：<br>
+- *人员* – 确保其经历足够的知识水平和意识；<br>
+- *过程* – 确保有足够的政策和标准，人们知道如何遵循这些政策；<br>
+- *技术* – 确保某一进程已经被有效的执行。
 
-Unless a holistic approach is adopted, testing just the technical implementation of an application will not uncover management or operational vulnerabilities that could be present. By testing the people, policies, and processes, an organization can catch issues that would later manifest themselves into defects in the technology, thus eradicating bugs early and identifying the root causes of defects. Likewise, testing only some of the technical issues that can be present in a system will result in an incomplete and inaccurate security posture assessment.
+除非采用这样的整体测试方法，否则只测试应用的技术执行将不能涵盖到目前可能存在的管理或运营漏洞。通过对人员，策略以及过程进行测试，企业或组织可以提前获知那些后来才会自行凸现出来的技术缺陷，从而能尽早消除缺陷并查明缺陷产生的根源。同样，在一个系统之只对一些技术问题进行测试，将导致不完整不准确的安全现状评估。
 
-Denis Verdon, Head of Information Security at [Fidelity National Financial](http://www.fnf.com) presented an excellent analogy for this misconception at the OWASP AppSec 2004 Conference in New York [5]: "If cars were built like applications [...] safety tests would assume frontal impact only. Cars would not be roll tested, or tested for stability in emergency maneuvers, brake effectiveness, side impact, and resistance to theft." <br>
+[Fidelity国家金融信息](http://www.fnf.com)安全负责人DenisVerdon，在2004年纽约举行的OWASP应用安全大会中为这种误解提出了一个很好的比喻[5]：“如果将一辆汽车比作一个应用程序……那么目前的应用安全测试则象征了汽车的正面碰撞测试。汽车并没有进行翻滚测试，或紧急情况下的稳定性测试，制动效能测试，侧面碰撞测试以及防窃措施测试。
 
-#### Feedback and Comments
-As with all OWASP projects, we welcome comments and feedback. We especially like to know that our work is being used and that it is effective and accurate.
+#### 意见反馈
+如同所有的OWASP的项目，我们欢迎各界的评论和反馈。我们特别希望了解到我们的成果正在被使用，以及它非常有效和准确。
 
-### Principles of Testing
+### 测试原则
 
-There are some common misconceptions when developing a testing methodology to find security bugs in software. This chapter covers some of the basic principles that professionals should take into account when performing security tests on software.
+对于开发一个剔除软件安全漏洞的测试方法，存在一些常见的误解。本章所涉及一些基本原则，专业人士在进行软件安全漏洞测试时应加以考虑。
 
-#### There is No Silver Bullet
-While it is tempting to think that a security scanner or application firewall will provide many defenses against attack or identify a multitude of problems, in reality there is no silver bullet to the problem of insecure software. Application security assessment software, while useful as a first pass to find low-hanging fruit, is generally immature and ineffective at in-depth assessments or providing adequate test coverage. Remember that security is a process and not a product.
+#### 没有银弹(SilverBullet)
+当你试图思考安全扫描器或应用防火墙既不能提供各类攻击防御和辨别各类安全问题的时候，实际上不存在一下子就能解决不安全软件问题的方法。应用程序安全评估软件，只能作为发现伸手就能摘到的果实的第一张通行证，通常并不能充分覆盖到应用的各个层面，从而不能提供成熟有效的详细评估。切记：安全是一个过程，不是某个产品。
 
-#### Think Strategically, Not Tactically
-Over the last few years, security professionals have come to realize the fallacy of the patch-and-penetrate model that was pervasive in information security during the 1990’s. The patch-and-penetrate model involves fixing a reported bug, but without proper investigation of the root cause. This model is usually associated with the window of vulnerability shown in the figure below. The evolution of vulnerabilities in common software used worldwide has shown the ineffectiveness of this model. For more information about the window of vulnerability please refer to [6].
+#### 战略性思考，而非策略
+在过去几年中，安全专家已经逐渐认识到90年代深入信息安全界的“补丁-渗透”测试模型存在的缺陷。该测试模型将提交一个错误报告，但并不会经过适当的调查以明确问题所在的根源。这种测试模型通常与下图中显示的安全漏洞相关联。全球通用软件中漏洞的演变表明了该测试模型的无效性。欲了解更多有关安全漏洞的信息，请参阅[6]。
 
-Vulnerability studies [7] have shown that with the reaction time of attackers worldwide, the typical window of vulnerability does not provide enough time for patch installation, since the time between a vulnerability being uncovered and an automated attack against it being developed and released is decreasing every year.
+脆弱性研究[7]显示随着世界范围内的攻击者的反应时间增快，典型的安全漏洞并没有提供足够的时间安装补丁程序，因为安全漏洞的修补与自动攻击工具的开发之间的时间差在逐年减少。
 
-There are several incorrect assumptions in the patch-and-penetrate model. Many users believe that patches interfere with normal operations and might break existing applications. It is also incorrect to assume that all users are aware of newly released patches. Consequently not all users of a product will apply patches, either because they think patching may interfere with how the software works or because they lack knowledge about the existence of the patch.<br>
+还有一些对“补丁-渗透”测试模型的错误猜想：补丁干扰正常运作，并可能破坏现有的应用程序，并不是所有的用户都能（最终）意识到了补丁的可用性。因此并非所有的产品的用户将适用于安装补丁，或者是由于以上这个问题或者是因为他们对补丁的存在缺乏了解。
 
 
 <center>![Image:WindowExposure.jpg](https://www.owasp.org/images/9/90/WindowExposure.jpg)<br>
-*Figure 2: Window of Vulnerability*</center>
+*图2:“补丁-渗透”测试模型*</center>
 
-It is essential to build security into the Software Development Life Cycle (SDLC) to prevent reoccurring security problems within an application. Developers can build security into the SDLC  by developing standards, policies, and guidelines that fit and work within the development methodology. Threat modeling and other techniques should be used to help assign appropriate resources to those parts of a system that are most at risk.
+为了防止一个应用程序再次发生安全问题，将安全融入到软件开发生命周期（SDLC）每一个阶段，并通过制定适合有效的开发方法标准，策略和指导方针是十分必要的。威胁建模与其它技术应该用来帮助区分系统中的哪些部分的特定资源是危险的。
 
-#### The SDLC is King
+#### SDLC才是王道
 
-The SDLC is a process that is well-known to developers. By integrating security into each phase of the SDLC, it allows for a holistic approach to application security that leverages the procedures already in place within the organization. Be aware that while the names of the various phases may change depending on the SDLC model used by an organization, each conceptual phase of the archetype SDLC will be used to develop the application (i.e., define, design, develop, deploy, maintain). Each phase has security considerations that should become part of the existing process, to ensure a cost-effective and comprehensive security program.
+软件开发生命周期是每一个开发人员都非常了解的一个过程。通过将安全的概念纳入到软件开发生命周期中的各个阶段，可以对应用安全采用综合方法以实现该组织内各程序的平衡。不同阶段的名称可能会根据各组织所采用的SDLC模型的改变而改变，每一个原始SDLC的概念阶段都将被用来开发应用（例如，定义，设计，开发，部署，维护）。每个阶段的安全考虑都应当成为现行进程的一部分，以确保安全计划全面有效。
 
-There are several secure SDLC frameworks that exist that provide both descriptive and prescriptive advice. Whether a person takes descriptive or prescriptive advice depends on the maturity of the SDLC process. Essentially, prescriptive advice shows how the secure SDLC should work, and descriptive advice shows how its used in the real world. Both have their place. For example, if you don't know where to start, a prescriptive framework can provide a menu of potential security controls that can be applied within the SDLC. Descriptive advice can then help drive the decision process by presenting what has worked well for other organizations. Descriptive secure SDLCs include BSIMM-V; and the prescriptive secure SDLCs inculde OWASP's Open Software Assurance Maturity Model (OpenSAMM) and ISO/IEC 27034 Parts 1-8, parts of which are still in development.
-<br>
+现在存在多个SDLC框架，提供了描述性的和规范性的建议。无论你想选择描述性建议或者规范性建议依赖于SDLC过程的成熟度。一般的，规范性建议展示了安全SDLC过程如何发生作用，描述性建议则展示了他如何在实际生活中应用。两者都有各自不同的发挥作用的地方。例如，如果你不知道如何开始一个SDLC，那么规范性的框架提供一系列潜在安全控制手段供你选择。描述性建议通过展示其他组织如何工作的来帮你更好的做决定。描述性安全SDLC包括BSIMM-V，规范性安全SDLC包括OWASP的开发软件成熟度模型（OpenSAMM）和ISO/IEC 27034中的1-8部分，部分章节还在开发中。
 
-#### Test Early and Test Often
-When a bug is detected early within the SDLC it can be addressed faster and at a lower cost. A security bug is no different from a functional or performance-based bug in this regard. A key step in making this possible is to educate the development and QA teams about common security issues and the ways to detect and prevent them. Although new libraries, tools, or languages can help design better programs (with fewer security bugs), new threats arise constantly and developers must be aware of the threats that affect the software they are developing. Education in security testing also helps developers acquire the appropriate mindset to test an application from an attacker's perspective. This allows each organization to consider security issues as part of their existing responsibilities.
-<br>
+#### 及早测试、频繁测试
+漏洞及早在软件开发生命周期中被查出，它可以迅速被修补并花费较低的成本。在这里，安全漏洞可被等价看作一个功能或基于性能的漏洞。实现这个目标最关键的一步在于教育开发部门和QA部门关于常见的安全问题以及发现和防范的方法。虽然最新的图书、工具或者语言也许帮助设计更好的计划(产生少量的漏洞)，然而新的威胁频繁出现，它们的开发者必须认识到这些新威胁对他们所开发的软件所带来的影响。安全测试的教育将帮助开发者从攻击者的渗透行为中获取适用的应用程序测试思路。每个企业或组织都应将安全问题作为他们现有的责任的一部分。
 
-#### Understand the Scope of Security
-It is important to know how much security a given project will require. The information and assets that are to be protected should be given a classification that states how they are to be handled (e.g., confidential, secret, top secret). Discussions should occur with legal council to ensure that any specific security requirements will be met. In the USA requirements might come from federal regulations, such as the Gramm-Leach-Bliley Act [8], or from state laws, such as the California SB-1386 [9]. For organizations based in EU countries, both country-specific regulation and EU Directives may apply. For example, Directive 96/46/EC4 [10] makes it mandatory to treat personal data in applications with due care, whatever the application.
-<br>
+#### 理解安全的范围
+了解项目所需的安全范围非常重要。需要被保护的资料和资产应予以分类以明确它们应该被如何处理（例如，保密(Confidential)，秘密(Secret)，绝密(TopSecret)）。应就此事项与法律委员会共同讨论，以确保任何特定的安全需求都能够得到满足。在美国，像Gramn-Leach-Bliley法案[8]这样的联邦法案，如美国加州SB-1386[9]这样的州级法律都有相关的要求。对欧盟国家的组织或企业而言，国家具体法规和欧盟指引都适用。例如，96/46/EC4指引[10]强制要求，凡是涉及个人数据处理的应用应予以适当保护，而不论该应用是什么。
 
-#### Develop the Right Mindset
-Successfully testing an application for security vulnerabilities requires thinking "outside of the box." Normal use cases will test the normal behavior of the application when a user is using it in the manner that is expected. Good security testing requires going beyond what is expected and thinking like an attacker who is trying to break the application. Creative thinking can help to determine what unexpected data may cause an application to fail in an insecure manner. It can also help find what assumptions made by web developers are not always true and how they can be subverted. One of the reasons why automated tools are actually bad at automatically testing for vulnerabilities is that this creative thinking must be done on a case-by-case basis as most web applications are being developed in a unique way (even when using common frameworks).
-<br>
+#### 树立正确的思想
+成功地测试一个应用程序的安全漏洞需要超越性的思维。在正常模式下对应用程序的正常行为进行测试仅仅适用于用户按照你所预期的规则来使用应用程序。然后，良好的安全测试需要超越你的期望并像那些试图破坏该应用程序的攻击者一样思考。创新思想能够帮助你了解到在不安全的使用方式下哪些意想不到的数据可能会导致应用失败。它还可以帮你发现网络开发人员所做那些的假设往往并非总是正确的，同时了解它们如何能被破坏殆尽。这就是为什幺自动化测试工具在自动进行漏洞检测时所带来的局限性：这种创造性的思维的建立必须根据案例不同而不同，同时大多数Web应用程序都采取其独特的方式进行开发的（即使他们使用普遍的框架）。
 
-#### Understand the Subject
-One of the first major initiatives in any good security program should be to require accurate documentation of the application. The architecture, data-flow diagrams, use cases, etc, should be written in formal documents and made available for review. The technical specification and application documents should include information that lists not only the desired use cases, but also any specifically disallowed use case. Finally, it is good to have at least a basic security infrastructure that allows the monitoring and trending of attacks against an organization's applications and network (e.g., IDS systems).
-<br>
+#### 认识测试主体
+一个良好的安全计划中的第一个非常重要的步骤就是在对应用程序进行了解并准确地记录下来。其结构，数据流程图，使用情况等，都应记录为正式的书面文件并使其适于审查。技术规格和申请文件应不仅包括允许使用的情况，同时应包括下不允许使用的特殊情况。最后，至少有一个基本的安全设施是件好事，可以实时监测并应对针对组织或企业的应用及网络所发起的攻击（例如，入侵检测系统）。
 
-#### Use the Right Tools
-While we have already stated that there is no silver bullet tool, tools do play a critical role in the overall security program. There is a range of open source and commercial tools that can automate many routine security tasks. These tools can simplify and speed up the security process by assisting security personnel in their tasks. However, it is important to understand exactly what these tools can and cannot do so that they are not oversold or used incorrectly.
-<br>
+#### 使用合适的工具
+虽然我们已经说过没有万能工具，但是工具在总体安全计划中确实发挥重要的作用。有一系列的开源工具和商业工具，可以自动完成许多例行的安全工作。这些工具可以协助安全人员简化和加快安全任务进程。最重要的是理解这些工具能做什幺不能做什幺以防止他们过量销售和使用不当。
 
-#### The Devil is in the Details
-It is critical not to perform a superficial security review of an application and consider it complete. This will instill a false sense of confidence that can be as dangerous as not having done a security review in the first place. It is vital to carefully review the findings and weed out any false positive that may remain in the report. Reporting an incorrect security finding can often undermine the valid message of the rest of a security report. Care should be taken to verify that every possible section of application logic has been tested, and that every use case scenario was explored for possible vulnerabilities.
-<br>
+#### 难在细节
+至关重要的是不要执行表面的应用安全检查并认为这样就使完成了检测任务。这将导致一种安全假象，这与不做安全检查一样危险。仔细审核检测结果并剔除检测报告中可能存在的错误是很重要的。安全检测结果的不准确性往往也破坏了安全报告其余部分的有效信息。应当注意，确认一切可能的应用逻辑部分都已经过测试，并对每种使用情况都进行了漏洞检测。
 
-#### Use Source Code When Available
-While black box penetration test results can be impressive and useful to demonstrate how vulnerabilities are exposed in a production environment, they are not the most effective or efficient way to secure an application. It is difficult for dynamic testing to test the entire code base, particularly if many nested conditional statements exist. If the source code for the application is available, it should be given to the security staff to assist them while performing their review. It is possible to discover vulnerabilities within the application source that would be missed during a black box engagement.
-<br>
+#### 适当情况下请使用源代码
+虽然黑盒渗透测试的结果对说明产品中所暴露的弱点十分形象有效，但是它们并不是确保应用安全最为有效的方式。在适当的情况下，程序的源代码应考虑移交给安全人员以协助他们在履行其测试工作。通过这种方式可能发现黑盒渗透测试无法发现的应用漏洞。
 
-#### Develop Metrics
-An important part of a good security program is the ability to determine if things are getting better. It is important to track the results of testing engagements, and develop metrics that will reveal the application security trends within the organization.
+#### 开发指标
+一个良好的安全计划的重要组成部分就是确定事情是否能够好转的能力。跟踪测试约定结果以及开发指标十分重要，这些指标能显示组织或企业内的应用程序的安全趋势。
 
-Good metrics will show: <br>
-* If more education and training are required;<br>
-* If there is a particular security mechanism that is not clearly understood by the development team;<br>
-* If the total number of security related problems being found each month is going down.
+这些好的指标指标可以是：<br>
+* 是否需要更多的教育和培训；<br>
+* 是否存在一个对开发没有明确理解的特殊的安全机制；<br>
+* 发现与安全有关的问题总数是否每个月正在下降。
 
-Consistent metrics that can be generated in an automated way from available source code will also help the organization in assessing the effectiveness of mechanisms introduced to reduce security bugs in software development. Metrics are not easily developed, so using standard metrics like those provided by the OWASP Metrics project and other organizations is a good starting point.<br>
+从现有的源代码中可以自动产生连贯的数据，将有助于增强该组织或企业在评估机制中减少软件开发过程中的安全漏洞的有效性。指标的建立并不容易，因此使用OWASP指标项目以及其它标准组织所提供的标准指标将是一个良好的开端。
 
-#### Document the Test Results
-To conclude the testing process, it is important to produce a formal record of what testing actions were taken, by whom, when they were performed, and details of the test findings. It is wise to agree on an acceptable format for the report which is useful to all concerned parties, which may include developers, project management, business owners, IT department, audit, and compliance.
+#### 对测试结果进行文档记录
+为完成测试过程，产生一个正式的报告以记录谁、什么时间、采取了什么测试行为、以及详细的测试结果是非常重要的。明智的做法是通过商定一个所有相关方面，包括开发者，项目管理部门，企业所有者，IT部门，审计部门和执行部门都可以接受的报告模式。
 
-The report should be clear to the business owner in identifying where material risks exist and sufficient to get their backing for subsequent mitigation actions. The report should also be clear to the developer in pin-pointing the exact function that is affected by the vulnerability and associated recommendations for resolving issues in a language that the developer will understand. The report should also allow another security tester to reproduce the results. Writing the report should not be overly burdensome on the security tester themselves. Security testers are not generally renowned for their creative writing skills and agreeing on a complex report can lead to instances where test results do not get properly documented. Using a security test report template can save time and ensure that results are documented accurately and consistently, and are in a format that is suitable for the audience.
+该报告必须清楚地为企业所有者指出存在脆弱点，以支持他们以后的漏洞排查行为。该报告必须清楚地为开发人员明确指出脆弱点所带来的影响，并附以开发人员可理解的解决方案（没有双关语意）。最后，安全测试工程师的报告写作不应过于繁琐，安全测试工程师一般并不具有非常出色的创作技巧，因此，商定一项复杂的检测报告可能会导致测试结果并不能真实地反应于报告中。使用安全测试报告模板能节约时间，并且保证测试结果能正确一致地记录，也适合阅读。
 
-### Testing Techniques Explained
+### 测试技术解释
 
-This section presents a high-level overview of various testing techniques that can be employed when building a testing program. It does not present specific methodologies for these techniques as this information is covered in Chapter 3. This section is included to provide context for the framework presented in the next chapter and to highlight the advantages and disadvantages of some of the techniques that should be considered. In particular, we will cover:
-* Manual Inspections & Reviews
-* Threat Modeling
-* Code Review
-* Penetration Testing
+该部分提出可用于创建测试工程的各类高级测试技术。这里针对这些技术的具体实现方法并没有进行详细讨论，详情可参见第3章。该部分旨在为下个章节所提出的测试框架提供上下文并突出某些技术在选择使用时应考虑的优点以及缺点。特别包括：
+* 人工检查及复查
+* 软件威胁建模
+* 代码复查
+* 渗透测试
 
-#### Manual Inspections & Reviews
-##### Overview
-Manual inspections are human reviews that typically test the security implications of people, policies, and processes. Manual inspections can also include inspection of technology decisions such as architectural designs. They are usually conducted by analyzing documentation or performing interviews with the designers or system owners.
+#### 人工检查及复查
+##### 概要
+人工检查是安全测试过程中，通过人工检查或者审核的方式对应用开发过程中的人，策略和进程，包括技术决策如开发模型设计进行安全检测。人工检查通常采取文件分析或对设计师或系统的所有者进行访谈的方式进行。
 
-While the concept of manual inspections and human reviews is simple, they can be among the most powerful and effective techniques available. By asking someone how something works and why it was implemented in a specific way, the tester can quickly determine if any security concerns are likely to be evident. Manual inspections and reviews are one of the few ways to test the software development life-cycle process itself and to ensure that there is an adequate policy or skill set in place.
+虽然人工检查和人员访谈这个概念十分简单，但是它们确是最强大的和有效的可用技术。通过询问别人这件事如何运行，为什幺采用当前的运行模式，能够帮助测试者快速确定是否存在显而易见的安全问题。人工检查及复查是在软件开发生命周期过程中对软件进行测试并确保其充分的策略和技能的为数不多的途径之一。
 
-As with many things in life, when conducting manual inspections and reviews it is recommended that a trust-but-verify model is adopted. Not everything that the tester is shown or told will be accurate. Manual reviews are particularly good for testing whether people understand the security process, have been made aware of policy, and have the appropriate skills to design or implement a secure application.
+正如生活中的许多事情，当进行人工检查及复查时，我们建议您通过信任但进行验证模式。并不是每个人告诉或展示给你的每件事都是准确的。人工检查对测试人员是否了解安全进程，是否了解安全策略，是否具有适合的技能以设计或执行一个安全的应用程序十分有用。
 
-Other activities, including manually reviewing the documentation, secure coding policies, security requirements, and architectural designs, should all be accomplished using manual inspections.
+其它包括文件，代码安全策略，安全要求，构架设计的检查都应该使用人工检查的方式来完成。
 
-##### Advantages:
-* Requires no supporting technology
-* Can be applied to a variety of situations
-* Flexible
-* Promotes teamwork
-* Early in the SDLC
+##### 优点：
+* 无需支持技术
+* 可应用于各种不同的情况
+* 灵活
+* 促进团队协助
+* 在软件开发生命周期早期
 
-##### Disadvantages:
-* Can be time consuming
-* Supporting material not always available
-* Requires significant human thought and skill to be effective
+##### 缺点：
+* 可能会非常耗时
+* 支持材料并不容易得到
+* 需要大量的思考及技巧才能非常有效
 
-#### Threat Modeling
-##### Overview
-Threat modeling has become a popular technique to help system designers think about the security threats that their systems and applications might face. Therefore, threat modeling can be seen as risk assessment for applications. In fact, it enables the designer to develop mitigation strategies for potential vulnerabilities and helps them focus their inevitably limited resources and attention on the parts of the system that most require it. It is recommended that all applications have a threat model developed and documented. Threat models should be created as early as possible in the SDLC, and should be revisited as the application evolves and development progresses.
+#### 软件威胁建模
+##### 概要
+软件威胁建模已成为一种流行的技术，用以帮助系统设计师思考他们的系统/应用程序可能面临的安全威胁。因此，软件威胁建模可以被看作是应用风险评估。事实上，它能有效帮助设计师开发出缓解潜在的漏洞威胁的战略，并帮助他们将有限的资源和注意力集中在系统中最需要进行安全测试的部分。建议为所有的应用建立威胁模型并记录下来。威胁模型应与软件开发生命周期同步建立，并随着应用的演变和开发进程进行重新审视。
 
-To develop a threat model, we recommend taking a simple approach that follows the NIST 800-30 [11] standard for risk assessment. This approach involves:
-* Decomposing the application – use a process of manual inspection to understand how the application works, its assets, functionality, and connectivity.
-* Defining and classifying the assets – classify the assets into tangible and intangible assets and rank them according to business importance.
-* Exploring potential vulnerabilities - whether technical, operational, or management.
-* Exploring potential threats – develop a realistic view of potential attack vectors from an attacker’s perspective, by using threat scenarios or attack trees.
-* Creating mitigation strategies – develop mitigating controls for each of the threats deemed to be realistic.
+我们建议采取NIST的800-30[11]标准的风险评估的办法来制定威胁模型。该方法包括：
+* 分解应用程序——通过人工检查理解应用程序如何运作，它的资产，功能和连接。
+* 界定和归类资产——将资产分为有形资产和无形资产并根据业务的重要性进行排名。
+* 探索潜在的弱点——无论是技术上，运营上，或是管理。
+* 探索潜在的威胁——通过使用威胁情景或攻击树，从攻击者的角度制定一个切合实际的潜在攻击矢量图。
+* 建立迁移战略——为每一个可能演变成破坏的威胁制定迁移战略。
 
-The output from a threat model itself can vary but is typically a collection of lists and diagrams. The OWASP Code Review Guide outlines an Application Threat Modeling methodology that can be used as a reference for the testing applications for potential security flaws in the design of the application. There is no right or wrong way to develop threat models and perform information risk assessments on applications. [12]. <br>
+威胁模型本身的输入各有不同，但通常是清单和图表收集。OWASP代码审查指南简要指出，应用程序威胁建模可以用来作为测试应用安全潜在漏洞的参考。选择创建应用威胁模型或者执行信息风险评估并没有正确错误之分[12]。
 
-##### Advantages:
-* Practical attacker's view of the system
-* Flexible
-* Early in the SDLC
+##### 优点：
+* 采用攻击者的思想对系统进行模拟攻击
+* 灵活
+* 软件开发生命周期早期
 
-##### Disadvantages:
-* Relatively new technique
-* Good threat models don’t automatically mean good software
+##### 缺点：
+* 相对新型的技术
+* 良好的威胁模型并不意味着自动产生良好的软件
 
-#### Source Code Review
-##### Overview
-Source code review is the process of manually checking the source code of a web application for security issues. Many serious security vulnerabilities cannot be detected with any other form of analysis or testing. As the popular saying goes “if you want to know what’s really going on, go straight to the source." Almost all security experts agree that there is no substitute for actually looking at the code. All the information for identifying security problems is there in the code somewhere. Unlike testing third party closed software such as operating systems, when testing web applications (especially if they have been developed in-house) the source code should be made available for testing purposes.
+#### 代码复查
+##### 概要
+代码复查是手动检查的一个过程，它往往用于检查WEB应用程序中的源代码可能存在的安全问题。许多严重的安全漏洞不能被任何其它形式的分析或测试所检测到。有句俗话，“如果你想知道一件事是怎么产生的，请直接寻找其根源。”几乎所有的安全专家一致认为，没有任何检测方法可以取代代码审查。几乎所有信息安全问题都被证实为代码问题。与对源代码不开放的第三方软件，如操作系统进行测试不同，测试Web应用程序时（特别是如果他们已经完成内部定制）源代码应当可以获得。
 
-Many unintentional but significant security problems are also extremely difficult to discover with other forms of analysis or testing, such as penetration testing, making source code analysis the technique of choice for technical testing. With the source code, a tester can accurately determine what is happening (or is supposed to be happening) and remove the guess work of black box testing.
+一些由于过失而导致的显着安全问题，通过其它形式的分析和测试，比如渗透测试是极其难以发现的，这也是在测试技术中源代码复查技术不可缺失的原因。测试者通过代码复查可以准确判断接下来将发生什幺事情（或应该发生），消除了黑盒测试中的猜测过程。
 
-Examples of issues that are particularly conducive to being found through source code reviews include concurrency problems, flawed business logic, access control problems, and cryptographic weaknesses as well as backdoors, Trojans, Easter eggs, time bombs, logic bombs, and other forms of malicious code. These issues often manifest themselves as the most harmful vulnerabilities in web sites. Source code analysis can also be extremely efficient to find implementation issues such as places where input validation was not performed or when fail open control procedures may be present. But keep in mind that operational procedures need to be reviewed as well, since the source code being deployed might not be the same as the one being analyzed herein [13].<br>
+源代码复查特别有利于发现以下安全问题：如并发的问题，有缺陷的业务逻辑，访问控制的问题，加密的弱点，后门，木马，复活节彩蛋，定时炸弹，逻辑炸弹，和其它形式的恶意代码。这些问题在网站中往往表现为最有害的漏洞。源代码分析对于查找可能存在的执行问题，比如某个需要输入验证的地方不能有效执行或打开控制进程失败是十分有效的。但是请记住，业务流程同样需要加以审查，因为真实运行环境中的源代码可能与此处已分析的源代码不一样[13]。
 
-##### Advantages:
-* Completeness and effectiveness
-* Accuracy
-* Fast (for competent reviewers)
+##### 优点：
+* 完整性和有效性
+* 准确
+* 快速(对具有高能力的复查者而言)
 
-##### Disadvantages:
-* Requires highly skilled security developers
-* Can miss issues in compiled libraries
-* Cannot detect run-time errors easily
-* The source code actually deployed might differ from the one being analyzed
+##### 缺点：
+* 需要高度熟练的安全开发者
+* 可能错过存在于已编译好的类库中的问题
+* 无法检测运行时产生的错误
+* 真实运行环境中的源代码可能与此处已分析的源代码不一样
 
-**For more on code review, checkout the [OWASP code review project](https://www.owasp.org/index.php/OWASP_Code_Review_Project)**.<BR>
+**欲了解关于代码审查的更多信息，查询[OWASP代码审查项目](https://www.owasp.org/index.php/OWASP_Code_Review_Project)**.<BR>
 
-#### Penetration Testing
-##### Overview
-Penetration testing has been a common technique used to test network security for many years. It is also commonly known as black box testing or ethical hacking. Penetration testing is essentially the “art” of testing a running application remotely to find security vulnerabilities, without knowing the inner workings of the application itself. Typically, the penetration test team would have access to an application as if they were users. The tester acts like an attacker and attempts to find and exploit vulnerabilities. In many cases the tester will be given a valid account on the system.
+#### 渗透测试
+##### 概要
+渗透测试作为一个网络安全通用的测试技术已经多年。它也通常被称为黑盒测试或道德入侵(Ethical Hacking)。渗透测试在本质上是“艺术”，在不知道内部运作的应用程序本身的情况下，对正在运行的应用进行远程检测，发现安全漏洞。通常，渗透测试团队会假装成合法用户使用应用程序进行。测试者通过模拟攻击者的攻击手法，试图发现并利用安全漏洞。通常情况下，测试者将得到一个有效的系统帐户。
 
-While penetration testing has proven to be effective in network security, the technique does not naturally translate to applications. When penetration testing is performed on networks and operating systems, the majority of the work is involved in finding and then exploiting known vulnerabilities in specific technologies. As web applications are almost exclusively bespoke, penetration testing in the web application arena is more akin to pure research. Penetration testing tools have been developed that automate the process, but with the nature of web applications their effectiveness is usually poor.
+对网络安全而言，渗透测试已被证明是一种非常有效的检测手段，然而该技术对应用而言却不是十分有效。当测试者对网络和操作系统进行渗透测试时，大多数的工作是寻找，然后采用具体技术对已知漏洞加以利用。Web应用程序几乎完全定制，对Web应用进行渗透测试更象是纯理论的研究。虽然已经开发出来自动化渗透测试工具，但是，针对Web应用程序的性质其效力通常很差。
 
-Many people today use web application penetration testing as their primary security testing technique. Whilst it certainly has its place in a testing program, we do not believe it should be considered as the primary or only testing technique. Gary McGraw in [14] summed up penetration testing well when he said, “If you fail a penetration test you know you have a very bad problem indeed. If you pass a penetration test you do not know that you don’t have a very bad problem”. However, focused penetration testing (i.e., testing that attempts to exploit known vulnerabilities detected in previous reviews) can be useful in detecting if some specific vulnerabilities are actually fixed in the source code deployed on the web site. <br>
+许多人今天使用Web应用程序渗透测试作为其主要的安全检测技术。虽然在测试过程中，其肯定占有一席之地，然而，我们不认为它应被看作是主要的或唯一的测试技术。Gary McGraw[14]对渗透测试进行了总结，他说：“如果一个渗透测试未通过，你知道你确实有一个非常不好的问题。如果你通过了渗透测试，你不知道你没有一个非常不好的问题”。然而，集中渗透测试（即试图利用之前检测发现的已知漏洞检测）可用于检测某些特定的安全漏洞，如部署在网站上的固定的源代码。
 
-##### Advantages:
-* Can be fast (and therefore cheap)
-* Requires a relatively lower skill-set than source code review
-* Tests the code that is actually being exposed
+##### 优点：
+* 可以快速进行（因此便宜）
+* 需要较低的技能，相对于源代码复查而言
+* 测试实际曝露的代码(译注：即指实际运行的程序)
 
-##### Disadvantages:
-* Too late in the SDLC
-* Front impact testing only.
+##### 缺点：
+* 软件开发生命周期晚期
+* 仅仅测试前部影响!
 
-#### The Need for a Balanced Approach
-With so many techniques and approaches to testing the security of web applications it can be difficult to understand which techniques to use and when to use them. Experience shows that there is no right or wrong answer to the question of exactly what techniques should be used to build a testing framework. In fact all techniques should probably be used to test all the areas that need to be tested.
+#### 方法平衡的需求
+针对WEB应用安全测试，有如此之多的技术及方法，了解何时选用哪一种技术进行测试非常困难。经验表明，选取哪一种技术用于建立测试框架并没有对错之分。事实上，所有的技术都应该被适当采用以确保所有需要测试的范围都已经被测试。
 
-Although it is clear that there is no single technique that can be performed to effectively cover all security testing and ensure that all issues have been addressed, many companies adopt only one approach. The approach used has historically been penetration testing. Penetration testing, while useful, cannot effectively address many of the issues that need to be tested. It is simply “too little too late” in the software development life cycle (SDLC).
+但是，显而易见的是不存在某一种单一的技术可以覆盖安全测试的各个方面以确保所有的问题都已涉及到。在以往，许多公司都采取渗透测试这一种方法进行测试。虽然渗透测试在一定程度上具有可用性，但是不能涉及到所有需要测试的问题，并且对于软件开发生命周期而言，渗透测试过于简单和迟来。
 
-The correct approach is a balanced approach that includes several techniques, from manual reviews to technical testing. A balanced approach should cover testing in all phases of the SDLC. This approach leverages the most appropriate techniques available depending on the current SDLC phase.
+正确的做法是采取多种技术以达到平衡，包括人工检查和测试技术。方法平衡应确保在覆盖到软件开发生命周期的各个阶段。这种方法可以根据当前所在的软件开发生命周期的阶段平衡一种最合适的技术。
 
-Of course there are times and circumstances where only one technique is possible. For example, a test on a web application that has already been created, but where the testing party does not have access to the source code. In this case, penetration testing is clearly better than no testing at all. However, the testing parties should be encouraged to challenge assumptions, such as no access to source code, and to explore the possibility of more complete testing.
+当然，在某些时间或情况下，一种测试技术也是有可能的；例如，针对WEB应用所做的测试框架已经建立，但是测试团队无法获取WEB应用源代码。在这种情况下，渗透测试总好过不进行测试。然而，我们鼓励测试团队挑战假设，比如不能获取源代码时，探索其它更加全面的测试方法。
 
-A balanced approach varies depending on many factors, such as the maturity of the testing process and corporate culture. It is recommended that a balanced testing framework should look something like the representations shown in Figure 3 and Figure 4. The following figure shows a typical proportional representation overlaid onto the software development life cycle. In keeping with research and experience, it is essential that companies place a higher emphasis on the early stages of development.
+平衡方式各不相同，这取决于许多因素，比如测试过程的成熟度和企业文化。尽管如此，我们建议采用图3和图4中展示的平衡框架。下图展示了测试技术在软件开发生命周期中一个典型的具有代表性的覆盖比例。随着研究的深入和经验的积累，公司对早期开发阶段的重视是非常重要的。
+
 <center>
 ![Image:ProportionSDLC.png](https://www.owasp.org/images/3/31/ProportionSDLC.png)
-<br>*Figure 3: Proportion of Test Effort in SDLC*
+<br>*图3:SDLC各阶段的测试工作量比例*
 </center>
-The following figure shows a typical proportional representation overlaid onto testing techniques. <br>
+
+下图展示了测试技术在软件开发生命周期中一个典型的具有代表性的覆盖比例。
+
 <center>
 ![Image:ProportionTest.png](https://www.owasp.org/images/5/5c/ProportionTest.png)
-<br>*Figure 4: Proportion of Test Effort According to Test Technique*
+<br>*图4:测试技术的测试工作量比例*
 </center>
 
-##### A Note about Web Application Scanners
-Many organizations have started to use automated web application scanners. While they undoubtedly have a place in a testing program, some fundamental issues need to be highlighted about why it is believed that automating black box testing is not (or will ever be) effective. However, highlighting these issues should not discourage the use of web application scanners. Rather, the aim is to ensure the limitations are understood and testing frameworks are planned appropriately.
+##### 注：关于WEB应用扫描器
+许多组织或企业已经开始使用自动WEB应用扫描器。虽然他们对目前的测试计划毫无疑问，但是我们希望强调一些根问问题：为什么我们（从不）不信任自动化黑盒测试的有效性。通过强调这些问题，我们不鼓励使用WEB应用扫描器。另外，我们所说的其局限性应当被充分了解，同时应当建立适用的测试框架。
 
-Important: OWASP is currently working to develop a web application scanner bench marking platform. The following examples show why automated black box testing is not effective.
-<br>
+重要：OWASP目前在正致力于开发一个WEB应用安全扫描基准平台。下面的例子将表明为什么自动化黑盒测试并不奏效。
 
-**Example 1: Magic Parameters**<br>
-Imagine a simple web application that accepts a name-value pair of “magic” and then the value. For simplicity, the GET request may be: *`http://www.host/application?magic=value`* <br> To further simplify the example, the values in this case can only be ASCII characters a – z (upper or lowercase) and integers 0 – 9.
+**例 1: Magic 参数**<br>
+请想象一个简单的WEB应用程序，接受一个“magic”的名称，然后赋值。通常情况下，Get请求可能为： *`http://www.host/application?magic=value`* <br> 为了进一步简化以上举例，这个请求中的值只能是ASCII码a–z(大写或小写)以及整数0–9。
 
-The designers of this application created an administrative backdoor during testing, but obfuscated it to prevent the casual observer from discovering it. By submitting the value sf8g7sfjdsurtsdieerwqredsgnfg8d (30 characters), the user will then be logged in and presented with an administrative screen with total control of the application. The HTTP request is now:<br> *`http://www.host/application?magic= sf8g7sfjdsurtsdieerwqredsgnfg8d`* <br>
+该应用程序的设计者在测试期间建立了一个管理后门，同时对其进行混淆已避免被其它人发现。通过输入值 `sf8g7sfjdsurtsdieerwqredsgnfg8d` (30个字符),用户就可以直接登陆并能够对该应用进行完全控制。HTTP请求如下:<br> *`http://www.host/application?magic= sf8g7sfjdsurtsdieerwqredsgnfg8d`* <br>
 
-Given that all of the other parameters were simple two- and three-characters fields, it is not possible to start guessing combinations at approximately 28 characters. A web application scanner will need to brute force (or guess) the entire key space of 30 characters. That is up to 30^28 permutations, or trillions of HTTP requests. That is an electron in a digital haystack.
+考虑到其它所有参数都是简单的2、3个字符，不可能开始猜测大约28个字符的组合。一个web应用扫描器将需要蛮力（或猜想）破解整整30个字符的关键空间。高达30^28种排列，或万亿HTTP请求！这是一个在电子数字中大海捞针！
 
-The code for this exemplar Magic Parameter check may look like the following: <br>
+这个典范magic参数代码检查可能看起来如下所示： <br>
 ```java
  public void doPost( HttpServletRequest request, HttpServletResponse response)
  {
@@ -259,250 +252,247 @@ The code for this exemplar Magic Parameter check may look like the following: <b
  else …. // normal processing
  }
  ```
-By looking in the code, the vulnerability practically leaps off the page as a potential problem.
-<br>
-**Example 2: Bad Cryptography**<br>
-Cryptography is widely used in web applications. Imagine that a developer decided to write a simple cryptography algorithm to sign a user in from site A to site B automatically. In his/her wisdom, the developer decides that if a user is logged into site A, then he/she will generate a key using an MD5 hash function that comprises: *`Hash { username : date }`* <br>
-When a user is passed to site B, he/she will send the key on the query string to site B in an HTTP re-direct. Site B independently computes the hash, and compares it to the hash passed on the request. If they match, site B signs the user in as the user they claim to be.
+通过查看代码，该弱点事实上导致该页面存在潜在问题。
 
-As the scheme is explained the inadequacies can be worked out. Anyone that figures out the scheme (or is told how it works, or downloads the information from Bugtraq) can log in as any user. Manual inspection, such as a review or code inspection, would have uncovered this security issue quickly. A black-box web application scanner would not have uncovered the vulnerability. It would have seen a 128-bit hash that changed with each user, and by the nature of hash functions, did not change in any predictable way.
-<br>
+**例 2: 无效加密**<br>
+密码学广泛应用于Web应用程序。可以想象，开发人员决定采用一种简单的密码学算法来对用户从站点A到站点B进行自动认证。开发人员以其聪明才智决定，如果用户登陆到站点A，他或她将产生一个采用MD5散列(Hash)函数进行加密的钥匙，其内容包括：*`Hash { username : date }`* <br>
+当用户通过站点B，他或她将该钥匙以询问字符串的形式通过HTTP复位向发往站点B。站点B通过独立计算Hash值，并且对请求通过的Hash值进行比较。如果他们匹配，站点B则声称该用户是其标志用户。
 
-##### A Note about Static Source Code Review Tools
-Many organizations have started to use static source code scanners. While they undoubtedly have a place in a comprehensive testing program, it is necessary to highlight some fundamental issues about why this approach is not effective when used alone. Static source code analysis alone cannot identify issues due to flaws in the design, since it cannot understand the context in which the code is constructed. Source code analysis tools are useful in determining security issues due to coding errors, however significant manual effort is required to validate the findings.
-<br>
+我们可以清楚看到，像我们解释的那样，该计算可能执行失败或者被其它人看见它是如何计算的(或被告诉知它是如何运作的，或者从Bugtraq可直接下载相关信息)，从而可能作为其合法用户进行登录。通过对代码进行手工检查，例如访谈，将迅速揭露这类安全问题。黑盒Web应用程序扫描器可能认识到不同的用户的hash值采用自然的方式在改变，但是并不能预测其改变的方式。
 
-### Deriving Security Test Requirements ##
-To have a successful testing program, one must know what the testing objectives are. These objectives are specified by the security requirements. This section discusses in detail how to document requirements for security testing by deriving them from applicable standards and regulations, and from positive and negative application requirements. It also discusses how security requirements effectively drive security testing during the SDLC and how security test data can be used to effectively manage software security risks.
+##### 注：关于静态源代码复查工具
+许多组织或企业开始使用静态源代码扫描器。毋庸置疑，综合测试一个应用程序时，其具有一定的有效性，然而，我们想要突出的根本问题是，当单独时使用该类工具时，为什么我们并不相信这种方法的有效性。静态源代码分析在设计不可能辨认问题由于缺点，因为它不可能了解所开发代码的上下文。源代码分析工具是在确定由于编码错误而导致安全性问题有用的，然而重大手工努力需要确认研究结果。
 
-#### Testing Objectives
-One of the objectives of security testing is to validate that security controls operate as expected. This is documented via *security requirements* that describe the functionality of the security control. At a high level, this means proving confidentiality, integrity, and availability of the data as well as the service.  The other objective is to validate that security controls are implemented with few or no vulnerabilities. These are common vulnerabilities, such as the [[OWASP Top Ten]], as well as vulnerabilities that have been previously identified with security assessments during the SDLC, such as threat modelling, source code analysis, and penetration test.
+### 安全需求测试推导
+如果你想要有一个成功的测试项目，你需要知道测试的目的是什么。这些目的由安全要求指定。这章详细讨论了如何通过从适用标准和准则和积极和消极应用程序要求中推导出安全测试并记录安全测试要求。它也谈论安全要求如何有效地在SDLC期间使用安全测试，如何使用安全测验数据有效地处理软件安全风险。
 
-#### Security Requirements Documentation
-The first step in the documentation of security requirements is to understand the *business requirements*. A business requirement document can provide initial high-level information on the expected functionality of the application. For example, the main purpose of an application may be to provide financial services to customers or to allow goods to be purchased from an on-line catalog. A security section of the business requirements should highlight the need to protect the customer data as well as to comply with applicable security documentation such as regulations, standards, and policies.
+#### 测试目的
+安全测试的目的之一是确认安全控制能如预期一样起作用。*安全需求*文献描述了安全控制的功能。在高水平角度看，这意味证明数据和服务的机密性、完整性和可用性。另一个目的确认安全控制是在很少或没有弱点的情况下安装的。存在一些共同的弱点，例如[OWASP十大漏洞](https://www.owasp.org/index.php/OWASP_Top_Ten)和之前在SDLC期间进行安全评估所确认的漏洞，例如软件威胁建模，原代码分析和渗透测试。
 
-A general checklist of the applicable regulations, standards, and policies is a good preliminary security compliance analysis for web applications. For example, compliance regulations can be identified by checking information about the business sector and the country or state where the application will operate. Some of these compliance guidelines and regulations might translate into specific technical requirements for security controls. For example, in the case of financial applications, the compliance with FFIEC guidelines for authentication [15] requires that financial institutions implement applications that mitigate weak authentication risks with multi-layered security control and multi-factor authentication.
+#### 安全需求文档
+安全要求文档的第一步是明白*业务需求*。一个业务需求文献能够提供最原始的、高水平的应用的期望功能的资料。例如，应用的主要目的或许可以为顾客提供金融服务或从在在线的物品目录上购物和购买物品。企业要求的安全部分应该突出表现为需要保护的顾客数据并且符合可适用的安全文献的要求，例如章程(Regulations)、标准(Standards)和政策(Policies)。
 
-Applicable industry standards for security need also to be captured by the general security requirement checklist. For example, in the case of applications that handle customer credit card data, the compliance with the PCI DSS [16] standard forbids the storage of PINs and CVV2 data and requires that the merchant protect magnetic strip data in storage and transmission with encryption and on display by masking. Such PCI DSS security requirements could be validated via source code analysis.
+一般一个合适的章程，标准和政策清单适合初步的Web应用安全合规性分析。例如，可以根据检查企业部门的信息和应用运行/经营的国家或者州的信息来确定是否符合章程。其中一些合规性指南和章程或许在安全控制所需要的特定技术要求上有所转换。例如，在财政应用情况下，遵照FFIEC指南认证方面[15]要求财政机关安装拥有多层控制和多因素认证功能的应用软件来应对弱认证(带来的)风险。
 
-Another section of the checklist needs to enforce general requirements for compliance with the organization's information security standards and policies. From the functional requirements perspective, requirements for the security control need to map to a specific section of the information security standards. An example of such requirement can be: "a password complexity of six alphanumeric characters must be enforced by the authentication controls used by the application." When security requirements map to compliance rules a security test can validate the exposure of compliance risks. If violation with information security standards and policies are found, these will result in a risk that can be documented and that the business has to manage. Since these security compliance requirements are enforceable, they need to be well documented and validated with security tests.
+可适用的安全业界标准需要由一般安全要求清单决定。举个例子，在处理顾客信用卡数据的应用情况下，遵照PCI DSS[16]标准禁止PIN和CVV2数据存贮，并且要求客户通过加密存储和传输和保密显示的方法保护磁条数据。这样通过原代码分析PCIDSS安全要求才能生效。
 
-#### Security Requirements Validation
-From the functionality perspective, the validation of security requirements is the main objective of security testing. From the risk management perspective, the validation of security requirements is the objective of information security assessments. At a high level, the main goal of information security assessments is the identification of gaps in security controls, such as lack of basic authentication, authorization, or encryption controls. More in depth, the security assessment objective is risk analysis, such as the identification of potential weaknesses in security controls that ensure the confidentiality, integrity, and availability of the data. For example, when the application deals with personal identifiable information (PII) and sensitive data, the security requirement to be validated is the compliance with the company information security policy requiring encryption of such data in transit and in storage. Assuming encryption is used to protect the data, encryption algorithms and key lengths need to comply with the organization encryption standards. These might require that only certain algorithms and key lengths could be used. For example, a security requirement that can be security tested is verifying that only allowed ciphers are used (e.g., SHA-256, RSA, AES) with allowed minimum key lengths (e.g., more than 128 bit for symmetric and more than 1024 for asymmetric encryption).
+清单的另一个部分需要加强对符合组织信息安全标准和政策一般要求。从功能要求来看，安全控制要求需要在信息安全标准中的一个具体章节占有一席之地。这样要求的例子可以是：“必须由应用使用的认证控制强制执行六个字母或数字字符的复杂密码。“当安全要求存在于合规性规则中时，安全测试能确认发现的合规性风险。如果发现违反信息安全标准和政策行为，就导致一些能被记录并且必须处理的风险(即，处理)。为此，因为这些安全合规性要求是可执行的，他们需要与安全测试一起记录在案并产生效果。
 
-From the security assessment perspective, security requirements can be validated at different phases of the SDLC by using different artifacts and testing methodologies. For example, threat modeling focuses on identifying security flaws during design, secure code analysis and reviews focus on identifying security issues in source code during development, and penetration testing focuses on identifying vulnerabilities in the application during testing or validation.
+#### 安全需求验证
+从功能上来看，安全测试的主要目标是确认安全要求。但是从风险管理角度看，确认安全要求却是信息安全评估的目标。从更高层次考虑，信息安全评估的主要目标是确认安全控制中的差异，例如缺乏基本验证、授权或者加密控制。更深入分析，安全评估宗旨是风险分析，例如在安全控制中找出潜在的弱点就保证了数据保密性，完整性和有效性。再例如，当应用程序处理了个人可识别的信息(Personal Identifiable Information,PII)和敏感数据，安全要求会按照公司信息安全策略的要求对这些数据在传输和存储过程中加密。如果加密是为了保护数据安全，那么加密算法和关键字长度需要符合组织加密标准。这也许会要求只能使用某些算法和关键词长度。例如，能通过安全测试的一条安全要求说明：只允许规定最小密钥长度的加密算法(如，对称加密长度必须超过128位和不对称的加密长度必须超过1024位)。(如，SHA-1、RSA，3DES算法)。
 
-Security issues that are identified early in the SDLC can be documented in a test plan so they can be validated later with security tests. By combining the results of different testing techniques, it is possible to derive better security test cases and increase the level of assurance of the security requirements. For example, distinguishing true vulnerabilities from the un-exploitable ones is possible when the results of penetration tests and source code analysis are combined.  Considering the security test for a SQL injection vulnerability, for example, a black box test might first involve a scan of the application to fingerprint the vulnerability. The first evidence of a potential SQL injection vulnerability that can be validated is the generation of a SQL exception. A further validation of the SQL vulnerability might involve manually injecting attack vectors to modify the grammar of the SQL query for an information disclosure exploit. This might involve a lot of trial-and-error analysis until the malicious query is executed. Assuming the tester has the source code, she might learn from the source code analysis on how to construct the SQL attack vector that can exploit the vulnerability (e.g., execute a malicious query returning confidential data to unauthorized user).
+从安全评估角度看，在SDLC的不同阶段，使用不同的测试工具和测试方法能证实安全要求。例如，威胁模型在设计阶段能识别安全漏洞，安全代码分析和审查能在发展阶段在源代码中发现安全问题，渗透测试能在测试/确认时在应用阶段发现漏洞。
 
-#### Threats and Countermeasures Taxonomies
-A *threat and countermeasure classification*, which takes into consideration root causes of vulnerabilities, is the critical factor in verifying that security controls are designed, coded, and built to mitigate the impact of the exposure of such vulnerabilities. In the case of web applications, the exposure of security controls to common vulnerabilities, such as the OWASP Top Ten, can be a good starting point to derive general security requirements. More specifically, the web application security frame [17] provides a classification (e.g. taxonomy) of vulnerabilities that can be documented in different guidelines and standards and validated with security tests.
+在SDLC较早阶段发现的安全问题需要在测试计划中记录下来，以便能使用安全测试证实这些安全问题。通过结合各种测试技术的检测结果，就能得到更好的安全测试案例，同时增加安全需求的可信度。例如，结合渗透测试和源代码分析的结果能区分真正的漏洞和未被利用的漏洞。例如，在了解到SQL注入漏洞的安全测试后，黑盒测试能最先使用应用扫描去发现漏洞。发现潜在SQL注入漏洞存的第一个证据就是产生了SQL exception。进一步检测SQL漏洞也许需要利用手工注入攻击载体去修改导致信息泄露的SQL查询的语法。这也许需要多次反复试验分析，直到恶意查询执行为止。如果测试者有源代码，她就能从源代码中分析出如何构建能发现漏洞的SQL攻击载体（如执行恶意查询能使未授权用户得到机密数据）。
 
-The focus of a threat and countermeasure categorization is to define security requirements in terms of the threats and the root cause of the vulnerability. A threat can be categorized by using STRIDE [18] as Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, and Elevation of privilege. The root cause can be categorized as security flaw in design, a security bug in coding, or an issue due to insecure configuration. For example, the root cause of weak authentication vulnerability might be the lack of mutual authentication when data crosses a trust boundary between the client and server tiers of the application. A security requirement that captures the threat of non-repudiation during an architecture design review allows for the documentation of the requirement for the countermeasure (e.g., mutual authentication) that can be validated later on with security tests.
+#### 威胁和对策分类
+*威胁和对策分类*考虑了弱点产生根源，是证明安全控制在设计，编码和建立的重要因素。因此，利用这些漏洞所产生的影响已经缓和。在Web应用案例中，针对普通漏洞的安全控制措施，如OWASP TOP Ten，是获得一般安全要求的一个好的开始。更具体地说，web应用安全框架[17]提供了漏洞的分类，以便能按照不同的指南和标准记载这些漏洞，在以后的安全测试中能确认这些漏洞。
 
-A threat and countermeasure categorization for vulnerabilities can also be used to document security requirements for secure coding such as secure coding standards. An example of a common coding error in authentication controls consists of applying an hash function to encrypt a password, without applying a seed to the value. From the secure coding perspective, this is a vulnerability that affects the encryption used for authentication with a vulnerability root cause in a coding error. Since the root cause is insecure coding the security requirement can be documented in secure coding standards and validated through secure code reviews during the development phase of the SDLC.
+威胁和对策分类的焦点是根据威胁和弱点的起因定义安全要求。威胁可以使用STRIDE分类[18]，例如，欺骗(Spoofing)，窜改(Tempering)，否认（Repudiation），信息透露(Information Disclosure)、拒绝服务（Denial of Service）和特权提升（Elevation of Privilege）。弱点起因可以分为设计阶段的安全漏洞，编码阶段的安全漏洞，或不安全配置问题。例如：当数据在客户和应用的服务器层的可信任界外时，微弱认证漏洞的起因可能是由于缺乏互相认证。安全要求在架构设计审查阶段获得的认可威胁，并允许记录对策要求（即：互相认证）。而这些对策能在后来的安全测试中得到确认。
 
-#### Security Testing and Risk Analysis
-Security requirements need to take into consideration the severity of the vulnerabilities to support a *risk mitigation strategy*. Assuming that the organization maintains a repository of vulnerabilities found in applications (i.e, a vulnerability knowledge base), the security issues can be reported by type, issue, mitigation, root cause, and mapped to the applications where they are found.  Such a vulnerability knowledge base can also be used to establish a metrics to analyze the effectiveness of the security tests throughout the SDLC.
+弱点的威胁和对策分类同样能用于记录关于安全编码的安全要求。如，安全编码标准。认证控制中一个共同编码错误的例子包含应用Hash功能加密密码，而不是seed增加价值。从安全编码角度看来，漏洞利用编码错误中的漏洞起因影响了认证加密。既然漏洞起因是不安全编码，安全要求会在安全编码标准中记载并通过在SDLC的发展阶段进行安全编码审查确认。
 
-For example, consider an input validation issue, such as a SQL injection, which was identified via source code analysis and reported with a coding error root cause and input validation vulnerability type. The exposure of such vulnerability can be assessed via a penetration test, by probing input fields with several SQL injection attack vectors. This test might validate that special characters are filtered before hitting the database and mitigate the vulnerability. By combining the results of source code analysis and penetration testing it is possible to determine the likelihood and exposure of the vulnerability and calculate the risk rating of the vulnerability. By reporting vulnerability risk ratings in the findings (e.g., test report) it is possible to decide on the mitigation strategy. For example, high and medium risk vulnerabilities can be prioritized for remediation, while low risk can be fixed in further releases.
+#### 安全测试和风险分析
+安全要求需要考虑到弱点的严重性从而支持一个*风险缓和*的策略。假设某组织维护一个在应用系统中发现的漏洞数据库，即：漏洞知识库，安全事件可以通过类型，事件，缓和和起因报告出来并映像到它们被发现的应用系统中。在整个SDLC过程中，这样的漏洞知识库可以也用于测量分析安全测试的有效性。
 
-By considering the threat scenarios of exploiting common vulnerabilities it is possible to identify potential risks that the application security control needs to be security tested for. For example, the OWASP Top Ten vulnerabilities can be mapped to attacks such as phishing, privacy violations, identify theft, system compromise, data alteration or data destruction, financial loss, and reputation loss. Such issues should be documented as part of the threat scenarios. By thinking in terms of threats and vulnerabilities, it is possible to devise a battery of tests that simulate such attack scenarios. Ideally, the organization vulnerability knowledge base can be used to derive security risk driven tests cases to validate the most likely attack scenarios. For example, if identity theft is considered high risk, negative test scenarios should validate the mitigation of impacts deriving from the exploit of vulnerabilities in authentication, cryptographic controls, input validation, and authorization controls.
+例如，考虑到输入的验证事件，如SQL注入就是通过源代码分析被识别，并且回报错误编码起因和输入验证的漏洞类别。这样漏洞发现可以通过渗透测试评估到，即从几个SQL注入攻击矢量探测输入领域。这个测试能验证击特殊字符在到达数据库之前被过滤掉。通过结合源代码分析和渗透测试，就可能确定弱点的相似性及漏洞泄露，并计算出弱点的风险等级。通过报告研究结果中的弱点风险等级(如，测试报告)就可能决策出缓和战略。例如，高等及中等风险漏洞需优先被修补，而低风险的漏洞则可以在更后面的发布中被修补。
 
-#### Deriving Functional and Non Functional Test Requirements
-##### Functional Security Requirements
-From the perspective of functional security requirements, the applicable standards, policies and regulations drive both the need for a type of security control as well as the control functionality. These requirements are also referred to as “positive requirements”, since they state the expected functionality that can be validated through security tests.
-Examples of positive requirements are: “the application will lockout the user after six failed log on attempts” or “passwords need to be a minimum of six alphanumeric characters”. The validation of positive requirements consists of asserting the expected functionality and can be tested by re-creating the testing conditions and running the test according to predefined inputs. The results are then shown as as a fail or pass condition.
+通过利用普通弱点的安全威胁方案，来识别需要进行安全测试的应用程序安全控制中潜在的风险。比如，OWASP名列前十的弱点可以被映像到的攻击例如：钓鱼(Phishing)，侵害隐私(Privacy Violations)，身份盗窃(Identity Theft)、系统破坏(System Compromise)、数据更改或者数据破坏、金融损失(Financial)及名誉损失(ReputationLoss)。这些事件应该归类到威胁方案中的一部分。在考虑到安全威胁和弱点时，可以构想出一系列测试来模仿攻击情景。理想地说，组织的弱点知识库可以通过获得安全风险被动测试案例来验证最有可能的攻击方案。例如，如果盗用身份被确认为高风险，消极测试(Negative Test)方案就能验证密码控制、输入检验和授权控制等领域的漏洞而产生的影响的缓和方案。
 
-In order to validate security requirements with security tests, security requirements need to be function driven and they need to highlight the expected functionality (the what) and implicitly the implementation (the how). Examples of high-level security design requirements for authentication can be:
-* Protect user credentials and shared secrets in transit and in storage
-* Mask any confidential data in display (e.g., passwords, accounts)
-* Lock the user account after a certain number of failed log in attempts
-* Do not show specific validation errors to the user as a result of a failed log on
-* Only allow passwords that are alphanumeric, include special characters and six characters minimum length, to limit the attack surface
-* Allow for password change functionality only to authenticated users by validating the old password, the new password, and the user answer to the challenge question, to prevent brute forcing of a password via password change.
-* The password reset form should validate the user’s username and the user’s registered email before sending the temporary password to the user via email. The temporary password issued should be a one time password. A link to the password reset web page will be sent to the user. The password reset web page should validate the user temporary password, the new password, as well as the user answer to the challenge question.
+#### 功能和非功能测试需求
+##### 功能性安全需求
+从功能安全要求角度透视，适当的标准、政策和管理条例推动了安全控制的类型的需求和控制功能性的发展。这些要求同时被称为“正面的要求”，因为他们阐述的预期的功能性可以通过安全测试验证。正面要求的例子是：“6次登录失败后，应用系统将会锁住用户”，或者“密码必须至少6个字符，字母数字型”。正面要求的验证是由断言的预期功能组成，它能在重建的测试条件中进行测试；并根据预定义的输入运行测试断言预期的输出情况是“失败/正常”条件。
 
-##### Risk Driven Security Requirements
-Security tests need also to be risk driven, that is they need to validate the application for unexpected behavior. These are also called “negative requirements”, since they specify what the application should not do.
+为了安全需求能通过安全测试验证，安全需求必须是功能驱动的，并且突出预期的功能(做什么)以及隐含的实现(如何做)。用于认证的高级安全设计要求的例子：
+* 保护用户认证信息和共享的传输中和存储中的秘密；
+* 在现实中隐藏所有保密信息(即，密码，帐户)；
+* 在一定数量的登录失败后，锁定用户帐号；
+* 用户登录失败后不显示具体失败信息；
+* 只允许输入由字母数字并且包含特殊字符组成的至少六个字符的密码，以限制攻击层面；
+* 用户要修改密码，必须通过旧密码、新密码、对密码问题的回答的验证，以防止通过密码修改功能对密码进行穷举(Brute Force)搜索攻击。
+* 采用密码重置功能时，系统将临时密码发送到你指定的邮箱之前，需验证用户注册时的用户名和邮箱地址。该临时密码只能使用一次。一个密码重置的网页链接将发送给用户。密码重置网页应该验证用户的临时密码，新密码，以及用户对密码问题的回答。
 
-Examples of negative requirements are:
-* The application should not allow for the data to be altered or destroyed
-* The application should not be compromised or misused for unauthorized financial transactions by a malicious user.
+##### 风险驱动的安全需求
+安全测试也是需要风险控制的，也就是他们需要验证非预期的行为。这些也称为“负面要求”，因为他们指定应用系统什么不应该做。
 
-Negative requirements are more difficult to test, because there is no expected behavior to look for. This might require a threat analyst to come up with unforeseeable input conditions, causes, and effects. This is where security testing needs to be driven by risk analysis and threat modeling. The key is to document the threat scenarios and the functionality of the countermeasure as a factor to mitigate a threat.
+“不应该做”(负面)要求的例子：
+* 应用系统不允许修改或毁坏数据；
+* 应用系统不允许被破坏或者被恶意用户用于未认证的金融交易事务。
 
-For example, in the case of authentication controls, the following security requirements can be documented from the threats and countermeasure perspective:
-* Encrypt authentication data in storage and transit to mitigate risk of information disclosure and authentication protocol attacks
-* Encrypt passwords using non reversible encryption such as using a digest (e.g., HASH) and a seed to prevent dictionary attacks
-* Lock out accounts after reaching a log on failure threshold and enforce password complexity to mitigate risk of brute force password attacks
-* Display generic error messages upon validation of credentials to mitigate risk of account harvesting or enumeration
-* Mutually authenticate client and server to prevent non-repudiation and Man In the Middle (MiTM) attacks
+负面要求更难测试，因为找不到预期的行为。这就要求一个安全威胁分析员能应对不可预知的输入条件、起因和影响。这就是安全测试中的需要控制的风险分析和威胁模型。关键是将安全方案文档化并将对抗措施功能作为一个缓和安全威胁的因素。
 
-Threat modeling tools such as threat trees and attack libraries can be useful to derive the negative test scenarios. A threat tree will assume a root attack (e.g., attacker might be able to read other users' messages) and identify different exploits of security controls (e.g., data validation fails because of a SQL injection vulnerability) and necessary countermeasures (e.g., implement data validation and parametrized queries) that could be validated to be effective in mitigating such attacks.
+例如，在认证控制的情况下，以下安全要求可以从威胁和对抗措施透视中文档化：
+* 加密在传输和存储过程中的认证数据，以缓和信息泄露和认证协议攻击的危险；
+* 使用不可反向解密方式加密密码，如使用一个摘要(digest)(如HASH)和一个种子(seed)防止字典攻击；
+* 在达到一定数量的登录失败后锁牢帐户，并增强密码的复杂性来缓和穷举密码攻击的风险；
+* 在身份验证错误输入显示笼统的错误信息，以缓和帐户的捕获/列举风险；
+* 客户端和服务器相互认证防止非否认和中间人(ManintheMidle,MiTM)攻击。
 
-#### Deriving Security Test Requirements Through Use and Misuse Cases
-A prerequisite to describing the application functionality is to understand what the application is supposed to do and how. This can be done by describing *use cases*. Use cases, in the graphical form as commonly used in software engineering, show the interactions of actors and their relations. They help to identify the actors in the application, their relationships, the intended sequence of actions for each scenario, alternative actions, special requirements, preconditions and and post-conditions.
+软件威胁建模的加工物，如威胁树(threat trees)和攻击库(attack libraries)对于推导出负面测试案例是很有效的。一个威胁树假设一个根源攻击(即，攻击者可能读取到其它用户的信息)，然后识别所采用的不同的的安全控制类型(例如，由于SQL注入漏洞而使数据验证实效)和必要的对抗措施(例如，实现数据验证和参数化查询(parameterized queries))，这样做就能有效地缓和这种攻击。
 
-Similar to use cases, *misuse and abuse cases* [19] describe unintended and malicious use scenarios of the application. These misuse cases provide a way to describe scenarios of how an attacker could misuse and abuse the application. By going through the individual steps in a use scenario and thinking about how it can be maliciously exploited, potential flaws or aspects of the application that are not well-defined can be discovered. The key is to describe all possible or, at least, the most critical use and misuse scenarios.
+#### 安全需求在使用和误用中的衍生
+在描述应用系统功能之前必须了解的是：应用系统是用来做什么的，怎样做的。这些可以从描述的使用案例中了解到。*使用案例*，在软件工程中常以图解形式使用，展示执行者间的互作用与相互关系，帮助识别应用系统中的执行者身份、关系、每个方案行为的设想结果、可选择的行为、特殊要求，前期和后期条件。
 
-Misuse scenarios allow the analysis of the application from the attacker's point of view and contribute to identifying potential vulnerabilities and the countermeasures that need to be implemented to mitigate the impact caused by the potential exposure to such vulnerabilities. Given all of the use and abuse cases, it is important to analyze them to determine which of them are the most critical ones and need to be documented in security requirements. The identification of the most critical misuse and abuse cases drives the documentation of security requirements and the necessary controls where security risks should be mitigated.
+相似于使用案例，*误用和滥用案件*[19]描述应用系统中的未计划与恶意使用方案。这些误用案例提供一个方案描述攻击者怎样误用和滥用应用系统。通过审阅使用案例中的各个步骤并思考是如何被恶意利用的，就能发现未被很定义好的潜在漏洞和应用系统部分。关键是描述所有可能性，或至少描述最重要的使用和误用方案。
 
-To derive security requirements from use and misuse case [20] it is important to define the functional scenarios and the negative scenarios and put these in graphical form. In the case of derivation of security requirements for authentication, for example, the following step-by-step methodology can be followed.
+误用方案中允许从攻击者的观点分析应用系统，并且致力于识别潜在漏洞和对抗措施,这些对抗措施是用于缓和由这些潜在漏洞泄漏引起的冲击。在所有使用和滥用案例中，非常关键的一点是分析并确定他们之中哪些是最关键的部分并且需要写入安全要求。最重要的使用和滥用案例识别促使了安全要求的文档化和控制缓和风险的必要性。
 
-* Step 1: Describe the Functional Scenario: User authenticates by supplying a username and password. The application grants access to users based upon authentication of user credentials by the application and provides specific errors to the user when validation fails.
+从使用和滥用案例[20]中要获得的安全要求时，重要的是定义功能情景和消极情景，并建成图解形式。在安全要求验证的衍生的案例中，可以根据以下方法逐步学习。
 
-* Step 2: Describe the Negative Scenario:  Attacker breaks the authentication through a brute force or dictionary attack of passwords and account harvesting vulnerabilities in the application. The validation errors provide specific information to an attacker to guess which accounts are actually valid registered accounts (usernames). Then the attacker will try to brute force the password for such a valid account. A brute force attack to four minimum length all digit passwords can succeed with a limited number of attempts (i.e., 10^4).
+* 第1步：描述功能情景：用户通过提供用户名和密码认证。用户通过应用系统的身份认证访问系统，当认证失败时为用户提供具体的错误信息。
 
-* Step 3: Describe Functional and Negative Scenarios With Use and Misuse Case: The graphical example in Figure below depicts the derivation of security requirements via use and misuse cases. The functional scenario consists of the user actions (enteringa username and password) and the application actions (authenticating the user and providing an error message if validation fails). The misuse case consists of the attacker actions, i.e. trying to break authentication by brute forcing the password via a dictionary attack and by guessing the valid usernames from error messages. By graphically representing the threats to the user actions (misuses), it is possible to derive the countermeasures as the application actions that mitigate such threats.
+* 第2步：描述消极情景：在应用系统中，攻击者通过穷举或字典攻击密码与账户捕获漏洞破解认证。验证失败时提供的具体信息使攻击者能猜测到哪些帐户实际上是合法的注册账户(用户名)。然后。穷举攻击者能在有限的次数内成功破解至少，攻击者将试着穷举破解一个合法的帐户的密码。穷举攻击者能在有限的次数内成功破解至少4位数长度的全数字密码。
+
+* 第3步：在使用和用案例中描述功能和消极情景：在如下的图解中，显示了通过使用和误用案例的衍生安全要求。功能情景包括用户行为(输入用户名和密码)和应用行为(认证用户或提供认证失败信息)。误用案例包括攻击者行为，即：设法通过字典攻击穷举破解密码以攻破认证，并从提示的错误信息中猜测合法的用户名。通过图解可以看到用户操作可能造成的威胁(误用)，就有可能通过对抗措施缓和应用行动可能带来的威胁。
 ![Image:UseAndMisuseCase.jpg|640px](https://www.owasp.org/images/thumb/9/94/UseAndMisuseCase.jpg/640px-UseAndMisuseCase.jpg)
 
-* Step 4: Elicit The Security Requirements. In this case, the following security requirements for authentication are derived:
-    1. Passwords need to be alphanumeric, lower and upper case and minimum of seven character length
-    2. Accounts need to lockout after five unsuccessful log in attempt
-    3. Log in error messages need to be generic
+* 第4步：安全需求总结：在这种情况下，可以获得用于认证的安全要求：
+    1. 密码必须是由字母（大小写）和数字组成的七个字符以上的字符串组成
+    2. 五次登录尝试失败以后，账户锁定
+    3. 登录失败信息不具体显示
 
-These security requirements need to be documented and tested.
+这些安全要求需要文档化和经过测试。
 
-### Security Tests Integrated in Development and Testing Workflows
-#### Security Testing in the Development Workflow
-Security testing during the development phase of the SDLC represents the first opportunity for developers to ensure that the individual software components they have developed are security tested before they are integrated with other components and built into the application. Software components might consist of software artifacts such as functions, methods, and classes, as well as application programming interfaces, libraries, and executable files. For security testing, developers can rely on the results of the source code analysis to verify statically that the developed source code does not include potential vulnerabilities and is compliant with the secure coding standards. Security unit tests can further verify dynamically (i.e., at run time) that the components function as expected.  Before integrating both new and existing code changes in the application build, the results of the static and dynamic analysis should be reviewed and validated.
+### 安全测试集成于开发者与测试者工作流
+#### 开发者的安全测试工作流
+在SDLC发展阶段的安全测试提供给开发者的第一个保证他们所开发的软件组件的安全性的机会就是在其集成被建立之前进行安全测试。一个软件的集成可能包括的软件工件有功能、方法、类以及应用程序接口、档案库和可执行文件。安全测试，开发者能够开发商可能依靠原始代码分析的结果静态地核实被开发的原始代码不包括潜在的弱点并且符合安全编制程序标准。安全单元测试能够进一步进行动态验证(如，按照运行时间)，确认各组件功能照常。在目前的应用上集成新的或已有的代码变更时，应该先回顾和确认静态和动态分析的结果。
 
-The validation of source code before integration in application builds is usually the responsibility of the senior developer. Such senior developers are also the subject matter experts in software security and their role is to lead the secure code review. They must make decisions on whether to accept the code to be released in the application build or to require further changes and testing. This secure code review workflow can be enforced via formal acceptance as well as a check in a workflow management tool. For example, assuming the typical defect management workflow used for functional bugs, security bugs that have been fixed by a developer can be reported on a defect or change management system. The build master can look at the test results reported by the developers in the tool and grant approvals for checking in the code changes into the application build.
+应用集成之前的源代码测试通常是高级开发者的责任。这些高级开发者通常也是软件安全事项的专家，同时他具有领导代码安全检查，决定是否接受在当前应用中添加即将发布的代码，或者需要更多的更改或测试。通过工作流管理工具对代码安全审核工作流强制执行检查。例如，假设一个用于发现已被开发者修补的功能缺陷及安全缺陷的典型的漏洞管理工作流能被用于报告管理系统存在的漏洞和变更。应用管理者能够看到开发者使用工具进行测试的结果报告，并允许在应用构造中采用适合的代码变更。
 
-#### Security Testing in the Test Workflow
-After components and code changes are tested by developers and checked in to the application build, the most likely next step in the software development process workflow is to perform tests on the application as a whole entity. This level of testing is usually referred to as integrated test and system level test. When security tests are part of these testing activities they can be used to validate both the security functionality of the application as a whole, as well as the exposure to application level vulnerabilities. These security tests on the application include both white box testing, such as source code analysis, and black box testing, such as penetration testing. Gray box testing is similar to Black box testing. In a gray box testing it is assumed that the tester has some partial knowledge about the session management of the application, and that should help in understanding whether the log out and timeout functions are properly secured.
+#### 测试者的安全测试工作流
+在开发者将已测试的改变后的成分和代码放入应用的建造中，下一步很可能就是在软件开发过程工作流中对应用做实体测试演示。这个测试的水平通常指综合测试和系统层测试。当安全测试成为测试的活动中的一部分时，总体上来讲，安全测试就可以用作验证应用的安全功能和应用层漏洞泄露。应用层的安全测试包括白盒测试（如源代码分析）和黑盒测试（如渗透测试）。灰盒测试类似于黑盒测试，我们可以假设我们有一些部份关于我们的应用层的会话管理知识，这样就可以帮助我们确认注销和暂停功能是否相当安全。
 
-The target for the security tests is the complete system that will be potentially attacked and includes both the whole source code and the executable. One peculiarity of security testing during this phase is that it is possible for security testers to determine whether vulnerabilities can be exploited and expose the application to real risks. These include common web application vulnerabilities, as well as security issues that have been identified earlier in the SDLC with other activities such as threat modeling, source code analysis, and secure code reviews.
+安全测试的目标是使系统成为一个拥有潜在攻击并且包括所有源代码和可执行操作的完整系统。这个阶段中，安全测试唯一的特异就是安全测试者可以决定是否利用漏洞或泄露并让应用面对实际的风险。这些包括普通的Web应用程序弱点、早期在SDLC已识别的安全事件、其它行为如被安全威胁模型、源代码分析、和安全代码审查。
 
-Usually testing engineers, rather then software developers, perform security tests when the application is in scope for integration system tests. Such testing engineers have security knowledge of web application vulnerabilities, black box and white box security testing techniques, and own the validation of security requirements in this phase. In order to perform such security tests, it is a prerequisite that security test cases are documented in the security testing guidelines and procedures.
+通常，测试工程师,而不是软件开发员在整个系统测试中演示应用的安全测试。这个测试工程师很多的安全知识，如Web应用漏洞、黑盒和白盒安全测试技术、和自己的这个阶段的安全需求验证。做这个安全测试演示的首要目的是将测试案例在安全测试指南和规程中文档化。
 
-A testing engineer who validates the security of the application in the integrated system environment might release the application for testing in the operational environment (e.g., user acceptance tests). At this stage of the SDLC (i.e., validation), the application functional testing is usually a responsibility of QA testers, while white-hat hackers or security consultants are usually responsible for security testing. Some organizations rely on their own specialized ethical hacking team  to conduct such tests when a third party assessment is not required (such as for auditing purposes).
+在集成系统环境里验证应用安全性的测试工程师也许发布操作环境的应用测试(即：用户可接受测试)。在SDLC的这个阶段(即验证阶段)，QA测试者通常负责应用功能测试，而黑客/安全咨询顾问则通常负责安全测试。在没有第三方评估需求（如审计目的）时，有些组织机构依靠他们自己的专业道德入侵团队做这个测试。
 
-Since these tests are the last resort for fixing vulnerabilities before the application is released to production, it is important that such issues are addressed as recommended by the testing team. The recommendations can include code, design, or configuration change. At this level, security auditors and information security officers discuss the reported security issues and analyze the potential risks according to information risk management procedures. Such procedures might require the development team to fix all high risk vulnerabilities before the application can be deployed, unless such risks are acknowledged and accepted.
+由于这些测试是应用投入生产前最后一次确定漏洞,因此由测试团体推荐这些安全事件事件很重要。（推荐内容包括：代码、设计和配置变化)。在这个水平上，安全审计员和信息安全专家根据信息风险管理规程讨论报告的安全事件并分析潜在的风险。这样规程可能要求开发团体在应用部署之前确认所有的高风险弱点，除非这种风险已经被知晓并且接受。
 
-#### Developers' Security Tests
-#####Security Testing in the Coding Phase: Unit Tests<br>
-From the developer’s perspective, the main objective of security tests is to validate that code is being developed in compliance with secure coding standards requirements. Developers' own coding artifacts (such as functions, methods, classes, APIs, and libraries) need to be functionally validated before being integrated into the application build.
+#### 开发者的安全测试
+##### 编制阶段的安全测试：单位测试
+从开发员角度透视，安全测试主要宗旨是验证代码被开发过程是否依从安全编码程序标准要求。开发员自己的编码程序（如功能、方法、类别、APIs和代码库）需要在并入应用构造前进行功能性验证。
 
-The security requirements that developers have to follow should be documented in secure coding standards and validated with static and dynamic analysis. If the unit test activity follows a secure code review, unit tests can validate that code changes required by secure code reviews are properly implemented. Secure code reviews and source code analysis through source code analysis tools help developers in identifying security issues in source code as it is developed. By using unit tests and dynamic analysis (e.g., debugging) developers can validate the security functionality of components as well as verify that the countermeasures being developed mitigate any security risks previously identified through threat modeling and source code analysis.
+开发员必须遵从安全编码标准中的安全要求，同时通过静态和动态分析验证。作为安全代码审查下的测试行为，单位测试能证明安全代码审查所要求的代码变化在正确地执行。通过源代码分析工具进行的安全代码审查和源代码分析能帮助开发员在开发时识别源代码中的安全事件。通过使用单位测试和动态分析(如：调试功能)开发员就能验证成分的安全功能并且核实所开发的对抗措施能通过安全威胁模型和源代码分析缓和已识别的所有安全风险。
 
-A good practice for developers is to build security test cases as a generic security test suite that is part of the existing unit testing framework. A generic security test suite could be derived from previously defined use and misuse cases to security test functions, methods and classes. A generic security test suite might include security test cases to validate both positive and negative requirements for security controls such as:
-* Identity, Authentication & Access Control
-* Input Validation & Encoding
-* Encryption
-* User and Session Management
-* Error and Exception Handling
-* Auditing and Logging
+将安全测试案例建立成为现有的单位测试的框架的一个普通安全测试序列对于开发员是一个很好的实践机会。一个普通安全测试序列能从早先已定义的使用和误用案例中获得安全测试功能、方法和分类。一个普通安全测试程序也许包括验证安全控件正面和负面要求的安全测试案例，例如：
+* 认证与访问控制
+* 输入验证码与编码
+* 加密
+* 用户和会话管理
+* 错误和异常处理
+* 审计和日志记录
 
-Developers empowered with a source code analysis tool integrated into their IDE, secure coding standards, and a security unit testing framework can assess and verify the security of the software components being developed. Security test cases can be run to identify potential security issues that have root causes in source code: besides input and output validation of parameters entering and exiting the components, these issues include authentication and authorization checks done by the component, protection of the data within the component, secure exception and error handling, and secure auditing and logging. Unit test frameworks such as Junit, Nunit, and CUnit can be adapted to verify security test requirements. In the case of security functional tests, unit level tests can test the functionality of security controls at the software component level, such as functions, methods, or classes. For example, a test case could validate input and output validation (e.g., variable sanitation) and boundary checks for variables by asserting the expected functionality of the component.
+开发员用源代码分析工具集成IDE、安全编码标准，和安全单位测试框架能存取和检验开发的软件成分的安全性。安全测试案例可以用来识别由源代码引起的潜在的安全事件：除进出成分的参数输入和输出验证以外，这些事件包括了对成分所做的授权和授权检测，保护成分内的数据，处理安全例外和错误，审计安全和登陆安全。单位测试框架如Junit，Nunit，CUnit可以适用检验安全测试要求。在安全功能测试情况下，单位层测试能对软件组件层的安全控件做功能测试，如功能、方法和分类。例如，测试案例可以验证输入输出数据（如各种数据清理），或者通过已知预期的成分功能性来检测边界的安全性。
 
-The threat scenarios identified with use and misuse cases can be used to document the procedures for testing software components. In the case of authentication components, for example, security unit tests can assert the functionality of setting an account lockout as well as the fact that user input parameters cannot be abused to bypass the account lockout (e.g., by setting the account lockout counter to a negative number).
+通过使用和误用案例识别的安全威胁情景，可以为测试软件组件的过程文档化。例如，对于已授权的成分，安全单元测试可以通过设置帐户封锁来判断功能性，同时还有一个事实就是用户输入参数不可能绕过帐户封锁滥用(如对一个负面数字设置帐户封锁)。。
 
-At the component level, security unit tests can validate positive assertions as well as negative assertions, such as errors and exception handling. Exceptions should be caught without leaving the system in an insecure state, such as potential denial of service caused by resources not being de-allocated (e.g., connection handles not closed within a final statement block), as well as potential elevation of privileges (e.g., higher privileges acquired before the exception is thrown and not re-set to the previous level before exiting the function). Secure error handling can validate potential information disclosure via informative error messages and stack traces.
+在成分层面上，安全单位测试同时验证正面判断和负面判断，例如错误和异常处理。在非安全事件中，要在不离开系统的条件下捕捉异常事件，如：由于资源未分配引起的潜在的拒绝服务（最后阐述块中未关闭的连接处理）；潜在特权提升(即:功能退出前已经放弃或没有被重置的例外事件能获取更高的特权)。安全错误处理可以通过信息化错误消息和堆积追踪验证潜在的信息泄露。
 
-Unit level security test cases can be developed by a security engineer who is the subject matter expert in software security and is also responsible for validating that the security issues in the source code have been fixed and can be checked into the integrated system build.  Typically, the manager of the application builds also makes sure that third-party libraries and executable files are security assessed for potential vulnerabilities before being integrated in the application build.
+单位层面安全测试案例可以是由作为软件安全方面的事项专家的安全工程师开发，并且也负责验证源代码中已确定的安全事件，并检测集成系统的构造。一般，构建应用层的管理者也确信第三方档案库和可执行文件是集成应用构建前潜在漏洞的安全判断依据。
 
-Threat scenarios for common vulnerabilities that have root causes in insecure coding can also be documented in the developer’s security testing guide. When a fix is implemented for a coding defect identified with source code analysis, for example, security test cases can verify that the implementation of the code change follows the secure coding requirements documented in the secure coding standards.
+普通漏洞的由非安全编码引起的安全威胁情景同样可以写入开发员的安全测试指南中.例如，当在已用源代码分析识别的编码侦查系统中实施集线器时，安全测试案例能根据已经写入安全编码标准的安全编码要求验证代码变化的执行过程。
 
-Source code analysis and unit tests can validate that the code change mitigates the vulnerability exposed by the previously identified coding defect. The results of automated secure code analysis can also be used as automatic check-in gates for version control, for example software artifacts cannot be checked into the build with high or medium severity coding issues.
+源代码分析和单位测试可以验证代码变化通过先前识别的代码侦查系统缓和漏洞泄露冲击。自动化的安全代码分析的结果可以用作版本控制的自动化的入门管理，如不会将高等或中等严重的代码事件构建到软件产品中。
 
-#### Functional Testers' Security Tests
-##### Security Testing During the Integration and Validation Phase: Integrated System Tests and Operation Tests
-The main objective of integrated system tests is to validate the “defense in depth” concept, that is, that the implementation of security controls provides security at different layers. For example, the lack of input validation when calling a component integrated with the application is often a factor that can be tested with integration testing.
+#### 功能测试者的安全测试
+##### 集成和验证阶段的安全测试：集成系统测试和操作测试
+集成系统测试主要宗旨是验证“防御深度”概念，即，安全控件的实施为各个层面提供安全保护。例如，当应用层面召集成分集成时缺少输入验证，这通常是集成测试中的一个常见因素。
 
-The integration system test environment is also the first environment where testers can simulate real attack scenarios as can be potentially executed by a malicious external or internal user of the application. Security testing at this level can validate whether vulnerabilities are real and can be exploited by attackers. For example, a potential vulnerability found in source code can be rated as high risk because of the exposure to potential malicious users, as well as because of the potential impact (e.g., access to confidential information).
+集成系统测试环境也是测试者模拟实时攻击情景的第一个环境，这个攻击是由一个恶意的、外部或者内部的应用用户潜在执行的。这个阶层的安全测试能验证弱点是否是真正的，是否可以被攻击者利用。例如，在源代码中发现的一个潜在的弱点被估计为高风险等级，理由是已经泄露给潜在的恶意用户，并存在潜在的冲击（如：存取机密信息）。
 
-Real attack scenarios can be tested with both manual testing techniques and penetration testing tools. Security tests of this type are also referred to as ethical hacking tests. From the security testing perspective, these are risk driven tests and have the objective of testing the application in the operational environment. The target is the application build that is representative of the version of the application being deployed into production.
+实时攻击情景可以用手工试验技术和渗透测试工具测试。这个类型的安全测试通常被称为道德攻击测试。从安全测试的角度透视，这些是测试是用于应对风险的，宗旨是测试操作环境里的应用。应用构建的目标代表了部署入生产的应用版本。
 
-Including security testing in the integration and validation phase is critical to identifying vulnerabilities due to integration of components as well as validating the exposure of such vulnerabilities. Application security testing requires a specialized set of skills, including both software and security knowledge, that are not typical of security engineers. As a result organizations are often required to security-train their software developers on ethical hacking techniques, security assessment procedures and tools. A realistic scenario is to develop such resources in-house and document them in security testing guides and procedures that take into account the developer’s security testing knowledge. A so called “security test cases cheat list or check-list”, for example, can provide simple test cases and attack vectors that can be used by testers to validate exposure to common vulnerabilities such as spoofing, information disclosures, buffer overflows, format strings, SQL injection and XSS injection, XML, SOAP, canonicalization issues, denial of service and managed code and ActiveX controls (e.g., .NET). A first battery of these tests can be performed manually with a very basic knowledge of software security.
+在集成与验证阶段执行安全对于识别由成分集成和弱点泄露引起的漏洞是至关重要的。因为应用程序安全测试要求一套专业技能，包括软件和安全知识，而且安全工程和组织通常也需要对软件开发员进行关于道德攻击技术、安全评估程序和工具的安全培训。一个现实的方案就是开发内部资源并作为开发员安全测试知识写入安全测试的指南和规程。例如，所谓的“安全测试安全欺骗清单或核对清单”能提供测试者使用的简单的测试案例和攻击矢量来验证普通弱点泄露情况，例如欺骗、信息透露、缓冲溢出、格式串、SQL注入和XSS注入、XML、SOAP、标准化(Canonicalization)问题、拒绝服务和托管代码和ActiveX控件等(如：.NET)。第一列的测试可以使用非常基础软件安全知识进行手工测试。
 
-The first objective of security tests might be the validation of a set of minimum security requirements. These security test cases might consist of manually forcing the application into error and exceptional states and gathering knowledge from the application behavior. For example, SQL injection vulnerabilities can be tested manually by injecting attack vectors through user input and by checking if SQL exceptions are thrown back the user. The evidence of a SQL exception error might be a manifestation of a vulnerability that can be exploited.
+安全测试最基本的宗旨也许是验证一套极小的安全要求。这些安全测试案例包括手工强硬输入错误应用，例外阐述、从应用程序行为收集知识。例如，SQL注入漏洞可以通过在用户输入时注入攻击矢量进行手工测试，用于检测SQL异常是否被抛回给用户。SQL异常错误的证据也许能突显出可利用的漏洞。
 
-A more in-depth security test might require the tester’s knowledge of specialized testing techniques and tools. Besides source code analysis and penetration testing, these techniques include, for example, source code and binary fault injection, fault propagation analysis and code coverage, fuzz testing, and reverse engineering. The security testing guide should provide procedures and recommend tools that can be used by security testers to perform such in-depth security assessments.
+一个更加详细的安全测试也许要求测试者更加专业测试技术和工具。除源代码分析渗透测试以外，这些技术还包括：源代码和二进制漏洞注入、漏洞传播分析和代码覆盖、模糊测试和反向工程。安全测试的指南需要提供可使用的过程及推荐工具使得测试人员可以进行这种有深度的安全评估。
 
-The next level of security testing after integration system tests is to perform security tests in the user acceptance environment. There are unique advantages to performing security tests in the operational environment. The user acceptance tests environment (UAT) is the one that is most representative of the release configuration, with the exception of the data (e.g., test data is used in place of real data). A characteristic of security testing in UAT is testing for security configuration issues. In some cases these vulnerabilities might represent high risks. For example, the server that hosts the web application might not be configured with minimum privileges, valid SSL certificate and secure configuration, essential services disabled and web root directory not cleaned from test and administration web pages.
+安全测试的下一个层次是系统集成测试后在用户验收环境中演示安全测试。在操作环境中演示安全测试有独特优势。用户验收测试环境(UAT)是能代表发行配置的，并带有数据(即，测验实时使用的数据)。在UAT中安全测试的一个特征是测试安全配置问题。在有些案例中，这些漏洞可能代表了高风险。例如，用于运行Web应用程序的服务器也许不配置以下内容：最小的特权、合法的SSL证书和安全配置、关闭基本服务和网页根目录没有从测试和管理网页中移除。
 
-### Security Test Data Analysis and Reporting
-#### Goals for Security Test Metrics and Measurements
-Defining the goals for the security testing metrics and measurements is a prerequisite for using security testing data for risk analysis and management processes. For example, a measurement such as the total number of vulnerabilities found with security tests might quantify the security posture of the application. These measurements also help to identify security objectives for software security testing. For example, reducing the number of vulnerabilities to an acceptable number (minimum) before the application is deployed into production.
+### 安全测试数据分析和报告
+#### 安全测试指标(Metrics)和测量的目标
+安全测试的指标和衡量定义的目标的一个前提是对风险分析和管理过程于使用安全测验数据。例如，衡量的一个例子：安全测试中发现弱点的总数也许由应用安全状态定量。这些衡量标准也帮助软件安全测试识别安全目标，例如，在应用部署入生产之前将弱点数量降低到一个可接受的数字(极小值)。
 
-Another manageable goal could be to compare the application security posture against a baseline to assess improvements in application security processes. For example, the security metrics baseline might consist of an application that was tested only with penetration tests. The security data obtained from an application that was also security tested during coding should show an improvement (e.g., fewer number of vulnerabilities) when compared with the baseline.
+另一个可管理的目标就是对比基线对应的应用程序安全状态去评估应用安全过程进展。例如，安全度规基础线也许包含了仅做渗透试验的应用。相比于基础线，在编码期间也做了安全测试的应用程序中的安全数据应该显示进程(即，更少的弱点数量)。
 
-In traditional software testing, the number of software defects, such as the bugs found in an application, could provide a measure of software quality. Similarly, security testing can provide a measure of software security. From the defect management and reporting perspective, software quality and security testing can use similar categorizations for root causes and defect remediation efforts. From the root cause perspective, a security defect can be due to an error in design (e.g., security flaws) or due to an error in coding (e.g., security bug). From the perspective of the effort required to fix a defect, both security and quality defects can be measured in terms of developer hours to implement the fix, the tools and resources required to fix, and the cost to implement the fix.
+在传统软件测试中，软件瑕疵的数量（例如应用程序中发现的bugs）能提供衡量软件质量的标准。同样地，安全测试可以提供软件安全的一个衡量标准。从瑕疵管理和报告角度透视，软件质量和安全测试可能对起因和瑕疵修正力度使用相似的分类法。从起因透视，安全瑕疵是由设计错误引起的(即，安全漏洞)，或者是编码时的错误(如安全bug).从瑕疵修正力度透视，安全上和质量上的瑕疵可以根据开发员用于修补的时间来衡量，或是用于修复的工具和资源，最后是用于实施修复的花费。
 
-A characteristic of security test data, compared to quality data, is the categorization in terms of the threat, the exposure of the vulnerability, and the potential impact posed by the vulnerability to determine the risk. Testing applications for security consists of managing technical risks to make sure that the application countermeasures meet acceptable levels. For this reason, security testing data needs to support the security risk strategy at critical checkpoints during the SDLC. For example, vulnerabilities found in source code with source code analysis represent an initial measure of risk. A measure of risk (e.g., high, medium, low) for the vulnerability can be calculated by determining the exposure and likelihood factors and by validating the vulnerability with penetration tests. The risk metrics associated to vulnerabilities found with security tests empower business management to make risk management decisions, such as to decide whether risks can be accepted, mitigated, or transferred at different levels within the organization (e.g., business as well as technical risks).
+与质量数据比较，安全测试数据的特异在于以下范畴的不同：威胁、弱点的泄露和弱点引起的潜在的攻击影响风险等级。安全的测试应用程序包括通过管理技术风险来确保应用对抗措施达到可验收水平。为此，在SDLC期间安全测验数据必须在重要的检测点上支持安全风险战略。比如，用源代码分析发现源代码中的弱点代表风险中一项最初的衡量标准。这些弱点风险的衡量(即，高，中等，低)可以通过泄露和可能性因素的计算确定，或者，进一步通过渗透测试验证。与安全测试中发现的弱点风险相关的度规授权业务管理做出风险管理决定，例如决定风险是否在接受、缓和或者传送到组织中的另一个层面(如业务和技术)。
 
-When evaluating the security posture of an application it is important to take into consideration certain factors, such as the size of the application being developed. Application size has been statistically proven to be related to the number of issues found in the application during testing. One measure of application size is the number of lines of code (LOC) of the application. Typically,  software quality defects range from about 7 to 10 defects per thousand lines of new and changed code [21]. Since testing can reduce the overall number by about 25% with one test alone, it is logical for larger size applications to be tested more often than smaller size applications.
+当评估应用程序的安全状态时，某些因素的考虑很重要，如开发的应用程序的规模。统计证明：应用程序的规模与在应用程序测试中发现的问题数量有关。应用程序规模的一项衡量标准是应用中的代码排数(LOC)。一般来说，软件质量中的瑕疵范围大约是每一千条新的或者变化代码中有7到10个[21]。由于通过一次测试可以减少大约整体数量中25%，逻辑上来讲，规模大的应用程序应该比小规模的做更多更频繁的测试。
 
-When security testing is done in several phases of the SDLC, the test data can prove the capability of the security tests in detecting vulnerabilities as soon as they are introduced. The test data can also prove the effectiveness of removing the vulnerabilities by implementing countermeasures at different checkpoints of the SDLC. A measurement of this type is also defined as “containment metrics” and provides a measure of the ability of a security assessment performed at each phase of the development process to maintain security within each phase. These containment metrics are also a critical factor in lowering the cost of fixing the vulnerabilities. It is less expensive to deal with vulnerabilities in the same phase of the SDLC that they are found, rather then fixing them later in another phase.
+当在SDLC的几个阶段都完成安全测试时，在侦查弱点方面的测验数据就能证明安全测试的能力，在SDLC的不同的监测点，这些弱点一旦引入，就能通过执行对抗措施证明移除它们的有效性。这个类型的衡量标准也被定义成“容量度规”，并且提供开发过程中维持各个阶段安全的演示的安全评估能力的衡量标准。这些容量度规对于降低修复弱点的费用也是至关重要的因素,因为在同一个SDLC阶段修补弱点比到另一个阶段修补它花费的代价小很多。
 
-Security test metrics can support security risk, cost, and defect management analysis when they are associated with tangible and timed goals such as:
-* Reducing the overall number of vulnerabilities by 30%
-* Fixing security issues by a certain deadline (e.g., before beta release)
+当它同有形和计时的目标联系在一起时，安全测试度规对安全风险、费用和瑕疵管理分析有以下帮助：
+* 减少30%的漏洞
+* 安全问题有望在期限内修复(如：在Beta发行之前)
 
-Security test data can be absolute, such as the number of vulnerabilities detected during manual code review, as well as comparative, such as the number of vulnerabilities detected in code reviews compared to penetration tests. To answer questions about the quality of the security process, it is important to determine a baseline for what could be considered acceptable and good.
+安全测验数据可以是绝对的，例如在手工代码审查期间查出的弱点数量，以及比较性，例如在代码审查出的弱点数量vs渗透测试查出的弱点数量。要回答关于安全程序的质量问题，必须确定一条分辨能否接受和好坏的基础线。
 
-Security test data can also support specific objectives of the security analysis. These objects could be compliance with security regulations and information security standards, management of security processes, the identification of security root causes and process improvements, and security cost benefit analysis.
+安全测试数据也可体现安全分析的具体宗旨，例如遵照安全程序的安全章程和信息安全标准、管理方式；识别安全起因和程序改进，安全花费vs效益分析。
 
-When security test data is reported it has to provide metrics to support the analysis. The scope of the analysis is the interpretation of test data to find clues about the security of the software being produced as well the effectiveness of the process.
+当报告安全测试数据时需要提供度规以支持分析。分析的范围是解释测试数据并找到关于生产出软件的安全性和程序的有效性。
 
-Some examples of clues supported by security test data can be:
-* Are vulnerabilities reduced to an acceptable level for release?
-* How does the security quality of this product compare with similar software products?
-* Are all security test requirements being met?
-* What are the major root causes of security issues?
-* How numerous are security flaws compared to security bugs?
-* Which security activity is most effective in finding vulnerabilities?
-* Which team is more productive in fixing security defects and vulnerabilities?
-* Which percentage of overall vulnerabilities are high risk?
-* Which tools are most effective in detecting security vulnerabilities?
-* Which kind of security tests are most effective in finding vulnerabilities (e.g., white box vs. black box) tests?
-* How many security issues are found during secure code reviews?
-* How many security issues are found during secure design reviews?
+支持安全测试数据线索的例子是：
+* 漏洞已经减少到可以发行的验收水平？
+* 与类似的软件产品相比，这个产品的安全质量如何？
+* 是否达到所有安全测试要求？
+* 安全问题的主要起因是什么？
+* 相对于安全缺陷，安全bug有多少？
+* 哪种安全行为对发现弱点最有效？
+* 哪个团队在修复安全瑕疵和弱点是效率最高？
+* 高风险的漏洞所占的百分比？
+* 哪些工具侦查安全漏洞是最有效的？
+* 哪种安全测试寻找弱点最有效（如白盒vs黑盒)？
+* 安全代码复查时发现多少安全问题？
+* 安全设计复查时发现多少安全问题？
 
-In order to make a sound judgment using the testing data, it is important to have a good understanding of the testing process as well as the testing tools. A tool taxonomy should be adopted to decide which security tools to use. Security tools can be qualified as being good at finding common known vulnerabilities targeting different artifacts.
+为了根据测试数据做正确判断，很好地理解测试过程和测试工具很重要。应该采用工具分类学决定应该使用哪些安全工具。合格的安全工具擅长于在不同的产品中发现普通的已知弱点。
 
-The issue is that the unknown security issues are not tested. The fact that a security test is clear of issues does not mean that the software or application is good. Some studies [22] have demonstrated that, at best, tools can only find 45% of overall vulnerabilities.
+问题是未知的安全问题没有被检测到：事实上，干净的测试结果并不能表示的的软件产品或应用程序是没有漏洞的。一些研究[22]显示，最好工具可能发现整体漏洞中的45%。
 
-Even the most sophisticated automation tools are not a match for an experienced security tester. Just relying on successful test results from automation tools will give security practitioners a false sense of security.  Typically, the more experienced the security testers are with the security testing methodology and testing tools, the better the results of the security test and analysis will be. It is important that managers making an investment in security testing tools also consider an investment in hiring skilled human resources as well as security test training.
+即使是最复杂的自动化工具也不是一位老练的安全测试者的对手：仅仅依靠从自动化工具中获得的成功的测试结果将给安全实习生对安全问题产生错感。一般，拥有安全测试的方法学和测试工具的越有经验的测试者，获得的安全分析和测试的结果更准确。管理层在安全测试工具方面的投资和雇佣有经验的人力资源和安全测试培训被认为是同等重要的。
 
-#### Reporting Requirements
-The security posture of an application can be characterized from the perspective of the effect, such as number of vulnerabilities and the risk rating of the vulnerabilities, as well as from the perspective of the cause or origin, such as coding errors, architectural flaws, and configuration issues.
+#### 报告要求
+应用程序的安全状态可以从效果方面的透视描绘，例如弱点数量和弱点的风险等级；也可以从起因方面透视(即根源)，例如编码错误、构造缺点和配置问题。
 
-Vulnerabilities can be classified according to different criteria. The most commonly used vulnerability severity metric is the Forum of Incident Response and Security Teams (FIRST) Common Vulnerability Scoring System (CVSS), which is currently in release version 2 with version 3 due for release shortly.
+弱点可以根据不同的标准分类。这可以是统计范畴，例如OWASP名列前10和WASCWeb应用程序安全统计工程或者在WASF(Web应用程序安全框架)中的防御控制。
 
-When reporting security test data the best practice is to include the following information:
-* The categorization of each vulnerability by type
-* The security threat that the issue is exposed to
-* The root cause of security issues (e.g., security bugs, security flaw)
-* The testing technique used to find the issue
-* The remediation of the vulnerability (e.g., the countermeasure)
-* The severity rating of the vulnerability (High, Medium, Low and/or CVSS score)
+当报告安全测试数据时，最好是包含以下信息：
+* 每个漏洞的类型分类
+* 问题引起的安全威胁
+* 安全问题的起因(即：安全bug，安全漏洞)
+* 用于发现的测试技术
+* 漏洞的修复(如对抗措施)
+* 漏洞的风险等级(高、中、低或CVSS评分)
 
-By describing what the security threat is, it will be possible to understand if and why the mitigation control is ineffective in mitigating the threat.
+通过描述什么是安全威胁，就可能理解在缓和威胁时是否或为什么缓和控制是无效的。
 
-Reporting the root cause of the issue can help pinpoint what needs to be fixed. In the case of a white box testing, for example, the software security root cause of the vulnerability will be the offending source code.
+报告问题的起因可能帮助精确定位什么需要修复：例如，在白盒子测试下，软件安全引起的弱点会与源代码冲突。
 
-Once issues are reported, it is also important to provide guidance to the software developer on how to re-test and find the vulnerability. This might involve using a white box testing technique (e.g., security code review with a static code analyzer) to find if the code is vulnerable. If a vulnerability can be found via a black box technique (penetration test), the test report also needs to provide information on how to validate the exposure of the vulnerability to the front end (e.g., client).
+一旦报告了问题，提供指南给开发员怎样再测试并发现漏洞也是很重要的。这也许涉及到使用白盒测试技术(即，通过一台静态代码分析仪做安全代码审查)寻找代码是否是有弱点。如果漏洞可以通过黑盒子技术(渗透测试)发现，测试报告也需要将在前端（客户端）怎样验证弱点泄露的信息提供给用户指南。.
 
-The information about how to fix the vulnerability should be detailed enough for a developer to implement a fix. It should provide secure coding examples, configuration changes, and provide adequate references.
+提供足够的关于怎样修补漏洞的信息帮助开发员事实维修部工作。信息中应该包含：安全编码例子、配置变化，并且提供充分参考。
 
-Finally, the severity rating contributes to the calculation of risk rating and helps to prioritize the remediation effort. Typically, assigning a risk rating to the vulnerability involves external risk analysis based upon factors such as impact and exposure.
+最后风险等级帮助解决给予修复过程的优先权。一般，分配弱点的风险等级需要涉及到建立在某些因素（冲击和泄露）基础上的风险分析。
 
-#### Business Cases
-For the security test metrics to be useful, they need to provide value back to the organization's security test data stakeholders. The stakeholders can include project managers, developers, information security offices, auditors, and chief information officers. The value can be in terms of the business case that each project stakeholder has in terms of role and responsibility.
+#### 商业案例
+证明安全测试度规有用的途径在于必须给予组织中安全测试数据拥有人（例如项目负责人，开发员、信息安全办公室、审计员和首席信息员）价值回报。价值的分配是根据每个参与者扮演的角色和责任。
 
-Software developers look at security test data to show that software is coded more securely and efficiently. This allows them to make the case for using source code analysis tools as well as following secure coding standards and attending software security training.
+软件开发员根据安全测试数据来实现更加安全和高效的软件编码，因此他们在编写软件时使用源代码分析工具、遵照安全编码标准并参与软件安全培训。
 
-Project managers look for data that allows them to successfully manage and utilize security testing activities and resources according to the project plan. To project managers, security test data can show that projects are on schedule and moving on target for delivery dates and are getting better during tests.
+项目负责人根据项目计划寻找数据，用以成功地管理和使用安全测试行为和资源。对项目负责人来说，安全测验数据可以表明在：项目进展正常，可以如期交货，并且在测试中变得更完美。
 
-Security test data also helps the business case for security testing if the initiative comes from information security officers (ISOs). For example, it can provide evidence that security testing during the SDLC does not impact the project delivery, but rather reduces the overall workload needed to address vulnerabilities later in production.
+安全测验数据同样也可以帮助安全测试中商业案例，如果主动性来自信息安全专家(ISO)。例如，它可能证明在SDLC期间的安全测试不会影响项目交付，而且后面的生产中减少弱点寻址的整个工作量。
 
-To compliance auditors, security test metrics provide a level of software security assurance and confidence that security standard compliance is addressed through the security review processes within the organization.
+为了规范审计员，安全测试度规提供了软件安全保证和信心，也就是安全标准规范通过安全审查程序。
 
-Finally, Chief Information Officers (CIOs) and Chief Information Security Officers (CISOs), who are responsible for the budget that needs to be allocated in security resources, look for derivation of a cost benefit analysis from security test data. This allows them to make informed decisions on which security activities and tools to invest. One of the metrics that supports such analysis is the Return On Investment (ROI) in Security [23]. To derive such metrics from security test data, it is important to quantify the differential between the risk due to the exposure of vulnerabilities and the effectiveness of the security tests in mitigating the security risk, and factor this gap with the cost of the security testing activity or the testing tools adopted.
+终于，首席信息专家(CIO)和首席信息安全专家(CISO)，负责对分配安全资源的预算，从安全测验数据中分析成本与效益，并作出投资哪个安全行为和工具的明智决定。支持这样分析的其中一个度规是安全的投资回报(ROI)[23]。从安全测验数据要获得这样度规，定量由于弱点泄露引起的风险和缓和安全风险时安全测试的效率之间的差别是很重要的，并将这个差异计入安全测试行为和采用的测试工具的成本之中。
 
-### References
+### 参考资料
 [1] T. DeMarco, *Controlling Software Projects: Management, Measurement and Estimation*, Yourdon Press, 1982
 
 [2] S. Payne, *A Guide to Security Metrics* - http://www.sans.org/reading_room/whitepapers/auditing/55.php
@@ -540,11 +530,13 @@ http://ec.europa.eu/justice/policies/privacy/docs/95-46-ce/dir1995-46_part1_en.p
 
 [18] MSDN, *Improving Web Application Security, Chapter 2, Threat And Countermeasures* - http://msdn.microsoft.com/en-us/library/aa302418.aspx
 
-[19] Sindre,G. Opdmal A., *Capturing Security Requirements Through Misuse Cases* - http://folk.uio.no/nik/2001/21-sindre.pdf
+[19] Gil Regev, Ian Alexander, Alain Wegmann, *Use Cases and Misuse Cases Model the Regulatory Roles of Business Processes* - http://easyweb.easynet.co.uk/~iany/consultancy/regulatory_processes/regulatory_processes.htm
 
-[20] Improving Security Across the Software Development Lifecycle Task Force, *Referred Data from Caper Johns, Software Assessments, Benchmarks and Best Practices* - http://www.criminal-justice-careers.com/resources/SDLCFULL.pdf
+[20] Sindre,G. Opdmal A., *Capturing Security Requirements Through Misuse Cases* - http://folk.uio.no/nik/2001/21-sindre.pdf
 
-[21] MITRE, *Being Explicit About Weaknesses, Slide 30, Coverage of CWE* - http://cwe.mitre.org/documents/being-explicit/BlackHatDC_BeingExplicit_Slides.ppt
+[21] Improving Security Across the Software Development Lifecycle Task Force, *Referred Data from Caper Johns, Software Assessments, Benchmarks and Best Practices* - http://www.criminal-justice-careers.com/resources/SDLCFULL.pdf
 
-[22] Marco Morana, *Building Security Into The Software Life Cycle, A Business Case* - http://www.blackhat.com/presentations/bh-usa-06/bh-us-06-Morana-R3.0.pdf
-<br>
+[22] MITRE, *Being Explicit About Weaknesses, Slide 30, Coverage of CWE* - http://cwe.mitre.org/documents/being-explicit/BlackHatDC_BeingExplicit_Slides.ppt
+
+[23] Marco Morana, *Building Security Into The Software Life Cycle, A Business Case* - http://www.blackhat.com/presentations/bh-usa-06/bh-us-06-Morana-R3.0.pdf
+

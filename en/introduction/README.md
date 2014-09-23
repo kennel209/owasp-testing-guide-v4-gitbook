@@ -15,8 +15,7 @@ Chapter 4 covers how to test for specific vulnerabilities (e.g., SQL Injection) 
 #### Measuring Security: the Economics of Insecure Software
 A basic tenet of software engineering is that you can't control what you can't measure [1]. Security testing is no different. Unfortunately, measuring security is a notoriously difficult process. This topic will not be covered in detail here, as it would take a guide on its own (for an introduction, see [2]).
 
-One aspect that should be emphasized is that security measurements are about both the specific technical issues (e.g., how prevalent a certain vulnerability is) and how these issues affect the economics of software. Most technical people will at least understand the basic issues, or they may have a deeper understanding of the vulnerabilities. Sadly, few are able to translate that technical knowledge into monetary terms and quantify the potential cost of vulnerabilities to the application owner's business. Until this happens, CIOs will not be able to develop an accurate return on security investment and, subsequently, assign appropriate budgets for software security.<br/>
-While estimating the cost of insecure software may appear a daunting task, there has been a significant amount of work in this direction. For example, in June 2002, the US National Institute of Standards (NIST) published a survey on the cost of insecure software to the US economy due to inadequate software testing [3]. Interestingly, they estimate that a better testing infrastructure would save more than a third of these costs, or about $22 billion a year. More recently, the links between economics and security have been studied by academic researchers. See [4] for more information about some of these efforts.
+One aspect that should be emphasized is that security measurements are about both the specific technical issues (e.g., how prevalent a certain vulnerability is) and how these issues affect the economics of software. Most technical people will at least understand the basic issues, or they may have a deeper understanding of the vulnerabilities. Sadly, few are able to translate that technical knowledge into monetary terms and quantify the potential cost of vulnerabilities to the application owner's business. Until this happens, CIOs will not be able to develop an accurate return on security investment and, subsequently, assign appropriate budgets for software security.
 
 While estimating the cost of insecure software may appear a daunting task, there has been a significant amount of work in this direction. For example, in June 2002, the US National Institute of Standards (NIST) published a survey on the cost of insecure software to the US economy due to inadequate software testing [3]. Interestingly, they estimate that a better testing infrastructure would save more than a third of these costs, or about $22 billion a year. More recently, the links between economics and security have been studied by academic researchers. See [4] for more information about some of these efforts.
 
@@ -272,11 +271,11 @@ As the scheme is explained the inadequacies can be worked out. Anyone that figur
 Many organizations have started to use static source code scanners. While they undoubtedly have a place in a comprehensive testing program, it is necessary to highlight some fundamental issues about why this approach is not effective when used alone. Static source code analysis alone cannot identify issues due to flaws in the design, since it cannot understand the context in which the code is constructed. Source code analysis tools are useful in determining security issues due to coding errors, however significant manual effort is required to validate the findings.
 <br>
 
-### Deriving Security Test Requirements ##
+### Deriving Security Test Requirements
 To have a successful testing program, one must know what the testing objectives are. These objectives are specified by the security requirements. This section discusses in detail how to document requirements for security testing by deriving them from applicable standards and regulations, and from positive and negative application requirements. It also discusses how security requirements effectively drive security testing during the SDLC and how security test data can be used to effectively manage software security risks.
 
 #### Testing Objectives
-One of the objectives of security testing is to validate that security controls operate as expected. This is documented via *security requirements* that describe the functionality of the security control. At a high level, this means proving confidentiality, integrity, and availability of the data as well as the service.  The other objective is to validate that security controls are implemented with few or no vulnerabilities. These are common vulnerabilities, such as the [[OWASP Top Ten]], as well as vulnerabilities that have been previously identified with security assessments during the SDLC, such as threat modelling, source code analysis, and penetration test.
+One of the objectives of security testing is to validate that security controls operate as expected. This is documented via *security requirements* that describe the functionality of the security control. At a high level, this means proving confidentiality, integrity, and availability of the data as well as the service.  The other objective is to validate that security controls are implemented with few or no vulnerabilities. These are common vulnerabilities, such as the [OWASP Top Ten](https://www.owasp.org/index.php/OWASP_Top_Ten), as well as vulnerabilities that have been previously identified with security assessments during the SDLC, such as threat modelling, source code analysis, and penetration test.
 
 #### Security Requirements Documentation
 The first step in the documentation of security requirements is to understand the *business requirements*. A business requirement document can provide initial high-level information on the expected functionality of the application. For example, the main purpose of an application may be to provide financial services to customers or to allow goods to be purchased from an on-line catalog. A security section of the business requirements should highlight the need to protect the customer data as well as to comply with applicable security documentation such as regulations, standards, and policies.
@@ -540,11 +539,12 @@ http://ec.europa.eu/justice/policies/privacy/docs/95-46-ce/dir1995-46_part1_en.p
 
 [18] MSDN, *Improving Web Application Security, Chapter 2, Threat And Countermeasures* - http://msdn.microsoft.com/en-us/library/aa302418.aspx
 
-[19] Sindre,G. Opdmal A., *Capturing Security Requirements Through Misuse Cases* - http://folk.uio.no/nik/2001/21-sindre.pdf
+[19] Gil Regev, Ian Alexander, Alain Wegmann, *Use Cases and Misuse Cases Model the Regulatory Roles of Business Processes* - http://easyweb.easynet.co.uk/~iany/consultancy/regulatory_processes/regulatory_processes.htm
 
-[20] Improving Security Across the Software Development Lifecycle Task Force, *Referred Data from Caper Johns, Software Assessments, Benchmarks and Best Practices* - http://www.criminal-justice-careers.com/resources/SDLCFULL.pdf
+[20] Sindre,G. Opdmal A., *Capturing Security Requirements Through Misuse Cases* - http://folk.uio.no/nik/2001/21-sindre.pdf
 
-[21] MITRE, *Being Explicit About Weaknesses, Slide 30, Coverage of CWE* - http://cwe.mitre.org/documents/being-explicit/BlackHatDC_BeingExplicit_Slides.ppt
+[21] Improving Security Across the Software Development Lifecycle Task Force, *Referred Data from Caper Johns, Software Assessments, Benchmarks and Best Practices* - http://www.criminal-justice-careers.com/resources/SDLCFULL.pdf
 
-[22] Marco Morana, *Building Security Into The Software Life Cycle, A Business Case* - http://www.blackhat.com/presentations/bh-usa-06/bh-us-06-Morana-R3.0.pdf
-<br>
+[22] MITRE, *Being Explicit About Weaknesses, Slide 30, Coverage of CWE* - http://cwe.mitre.org/documents/being-explicit/BlackHatDC_BeingExplicit_Slides.ppt
+
+[23] Marco Morana, *Building Security Into The Software Life Cycle, A Business Case* - http://www.blackhat.com/presentations/bh-usa-06/bh-us-06-Morana-R3.0.pdf
