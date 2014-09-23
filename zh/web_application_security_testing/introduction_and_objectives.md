@@ -1,89 +1,89 @@
-# Testing: Introduction and objectives
+# 测试：简介与目标
 
-This section describes the OWASP web application security testing methodology and explains how to test for evidence of vulnerabilities within the application due to deficiencies with identified security controls.
+这个章节介绍OWASP WEB应用测试方法论，以及说明如何在WEB应用中使用合适的安全测试方法发现和证明漏洞。
 
-### What is Web Application Security Testing?
-A security test is a method of evaluating the security of a computer system or network by methodically validating and verifying the effectiveness of application security controls. A web application security test focuses only on evaluating the security of a web application. The process involves an active analysis of the application for any weaknesses, technical flaws, or vulnerabilities. Any security issues that are found will be presented to the system owner, together with an assessment of the impact, a proposal for mitigation or a technical solution.
-
-
-### What is a Vulnerability?
-A vulnerability is a flaw or weakness in a system's design, implementation, operation or management that could be exploited to compromise the system's security objectives.
+### 什么事WEB应用安全测试？
+安全测试是通过有条不紊检验和验证有效的应用安全控制来评估计算机系统或网络系统安全性的方法。整个流程包括积极分析应用的弱点，技术缺陷，或者漏洞。任何被发现的安全问题将被提交给这个系统的所有者，同时被提交的还有对此安全问题所产生影响的评估，以及减小或降低这个问题所产生风险的建议书或技术解决方案。。
 
 
-### What is a Threat?
-A threat is anything (a malicious external attacker, an internal user, a system instability, etc) that may harm the assets owned by an application (resources of value, such as the data in a database or in the file system) by exploiting a vulnerability.
+### 什么是漏洞？
+漏洞是在系统设计，实现，或操作管理中可以利用的一个缺陷或者一个弱点，它能破坏系统安全策略。
 
 
-### What is a Test?
-A test is an action to demonstrate that an application meets the security requirements of its stakeholders.
+### 什么是威胁？
+威胁是利用漏洞产生的潜在攻击，可能危害应用资产（有价值的资源，如数据库中的数据或文件系统的数据）。
 
 
-### The Approach in Writing this Guide
-
-The OWASP approach is open and collaborative:
-* Open: every security expert can participate with his or her experience in the project. Everything is free.
-* Collaborative: brainstorming is performed before the articles are written so the team can share ideas and develop a collective vision of the project. That means rough consensus, a wider audience and increased participation.<br>
+### 什么是测试？
+测试就是证明一个应用的安全需求与它的利益相符合的行为。
 
 
-This approach tends to create a defined Testing Methodology that will be:
-* Consistent
-* Reproducible
-* Rigorous
-* Under quality control<br>
+### 这篇指南的编写方法
+
+OWASP的方法是开放与协作：
+* 开放: 每个安全专家都能将他/她的经验加入到项目之中。所有东西都是免费的。
+* 协作: 每篇文章编写前，每个小组都会举行头脑风暴来更好地分享主意以及为项目建立集体视野。这意味着更好的一致性，更多的听众群以及更高的参与度。
 
 
-The problems to be addressed are fully documented and tested. It is important to use a method to test all known vulnerabilities and document all the security test activities.<br>
+这种方法创建的测试方法论有着如下特点：
+* 一致性
+* 可重现
+* 缜密性
+* 有质量控制
 
 
-### What is the OWASP testing methodology?
-
-Security testing will never be an exact science where a complete list of all possible issues that should be tested can be defined. Indeed, security testing is only an appropriate technique for testing the security of web applications under certain circumstances. The goal of this project is to collect all the possible testing techniques, explain these techniques, and keep the guide updated. The OWASP Web Application Security Testing method is based on the black box approach. The tester knows nothing or has very little information about the application to be tested.
+被提及的问题都已经完全文档化和被测试。使用一种方法论去测试所有已知漏洞和归档所有安全测试活动是十分重要的。
 
 
-The testing model consists of:
-* Tester: Who performs the testing activities
-* Tools and methodology: The core of this Testing Guide project
-* Application: The black box to test
+### 什么事OWASP测试方法论？
+
+安全测试从不是一门精准的能够定义所有可能需要测试的问题的科学。事实上，安全测试只是适合在一定环境下测试WEB应用安全的一种技术。这个项目的目的是收集所有可能的测试技术并进行解释然后保持更新。OWASP网页应用安全测试是基于黑盒测试方法。测试人员不知道或者仅仅知道一点关于被测试的系统。
 
 
-The test is divided into 2 phases:
-* Phase 1 Passive mode:
+测试的模型包括：
+* 测试者：执行测试的人员
+* 工具和方法：测试指导项目的核心
+* 应用：用于测试的黑盒
 
-In the passive mode the tester tries to understand the application's logic and plays with the application. Tools can be used for information gathering.For example, an HTTP proxy can be used to observe all the HTTP requests and responses. At the end of this phase, the tester should understand all the access points (''gates'') of the application (e.g., HTTP headers, parameters, and cookies). The Information Gathering section explains how to perform a passive mode test.
 
-For example the tester could find the following:
+测试分成2个阶段：
+* 阶段1： 被动模式
+
+在被动模式里面，测试人员尽力去明白应用的逻辑并使用系统。可以用工具进行信息的收集。比如http代理器观察http的请求和响应。在这个阶段的最后，测试人员应该了解这个应用所有的控制点（入口）（比如Http头，参数，cookies）。信息收集章节具体解释了如何执行被动模式的测试。
+
+比如，测试者应该看如下的信息：
 ```
 https://www.example.com/login/Authentic_Form.html
 ```
 
-This may indicate an authentication form where the application requests a username and a password. <br>
+这个展示了一个认证的表单，需要一个用户名和密码。
 
 
-The following parameters represent two access points (gates) to the application:
+下面的参数展现了两个测试入口点：
 ```
 http://www.example.com/Appx.jsp?a=1&b=1
 ```
 
 
-In this case, the application shows two gates (parameters a and b).
-All the gates found in this phase represent a point of testing. A spreadsheet with the directory tree of the application and all the access points would be useful for the second phase.
+在这种情况下，应用表明了2个入口（参数a和b）。
+所有的在这个阶段发现的入口表明了一个测试的点。一个应用的目录树形数据表以及所有的点对于第二个阶段都是很有用的。
 
 
-* Phase 2 Active mode:
+* 阶段2： 主动模式
 
-In this phase the tester begins to test using the methodology described in the follow sections.
+在这个阶段，测试者开始用下面描述的方法测试。
 
 
-The set of active tests have been split into 11 sub-categories for a total of 91 controls:
-* Information Gathering
-* Configuration and Deployment Management Testing
-* Identity Management Testing
-* Authentication Testing
-* Authorization Testing
-* Session Management Testing
-* Input Validation Testing
-* Error Handling
-* Cryptography
-* Business Logic Testing
-* Client Side Testing
+我们将主动测试分成11个子类共91项测试：
+* 信息收集
+* 配置以及部署管理测试
+* 身份鉴别管理测试
+* 认证测试
+* 授权测试
+* 会话管理测试
+* 输入验证测试
+* 错误处理测试
+* 密码学测试
+* 业务逻辑测试
+* 客户端测试
 
