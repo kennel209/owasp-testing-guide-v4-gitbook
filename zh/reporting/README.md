@@ -1,173 +1,177 @@
-# Reporting
+# 报告编写
 
-Performing the technical side of the assessment is only half of the overall assessment process. The final product is the production of a well written and informative report. A report should be easy to understand and should highlight all the risks found during the assessment phase. The report should appeal to both executive management and technical staff.
-The report needs to have three major sections. It should be created in a manner that allows each separate section to be printed and given to the appropriate teams, such as the developers or system managers. The recommended sections are outlined below.
+执行技术方面的评价只是整体评价进程的一半；最终产品是一份内容详实的报告。报告应该简单易懂、突出所有评估期间找到的风险，并将之呈现给管理员工和技术员工。
 
-### 1. Executive Summary
-The executive summary sums up the overall findings of the assessment and gives business managers and system owners a high level view of the vulnerabilities discovered. The language used should be more suited to people who are not technically aware and should include graphs or other charts which show the risk level. Keep in mind that executives will likely only have time to read this summary and will want two questions answered in plain language:
-1. *What's wrong?*
-2. *How do I fix it?*
+报告需要有三个主要部分，并且在一定程度上允许每个部分被单独分离出来，打印并交与相关的团队，比如开发人员或者系统管理员。
 
-You have one page to answer these questions.
-The executive summary should plainly state that the vulnerabilities and their severity is an **input** to their organizational risk management process, not an outcome or remediation. It is safest to explain that tester does not understand the threats faced by the organization or business consequences if the vulnerabilities are exploited. This is the job of the risk professional who calculates risk levels based on this and other information. Risk management will typically be part of the organization's IT Security Governance, Risk and Compliance (GRC) regime and this report will simply provide an input to that process.
+通常推荐有如下几个部分：.
 
-### 2. Test Parameters
+### 1. 内容提要
+内容提要集合了所有评价，并给予管理层或系统管理员一个对全局风险的认识。使用的语言应该更适合没有技术背景的人看，还应该使用图表来显示风险等级。请牢记，内容提要的读者是那些仅仅有时间阅读摘要的人，他需要描述清楚下面两个问题：
+1. *哪里发生问题了？*
+2. *我该如何修复问题？*
 
-The Introduction should outline the parameters of the security testing, the findings and remediation. Some suggested section headings include:
-#### 2.1  Project Objective:
-This section outlines the project objectives and the expected outcome of the assessment.
-#### 2.2 Project Scope:
-This section outlines the agreed scope.
-#### 2.3 Project Schedule
-This section outlines when the testing commenced and when it was completed.
-#### 2.4 Targets:
-This section lists the number of applications or targeted systems.
-#### 2.5 Limitations:
-This section outlines every limitation which was faced throughout the assessment. For example, limitations of project-focused tests, limitation in the security testing methods, performance or technical issues that the tester come across during the course of assessment, etc.
-#### 2.6 Findings Summary
-This section outlines the vulnerabilities that were discovered during testing.
-#### 2.7 Remediation Summary
-This section outlines the action plan for fixing the vulnerabilities that were discovered during testing.
+你只能用一页纸来回答这些问题。
 
-### 3. Findings
+内容提要应该明确地陈述清楚漏洞和它的严重程度是组织风险管理的一个**输入**，而不是结果或者整治措施。最安全的，可以向组织解释，测试者并不清楚漏洞被利用后会给组织或者商业行为带来何种威胁。这些是风险控制专家在结合漏洞和计算风险等级后的工作。风险管理通常是组织IT安全管控（GRC）的一部分。这份报告只是简单地向这个过程提供一个输入。
 
-The last section of the report includes detailed technical information about the vulnerabilities found and the actions needed to resolve them. This section is aimed at a technical level and should include all the necessary information for the technical teams to understand the issue and resolve it. Each finding should be clear and concise and give the reader of the report a full understanding of the issue at hand.
-The findings section should include:
-* Screenshots and command lines to indicate what tasks were undertaken during the execution of the test case
-* The affected item
-* A technical description of the issue and the affected function or object
-* A section on resolving the issue
-* The severity rating [1], with vector notation if using CVSS
-The following is the list of controls that were tested during the assessment:
+### 2. 测试详情
 
-|**Test ID**|**Test Description**|**Findings**|**Severity**|**Recommendations**|
-|---|---|---|---|---|
-|**Information Gathering**| | | | |
-| OTG-INFO-001|Conduct Search Engine Discovery and Reconnaissance for Information Leakage | | | |
-| OTG-INFO-002|Fingerprint Web Server | | | |
-| OTG-INFO-003|Review Webserver Metafiles for Information Leakage | | | |
-| OTG-INFO-004|Enumerate Applications on Webserver | | | |
-| OTG-INFO-005|Review Webpage Comments and Metadata for Information Leakage | | | |
-| OTG-INFO-006|Identify application entry points | | | |
-| OTG-INFO-007|Map execution paths through application | | | |
-| OTG-INFO-009|Fingerprint Web Application Framework | | | |
-| OTG-INFO-009|Fingerprint Web Application | | | |
-| OTG-INFO-010|Map Application Architecture | | | |
-| | | | | |
-|**Configuration and Deploy Management Testing**| | | | |
-| OTG-CONFIG-001|Test Network/Infrastructure Configuration | | | |
-| OTG-CONFIG-002 |Test Application Platform Configuration | | | |
-| OTG-CONFIG-003|Test File Extensions Handling for Sensitive Information | | | |
-| OTG-CONFIG-004| Backup and Unreferenced Files for Sensitive Information | | | |
-| OTG-CONFIG-005|Enumerate Infrastructure and Application Admin Interfaces | | | |
-| OTG-CONFIG-006|Test HTTP Methods | | | |
-| OTG-CONFIG-007|Test HTTP Strict Transport Security | | | |
-| OTG-CONFIG-008|Test RIA cross domain policy | | | |
-| | | | | |
-|**Identity Management Testing**| | | | |
-| OTG-IDENT-001|Test Role Definitions | | | |
-| OTG-IDENT-002|Test User Registration Process | | | |
-| OTG-IDENT-003|Test Account Provisioning Process | | | |
-| OTG-IDENT-004|Testing for Account Enumeration and Guessable User Account | | | |
-| OTG-IDENT-005|Testing for Weak or unenforced username policy | | | |
-| OTG-IDENT-006|Test Permissions of Guest/Training Accounts | | | |
-| OTG-IDENT-007|Test Account Suspension/Resumption Process | | | |
-| | | | | |
-|**Authentication Testing**| | | | |
-| OTG-AUTHN-001|Testing for Credentials Transported over an Encrypted Channel | | | |
-| OTG-AUTHN-002|Testing for default credentials | | | |
-| OTG-AUTHN-003|Testing for Weak lock out mechanism | | | |
-| OTG-AUTHN-004|Testing for bypassing authentication schema | | | |
-| OTG-AUTHN-005|Test remember password functionality | | | |
-| OTG-AUTHN-006|Testing for Browser cache weakness | | | |
-| OTG-AUTHN-007|Testing for Weak password policy | | | |
-| OTG-AUTHN-008|Testing for Weak security question/answer | | | |
-| OTG-AUTHN-009|Testing for weak password change or reset functionalities | | | |
-| OTG-AUTHN-010|Testing for Weaker authentication in alternative channel | | | |
-| | | | | |
-|**Authorization Testing**| | | | |
-| OTG-AUTHZ-001|Testing Directory traversal/file include | | | |
-| OTG-AUTHZ-002|Testing for bypassing authorization schema | | | |
-| OTG-AUTHZ-003|Testing for Privilege Escalation | | | |
-| OTG-AUTHZ-004|Testing for Insecure Direct Object References | | | |
-| | | | | |
-|**Session Management Testing**| | | | |
-| OTG-SESS-001 |Testing for Bypassing Session Management Schema | | | |
-| OTG-SESS-002 |Testing for Cookies attributes | | | |
-| OTG-SESS-003 |Testing for Session Fixation | | | |
-| OTG-SESS-004 |Testing for Exposed Session Variables | | | |
-| OTG-SESS-005 |Testing for Cross Site Request Forgery | | | |
-| OTG-SESS-006 |Testing for logout functionality | | | |
-| OTG-SESS-007 |Test Session Timeout | | | |
-| OTG-SESS-008 |Testing for Session puzzling | | | |
-| | | | | |
-|**Input Validation Testing**| | | | |
-| OTG-INPVAL-001|Testing for Reflected Cross Site Scripting | | | |
-| OTG-INPVAL-002|Testing for Stored Cross Site Scripting | | | |
-| OTG-INPVAL-003 |Testing for HTTP Verb Tampering | | | |
-| OTG-INPVAL-004|Testing for HTTP Parameter pollution | | | |
-| OTG-INPVAL-006|Testing for SQL Injection | | | |
-| |Oracle Testing | | | |
-| |MySQL Testing | | | |
-| |SQL Server Testing | | | |
-| |Testing PostgreSQL | | | |
-| |MS Access Testing | | | |
-| |Testing for NoSQL injection | | | |
-| OTG-INPVAL-007|Testing for LDAP Injection | | | |
-| OTG-INPVAL-008|Testing for ORM Injection | | | |
-| OTG-INPVAL-009|Testing for XML Injection | | | |
-| OTG-INPVAL-010|Testing for SSI Injection | | | |
-| OTG-INPVAL-011|Testing for XPath Injection | | | |
-| OTG-INPVAL-012|IMAP/SMTP Injection | | | |
-| OTG-INPVAL-013|Testing for Code Injection | | | |
-| |Testing for Local File Inclusion | | | |
-| |Testing for Remote File Inclusion | | | |
-| OTG-INPVAL-014|Testing for Command Injection | | | |
-| OTG-INPVAL-015|Testing for Buffer overflow | | | |
-| |Testing for Heap overflow | | | |
-| |Testing for Stack overflow | | | |
-| |Testing for Format string | | | |
-| OTG-INPVAL-016|Testing for incubated vulnerabilities | | | |
-| OTG-INPVAL-017|Testing for HTTP Splitting/Smuggling | | | |
-| | | | | |
-|**Error Handling**| | | | |
-| OTG-ERR-001|Analysis of Error Codes | | | |
-| OTG-ERR-002|Analysis of Stack Traces | | | |
-| | | | | |
-|**Cryptography**| | | | |
-| OTG-CRYPST-001|Testing for Weak SSL/TSL Ciphers,  Insufficient Transport Layer Protection | | | |
-| OTG-CRYPST-002|Testing for Padding Oracle | | | |
-| OTG-CRYPST-003|Testing for Sensitive information sent via unencrypted channels | | | |
-| | | | | |
-|**Business Logic Testing**| | | | |
-| OTG-BUSLOGIC-001|Test Business Logic Data Validation | | | |
-| OTG-BUSLOGIC-002|Test Ability to Forge Requests | | | |
-| OTG-BUSLOGIC-003|Test Integrity Checks | | | |
-| OTG-BUSLOGIC-004|Test for Process Timing | | | |
-| OTG-BUSLOGIC-005|Test Number of Times a Function Can be Used Limits | | | |
-| OTG-BUSLOGIC-006|Testing for the Circumvention of Work Flows | | | |
-| OTG-BUSLOGIC-007|Test Defenses Against Application Mis-use | | | |
-| OTG-BUSLOGIC-008|Test Upload of Unexpected File Types | | | |
-| OTG-BUSLOGIC-009|Test Upload of Malicious Files | | | |
-| | | | | |
-|**Client Side Testing**| | | | |
-| OTG-CLIENT-001|Testing for DOM based Cross Site Scripting | | | |
-| OTG-CLIENT-002|Testing for JavaScript Execution | | | |
-| OTG-CLIENT-003|Testing for HTML Injection | | | |
-| OTG-CLIENT-004 |Testing for Client Side URL Redirect | | | |
-| OTG-CLIENT-005|Testing for CSS Injection | | | |
-| OTG-CLIENT-006|Testing for Client Side Resource Manipulation | | | |
-| OTG-CLIENT-007|Test Cross Origin Resource Sharing | | | |
-| OTG-CLIENT-008|Testing for Cross Site Flashing | | | |
-| OTG-CLIENT-009|Testing for Clickjacking | | | |
-| OTG-CLIENT-010|Testing WebSockets | | | |
-| OTG-CLIENT-011|Test Web Messaging | | | |
-| OTG-CLIENT-012|Test Local Storage | | | |
+这里介绍安全测试、问题发现、整改措施大纲，推荐章节标题如下：
+#### 2.1 测试项目目标:
+这部分大略描述评估项目整体目标和期望结果。
+#### 2.2 测试项目范围:
+这部分描述项目范围。
+#### 2.3 测试项目进度：
+这部分描述测试正式开始和结束时间
+#### 2.4 测试目标：
+这部分应列清楚测试应用数量和测试系统数量。
+#### 2.5 测试限制条件：
+这部分应表达出在整个评估过程中存在的限制条件。比如项目关注度限制，测试方法、性能、技术水平限制以及测试中测试者所遇到的问题等等。
+#### 2.6 测试结果小结
+这部分介绍在测试中发现的漏洞和问题。
+#### 2.7 整改方案小结
+这部分规划修复发现的漏洞的方案和计划。
 
-### Appendix
+### 3. 测试结果
 
-This section is often used to describe the commercial and open-source tools that were used in conducting the assessment. When custom scripts or code are utilized during the assessment, it should be disclosed in this section or noted as attachment. Customers appreciate when the methodology used by the consultants is included. It gives them an idea of the thoroughness of the assessment and what areas were included.
+报告的最后部分需要包含详细的漏洞技术细节以及解决技术方案。这部分以一个技术层为目标，它应该包括关于所有必要的信息，使得技术团队理解问题并解决问题。每个发现的问题应该明确简练，并让报告阅读者能立即理解问题所在。
 
-### References
+测试结果部分应当包括:
+* 一定数量的截图和命令参考，用以做简单的参考
+* 被影响的事物
+* 对问题的技术描述
+* 如何解决问题的章节
+* 问题严重等级，可以使用CVSS描述的向量标记[1]
+
+下面是在评估中测试的清单列表:
+
+| 测试编号         | 测试内容                              | 发现问题 | 严重等级 | 解决方案 |
+|------------------|---------------------------------------|----------|----------|----------|
+|                  | **信息收集**                              |          |          |          |
+| OTG-INFO-001     | 搜索引擎信息发现和侦察                |          |          |          |
+| OTG-INFO-002     | 识别web服务器                         |          |          |          |
+| OTG-INFO-003     | web服务器元文件信息发现               |          |          |          |
+| OTG-INFO-004     | 服务器应用应用枚举                    |          |          |          |
+| OTG-INFO-005     | 评论信息发现                          |          |          |          |
+| OTG-INFO-006     | 应用入口识别                          |          |          |          |
+| OTG-INFO-007     | 识别应用工作流程                      |          |          |          |
+| OTG-INFO-008     | 识别web应用框架                       |          |          |          |
+| OTG-INFO-009     | 识别web应用程序                       |          |          |          |
+| OTG-INFO-010     | 绘制应用架构图                        |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **配置以及部署管理测试**                  |          |          |          |
+| OTG-CONFIG-001   | 网络基础设施配置测试                  |          |          |          |
+| OTG-CONFIG-002   | 应用平台配置管理测试                  |          |          |          |
+| OTG-CONFIG-003   | 文件扩展名处理测试                    |          |          |          |
+| OTG-CONFIG-004   | 备份、未链接文件测试                  |          |          |          |
+| OTG-CONFIG-005   | 枚举管理接口测试                      |          |          |          |
+| OTG-CONFIG-006   | HTTP方法测试                          |          |          |          |
+| OTG-CONFIG-007   | HTTP强制转换测试                      |          |          |          |
+| OTG-CONFIG-008   | 应用跨域策略测试                      |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **身份鉴别管理测试**                      |          |          |          |
+| OTG-IDENT-001    | 角色定义测试                          |          |          |          |
+| OTG-IDENT-002    | 用户注册过程测试                      |          |          |          |
+| OTG-IDENT-003    | 用户选项测试                          |          |          |          |
+| OTG-IDENT-004    | 帐户枚举测试                          |          |          |          |
+| OTG-IDENT-005    | 弱用户名策略测试                      |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **认证测试**                              |          |          |          |
+| OTG-AUTHN-001    | 口令信息加密传输测试                  |          |          |          |
+| OTG-AUTHN-002    | 默认口令测试                          |          |          |          |
+| OTG-AUTHN-003    | 帐户锁定机制测试                      |          |          |          |
+| OTG-AUTHN-004    | 认证绕过测试                          |          |          |          |
+| OTG-AUTHN-005    | 记住密码功能测试 functionality        |          |          |          |
+| OTG-AUTHN-006    | 浏览器缓存弱点测试                    |          |          |          |
+| OTG-AUTHN-007    | 密码策略测试                          |          |          |          |
+| OTG-AUTHN-008    | 安全问答测试                          |          |          |          |
+| OTG-AUTHN-009    | 密码重置测试                          |          |          |          |
+| OTG-AUTHN-010    | 其他相关认证渠道测试                  |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **授权测试**                              |          |          |          |
+| OTG-AUTHZ-001    | 目录遍历/文件包含测试                 |          |          |          |
+| OTG-AUTHZ-002    | 授权绕过测试                          |          |          |          |
+| OTG-AUTHZ-003    | 权限提升测试                          |          |          |          |
+| OTG-AUTHZ-004    | 不安全对象直接引用测试                |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **会话管理测试**                          |          |          |          |
+| OTG-SESS-001     | 会话管理绕过测试                      |          |          |          |
+| OTG-SESS-002     | Cookies属性测试                       |          |          |          |
+| OTG-SESS-003     | 会话固定测试                          |          |          |          |
+| OTG-SESS-004     | 会话令牌泄露测试                      |          |          |          |
+| OTG-SESS-005     | 跨站点请求伪造（CSRF）测试            |          |          |          |
+| OTG-SESS-006     | 登出功能测试                          |          |          |          |
+| OTG-SESS-007     | 会话超时测试                          |          |          |          |
+| OTG-SESS-008     | 会话令牌重载测试                      |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **输入验证测试**                          |          |          |          |
+| OTG-INPVAL-001   | 反射型跨站脚本测试                    |          |          |          |
+| OTG-INPVAL-002   | 存储型跨站脚本测试                    |          |          |          |
+| OTG-INPVAL-003   | HTTP谓词伪造测试                      |          |          |          |
+| OTG-INPVAL-004   | HTTP参数污染测试                      |          |          |          |
+| OTG-INPVAL-005   | SQL注入测试                           |          |          |          |
+|                  | Oracle注入测试                        |          |          |          |
+|                  | MySQL注入测试                         |          |          |          |
+|                  | SQL Server注入测试                    |          |          |          |
+|                  | PostgreSQL注入测试                    |          |          |          |
+|                  | MS Access注入测试                     |          |          |          |
+|                  | NoSQL注入测试                         |          |          |          |
+| OTG-INPVAL-006   | LDAP注入测试                          |          |          |          |
+| OTG-INPVAL-007   | ORM注入测试                           |          |          |          |
+| OTG-INPVAL-008   | XML注入测试                           |          |          |          |
+| OTG-INPVAL-009   | SSI注入测试                           |          |          |          |
+| OTG-INPVAL-010   | XPath注入测试                         |          |          |          |
+| OTG-INPVAL-011   | IMAP/SMTP注入测试                     |          |          |          |
+| OTG-INPVAL-012   | 代码注入测试                          |          |          |          |
+|                  | 本地文件包含测试                      |          |          |          |
+|                  | 远程文件包含测试                      |          |          |          |
+| OTG-INPVAL-013   | 命令执行注入测试                      |          |          |          |
+| OTG-INPVAL-014   | 缓冲区溢出测试                        |          |          |          |
+|                  | 堆溢出测试                            |          |          |          |
+|                  | 栈溢出测试                            |          |          |          |
+|                  | 格式化字符串测试                      |          |          |          |
+| OTG-INPVAL-015   | 潜伏式漏洞测试                        |          |          |          |
+| OTG-INPVAL-016   | HTTP分割/伪造测试                     |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **错误处理测试**                          |          |          |          |
+| OTG-ERR-001      | 错误码分析                            |          |          |          |
+| OTG-ERR-002      | 栈追踪分析                            |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **密码学测试**                            |          |          |          |
+| OTG-CRYPST-001   | 弱SSL/TLS加密，不安全的传输层防护测试 |          |          |          |
+| OTG-CRYPST-002   | Padding Oracle测试                    |          |          |          |
+| OTG-CRYPST-003   | 非加密信道传输敏感数据测试            |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **业务逻辑测试**                          |          |          |          |
+| OTG-BUSLOGIC-001 | 业务逻辑数据验证测试                  |          |          |          |
+| OTG-BUSLOGIC-002 | 请求伪造能力测试                      |          |          |          |
+| OTG-BUSLOGIC-003 | 完整性测试                            |          |          |          |
+| OTG-BUSLOGIC-004 | 过程时长测试                          |          |          |          |
+| OTG-BUSLOGIC-005 | 功能使用次数限制测试                  |          |          |          |
+| OTG-BUSLOGIC-006 | 工作流程绕过测试                      |          |          |          |
+| OTG-BUSLOGIC-007 | 应用误用防护测试                      |          |          |          |
+| OTG-BUSLOGIC-008 | 非预期文件类型上传测试                |          |          |          |
+| OTG-BUSLOGIC-009 | 恶意文件上传测试                      |          |          |          |
+|                  |                                       |          |          |          |
+|                  | **客户端测试**                            |          |          |          |
+| OTG-CLIENT-001   | 基于DOM跨站脚本测试                   |          |          |          |
+| OTG-CLIENT-002   | JavaScript脚本执行测试                |          |          |          |
+| OTG-CLIENT-003   | HTML注入测试                          |          |          |          |
+| OTG-CLIENT-004   | 客户端URL重定向测试                   |          |          |          |
+| OTG-CLIENT-005   | CSS注入测试                           |          |          |          |
+| OTG-CLIENT-006   | 客户端资源操纵测试                    |          |          |          |
+| OTG-CLIENT-007   | 跨源资源分享测试                      |          |          |          |
+| OTG-CLIENT-008   | Flash跨站测试                         |          |          |          |
+| OTG-CLIENT-009   | 点击劫持测试                          |          |          |          |
+| OTG-CLIENT-010   | WebSockets测试                        |          |          |          |
+| OTG-CLIENT-011   | Web消息测试                           |          |          |          |
+| OTG-CLIENT-012   | 本地存储测试                          |          |          |          |
+
+### 附录部分
+
+这部分常用于描述评估中使用的商业以及开源工具。当在评价过程中使用用户脚本/代码时，应该在这部分中说明或以附件形式标记。通常用户很喜欢该测试包含了顾问的使用方法。他们可以知道该评估的全面性已经包含了哪些方面。
+
+### 参考资料
 
 Industry standard vulnerability severity and risk rankings (CVSS) [1] – http://www.first.org/cvss
