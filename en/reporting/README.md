@@ -1,6 +1,7 @@
 # Reporting
 
 Performing the technical side of the assessment is only half of the overall assessment process. The final product is the production of a well written and informative report. A report should be easy to understand and should highlight all the risks found during the assessment phase. The report should appeal to both executive management and technical staff.
+
 The report needs to have three major sections. It should be created in a manner that allows each separate section to be printed and given to the appropriate teams, such as the developers or system managers. The recommended sections are outlined below.
 
 ### 1. Executive Summary
@@ -9,6 +10,7 @@ The executive summary sums up the overall findings of the assessment and gives b
 2. *How do I fix it?*
 
 You have one page to answer these questions.
+
 The executive summary should plainly state that the vulnerabilities and their severity is an **input** to their organizational risk management process, not an outcome or remediation. It is safest to explain that tester does not understand the threats faced by the organization or business consequences if the vulnerabilities are exploited. This is the job of the risk professional who calculates risk levels based on this and other information. Risk management will typically be part of the organization's IT Security Governance, Risk and Compliance (GRC) regime and this report will simply provide an input to that process.
 
 ### 2. Test Parameters
@@ -38,6 +40,7 @@ The findings section should include:
 * A technical description of the issue and the affected function or object
 * A section on resolving the issue
 * The severity rating [1], with vector notation if using CVSS
+
 The following is the list of controls that were tested during the assessment:
 
 |**Test ID**|**Test Description**|**Findings**|**Severity**|**Recommendations**|
