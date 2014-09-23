@@ -16,9 +16,9 @@ OWASP 感谢每一个作者,修订人员以及编辑人员,没有他们的努力
 [Matteo Meucci](mailto:matteo.meucci@owasp.org)
 
 
-### Version 4.0
+### 版本 4.0
 
-OWASP测试指南第四版比起第3版在三个方面更加改善了：
+OWASP测试指南第四版比起第三版在三个方面更加改善了：
 
 
 1. 这份指南整合了另外两个旗舰级的OWASP文档：开发者指南和代码评估指南。我们重新编排了章节和测试顺序，目的就是通过测试和代码评估来达到开发者指南中描述的安全控制。
@@ -38,6 +38,47 @@ Copyright (c) 2014 The OWASP Foundation.
 
 本文档由[Creative Commons 2.5 License](http://creativecommons.org/licenses/by-sa/2.5/)许授权。请阅读并理解该文档的许可和版权。
 
+### 中文版致谢与译者声明
+
+#### 第四版
+
+由[风镰月舞](mailto:kennel209@gmail.com)结合第三版翻译内容，自行翻译，纯属自娱自乐。由于译者水平有限,并不保证译文完全正确,请参照英文版以准。
+
+* [在线阅读](https://www.gitbook.io/book/kennel209/owasp-testing-guide-v4)
+* [参与编辑](https://github.com/kennel209/owasp-testing-guide-v4-gitbook)
+
+#### 第三版
+
+本指南为业界首套系统的介绍应用安全测试的指导性文档。
+
+数十位自愿者经过半年的辛苦工作,终于完成 OWASP 测试指南的翻译及校对。
+
+##### OWASP 测试指南中文版修订
+
+| 项目进展                | 时间            | 主要参与人 |
+|-------------------------|-----------------|------------|
+| OWASP 测试指南中文 V0.1 | 2009.7-2009.10  | FrankAaron |
+| OWASP 测试指南中文 V0.2 | 2009.10-2009.11 | RIP        |
+| OWASP 测试指南中文 V0.3 | 2009.11-2009.1  | Eric       |
+
+##### 翻译及校对人员(排名不分先后)
+
+* 程琼 (Microsoft)
+* Frank Fan (DBAPPSECURITY)
+* 贺佳琳 (Microsoft)
+* 李伟荣 (Microsoft)
+* 沈巍 (Microsoft)
+* 王超 (Microsoft)
+* 韦炜 (Microsoft)
+* 张柏明 (Microsoft)
+* 趙嘉言 (Microsoft)
+* Aaron (DBAPPSECURITY)
+* RIP (OWASP China Chair)
+
+##### 声明
+
+* 由于译者及校对人员水平有限,并不保证译文完全正确,请参照英文版以准。
+* 非常感谢您的支持,有任何问题,请及时邮件到 RIP@OWASP.ORG。
 
 ### 修订历史
 
@@ -245,42 +286,4 @@ Copyright (c) 2014 The OWASP Foundation.
 
 所有其他产品和公司的名称可能是其各自所有者的商标。长期使用本文档,不影响任何商标或服务标志的有效性。
 
-### 致谢与译者声明
-
-#### 第四版
-
-由[风镰月舞](mailto:kennel209@gmail.com)结合第三版翻译内容，自行翻译，纯属自娱自乐。由于译者水平有限,并不保证译文完全正确,请参照英文版以准。
-
-#### 第三版
-
-本指南为业界首套系统的介绍应用安全测试的指导性文档。
-
-数十位自愿者经过半年的辛苦工作,终于完成 OWASP 测试指南的翻译及校对。
-
-##### OWASP 测试指南中文版修订
-
-| 项目进展                | 时间            | 主要参与人 |
-|-------------------------|-----------------|------------|
-| OWASP 测试指南中文 V0.1 | 2009.7-2009.10  | FrankAaron |
-| OWASP 测试指南中文 V0.2 | 2009.10-2009.11 | RIP        |
-| OWASP 测试指南中文 V0.3 | 2009.11-2009.1  | Eric       |
-
-##### 翻译及校对人员(排名不分先后)
-
-* 程琼 (Microsoft)
-* Frank Fan (DBAPPSECURITY)
-* 贺佳琳 (Microsoft)
-* 李伟荣 (Microsoft)
-* 沈巍 (Microsoft)
-* 王超 (Microsoft)
-* 韦炜 (Microsoft)
-* 张柏明 (Microsoft)
-* 趙嘉言 (Microsoft)
-* Aaron (DBAPPSECURITY)
-* RIP (OWASP China Chair)
-
-##### 声明
-
-* 由于译者及校对人员水平有限,并不保证译文完全正确,请参照英文版以准。
-* 非常感谢您的支持,有任何问题,请及时邮件到 RIP@OWASP.ORG。
 
