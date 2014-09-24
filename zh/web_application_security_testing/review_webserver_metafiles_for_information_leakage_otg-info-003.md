@@ -1,22 +1,21 @@
-# Review Webserver Metafiles for Information Leakage (OTG-INFO-003)
+# 审核web服务器元文件发现信息泄露 (OTG-INFO-003)
 
 
-### Summary
-This section describes how to test the robots.txt file for information leakage of the web application's directory or folder path(s).  Furthermore, the list of directories that are to be avoided by Spiders, Robots, or Crawlers can also be created as a dependency for [Map execution paths through application (OTG-INFO-007)](https://www.owasp.org/index.php/Map_execution_paths_through_application_%28OTG-INFO-007%29)
+### 综述
+这章节描述如何从robots.txt中发现泄露的web应用路径信息。更进一步，这些应该被蜘蛛、机器人和网页抓取软件忽略的目录列表能很好地作为[建立应用流程](https://www.owasp.org/index.php/Map_execution_paths_through_application_%28OTG-INFO-007%29)的参考。
 
 
-### Test Objectives
-1. Information leakage of the web application's directory or folder path(s).
+### 测试目标
+1. web应用路径或者文件夹泄露信息。
 
-2. Create the list of directories that are to be avoided by Spiders, Robots, or Crawlers.
+2. 建立被蜘蛛机器人忽略的目录列表。
 
 
-### How to Test
+### 如何测试
 #### robots.txt
-Web Spiders, Robots, or Crawlers retrieve a web page and then recursively traverse hyperlinks to retrieve further web content. Their accepted behavior is specified by the *Robots Exclusion Protocol* of the robots.txt file in the web root directory [1].
-<br>
+Web蜘蛛、机器人和网页抓取软件通过获取页面，递归遍历超链接来获取更多的网页内容。他们的行为应该遵循在网站根目录下robots.txt所定义的*机器人排除协议*[1]。
 
-As an example, the beginning of the robots.txt file from http://www.google.com/robots.txt sampled on 11 August 2013 is quoted below:
+例如，2013年8月11日获取的 http://www.google.com/robots.txt 的robots.txt文件，该文件开头如下所示：
 ```
 User-agent: *
 Disallow: /search
@@ -28,13 +27,13 @@ Disallow: /catalogs
 ```
 
 
-The *User-Agent* directive refers to the specific web spider/robot/crawler.  For example the *User-Agent: Googlebot* refers to the spider from Google while ["User-Agent: bingbot"](http://www.bing.com/blogs/site_blogs/b/webmaster/archive/2010/06/28/bing-crawler-bingbot-on-the-horizon.aspx) refers to crawler from Microsoft/Yahoo!.  *User-Agent: \** in the example above applies to all web spiders/robots/crawlers [2] as quoted below:
+*User-Agent* 指令特别指定了特定的蜘蛛机器人。例如，*User-Agent: Googlebot* 特指那些谷歌的蜘蛛机器人，*["User-Agent: bingbot"](http://www.bing.com/blogs/site_blogs/b/webmaster/archive/2010/06/28/bing-crawler-bingbot-on-the-horizon.aspx)* 特指那些来自Microsoft/Yahoo!的爬虫机器人。在如下所示例子中的 *User-Agent: \** 则指明包括所有的蜘蛛机器人[2]：
 ```
 User-agent: *
 ```
 
 
-The *Disallow* directive specifies which resources are prohibited by spiders/robots/crawlers. In the example above, directories such as the following are prohibited:
+*Disallow* 指令规定了蜘蛛机器人限制访问的资源。上面的例子中如下资源被禁止访问：
 ```
 ...
 Disallow: /search
@@ -46,12 +45,11 @@ Disallow: /catalogs
 ```
 
 
-Web spiders/robots/crawlers can intentionally ignore the *Disallow* directives specified in a robots.txt file [3], such as those from [Social Networks](https://www.htbridge.com/news/social_networks_can_robots_violate_user_privacy.html) to ensure that shared linked are still valid.  Hence, robots.txt should not be considered as a mechanism to enforce restrictions on how web content is accessed, stored, or republished by third parties.
-<br>
+Web蜘蛛机器人可以故意忽略robots.txt中的*Disallow*指令所规定的内容[3], 比如那些来自[Social Networks](https://www.htbridge.com/news/social_networks_can_robots_violate_user_privacy.html) 的机器人需要确保共享的链接依旧合法。因此，robots.txt不应该当做一个强制约束机制来控制第三方访问这些web页面。
 
-**robots.txt in webroot - with "wget" or "curl"**<br>
+**获取根目录下的robots.txt- 使用"wget" 或 "curl"**<br>
 
-The robots.txt file is retrieved from the web root directory of the web server. For example, to retrieve the robots.txt from www.google.com using "wget" or "curl":
+robots.txt文件能从web服务器根目录下获得。例如使用"wget"或"curl"获取www.google.com的robots.txt文件：
 ```
 cmlh$ wget http://www.google.com/robots.txt
 --2013-08-11 14:40:36--  http://www.google.com/robots.txt
@@ -89,11 +87,11 @@ cmlh$
 ```
 
 
-**robots.txt in webroot - with rockspider**<br>
-["rockspider"] automates the creation of the initial scope for Spiders/Robots/Crawlers of files and directories/folders of a web site.
+**获取根目录下的robots.txt- 使用rockspider**<br>
+["rockspider"] 能自动为蜘蛛机器人建立初始的范围和网站的目录。
 
 
-For example, to create the initial scope based on the Allowed: directive from www.google.com using ["rockspider"]:
+例如，使用["rockspider"]基于*allowed:*指令建立www.google.com的网站初始目录结构：
 ```
 cmlh$ ./rockspider.pl -www www.google.com
 
@@ -115,39 +113,38 @@ cmlh$
 ```
 ["rockspider"]: https://github.com/cmlh/rockspider/releases
 
-**Analyze robots.txt using Google Webmaster Tools**<br>
-Web site owners can use the Google "Analyze robots.txt" function to analyse the website as part of its ["Google Webmaster Tools"](https://www.google.com/webmasters/tools). This tool can assist with testing and the procedure is as follows:
+**使用Google Webmaster 工具分析 robots.txt**<br>
+网站拥有者们可以使用["Google Webmaster Tools"](https://www.google.com/webmasters/tools)工具中的"Analyze robots.txt"功能来分析网站结构。这个工具能帮助测试，使用方式如下：
 
-1. Sign into Google Webmaster Tools with a Google account.<br>
-2. On the dashboard, write the URL for the site to be analyzed.<br>
-3. Choose between the available methods and follow the on screen instruction.<br>
-
-
-#### META Tag
-
-<META> tags are located within the HEAD section of each HTML Document and should be consistent across a web site in the likely event that the robot/spider/crawler start point does not begin from a document link other than webroot i.e. a ["deep link"](http://en.wikipedia.org/wiki/Deep_linking).
+1. 使用Google帐号登陆Google Webmaster Tools；
+2. 在操作面板中输入待分析网站URL；
+3. 根据指示选择合适的功能。
 
 
-If there is no "`<META NAME="ROBOTS" ... >`" entry then the "Robots Exclusion Protocol" defaults to "INDEX,FOLLOW" respectively.  Therefore, the other two valid entries defined by the "Robots Exclusion Protocol" are prefixed with "NO..." i.e. "NOINDEX" and "NOFOLLOW".
+#### 元标签（META）
+
+<META> 标签位于HTML文档的HEAD区域内，应该与网站整体内容保持一致以防蜘蛛机器人从其他地方开始抓取，并非从根页面，例如["deep link"](http://en.wikipedia.org/wiki/Deep_linking)。
 
 
-Web spiders/robots/crawlers can intentionally ignore the "`<META NAME="ROBOTS"`" tag as the robots.txt file convention is preferred.  Hence, **`<META>` Tags should not be considered the primary mechanism, rather a complementary control to robots.txt**.
-
-**`<META>` Tags - with Burp**<br>
+如果没有像"`<META NAME="ROBOTS" ... >`"这样的条目，那么“机器人排除协议”默认为可索引（"INDEX,FOLLOW"）。因此协议规定的其他另外两个合法的条目以"NO..."开头，例如"NOINDEX" and "NOFOLLOW"。
 
 
-Based on the Disallow directive(s) listed within the robots.txt file in webroot, a regular expression search for "`<META NAME="ROBOTS"`" within each web page is undertaken and the result compared to the robots.txt file in webroot.
+web蜘蛛机器人也可以故意忽略`"<META NAME="ROBOTS""`，就像对待robots.txt一样。因此，**`<META>`也不能被当做是一项主要控制措施，最多只是robots.txt的补充措施**。
+
+**发现`<META>`标签 - 使用Burp**
+
+基于robots.txt定义的Disallow指令目录与使用正则表达式搜索每个页面中的"`<META NAME="ROBOTS"`"相互比较结果。
 
 
-For example, the robots.txt file from facebook.com has a "Disallow: /ac.php" [entry](http://facebook.com/robots.txt) and the resulting search for "`<META NAME="ROBOTS"`" shown below:
-<br>
+比如facebook.com下测robots.txt有一条"Disallow: /ac.php" [入口](http://facebook.com/robots.txt)，以及搜索得来的"`<META NAME="ROBOTS"`" 显示如下：
+
 ![File:CMLH-Meta Tag Example-Facebook-Aug 2013.png](https://www.owasp.org/images/3/3d/CMLH-Meta_Tag_Example-Facebook-Aug_2013.png)
 <br>
 
-The above might be considered a fail since "INDEX,FOLLOW" is the default `<META>` Tag specified by the "Robots Exclusion Protocol" yet "Disallow: /ac.php" is listed in robots.txt.
+上面可以当做一个失败的例子，因为"INDEX,FOLLOW"是“机器人排除协议”中默认的`<META>`标签描述，但是 "Disallow: /ac.php"却在robots.txt中清楚表明，两者相互矛盾。
 
 
-### Tools
+### 测试工具
 
 * Browser (View Source function)
 * curl
@@ -155,10 +152,10 @@ The above might be considered a fail since "INDEX,FOLLOW" is the default `<META>
 * [rockspider](https://github.com/cmlh/rockspider/releases)
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**<br>
 * [1] "The Web Robots Pages" - http://www.robotstxt.org/
 * [2] "Block and Remove Pages Using a robots.txt File" - https://support.google.com/webmasters/answer/156449
 * [3] "(ISC)2 Blog: The Attack of the Spiders from the Clouds" - http://blog.isc2.org/isc2_blog/2008/07/the-attack-of-t.html
 * [4] "Telstra customer database exposed" - http://www.smh.com.au/it-pro/security-it/telstra-customer-database-exposed-20111209-1on60.html
-<br>
+
