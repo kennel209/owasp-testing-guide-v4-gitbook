@@ -51,7 +51,7 @@ Connection: close
 Content-Type: text/HTML
 ```
 
-**Microsoft IIS 5.0** 服务器： 
+**Microsoft IIS 5.0** 服务器：
 ```
 HTTP/1.1 200 OK
 Server: Microsoft-IIS/5.0
@@ -280,7 +280,7 @@ Your browser sent a query this server could not understand.
 ```
 
 
-### 工具
+### 测试工具
 * httprint - http://net-square.com/httprint.html
 * httprecon - http://www.computec.ch/projekte/httprecon/
 * Netcraft - http://www.netcraft.com

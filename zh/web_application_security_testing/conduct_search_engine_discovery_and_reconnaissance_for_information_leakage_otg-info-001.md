@@ -75,7 +75,7 @@ Google Hacking 数据库是一组十分有用的Google查询语句。查询被�
 * 敏感在线购物信息
 
 
-### 工具
+### 测试工具
 * FoundStone SiteDigger - http://www.mcafee.com/uk/downloads/free-tools/sitedigger.aspx <br>
 * Google Hacker - http://yehg.net/lab/pr0js/files.php/googlehacker.zip<br>
 * Stach & Liu's Google Hacking Diggity Project - http://www.stachliu.com/resources/tools/google-hacking-diggity-project/ <br>
