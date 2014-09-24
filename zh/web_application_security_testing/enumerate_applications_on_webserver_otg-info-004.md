@@ -1,52 +1,49 @@
-# Enumerate Applications on Webserver (OTG-INFO-004)
+# 枚举Web服务器上的应用 (OTG-INFO-004)
 
 
-### Summary
-A paramount step in testing for web application vulnerabilities is to find out which particular applications are hosted on a web server. Many applications have known vulnerabilities and known attack strategies that can be exploited in order to gain remote control or to exploit data. In addition, many applications are often misconfigured or not updated, due to the perception that they are only used "internally" and therefore no threat exists.<br/>
+### 综述
+测试Web应用漏洞的一个重要步骤是寻找出运行在服务器上的流行应用程序。许多应用程序存在已知漏洞或者已知的攻击手段来获取控制权限或者数据。此外，许多应用往往被错误配置，而且没有更新。他们被认为是“内部”使用，所以没有威胁存在。
 
-With the proliferation of virtual web servers, the traditional 1:1-type relationship between an IP address and a web server is losing much of its original significance. It is not uncommon to have multiple web sites or applications whose symbolic names resolve to the same IP address. This scenario is not limited to hosting environments, but also applies to ordinary corporate environments as well.
+随着虚拟web服务的大量使用，传统一个IP地址与一个服务器一一对应的传统形式已经失去了最初的重要意义。多个网站或应用解析到同一个IP地址并不少见。这样的场景不局限于主机托管环境，也应用在平常的合作环境。
 
+安全专家有时候被给与了一系列IP地址作为测试目标。可能会有争议，这个场景更接近渗透测试类型的任务，但是无论何种情况，类似的任务都希望测试目标地址中所有可以访问到的应用。问题是所给IP地址在80端口运行了一个HTTP服务，但是测试者通过指定IP地址（仅有的信息）访问却得到“没有web服务器被配置”或类似的消息。当访问不相关的域名（DNS）时，系统可能拒绝访问。显而易见，一定程度的分析工作极大影响测试任务，不然只能仅仅测试他们所意识到的系统。
 
-Security professionals are sometimes given a set of IP addresses as a target to test. It is arguable that this scenario is more akin to a penetration test-type engagement, but in any case it is expected that such an assignment would test all web applications accessible through this target. The problem is that the given IP address hosts an HTTP service on port 80, but if a tester should access it by specifying the IP address (which is all they know) it reports "No web server configured at this address" or a similar message. But that system could "hide" a number of web applications, associated to unrelated symbolic (DNS) names. Obviously, the extent of the analysis is deeply affected by the tester tests all applications or only tests the applications that they are aware of.
+有时候，测试目标的描述会更加丰富。测试者给予一系列IP地址以及相关的域名。当然，这个列表可能只传递了部分信息，例如它可能忽略部分域名，客户也可能根本没意识到这个问题（这在大型组织中往往很常见）。
 
+其他影响测试范围的问题还表现在Web应用程序发布了不明显的URL，例如（http://www.example.com/some-strange-URL），哪儿都访问不到这个地址。出现这样的地址可能由于偶然错误，比如错误配置，也可能是故意而为，比如不公开的管理接口。
 
-Sometimes, the target specification is richer. The tester may be given a list of IP addresses and their corresponding symbolic names. Nevertheless, this list might convey partial information, i.e., it could omit some symbolic names and the client may not even being aware of that (this is more likely to happen in large organizations).
-
-
-Other issues affecting the scope of the assessment are represented by web applications published at non-obvious URLs (e.g., http://www.example.com/some-strange-URL), which are not referenced elsewhere. This may happen either by error (due to misconfigurations), or intentionally (for example, unadvertised administrative interfaces).
-
-
-To address these issues, it is necessary to perform web application discovery.
+为了发现这些问题，我们需要实施web应用发现。
 
 
-### Test Objectives
+### 测试目标
 
-Enumerate the applications within scope that exist on a web server
-
-
-### How to Test
-
-#### Black Box Testing
-Web application discovery is a process aimed at identifying web applications on a given infrastructure. The latter is usually specified as a set of IP addresses (maybe a net block), but may consist of a set of DNS symbolic names or a mix of the two.
-This information is handed out prior to the execution of an assessment, be it a classic-style penetration test or an application-focused assessment. In both cases, unless the rules of engagement specify otherwise (e.g., “test only the application located at the URL http://www.example.com/”), the assessment should strive to be the most comprehensive in scope, i.e. it should identify all the applications accessible through the given target. The following examples examine a few techniques that can be employed to achieve this goal.
+枚举web服务器上存在的应用程序。
 
 
-**Note:** Some of the following techniques apply to Internet-facing web servers, namely DNS and reverse-IP web-based search services and the use of search engines. Examples make use of private IP addresses (such as *192.168.1.100*), which, unless indicated otherwise, represent *generic* IP addresses and are used only for anonymity purposes.
+### 如何测试
+
+#### 黑盒测试
+Web应用发现是一个在给定基础条件情况下鉴别Web应用程序的过程。一定基础条件往往是一系列IP地址(可能是一个网段)，也可能是一系列DNS解析名称，也可能是两者混合。
+这些信息往往是项目开始之前中最先给出的内容，无论在一个典型渗透测试或者是应用评估任务中。在这两种案例中，除非是合约条款中明确指出（例如，仅测试指定应用URL http://www.example.com/），否则测试应该力求最复杂的范围，比如应该识别出目标的所有应用访问入口。下面的例子展示了一些达成这个目标的技巧。
 
 
-There are three factors influencing how many applications are related to a given DNS name (or an IP address):
-
-**1. Different base URL** <br>
-The obvious entry point for a web application is *www.example.com*, i.e., with this shorthand notation we think of the web application originating at http://www.example.com/ (the same applies for https). However, even though this is the most common situation, there is nothing forcing the application to start at “/”.
+**注意:** 一些技巧是应用于互联网Web服务器、DNS服务器、反向IP搜索服务以及搜索引擎。文中例子所使用的私有ip地址（如*192.168.1.100*)仅仅是为了匿名需要指代表示 *通用* IP地址。
 
 
-For example, the same symbolic name may be associated to three web applications such as:
+应用的数量与所给的域名或IP的关系受到三个因素的影响：
+
+**1. 不同的基本 URL** <br>
+一个web应用明显的入口是 *www.example.com*, 也就是说，这个缩写表明我们认为这个Web应用最初的入口在http://www.example.com/ （HTTPS也一样）。然而即使这是常见情况，但是也没任何强制的措施要求应用程序一定要从“/”开始。
+
+
+例如，下面这些相同域名下的链接可能表示了三个不同的应用：
+```
 http://www.example.com/url1
 http://www.example.com/url2
 http://www.example.com/url3
+```
 
-
-In this case, the URL http://www.example.com/ would not be associated with a meaningful page, and the three applications would be “hidden”, unless the tester explicitly knows how to reach them, i.e., the tester knows *url1*, *url2* or *url3*. There is usually no need to publish web applications in this way, unless the owner doesn’t want them to be accessible in a standard way, and is prepared to inform the users about their exact location. This doesn’t mean that these applications are secret, just that their existence and location is not explicitly advertised.
+在这个例子中，URL地址 http://www.example.com/ 并没有分配到一个有意义的页面，有三个应用被“隐藏”了，除非测试者明确清楚如何访问他们，就是说需要明确知道*url1*, *url2* 和 *url3*。往往不会像这样发布web应用，除非拥有者不希望他们被正常访问，只将特定的地址通知特定的用户。这不意味着这些地址是秘密的，只是他们存在的确切地址没有被明确公布而已。
 
 
 **2. Non-standard ports**<br>
@@ -221,19 +218,20 @@ For instance, considering the previous example regarding *www.owasp.org*, the te
 Googling techniques are explained in [Testing: Spiders, Robots, and Crawlers](https://www.owasp.org/index.php/Testing:_Spiders,_Robots,_and_Crawlers_%28OWASP-IG-001%29).
 
 
-#### Gray Box Testing
-Not applicable. The methodology remains the same as listed in Black Box testing no matter how much information the tester starts with.
+#### 灰盒测试
+不适用。无论从哪里开始，基本方法和黑盒测试相同。
 
 
-###Tools
-* DNS lookup tools such as *nslookup*, *dig* and similar.
-* Search engines (Google, Bing and other major search engines).
-* Specialized DNS-related web-based search service: see text.
+### 测试工具
+* DNS查询工具如 *nslookup*, *dig* 等等；
+* 搜索引擎 (Google, Bing 和其他主要搜索引擎)；
+* 定制化的DNS相关web搜索服务：见上文；
 * Nmap - http://www.insecure.org
 * Nessus Vulnerability Scanner - http://www.nessus.org
 * Nikto - http://www.cirt.net/nikto2
 
 
-### References
-**Whitepapers**
+### 参考资料
+**白皮书**
 [1] RFC 2616 – Hypertext Transfer Protocol – HTTP 1.1
+

@@ -41,10 +41,11 @@ The obvious entry point for a web application is *www.example.com*, i.e., with t
 
 
 For example, the same symbolic name may be associated to three web applications such as:
+```
 http://www.example.com/url1
 http://www.example.com/url2
 http://www.example.com/url3
-
+```
 
 In this case, the URL http://www.example.com/ would not be associated with a meaningful page, and the three applications would be “hidden”, unless the tester explicitly knows how to reach them, i.e., the tester knows *url1*, *url2* or *url3*. There is usually no need to publish web applications in this way, unless the owner doesn’t want them to be accessible in a standard way, and is prepared to inform the users about their exact location. This doesn’t mean that these applications are secret, just that their existence and location is not explicitly advertised.
 
