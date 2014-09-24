@@ -1,23 +1,23 @@
-# Fingerprint Web Server (OTG-INFO-002)
+# 识别Web服务器 (OTG-INFO-002)
 
-### Summary
-Web server fingerprinting is a critical task for the penetration tester. Knowing the version and type of a running web server allows testers to determine known vulnerabilities and the appropriate exploits to use during testing.
-
-
-There are several different vendors and versions of web servers on the market today. Knowing the type of web server that is being tested significantly helps in the testing process and can also change the course of the test. This information can be derived by sending the web server specific commands and analyzing the output, as each version of web server software may respond differently to these commands. By knowing how each type of web server responds to specific commands and keeping this information in a web server fingerprint database, a penetration tester can send these commands to the web server, analyze the response, and compare it to the database of known signatures. Please note that it usually takes several different commands to accurately identify the web server, as different versions may react similarly to the same command. Rarely do different versions react the same to all HTTP commands. So by sending several different commands, the tester can increase the accuracy of their guess.
+### 综述
+对于渗透测试人员来说，识别Web服务器是一项十分关键的任务。了解正在运行的服务器类型和版本能让测试者更好去测试已知漏洞和大概的利用方法。
 
 
-### Test Objectives
-Find the version and type of a running web server to determine known vulnerabilities and the appropriate exploits to use during testing.
+今天市场上存在着许多不同开发商不同版本的Web服务器。明确被测试的服务器类型能够有效帮助测试过程和决定测试的流程。这些信息可以通过发送给web服务器测定命令，分析输出结果来推断出，因为不同版本的web服务器软件可能对这些命令有着不同的响应。通过了解不同服务器对于不同命令的响应，并把这些信息保存在指纹数据库中，测试者可以发送请求，分析响应，并与数据库中的已知签名相对比。请注意，由于不同版本的服务器对于同一个请求可能有同样的响应，所以可能需要多个命令请求才能准确识别web服务器。十分罕见的，也有不同版本的服务器响应的请求毫无差别。因此，通过发送不同的命令请求，测试者能增加猜测的准确度。
 
 
-### How to Test
-
-#### Black Box testing
-The simplest and most basic form of identifying a web server is to look at the Server field in the HTTP response header. Netcat is used in this experiment.
+### 测试目标
+发现运行的服务器的版本和类型，来决定已知漏洞和利用方式。
 
 
-Consider the following HTTP Request-Response:
+### 如何测试
+
+#### 黑盒测试
+最简单也是最基本的方法来鉴别web服务器就是查看HTTP响应头中的"Server"字段。下面实验中我们使用Netcat：
+
+
+考虑如下HTTP请求响应对：
 ```
 $ nc 202.41.76.251 80
 HEAD / HTTP/1.0
@@ -34,11 +34,11 @@ Content-Type: text/html
 ```
 
 
-From the *Server* field, one can understand that the server is likely Apache, version 1.3.3, running on Linux operating system.
+从*Server*字段，我们可以发现服务器可能是Apache，版本1.3.3，运行在Linux系统上。
 
-Four examples of the HTTP response headers are shown below.
+下面展示了4个其他服务器响应的例子。
 
-From an **Apache 1.3.23** server:
+**Apache 1.3.23** 服务器：
 ```
 HTTP/1.1 200 OK
 Date: Sun, 15 Jun 2003 17:10: 49 GMT
@@ -51,7 +51,7 @@ Connection: close
 Content-Type: text/HTML
 ```
 
-From a **Microsoft IIS 5.0** server:
+**Microsoft IIS 5.0** 服务器： 
 ```
 HTTP/1.1 200 OK
 Server: Microsoft-IIS/5.0
@@ -64,7 +64,7 @@ ETag: b0aac0542e25c31: 89d
 Content-Length: 7369
 ```
 
-From a **Netscape Enterprise 4.1** server:
+**Netscape Enterprise 4.1** 服务器：
 ```
 HTTP/1.1 200 OK
 Server: Netscape-Enterprise/4.1
@@ -76,7 +76,7 @@ Accept-ranges: bytes
 Connection: close
 ```
 
-From a **SunONE 6.1** server:
+**SunONE 6.1** 服务器：
 ```
 HTTP/1.1 200 OK
 Server: Sun-ONE-Web-Server/6.1
@@ -90,7 +90,7 @@ Connection: close
 ```
 
 
-However, this testing methodology is limited in accuracy. There are several techniques that allow a web site to obfuscate or to modify the server banner string. For example one could obtain the following answer:
+但是，这种测试方法有时候并不准确。网站有多种方法混淆或者改变服务器的标识字段。例如我们可能得到如下结果：
 ```
 403 HTTP/1.1 Forbidden
 Date: Mon, 16 Jun 2003 02:41: 27 GMT
@@ -100,17 +100,17 @@ Content-Type: text/HTML; charset=iso-8859-1
 ```
 
 
-In this case, the server field of that response is obfuscated. The tester cannot know what type of web server is running based on such information.
+在这个例子中，Server字段已经被混淆，测试者并不能从中得到服务器的信息。
 
 
-#### Protocol Behavior
-More refined techniques take in consideration various characteristics of the several web servers available on the market. Below is a list of some methodologies that allow testers to deduce the type of web server in use.
+#### 协议行为推断
+更好的方法是从web服务器的不同特征上入手。下面是一些推断web服务器类型的方法：
 
-**HTTP header field ordering**
+**HTTP头字段顺序**
 
-The first method consists of observing the ordering of the several headers in the response. Every web server has an inner ordering of the header. Consider the following answers as an example:
+第一个方法通过观察响应头的组织顺序。每个服务器都有一个内部的HTTP头排序方法，考虑如下例子：
 
-Response from **Apache 1.3.23**
+**Apache 1.3.23** 响应
 ```
 $ nc apache.example.com 80
 HEAD / HTTP/1.0
@@ -125,7 +125,7 @@ Content-Length: 196
 Connection: close
 Content-Type: text/HTML
 ```
-Response from **IIS 5.0**
+**IIS 5.0** 响应
 ```
 $ nc iis.example.com 80
 HEAD / HTTP/1.0
@@ -140,7 +140,7 @@ Last-Modified: Fri, 01 Jan 1999 20:13: 52 GMT
 ETag: W/e0d362a4c335be1: ae1
 Content-Length: 133
 ```
-Response from **Netscape Enterprise 4.1**
+**Netscape Enterprise 4.1** 响应
 ```
 $ nc netscape.example.com 80
 HEAD / HTTP/1.0
@@ -154,7 +154,7 @@ Content-length: 57
 Accept-ranges: bytes
 Connection: close
 ```
-Response from a **SunONE 6.1**
+**SunONE 6.1** 响应
 ```
 $ nc sunone.example.com 80
 HEAD / HTTP/1.0
@@ -169,15 +169,15 @@ Last-Modified: Wed, 10 Jan 2007 09:58:26 GMT
 Connection: close
 ```
 
-We can notice that the ordering of the *Date* field and the *Server* field differs between Apache, Netscape Enterprise, and IIS.
+我们注意到*Date*和*Server*字段在Apache、Netscape Enterprise和IIS中有所区别。
 
 
-**Malformed requests test**
+**畸形的请求测试**
 
-Another useful test to execute involves sending malformed requests or requests of nonexistent pages to the server.
+另一个有用测试是发送畸形的请求或者不存在的页面请求，考虑如下HTTP响应：
 Consider the following HTTP responses.
 
-Response from **Apache 1.3.23**
+**Apache 1.3.23**
 ```
 $ nc apache.example.com 80
 GET / HTTP/3.0
@@ -189,7 +189,7 @@ Connection: close
 Transfer: chunked
 Content-Type: text/HTML; charset=iso-8859-1
 ```
-Response from **IIS 5.0**
+**IIS 5.0**
 ```
 $ nc iis.example.com 80
 GET / HTTP/3.0
@@ -204,7 +204,7 @@ Last-Modified: Fri, 01 Jan 1999 20:14: 02 GMT
 ETag: W/e0d362a4c335be1: ae1
 Content-Length: 133
 ```
-Response from **Netscape Enterprise 4.1**
+**Netscape Enterprise 4.1**
 ```
 $ nc netscape.example.com 80
 GET / HTTP/3.0
@@ -216,7 +216,7 @@ Content-length: 140
 Content-type: text/HTML
 Connection: close
 ```
-Response from a **SunONE 6.1**
+**SunONE 6.1**
 ```
 $ nc sunone.example.com 80
 GET / HTTP/3.0
@@ -230,9 +230,9 @@ Connection: close
 ```
 
 
-We notice that every server answers in a different way. The answer also differs in the version of the server. Similar observations can be done we create requests with a non-existent HTTP method/verb. Consider the following responses:
+我们发现每个服务器都有不同的应答方式，而且不同版本也有所不同响应。类似的结果也能通过构造不存在的HTTP方法/谓词来获得。考虑如下例子：
 
-Response from **Apache 1.3.23**
+**Apache 1.3.23**
 ```
 $ nc apache.example.com 80
 GET / JUNK/1.0
@@ -247,7 +247,7 @@ Content-Length: 196
 Connection: close
 Content-Type: text/HTML
 ```
-Response from **IIS 5.0**
+**IIS 5.0**
 ```
 $ nc iis.example.com 80
 GET / JUNK/1.0
@@ -258,7 +258,7 @@ Date: Fri, 01 Jan 1999 20:14: 34 GMT
 Content-Type: text/HTML
 Content-Length: 87
 ```
-Response from **Netscape Enterprise 4.1**
+**Netscape Enterprise 4.1**
 ```
 $ nc netscape.example.com 80
 GET / JUNK/1.0
@@ -268,7 +268,7 @@ GET / JUNK/1.0
 Your browser sent to query this server could not understand.
 </BODY></HTML>
 ```
-Response from a **SunONE 6.1**
+**SunONE 6.1**
 ```
 $ nc sunone.example.com 80
 GET / JUNK/1.0
@@ -280,44 +280,44 @@ Your browser sent a query this server could not understand.
 ```
 
 
-### Tools
+### 工具
 * httprint - http://net-square.com/httprint.html
 * httprecon - http://www.computec.ch/projekte/httprecon/
 * Netcraft - http://www.netcraft.com
 * Desenmascarame - http://desenmascara.me
 
 
-#### Automated Testing
-Rather than rely on manual banner grabbing and analysis of the web server headers, a tester can use automated tools to achieve the same results. There are many tests to carry out in order to accurately fingerprint a web server. Luckily, there are tools that automate these tests. "*httprint*" is one of such tools. httprint uses a signature dictionary that allows it to recognize the type and the version of the web server in use.<br>
+#### 自动化测试工具
+与其手动抓取旗标和分析web服务器头，测试者也可以使用自动化工具来得到同样的结果。有许多用于准确识别web服务器的测试例子。幸运的是，也有许多工具可以自动化这些测试过程。"*httprint*"就是其中一款工具。他使用签名字典来辨认web服务器的类型和版本。
 
-An example of running httprint is shown below:<br><br>
+下图是一个例子：
 
 ![Image:httprint.jpg](https://www.owasp.org/images/2/24/Httprint.jpg)
 
 
-#### Online Testing
-Online tools can be used if the tester wishes to test more stealthily and doesn't wish to directly connect to the target website. An example of an online tool that often delivers a lot of information about target Web Servers, is [Netcraft](http://www.netcraft.com). With this tool we can retrieve information about operating system, web server used, Server Uptime, Netblock Owner, history of change related to Web server and O.S.<br>
-An example is shown below:
-<br><br>
+#### 在线测试工具
+测试者想要更加隐蔽，不直接连接目标网站可以使用在线测试工具。[Netcraft](http://www.netcraft.com)是获得目标web服务器多种信息的一个在线工具的例子。通过这个工具我们可以获得目标的操作系统信息、web服务器信息、服务器上线时长信息、拥有者信息以及历史修改信息等等。
+如下图中所示：
 
 ![Image:netcraft2.png](https://www.owasp.org/images/7/76/Netcraft2.png)
 
 
-[OWASP Unmaskme Project](https://www.owasp.org/index.php/OWASP_Unmaskme_Project) is expected to become another online tool to do fingerprinting of any website with an overall interpretation of all the [Web-metadata](https://www.owasp.org/index.php/Web-metadata) extracted. The idea behind this project is that anyone in charge of a website could test the metadata the site is showing to the world and assess it from a security point of view.
+[OWASP Unmaskme Project](https://www.owasp.org/index.php/OWASP_Unmaskme_Project)致力于成为另一个识别网站的在线工具，他通过提取 [Web-metadata](https://www.owasp.org/index.php/Web-metadata) 信息来实现。这个项目背后的想法是任何网站管理人员都能从安全的视角来审查网站的元数据。
 
-While this project is still being developed, you can test a [Spanish Proof of Concept of this idea](http://desenmascara.me/).
+这个项目仍在开发之中，你可以尝试一下[这个想法的证明的一个西班牙语网站](http://desenmascara.me/)。
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**<br>
 * Saumil Shah: "An Introduction to HTTP fingerprinting" - http://www.net-square.com/httprint_paper.html
 * Anant Shrivastava : "Web Application Finger Printing" - http://anantshri.info/articles/web_app_finger_printing.html
 
 
-### Remediation
+### 整改措施
 
-Protect the presentation layer web server behind a hardened reverse proxy.
+使用加强的反向代理服务器来保护Web服务器的展示层。
 
-Obfuscate the presentation layer web server headers.
+混淆Web服务器展示层的头信息。
 * Apache
 * IIS
+
