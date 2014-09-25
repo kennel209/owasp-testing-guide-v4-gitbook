@@ -1,59 +1,59 @@
-# Map execution paths through application (OTG-INFO-007)
+# 映射应用的执行路径 (OTG-INFO-007)
 
 
-### Summary
+### 综述
 
-Before commencing security testing, understanding the structure of the application is paramount. Without a thorough understanding of the layout of the application, it is unlkely that it will be tested thoroughly.
-
-
-### Test Objectives
-
-Map the target application and understand the principal workflows.
+在正式开始安全测试以前，理解应用程序的结构是非常重要的。如果没有通透地理解应用的布局情况，往往也无法彻底完成测试。
 
 
-### How to Test
+### 测试目标
 
-In black box testing it is extremely difficult to test the entire code base. Not just because the tester has no view of the code paths through the application, but even if they did, to test all code paths would be very time consuming. One way to reconcile this is to document what code paths were discovered and tested.
-
-
-There are several ways to approach the testing and measurement of code coverage:
-
-* **Path** - test each of the paths through an application that includes combinatorial and boundary value analysis testing for each decision path. While this approach offers thoroughness, the number of testable paths grows exponentially with each decision branch.
-* **Data flow (or taint analysis)** - tests the assignment of variables via external interaction (normally users). Focuses on mapping the flow, transformation and use of data throughout an application.
-* **Race** - tests multiple concurrent instances of the application manipulating the same data.
+建立目标应用程序结构图，并理解其主要工作流程。
 
 
-The trade off as to what method is used and to what degree each method is used should be negotiated with the application owner. Simpler approaches could also be adopted, including asking the application owner what functions or code sections they are particularly concerned about and how those code segments can be reached.
+### 如何测试
+
+在黑盒测试中，测试整个代码路径是非常困难的。不仅仅因为测试者对于应用代码路径毫无所知，而且即使知道，测试所有的代码路径也是非常耗时的。一直折中的办法是将发现的和测试的代码路径记录下来。
 
 
-** Black Box Testing **
+有一些办法来实施测试和测量代码覆盖率：
 
-To demonstrate code coverage to the application owner, the tester can start with a spreadsheet and document all the links discovered by spidering the application (either manually or automatically). Then the tester can look more closely at decision points in the application and investigate how many significant code paths are discovered. These should then be documented in the spreadsheet with URLs, prose and screenshot descriptions of the paths discovered.
-
-
-** Gray/White Box testing **
-
-Ensuring sufficient code coverage for the application owner is far easier with the gray and white box approach to testing. Information solicited by and provided to the tester will ensure the minimum requirements for code coverage are met.
+* **路径** - 测试每个应用路径，包括对决策路径进行组合测试和边界值分析测试。尽管这个方法提过了完全性，但是测试路径的数量会在每个决策分支上呈指数型增长。
+* **数据流 (或者污点分析)** - 测试外部交互（通常是用户）发生的变量赋值。专注于映射贯穿应用的数据流、数据转换和数据的使用。
+* **竞争** - 测试多个应用并发实例操作同一个数据的情况。
 
 
-#### Example
+权衡使用哪种测试方法应该和应用所有者进行协商。更简单的方法应该被采纳，包括询问应用所有者他们特别关心的是什么功能或代码段以及如何到达这些代码段。
 
-** Automatic Spidering **
 
-The automatic spider is a tool used to automatically discover new resources (URLs) on a particular website. It begins with a list of URLs to visit, called the seeds, which depends on how the Spider is started. While there are a lot of Spidering tools, the following example uses the [Zed Attack Proxy (ZAP)](https://code.google.com/p/zaproxy/) :
+** 黑盒测试 **
+
+为了向应用所有者证明代码覆盖率，测试者可以使用数据表来记录所有发现的链接（手动或自动）。然后测试者可以更仔细观察应用的决策点，并调查发现了多少重要的代码路径。把发现的这些路径的URL，截图描述等也记录进数据表。
+
+
+** 灰盒/白盒测试 **
+
+在灰盒/白盒盒测试中向应用所有者保证有效的代码覆盖率要容易得多。提供和被询问到的信息足以保证代码覆盖最小要求被满足。
+
+
+#### 例子
+
+** 自动蜘蛛抓取 **
+
+蜘蛛机器人是自动发现特定网站新资源（URL）的工具。提供一系列的访问URL（叫做种子页面）给蜘蛛作为爬行起点。有许多的蜘蛛机器人工具，下面的例子使用 [Zed Attack Proxy (ZAP)](https://code.google.com/p/zaproxy/) :
 
  ![File:OWASPZAPSP.png |1050px|](https://www.owasp.org/images/thumb/f/f6/OWASPZAPSP.png/1050px-OWASPZAPSP.png)
 
 
-[ZAP](https://code.google.com/p/zaproxy/)  offers the following automatic spidering features, which can be selected based on the tester's needs:
+[ZAP](https://code.google.com/p/zaproxy/) 提供如下自动抓取特性，可以根据测试者的需求，按需进行选择：
 
-* Spider Site - The seed list contains all the existing URIs already found for the selected site.
-* Spider Subtree - The seed list contains all the existing URIs already found and present in the subtree of the selected node.
-* Spider URL - The seed list contains only the URI corresponding to the selected node (in the Site Tree).
-* Spider all in Scope - The seed list contains all the URIs the user has selected as being 'In Scope'.
+* 探索整个站点 - 种子页面列表包括选择站点已经发现了的所有URL。
+* 探索子站点 - 种子页面列表包括选择节点的子树中已经发现了的所有URL。
+* 探索URL - 种子页面列表仅包括与选择节点相关的URL（在站点树中）。
+* 探索整个范围 - 种子页面列表包括用户在‘In Scope’中选择的所有URL。
 
 
-### Tools
+### 测试工具
 
 * [Zed Attack Proxy (ZAP)](https://code.google.com/p/zaproxy/)
 
@@ -62,9 +62,9 @@ The automatic spider is a tool used to automatically discover new resources (URL
 * [Diagramming software](http://en.wikipedia.org/wiki/Diagramming_software)
 
 
-### References
+### 参考资料
 
 
-**Whitepapers**
+**白皮书**
 
 [1] http://en.wikipedia.org/wiki/Code_coverage
