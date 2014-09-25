@@ -10,7 +10,7 @@
 
 有时候，测试目标的描述会更加丰富。测试者给予一系列IP地址以及相关的域名。当然，这个列表可能只传递了部分信息，例如它可能忽略部分域名，客户也可能根本没意识到这个问题（这在大型组织中往往很常见）。
 
-其他影响测试范围的问题还表现在Web应用程序发布了不明显的URL，例如（http://www.example.com/some-strange-URL），哪儿都访问不到这个地址。出现这样的地址可能由于偶然错误，比如错误配置，也可能是故意而为，比如不公开的管理接口。
+其他影响测试范围的问题还表现在Web应用程序发布了不明显的URL，例如（http://www.example.com/some-strange-URL） ，哪儿都访问不到这个地址。出现这样的地址可能由于偶然错误，比如错误配置，也可能是故意而为，比如不公开的管理接口。
 
 为了发现这些问题，我们需要实施web应用发现。
 
@@ -46,40 +46,40 @@ http://www.example.com/url3
 在这个例子中，URL地址 http://www.example.com/ 并没有分配到一个有意义的页面，有三个应用被“隐藏”了，除非测试者明确清楚如何访问他们，就是说需要明确知道*url1*, *url2* 和 *url3*。往往不会像这样发布web应用，除非拥有者不希望他们被正常访问，只将特定的地址通知特定的用户。这不意味着这些地址是秘密的，只是他们存在的确切地址没有被明确公布而已。
 
 
-**2. Non-standard ports**<br>
-While web applications usually live on port 80 (http) and 443 (https), there is nothing magic about these port numbers. In fact, web applications may be associated with arbitrary TCP ports, and can be referenced by specifying the port number as follows: http[s]://www.example.com:port/. For example, http://www.example.com:20000/.
+**2. 非标准端口**<br>
+Web应用常常使用80端口（http）和443端口（https），但是这些端口号没有什么特殊之处。事实上，web应用可以关联任意TCP端口，能通过如下方式为http[s]:www.wxample.com:port/指定端口。比如，http://www.example.com:20000/。
 
 
-**3. Virtual hosts**<br>
-DNS allows a single IP address to be associated with one or more symbolic names. For example, the IP address *192.168.1.100* might be associated to DNS names *www.example.com, helpdesk.example.com, webmail.example.com*. It is not necessary that all the names belong to the same DNS domain. This 1-to-N relationship may be reflected to serve different content by using so called virtual hosts. The information specifying the virtual host we are referring to is embedded in the HTTP 1.1 *Host:* header [1].
+**3. 虚拟主机**<br>
+DNS允许单个IP地址被关联多个域名。例如，IP地址 *192.168.1.100* 可能关联 *www.example.com, helpdesk.example.com, webmail.example.com* 等域名。没有必要所有名字都属于相同的DNS域名。这个一对多的关系来提供不同的网页内容的技术叫做虚拟主机。识别虚拟主机的信息涵在HTTP 1.1标准的 *Host:* 头中[1]。
 
 
-One would not suspect the existence of other web applications in addition to the obvious *www.example.com*, unless they know of *helpdesk.example.com* and *webmail.example.com*.
+一个人可能不会意识到除了明显的*www.example.com* 之外还存在其他web应用，除非他们知道 *helpdesk.example.com* 和 *webmail.example.com*。
 
 
-**Approaches to address issue 1 - non-standard URLs**<br>
-There is no way to fully ascertain the existence of non-standard-named web applications. Being non-standard, there is no fixed criteria governing the naming convention, however there are a number of techniques that the tester can use to gain some additional insight.
+**对抗因素1 - 非标准URL地址**<br>
+没有完全确定非标准命名的URL的web应用的方法。因为不是标准化，没有固定的规范来指导命名规则，但是有一些技巧能帮助测试者获取额外的信息。
 
 
-First, if the web server is mis-configured and allows directory browsing, it may be possible to spot these applications. Vulnerability scanners may help in this respect.
+首先如果web服务器被错误配置成允许目录浏览，，可以通过这点来发现其他应用。漏洞扫描器可以在这里提供帮助。
 
 
-Second, these applications may be referenced by other web pages and there is a chance that they have been spidered and indexed by web search engines. If testers suspect the existence of such “hidden” applications on *www.example.com* they could search using the *site* operator and examining the result of a query for “site: www.example.com”. Among the returned URLs there could be one pointing to such a non-obvious application.
+其次，这些应用可能被其他web页面引用，就有机会被蜘蛛机器人和搜素引擎收录。如果测试者怀疑有隐藏的应用存在在*www.example.com*中，可以使用 *site* 操作符来搜索结果，“site: www.example.com”。在返回结果中可以能存在指向这些不明显的应用。
 
 
-Another option is to probe for URLs which might be likely candidates for non-published applications. For example, a web mail front end might be accessible from URLs such as https://www.example.com/webmail, https://webmail.example.com/, or https://mail.example.com/. The same holds for administrative interfaces, which may be published at hidden URLs (for example, a Tomcat administrative interface), and yet not referenced anywhere. So doing a bit of dictionary-style searching (or “intelligent guessing”) could yield some results. Vulnerability scanners may help in this respect.
+另一个发现未发布的应用的方法是提供一个候选列表。例如，一个web邮件应用前端往往能通过类似 https://www.example.com/webmail, https://webmail.example.com/, 或 https://mail.example.com/ 之类的URL进行访问。这种方法也能应用于管理界面，它也可能作为隐藏页面发布（比如Tomcat管理接口），没有被其他地方链接。所以使用一些基于字典的查找方法（或“聪明的猜测”）能获得一些结果。漏洞扫描器也能在这方面提供帮助。 
 
 
-**Approaches to address issue 2 - non-standard ports**<br>
-It is easy to check for the existence of web applications on non-standard ports. A port scanner such as nmap [2] is capable of performing service recognition by means of the -sV option, and will identify http[s] services on arbitrary ports. What is required is a full scan of the whole 64k TCP port address space.
+**对抗因素2 - 非标准端口**<br>
+发现非标准端口上的应用是非常简单的。一个端口扫描器，比如namp[2]就能通过-sV选项胜任这项服务识别工作，它也能识别任意端口上的http[s]服务。这可能需要完整扫描64k的TCP端口地址空间。
 
 
-For example, the following command will look up, with a TCP connect scan, all open ports on IP *192.168.1.100* and will try to determine what services are bound to them (only *essential* switches are shown – nmap features a broad set of options, whose discussion is out of scope):
+下面例子中的命令会使用TCP连接扫描技术寻找IP *192.168.1.100* 的所有TCP端口，并识别这些端口上的服务。（nmap有着许多选项，我们只列出了*必需*的选择，其他内容超出了本章范围。）
 ```
 nmap –PN –sT –sV –p0-65535 192.168.1.100
 ```
 
-It is sufficient to examine the output and look for http or the indication of SSL-wrapped services (which should be probed to confirm that they are https). For example, the output of the previous command could look like:
+检查输出寻找http或者潜在的SSL包装服务（这些往往能被确认为https）就十分足够了。下面是上一个命令输出的例子：
 ```
 Interesting ports on 192.168.1.100:
 (The 65527 ports scanned but not shown below are in state: closed)
@@ -94,13 +94,13 @@ PORT      STATE SERVICE     VERSION
 8080/tcp  open  http        Apache Tomcat/Coyote JSP engine 1.1
 ```
 
-From this example, one see that:
-* There is an Apache http server running on port 80.
-* It looks like there is an https server on port 443 (but this needs to be confirmed, for example, by visiting https://192.168.1.100 with a browser).
-* On port 901 there is a Samba SWAT web interface.
-* The service on port 1241 is not https, but is the SSL-wrapped Nessus daemon.
-* Port 3690 features an unspecified service (nmap gives back its *fingerprint* - here omitted for clarity - together with instructions to submit it for incorporation in the nmap fingerprint database, provided you know which service it represents).
-* Another unspecified service on port 8000; this might possibly be http, since it is not uncommon to find http servers on this port. Let's examine this issue:
+从这个例子中我们发现：
+* 80端口运行这Apache Http服务器；
+* 443端口可能运行Https服务（但是无法确定，可以通过浏览器访问https://192.168.1.100 验证)；
+* 901端口运行着Samva SWAT web界面；
+* 1241端口运行的不是Https服务，而是SSL包装下的Nessus守护进程；The service on port 1241 is not https, but is the SSL-wrapped Nessus daemon.
+* 3690显示一个未知的服务（nmap给出了它的指纹情况，在这里为了显示清晰，我们忽略了这项内容。通过文档指导，可以将这些内容提交去合并入nmap的指纹数据库，来查找到底运行着什么服务）。
+* 8000上显示另一个未知的服务，他有可能是Http服务，因为在这个端口上Http服务很常见。下面让我们来仔细查看这个：
 
 ```
 $ telnet 192.168.10.100 8000
@@ -120,25 +120,25 @@ Cache-Control: no-cache
 ...
 ```
 
-This confirms that in fact it is an HTTP server. Alternatively, testers could have visited the URL with a web browser; or used the GET or HEAD Perl commands, which mimic HTTP interactions such as the one given above (however HEAD requests may not be honored by all servers).
-* Apache Tomcat running on port 8080.
+可以确定它是一个HTTP服务器。此外，测试这也能使用web浏览器或者使用Perl命令来模仿HTTP交互情况发送上面的GET或HEAD请求（注意HEAD请求可能不被所有浏览器支持）。
+* 8080端口运行着Apache Tomcat服务。
 
 
-The same task may be performed by vulnerability scanners, but first check that the scanner of choice is able to identify http[s] services running on non-standard ports. For example, Nessus [3] is capable of identifying them on arbitrary ports (provided it is instructed to scan all the ports), and will provide, with respect to nmap, a number of tests on known web server vulnerabilities, as well as on the SSL configuration of https services. As hinted before, Nessus is also able to spot popular applications or web interfaces which could otherwise go unnoticed (for example, a Tomcat administrative interface).
+漏洞扫描器也能完成同样的工作，但是扫描器的第一选择是识别非标准端口上是否运行http[s]服务。例如，Nessus[3]能鉴别任意端口上的服务（设定扫描所有端口的任务），与nmap相比，还能提供一系列服务器已知漏洞，包括https服务的SSL配置问题。就如前面提到的，Nessus也能发现没有提到的流行的应用程序和web入口，比如Tomcat管理接口。
 
 
-**Approaches to address issue 3 - virtual hosts**<br>
-There are a number of techniques which may be used to identify DNS names associated to a given IP address *x.y.z.t*.
+**对抗因素3 - 虚拟主机**<br>
+有一系列的技巧来识别给定IP *x.y.z.t* 下的DNS域名。
 
 
-*DNS zone transfers*<br>
-This technique has limited use nowadays, given the fact that zone transfers are largely not honored by DNS servers. However, it may be worth a try. First of all, testers must determine the name servers serving *x.y.z.t*. If a symbolic name is known for *x.y.z.t* (let it be *www.example.com*), its name servers can be determined by means of tools such as *nslookup*, *host*, or *dig*, by requesting DNS NS records.
+*DNS 区域传输*<br>
+这个技巧在现在已经被限制，DNS服务器很可能拒绝区域传输。但是仍然值得一试。首先，测试者需要确定*x.y.z.t*的域名服务器（name server）。如果这个IP的一个域名已经已知（比如*www.example.com*)，那么可以使用*nslookup*，*host*或者*dig*工具来查询DNS的NS记录来确定域名服务器。
 
 
-If no symbolic names are known for *x.y.z.t*, but the target definition contains at least a symbolic name, testers may try to apply the same process and query the name server of that name (hoping that *x.y.z.t* will be served as well by that name server). For example, if the target consists of the IP address *x.y.z.t* and the name *mail.example.com*, determine the name servers for domain *example.com*.
+如果不知道任何*x.y.z.t*的相关域名，但是测试目标定义中存在至少一个域名，测试者仍应尝试通过相同的办法来查询域名服务器（希望*x.y.t.z*也是被同一个域名服务器提供）。例如测试目标包括IP地址*x.y.z.t*和一个域名*mail.example.com*，可以考虑查询域名*example.com*的域名服务器。
 
 
-The following example shows how to identify the name servers for www.owasp.org by using the host command:
+下面的例子展示了如何使用host命令查询www.owasp.org的域名服务器：
 ```
 $ host -t ns www.owasp.org
 www.owasp.org is an alias for owasp.org.
@@ -147,9 +147,9 @@ owasp.org name server ns2.secure.net.
 ```
 
 
-A zone transfer may now be requested to the name servers for domain *example.com*. If the tester is lucky, they will get back a list of the DNS entries for this domain. This will include the obvious *www.example.com* and the not-so-obvious *helpdesk.example.com* and *webmail.example.com* (and possibly others). Check all names returned by the zone transfer and consider all of those which are related to the target being evaluated. <br>
+区域传送可以通过向*example.com*的域名服务器发出请求完成。如果足够幸运，测试者能得到该域名的一系列DNS条目。这里面会包含明显的*www.example.com*和不明显的*helpdesk.example.com*与*webmail.example.com*（还包括其他域名）。检查所有得到的域名，并对需要评估的目标进行分析。
 
-Trying to request a zone transfer for owasp.org from one of its name servers:
+试着对owasp.org的一个域名服务器请求区域传输：
 ```
 $ host -l www.owasp.org ns1.secure.net
 Using domain server:
@@ -158,50 +158,50 @@ Address: 192.220.124.10#53
 Aliases:
 
 Host www.owasp.org not found: 5(REFUSED)
-; Transfer failed.
+; 请求失败了
 ```
 
 
-*DNS inverse queries*<br>
-This process is similar to the previous one, but relies on inverse (PTR) DNS records. Rather than requesting a zone transfer, try setting the record type to PTR and issue a query on the given IP address. If the testers are lucky, they may get back a DNS name entry. This technique relies on the existence of IP-to-symbolic name maps, which is not guaranteed.
+*DNS 反向查询*<br>
+过程和前面类似，只不过依赖于反向（PTR）DNS记录。区别与区域传输，将记录类型设置成PTR，为IP地址发送请求。幸运的话，我们可以得到一系列DNS域名的记录。这个技巧需要服务器存在IP到域名的映射，有时无法保证这一点。
 
 
-*Web-based DNS searches*<br>
-This kind of search is akin to DNS zone transfer, but relies on web-based services that enable name-based searches on DNS. One such service is the *Netcraft Search DNS* service, available at http://searchdns.netcraft.com/?host. The tester may query for a list of names belonging to your domain of choice, such as *example.com*. Then they will check whether the names they obtained are pertinent to the target they are examining.
+*基于web的DNS搜索DNS*<br>
+这种搜索更类似于DNS区域传输，但是是依赖于提供DNS查询的Web服务。比如像*Netcraft Search DNS*的服务，地址在 http://searchdns.netcraft.com/?host 。测试者能提交一系列域名查询请求，如*example.com*，会返回一系列他们获得的相关目标域名。
 
 
-*Reverse-IP services*<br>
-Reverse-IP services are similar to DNS inverse queries, with the difference that the testers query a web-based application instead of a name server. There are a number of such services available. Since they tend to return partial (and often different) results, it is better to use multiple services to obtain a more comprehensive analysis.
+*反向IP查询服务*<br>
+反向IP查询服务类似DNS反向查询，不同之处在于测试者向web应用查询，而不是DNS服务器。有许多这样的服务网站存在，由于他们一般都返回部分结果（通常都不同），所以使用不同的服务查询会得到一个更加完善的结果。
 
 
 *Domain tools reverse IP*: http://www.domaintools.com/reverse-ip/
-(requires free membership)
+(需要注册)
 
 
 *MSN search*: http://search.msn.com
-syntax: "ip:x.x.x.x" (without the quotes)
+用法： "ip:x.x.x.x" 
 
 
 *Webhosting info*: http://whois.webhosting.info/
-syntax: http://whois.webhosting.info/x.x.x.x
+用法： http://whois.webhosting.info/x.x.x.x
 
 
 *DNSstuff*: http://www.dnsstuff.com/
-(multiple services available)
+(存在多个服务)
 
 http://www.net-square.com/mspawn.html
-(multiple queries on domains and IP addresses, requires installation)
+(多种服务，需要安装)
 
 
 *tomDNS*: http://www.tomdns.net/index.php
-(some services are still private at the time of writing)
+(部分服务未公开)
 
 
 *SEOlogs.com*: http://www.seologs.com/ip-domains.html
-(reverse-IP/domain lookup)
+(反向IP/DNS查询)
 
 
-The following example shows the result of a query to one of the above reverse-IP services to 216.48.3.18, the IP address of www.owasp.org. Three additional non-obvious symbolic names mapping to the same address have been revealed.
+下面例子展示了关于216.48.3.18的反向IP查找结果，这个IP是www.owasp.org的地址。例子中揭示了其他三个该IP地址下的不明显的域名。
 
 <center>
 ![Image:Owasp-Info.jpg](https://www.owasp.org/images/3/3e/Owasp-Info.jpg)
@@ -209,13 +209,13 @@ The following example shows the result of a query to one of the above reverse-IP
 
 
 *Googling*<br>
-Following information gathering from the previous techniques, testers can rely on search engines to possibly refine and increment their analysis. This may yield evidence of additional symbolic names belonging to the target, or applications accessible via non-obvious URLs.
+通过之前的信息收集的技巧介绍，测试者可以通过搜索引擎精炼和加强他们的结果分析。比如证明其他目标的其他域名存在或者可以通过隐藏URL访问应用。
 
 
-For instance, considering the previous example regarding *www.owasp.org*, the tester could query Google and other search engines looking for information (hence, DNS names) related to the newly discovered domains of *webgoat.org*, *webscarab.com*, and *webscarab.net*.
+举例说明，考虑上一个*www.owasp.org*的例子，测试者可以使用google或者其他搜索引擎获得相关信息（DNS域名）从而发现 *webgoat.org*，*webscarab.com*和*webscarab.net*。
 
 
-Googling techniques are explained in [Testing: Spiders, Robots, and Crawlers](https://www.owasp.org/index.php/Testing:_Spiders,_Robots,_and_Crawlers_%28OWASP-IG-001%29).
+Googling技巧请参阅 [Testing: Spiders, Robots, and Crawlers](https://www.owasp.org/index.php/Testing:_Spiders,_Robots,_and_Crawlers_%28OWASP-IG-001%29)。
 
 
 #### 灰盒测试
