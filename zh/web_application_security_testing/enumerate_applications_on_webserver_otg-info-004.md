@@ -67,7 +67,7 @@ DNS允许单个IP地址被关联多个域名。例如，IP地址 *192.168.1.100*
 其次，这些应用可能被其他web页面引用，就有机会被蜘蛛机器人和搜素引擎收录。如果测试者怀疑有隐藏的应用存在在*www.example.com*中，可以使用 *site* 操作符来搜索结果，“site: www.example.com”。在返回结果中可以能存在指向这些不明显的应用。
 
 
-另一个发现未发布的应用的方法是提供一个候选列表。例如，一个web邮件应用前端往往能通过类似 https://www.example.com/webmail, https://webmail.example.com/, 或 https://mail.example.com/ 之类的URL进行访问。这种方法也能应用于管理界面，它也可能作为隐藏页面发布（比如Tomcat管理接口），没有被其他地方链接。所以使用一些基于字典的查找方法（或“聪明的猜测”）能获得一些结果。漏洞扫描器也能在这方面提供帮助。 
+另一个发现未发布的应用的方法是提供一个候选列表。例如，一个web邮件应用前端往往能通过类似 https://www.example.com/webmail, https://webmail.example.com/, 或 https://mail.example.com/ 之类的URL进行访问。这种方法也能应用于管理界面，它也可能作为隐藏页面发布（比如Tomcat管理接口），没有被其他地方链接。所以使用一些基于字典的查找方法（或“聪明的猜测”）能获得一些结果。漏洞扫描器也能在这方面提供帮助。
 
 
 **对抗因素2 - 非标准端口**<br>
@@ -179,7 +179,7 @@ Host www.owasp.org not found: 5(REFUSED)
 
 
 *MSN search*: http://search.msn.com
-用法： "ip:x.x.x.x" 
+用法： "ip:x.x.x.x"
 
 
 *Webhosting info*: http://whois.webhosting.info/

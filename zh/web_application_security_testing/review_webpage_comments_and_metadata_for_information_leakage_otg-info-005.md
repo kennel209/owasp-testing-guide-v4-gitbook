@@ -1,24 +1,24 @@
-# Review Webpage Comments and Metadata for Information Leakage (OTG-INFO-005)
+# 审查网页注释和元数据发现信息泄露 (OTG-INFO-005)
 
 
-### Summary
+### 综述
 
-It is very common, and even recommended, for programmers to include detailed comments and metadata on their source code. However, comments and metadata included into the HTML code might reveal internal information that should not be available to potential attackers. Comments and metadata review should be done in order to determine if any information is being leaked.
-
-
-### Test Objectives
-
-Review webpage comments and metadata to better understand the application and to find any information leakage.
+在源代码中加入详细的注释和元数据非常常见，甚至是推荐行为。但是包含在HTML代码中的这些注释往往会揭露一些内部信息，这些信息本来不应该被潜在攻击者所查阅到。注释和元数据应该被审核来确定是否有信息泄露。
 
 
-### How to Test
+### 测试目标
 
-HTML comments are often used by the developers to include debugging information about the application. Sometimes they forget about the comments and they leave them on in production. Testers should look for HTML comments which start with "<!--" and end with "-->".
+审核页面注释和元数据来更了解应用情况和发现信息泄露。
 
 
-#### Black Box Testing
+### 如何测试
 
-Check HTML source code for comments containing sensitive information that can help the attacker gain more insight about the application. It might be SQL code, usernames and passwords, internal IP addresses, or debugging information.
+HTML注释常用于开发者进行应用调试。有时候他们忘了了注释这件事，并将他们留到了发布环境中。测试者应该查看以`<!--`开始,以`-->`结束的HTML注释。
+
+
+#### 黑盒测试
+
+检查HTML源代码中的注释获得敏感信息能更好的帮助攻击者加深对应用的理解。这些信息可能是SQL语句，用户名和密码，内部IP地址或者调试信息。
 
 ```
 ...
@@ -35,72 +35,72 @@ Check HTML source code for comments containing sensitive information that can he
 ```
 
 
-The tester may even find something like this:
+测试者甚至能发现下面这些信息：
 ```
 <!-- Use the DB administrator password for testing:  f@keP@a$$w0rD -->
 ```
 
 
-Check HTML version information for valid version numbers and Data Type Definition (DTD) URLs
+检查HTML版本信息来发现合法版本信息和数据类型定义（DTD）链接
 ```
  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 ```
 
-* "strict.dtd" -- default strict DTD
-* "loose.dtd" -- loose DTD
-* "frameset.dtd" -- DTD for frameset documents
+* "strict.dtd" -- 默认严格的 DTD
+* "loose.dtd" -- 宽松的 DTD
+* "frameset.dtd" -- 框架页面的 DTD
 
 
-Some Meta tags do not provide active attack vectors but instead allow an attacker to profile an application to
+有些元标签不能提供主动的攻击向量，但是允许攻击者获得档案信息
 ```
  <META name="Author" content="Andrew Muller">
 ```
 
-Some Meta tags alter HTTP response headers, such as http-equiv that sets an HTTP response header based on the the content attribute of a meta element, such as:
+有些元标签改变了HTTP回应头，比如 http-equiv 设置了基于页面属性的HTTP响应头，如下所示：
 ```
  <META http-equiv="Expires" content="Fri, 21 Dec 2012 12:34:56 GMT">
 ```
 
-which will result in the HTTP header:
+这会导致 HTTP 头加入如下信息：
 ```
  Expires: Fri, 21 Dec 2012 12:34:56 GMT
 ```
 
-and
+又如：
 ```
  <META http-equiv="Cache-Control" content="no-cache">
 ```
 
-will result in
+会产生下面结果：
 ```
  Cache-Control: no-cache
 ```
 
-Test to see if this can be used to conduct injection attacks (e.g. CRLF attack). It can also help determine the level of data leakage via the browser cache.
+当测试页面是否执行注入漏洞时（比如CRLF攻击），这些元标签也能通过浏览器缓存来帮助决定信息泄露程度。
 
-A common (but not WCAG compliant) Meta tag is the refresh.
+一个常见（但不是Web内容无障碍指南（WCAG）兼容版本）元标签就是刷新：
 ```
  <META http-equiv="Refresh" content="15;URL=https://www.owasp.org/index.html">
 ```
 
-A common use for Meta tag is to specify keywords that a search engine may use to improve the quality of search results.
+另一个常见元标签的使用是指定关键字给搜索引擎提高搜索结果的质量：
 ```
  <META name="keywords" lang="en-us" content="OWASP, security, sunshine, lollipops">
 ```
 
-Although most web servers manage search engine indexing via the robots.txt file, it can also be managed by Meta tags. The tag below will advise robots to not index and not follow links on the HTML page containing the tag.
+尽管大多数web服务器通过robots.txt来管理搜索引擎索引范围，但是也能通过元标签管理。这些标签会建议机器人不要索引和跟踪页面链接：
 ```
  <META name="robots" content="none">
 ```
 
-The Platform for Internet Content Selection (PICS) and Protocol for Web Description Resources (POWDER) provide infrastructure for associating meta data with Internet content.
+因特网内容选择平台 （Platform for Internet Content Selection PICS） 和 网站描述资源协议（Protocol for Web Description Resources POWDER） 提供元数据如何关联因特网页面内容的基础内容。
 
 
-#### Gray Box Testing
-Not applicable.
+#### 灰盒测试
+不适用。
 
 
-###Tools
+### 测试工具
 
 * Wget
 * Browser "view source" function
@@ -108,8 +108,8 @@ Not applicable.
 * Curl
 
 
-### References
-**Whitepapers**
+### 参考资料
+**白皮书**
 
 [1] http://www.w3.org/TR/1999/REC-html401-19991224 HTML version 4.01
 
