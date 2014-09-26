@@ -1,34 +1,34 @@
-# Fingerprint Web Application Framework (OTG-INFO-008)
+# 识别Web应用框架(OTG-INFO-008)
 
 
-### Summary
-Web framework[*] fingerprinting is an important subtask of the information gathering process. Knowing the type of framework can automatically give a great advantage if such a framework has already been tested by the penetration tester. It is not only the known vulnerabilities in unpatched versions but specific misconfigurations in the framework and known file structure that makes the fingerprinting process so important.
+### 综述
+Web框架[*]识别是信息收集过程简单重要的子任务。知道一个已知类型的框架而且被渗透测试过，这自然而然是一个巨大的优势。除了发现在未打补丁版本中的已知漏洞，还有了解在框架中特定的错误配置和已知文件目录框架使这一识别过程变得非常重要。
 
 
-Several different vendors and versions of web frameworks are widely used. Information about it significantly helps in the testing process, and can also help in changing the course of the test. Such information can be derived by careful analysis of certain common locations. Most of the web frameworks have several markers in those locations which help an attacker to spot them. This is basically what all automatic tools do, they look for a marker from a predefined location and then compare it to the database of known signatures. For better accuracy several markers are usually used.
+一些不同开发商不同版本的web框架被广泛使用。了解框架的信息对测试过程有极大帮助，也能帮助改进测试方案。这些信息可以从一些常见的地方仔细分析推断出来。大多数的web框架有几处特定的标记，能帮助攻击者识别他们。这也是基本上所有自动化工具做的事情，他们在定义好的位置搜寻标记，与数据库已知签名做比较。通常使用多个标记来增强准确程度。
 
 
-[*] Please note that this article makes no differentiation between Web Application Frameworks (WAF) and Content Management Systems (CMS). This has been done to make it convenient to fingerprint both of them in one chapter. Furthermore, both categories are referenced as web frameworks.
+[*] 请注意，这篇文章不区别Web应用框架（WAF）和内容管理系统（CMS）。这方便在同一章节中来识别他们。更进一步说，上述两个类别都被认为是web框架。
 
 
-### Test Objectives
-To define type of used web framework so as to have a better understanding of the security testing methodology.
+### 测试目标
+定义使用的web框架来获得对安全测试方法论更好的理解。
 
 
-### How to Test
+### 如何测试
 
-#### Black Box testing
-There are several most common locations to look in in order to define the current framework:
-* HTTP headers
+#### 黑盒测试
+有好几个常见的地方来寻找当前框架：
+* HTTP 头
 * Cookies
-* HTML source code
-* Specific files and folders
+* HTML 源代码
+* 特别的文件和目录
 
 
-##### HTTP headers
-The most basic form of identifying a web framework is to look at the *X-Powered-By* field in the HTTP response header. Many tools can be used to fingerprint a target. The simplest one is netcat utility.
+##### HTTP 头
+最基本识别web框架的方式是查看HTTP响应头中的*X-Powered-By*字段。许多工具可以用来识别目标，最简单一个是netcat。
 
-Consider the following HTTP Request-Response:
+考虑如下HTTP请求响应对：
 ```
 $ nc 127.0.0.1 80
 HEAD / HTTP/1.0
@@ -42,6 +42,7 @@ Vary: Accept-Encoding
 X-Powered-By: Mono
 ```
 
+从*X-Powered-By*字段中，我们能发现web应用框架很可能是Mono。
 From the *X-Powered-By* field, we understand that the web application framework is likely to be Mono. However, although this approach is simple and quick, this methodology doesn't work in 100% of cases. It is possible to easily disable *X-Powered-By* header by a proper configuration. There are also several techniques that allow a web site to obfuscate HTTP headers (see an example in [Remediation] chapter).
 
 
