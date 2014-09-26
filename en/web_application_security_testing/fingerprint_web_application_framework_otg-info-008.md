@@ -108,7 +108,7 @@ From the screenshot below one can easily learn the used framework and its versio
 ![Image:Zk_html_source.png](https://www.owasp.org/images/6/60/Zk_html_source.png)
 
 
-More frequently such information is placed between `<head></head>` tags, in <meta> tags or at the end of the page. Nevertheless, it is recommended to check the whole document since it can be useful for other purposes such as inspection of other useful comments and hidden fields. Sometimes, web developers do not care much about hiding information about the framework used. It is still possible to stumble upon something like this at the bottom of the page:
+More frequently such information is placed between `<head></head>` tags, in `<meta>` tags or at the end of the page. Nevertheless, it is recommended to check the whole document since it can be useful for other purposes such as inspection of other useful comments and hidden fields. Sometimes, web developers do not care much about hiding information about the framework used. It is still possible to stumble upon something like this at the bottom of the page:
 
 ![Image:banshee_bottom_page.png](https://www.owasp.org/images/9/9d/Banshee_bottom_page.png)
 

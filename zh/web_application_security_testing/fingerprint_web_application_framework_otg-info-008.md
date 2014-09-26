@@ -42,11 +42,10 @@ Vary: Accept-Encoding
 X-Powered-By: Mono
 ```
 
-从*X-Powered-By*字段中，我们能发现web应用框架很可能是Mono。
-From the *X-Powered-By* field, we understand that the web application framework is likely to be Mono. However, although this approach is simple and quick, this methodology doesn't work in 100% of cases. It is possible to easily disable *X-Powered-By* header by a proper configuration. There are also several techniques that allow a web site to obfuscate HTTP headers (see an example in [Remediation] chapter).
+从*X-Powered-By*字段中，我们能发现web应用框架很可能是Mono。尽管这个方法简单迅速，但是不会再100%的案例中有效。很有可能，*X-Powered-By*头被正确的配置禁用了。还有一些技巧使网站混淆HTTP头（参见下文整改措施章节的例子）。
 
 
-So in the same example the tester could either miss the *X-Powered-By* header or obtain an answer like the following:
+所以在同样的例子中，测试者可能错过*X-Powered-By*头，或者得到其他消息，如下所示：
 ```
 HTTP/1.1 200 OK
 Server: nginx/1.0.14
@@ -58,7 +57,7 @@ X-Powered-By: Blood, sweat and tears
 ```
 
 
-Sometimes there are more HTTP-headers that point at a certain web framework. In the following example, according to the information from HTTP-request, one can see that *X-Powered-By* header contains PHP version. However, the *X-Generator* header points out the used framework is actually Swiftlet, which helps a penetration tester to expand his attack vectors. When performing fingerprinting, always carefully inspect every HTTP-header for such leaks.
+有时候有更多的HTTP头指向某个确定的web框架。在下面的例子中，根据HTTP响应的头，我们能发现*X-Powered-By*头包含PHP版本。然而*X-Generator*头指出使用的实际框架是Swiftlet，这能帮助渗透测试人员扩充他的攻击向量。在实施识别的过程中，总是应该仔细调查每一个HTTP头来寻找类似信息。
 ```
 HTTP/1.1 200 OK
 Server: nginx/1.4.1
@@ -75,14 +74,14 @@ X-Generator: Swiftlet
 
 
 ##### Cookies
-Another similar and somehow more reliable way to determine the current web framework are framework-specific cookies.
+另一个类似的，有时候更加可靠来决定当前web框架的是与其相关的框架特定cookies。
 
-Consider the following HTTP-request:
+考虑如下HTTP请求：
 
 ![Image:Cakephp_cookie.png](https://www.owasp.org/images/4/49/Cakephp_cookie.png)
 
 
-The cookie *CAKEPHP* has automatically been set, which gives information about the framework being used. List of common cookies names is presented in chapter [Common frameworks] Limitations are the same - it is possible to change the name of the cookie. For example, for the selected *CakePHP* framework this could be done by the following configuration (excerpt from core.php):
+cookie *CAKEPHP* 被自动设置了，提示了我们使用的框架信息。常见cookies名字列表在下文常见框架章节中列出。限制条件与前者相同，可能cookie名字被改变。例如所标示的 *CakePHP*框架能通过下面配置改变（摘自core.php）。
 
 ```
 /**
@@ -97,35 +96,35 @@ Configure::write('Session.cookie', 'CAKEPHP');
 ```
 
 
-However, these changes are less likely to be made than changes to the *X-Powered-By* header, so this approach can be considered as more reliable.
+然而cookies不像*X-Powered-By*头那样可能变化，所以这个方法被认为更加可靠
 
 
-##### HTML source code
-This technique is based on finding certain patterns in the HTML page source code. Often one can find a lot of information which helps a tester to recognize a specific web framework. One of the common markers are HTML comments that directly lead to framework disclosure. More often certain framework-specific paths can be found, i.e. links to framework-specific css and/or js folders. Finally, specific script variables might also point to a certain framework.
+##### HTML 源代码
+这个技巧基于在HTML页面源代码中找到某一模板。我们常常能找到许多信息来帮助测试者辨认出一个特定web框架。一个通常的标志是HTML注释常常导致框架暴露。更常见的是某一框架相关的路径被发现，比如框架相关的css链接，js脚本目录。最后特定脚本变量也可能揭露特定框架。
 
 
-From the screenshot below one can easily learn the used framework and its version by the mentioned markers. The comment, specific paths and script variables can all help an attacker to quickly determine an instance of ZK framework.
+从下面的截图我们可以通过上文提到的标记轻松发现使用的框架和他的版本。注释、特殊路径和脚本变量都能帮助攻击者迅速发现这是一个ZK框架的实例。
 
 ![Image:Zk_html_source.png](https://www.owasp.org/images/6/60/Zk_html_source.png)
 
 
-More frequently such information is placed between `<head></head>` tags, in <meta> tags or at the end of the page. Nevertheless, it is recommended to check the whole document since it can be useful for other purposes such as inspection of other useful comments and hidden fields. Sometimes, web developers do not care much about hiding information about the framework used. It is still possible to stumble upon something like this at the bottom of the page:
+这些信息很大可能存在于 `<head></head>` 标签之间，在 `<meta>` 标签内或者页面最后。无论如何，推荐检查整个文档，因为这也能有益于其他目的，比如寻找其他有用注释和隐藏表单字段。有时候，web开发者并不关心隐藏关于框架的信息。所以有时候你可能在页面底下发现如下信息：
 
 ![Image:banshee_bottom_page.png](https://www.owasp.org/images/9/9d/Banshee_bottom_page.png)
 
 
-### Common frameworks
+### 常见框架
 #### Cookies
 
-| Framework | Cookie name     |
+| 框架 | Cookie 名称     |
 |-----------|-----------------|
 | Zope      | zope3           |
 | CakePHP   | cakephp         |
 | Kohana    | kohanasession   |
 | Laravel   | laravel_session |
 
-#### HTML source code
-##### General markers
+#### HTML 源代码
+##### 通用标记
 
 | %framework_name% |
 |------------------|
@@ -134,9 +133,9 @@ More frequently such information is placed between `<head></head>` tags, in <met
 | running          |
 
 
-##### Specific markers
+##### 特定标志
 
-| Framework         | Keyword                   |
+| 框架         | 关键字                   |
 |-------------------|---------------------------|
 | Adobe ColdFusion  | `<!-- START headerTags.cfm` |
 | Microsoft ASP.NET | `__VIEWSTATE`               |
@@ -145,40 +144,40 @@ More frequently such information is placed between `<head></head>` tags, in <met
 | Indexhibit        | `ndxz-studio`               |
 
 
-#### Specific files and folders
-Specific files and folders are different for each specific framework. It is recommended to install the corresponding framework during penetration tests in order to have better understanding of what infrastructure is presented and what files might be left on the server. However, several good file lists already exist and one good example is FuzzDB wordlists of predictable files/folders (http://code.google.com/p/fuzzdb/).
+#### 特定文件和目录
+每个特定框架都有不同特定文件和目录。推荐在渗透测试过程中自己搭建安装相关框架以便于更好理解框架的基础结构和明确服务器上的遗留文件。一些有用的文件类表已经存在，比如FuzzDB的预测文件和文件夹的字典（http://code.google.com/p/fuzzdb/ ）。
 
 
-### Tools
-A list of general and well-known tools is presented below. There are also a lot of other utilities, as well as framework-based fingerprinting tools.
+### 测试工具
+下面展示了一系列通用和知名的测试工具列表。出了框架识别外他们还有许多其他功能。
 
 
 #### WhatWeb
-Website:  http://www.morningstarsecurity.com/research/whatweb <br>
-Currently one of the best fingerprinting tools on the market. Included in a default [Kali Linux] build.
-Language: Ruby
-Matches for fingerprinting are made with:
-* Text strings (case sensitive)
-* Regular expressions
-* Google Hack Database queries (limited set of keywords)
-* MD5 hashes
-* URL recognition
-* HTML tag patterns
-* Custom ruby code for passive and aggressive operations
+网站:  http://www.morningstarsecurity.com/research/whatweb <br>
+现在市场上最好的识别工具之一。默认包括在[Kali Linux]之中。
+语言: Ruby
+使用下面技巧匹配指纹库：
+* 字符串 （大小写敏感）
+* 正则表达式
+* Google Hack数据库查询（有限关键字组）
+* MD5哈希值
+* URL 识别
+* HTML 标签模式
+* 自定义ruby代码，被动和主动操作.
 
 
-Sample output is presented on a screenshot below:
+下面的截屏展现一个输出样例：
 
 ![Image:whatweb-sample.png](https://www.owasp.org/images/8/8e/Whatweb-sample.png)
 
 
 
 #### BlindElephant
-Website: https://community.qualys.com/community/blindelephant <br>
-This great tool works on the principle of static file checksum based version difference thus providing a very high quality of fingerprinting.
-Language: Python
+网站: https://community.qualys.com/community/blindelephant <br>
+这个优秀的工具工作原理是基于不同版本的静态文件校验和，他提供了一个非常高质量的识别指纹库。T
+语言: Python
 
-Sample output of a successful fingerprint:
+一个成功识别的输出样例：
 ```
 pentester$ python BlindElephant.py http://my_target drupal
 Loaded /Library/Python/2.7/site-packages/blindelephant/dbs/drupal.pkl with 145 versions, 478 differentiating paths, and 434 version groups.
@@ -210,49 +209,49 @@ Best Guess: 7.14
 
 
 #### Wappalyzer
-Website: http://wappalyzer.com <br>
-Wapplyzer is a Firefox Chrome plug-in. It works only on regular expression matching and doesn't need anything other than the page to be loaded on browser. It works completely at the browser level and gives results in the form of icons. Although sometimes it has false positives, this is very handy to have notion of what technologies were used to construct a target website immediately after browsing a page.
+网站: http://wappalyzer.com <br>
+Wapplyzer是一个Firefox和Chrome插件。他只依赖于正则表达式，只需要一个浏览器上载入的页面就能工作。在浏览器层面工作并用图表形式给出结果。尽管有时候他会误报，但是在浏览一个网页后立刻能组织出目标站点使用技术信息也非常有用。
 
 
-Sample output of a plug-in is presented on a screenshot below.
+下面截图展示了一个输出样例：
 
 ![Image:Owasp-wappalyzer.png](https://www.owasp.org/images/a/a7/Owasp-wappalyzer.png)
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**<br>
 * Saumil Shah: "An Introduction to HTTP fingerprinting" - http://www.net-square.com/httprint_paper.html
 * Anant Shrivastava : "Web Application Finger Printing" - http://anantshri.info/articles/web_app_finger_printing.html
 
 
-### Remediation
-The general advice is to use several of the tools described above and check logs to better understand what exactly helps an attacker to disclose the web framework. By performing multiple scans after changes have been made to hide framework tracks, it's possible to achieve a better level of security and to make sure of the framework can not be detected by automatic scans. Below are some specific recommendations by framework marker location and some additional interesting approaches.
+### 整改措施
+通用的建议是使用上面描述的工具并查看日志理解攻击者如何暴露web框架。通过多次扫描修改隐藏框架操作，达到一个较好的安全等级和保证框架不会被自动化扫描检测出来。下面是一些关于框架标志位置的特定建议和一些额外的有趣的方法。
 
 
-#### HTTP headers
-Check the configuration and disable or obfuscate all HTTP-headers that disclose information the technologies used. Here is an interesting article about HTTP-headers obfuscation using Netscaler:
+#### HTTP 头
+检查配置和禁止或者混淆所有会暴露信息的HTTP头。这里有一篇有趣的文章关于使用NetScaler混淆HTTP头的文章：
 http://grahamhosking.blogspot.ru/2013/07/obfuscating-http-header-using-netscaler.html
 
 
 #### Cookies
-It is recommended to change cookie names by making changes in the corresponding configuration files.
+推荐通过修改相关配置文件来改变cookie名称。
 
 
-#### HTML source code
-Manually check the contents of the HTML code and remove everything that explicitly points to the framework.
+#### HTML 源代码
+手动检查HTML代码内容，移除所有明显指向框架的内容。
 
-General guidelines:
-* Make sure there are no visual markers disclosing the framework
-* Remove any unnecessary comments (copyrights, bug information, specific framework comments)
-* Remove META and generator tags
-* Use the companies own css or js files and do not store those in a framework-specific folders
-* Do not use default scripts on the page or obfuscate them if they must be used.
+通用指南:
+* 确保没有暴露框架可视标记；
+* 移除不需要的注释（版权，bug信息，特定框架注释）；
+* 移除生成的元标签；
+* 使用公司自己的css和js脚本文件，不要存放在框架相关的目录；
+* 不要使用页面默认的脚本，如果必须使用，混淆他们。
 
 
-#### Specific files and folders
-General guidelines:
-* Remove any unnecessary or unused files on the server. This implies text files disclosing information about versions and installation too.
-* Restrict access to other files in order to achieve 404-response when accessing them from outside. This can be done, for example, by modifying htaccess file and adding RewriteCond or RewriteRule there. An example of such restriction for two common WordPress folders is presented below.
+#### 特定文件和目录
+通用指南：
+* 在服务器上移除所有不需要的和无用的文件。这意味着也包括会暴露版本信息的文本文件和安装文件。
+* 使用404错误响应来限制从外部访问其他文件。例如这可以通过修改htaccess文件，加入重写规则 RewriteCond 和 RewriteRuleRestrict。例如，限制两个常见的WordPress文件夹的例子如下：
 ```
 RewriteCond %{REQUEST_URI} /wp-login\.php$ [OR]
 RewriteCond %{REQUEST_URI} /wp-admin/$
@@ -260,14 +259,14 @@ RewriteRule $ /http://your_website [R=404,L]
 ```
 
 
-However, these are not the only ways to restrict access. In order to automate this process, certain framework-specific plugins exist. One example for WordPress is StealthLogin (http://wordpress.org/plugins/stealth-login-page).
+当然，这不是唯一限制访问的方法，有相关特定框架的插件存在来自动化这个过程。一个WordPress的例子是StealthLogin (http://wordpress.org/plugins/stealth-login-page)。
 
 
-#### Additional approaches
-General guidelines:
-* Checksum management
-    - The purpose of this approach is to beat checksum-based scanners and not let them disclose files by their hashes. Generally, there are two approaches in checksum management:
-    - Change the location of where those files are placed (i.e. move them to another folder, or rename the existing folder)
-    - Modify the contents - even slight modification results in a completely different hash sum, so adding a single byte in the end of the file should not be a big problem.
-* Controlled chaos
-    - A funny and effective method that involves adding bogus files and folders from other frameworks in order to fool scanners and confuse an attacker. But be careful not to overwrite existing files and folders and to break the current framework!
+#### 其他措施
+通用指南：
+* 校验和管理
+    - 这个措施的目的是打败基于校验和的扫描器以及不让他们通过哈希值暴露文件。通常有两个方法进行校验和管理：
+    - 改变这些文件存在的位置（就是将他们移动到另一个文件夹，或者重命名文件夹）
+    - 修改文件内容 - 甚至细微的修改就能导致完全不同的哈希值，所以在文件末尾添加单个字节应该不是一个大问题。
+* 制造混乱
+    - 有个有趣且有效的方法需要从添加其他框架的伪装文件来愚弄工具盒混乱攻击者。但需要注意不要覆盖存在的文件和目录破坏现有框架。
