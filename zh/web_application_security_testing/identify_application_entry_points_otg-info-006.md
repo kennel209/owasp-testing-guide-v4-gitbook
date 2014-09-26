@@ -2,67 +2,67 @@
 
 
 ### 综述
-Enumerating the application and its attack surface is a key precursor before any thorough testing can be undertaken, as it allows the tester to identify likely areas of weakness. This section aims to help identify and map out areas within the application that should be investigated once enumeration and mapping have been completed.
+枚举应用和他的攻击面是一个关键的前期准备工作，应该在完全测试开展前进行，他为测试者识别了可能的弱点范围。这部分目标是一旦完成枚举映射工作，帮助识别和筹划应用中应该被详细调查的区域。
 
 
 ### 测试目标
 
-Understand how requests are formed and typical responses from the application
+理解请求是如何组织的，和典型的应用响应。
 
 
 ### 如何测试
 
-Before any testing begins, the tester should always get a good understanding of the application and how the user and browser communicates with it.  As the tester walks through the application, they should pay special attention to all HTTP requests (GET and POST Methods, also known as Verbs), as well as every parameter and form field that is passed to the application.  In addition, they should pay attention to when GET requests are used and when POST requests are used to pass parameters to the application.  It is very common that GET requests are used, but when sensitive information is passed, it is often done within the body of a POST request.
+在任何测试开始前，测试者总是应该对应用程序有足够的理解，明白用户和浏览器是如何与应用通信的。随着测试者在应用中遨游，他应当特别关注于所有的HTTP请求（GET和POST方法，也叫做谓词）以及每个传递给应用的参数和表单。此外也应该注意在传参数给应用时，什么时候使用的是GET请求，什么时候又使用了POST请求。通常情况下大多数使用GET请求，但是当传送敏感信息时，往往包含在POST请求的主体中。
 
 
-Note that to see the parameters sent in a POST request, the tester will need to use a tool such as an intercepting proxy (for example, OWASP: [Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)) or a browser plug-in.  Within the POST request, the tester should also make special note of any hidden form fields that are being passed to the application, as these usually contain sensitive information, such as state information, quantity of items, the price of items, that the developer never intended for you to see or change.
+注意为了查看POST请求中参数，测试这可能需要使用数据劫持代理工具（比如OWASP的[Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)）或者一些浏览器插件。在POST请求中，测试者应当特别注意传递给应用的任何表单隐藏域，往往他们包含一些敏感信息，这些信息可能是开发者不希望你看见或者修改的，如信息状态、物品数量、物品价格信息等等。
 
 
-In the author's experience, it has been very useful to use an intercepting proxy and a spreadsheet for this stage of the testing.  The proxy will keep track of every request and response between the tester and the application as they u walk through it.  Additionally, at this point, testers usually trap every request and response so that they can see exactly every header, parameter, etc. that is being passed to the application and what is being returned.  This can be quite tedious at times, especially on large interactive sites (think of a banking application). However, experience will show what to look for and this phase can be significantly reduced.
+根据作者的经验，在这个阶段使用一个数据劫持代理和电子表格是非常有用的。代理工具能记录和追踪每一个测试者和应用之间的请求和响应。此外，测试者通常能捕获每一个请求和响应，能够清楚看到每一个发出的和返回的头、参数等等信息。这些可能有时十分乏味特别是大型交互网站（想一想银行应用）。但是经验积累会告诉你该看什么，这个过程将极大地减轻。
 
 
-As the tester walks through the application, they should take note of any interesting parameters in the URL, custom headers, or body of the requests/responses, and save them in a spreadsheet.  The spreadsheet should include the page requested (it might be good to also add the request number from the proxy, for future reference), the interesting parameters, the type of request (POST/GET), if access is authenticated/unauthenticated, if SSL is used, if it's part of a multi-step process, and any other relevant notes.  Once they have every area of the application mapped out, then they can go through the application and test each of the areas that they have identified and make notes for what worked and what didn't work.  The rest of this guide will identify how to test each of these areas of interest, but this section must be undertaken before any of the actual testing can commence.
+当测试者在漫游应用的时候，也应当注意在URL中、自定义HTTP头中或请求响应中的有趣的参数，并在电子表格中记录下来。表格中应当包含被请求的页面（或许加入代理中的请求序号来做引用会更好），有趣的参数，请求类型（POST/GET），访问是否需要认证，是否使用SSL，以及其他相关备注（如果有多个过程）。一旦每一个应用区域都被映射完成，测试者应该测试每一个他们识别出来的地方，记录是否如预期一样工作。指南剩下的部分会指导如何测试这些有趣的区域，但是这章的工作必须在任何测试正式开始前完成。
 
 
-Below are some points of interests for all requests and responses.  Within the requests section, focus on the GET and POST methods, as these appear the majority of the requests.  Note that other methods, such as PUT and DELETE, can be used. Often, these more rare requests, if allowed, can expose vulnerabilities.  There is a special section in this guide dedicated for testing these HTTP methods.
+下面是通用的请求和响应中有意思的点，在请求部分，关注GET和POST方法，他往往是请求的主要部分。注意其他方法如PUT和DELETE也可能被使用。这些更加罕见的请求如果被接受，经常会产生漏洞。在指南中有特别的一个章节描述如何测试HTTP方法。
 
 
-**Requests:**
-* Identify where GETs are used and where POSTs are used.
-* Identify all parameters used in a POST request (these are in the body of the request).
-* Within the POST request, pay special attention to any hidden parameters.  When a POST is sent all the form fields (including hidden parameters) will be sent in the body of the HTTP message to the application.  These typically aren't seen unless a proxy or view the HTML source code is used.  In addition, the next page shown, its data, and the level of access can all be different depending on the value of the hidden parameter(s).
-* Identify all parameters used in a GET request (i.e., URL), in particular the query string (usually after a ? mark).
-* Identify all the parameters of the query string. These usually are in a pair format, such as foo=bar. Also note that many parameters can be in one query string such as separated by a &, ~, :, or any other special character or encoding.
-* A special note when it comes to identifying multiple parameters in one string or within a POST request is that some or all of the parameters will be needed to execute the attacks.  The tester needs to identify all of the parameters (even if encoded or encrypted) and identify which ones are processed by the application.  Later sections of the guide will identify how to test these parameters. At this point, just make sure each one of them is identified.
-* Also pay attention to any additional or custom type headers not typically seen (such as debug=False).
+**请求:**
+* 识别GET请求和POST请求使用的地方。
+* 识别所有使用在POST请求中的参数（这些参数在请求主体中）。
+* 在POST请求中，特别注意隐藏参数。POST请求会在HTTP消息的主体中发送所有的表单域（包括隐藏参数）给应用。这些往往不可见，除非使用代理或者查看页面源代码。此外，隐藏属性 的值可能导致不同的后续页面、数据和访问级别。
+* 识别所有GET请求中的参数（如URL），特别是查询字符串（一般跟着`?`标记后）。
+* 识别查询字符串中的所有参数。这些参数往往成对出现，如foo=bar。注意一下，许多参数也能在一个查询字符串中，用`&, ~, :`或者其他特殊字符或编码分割。
+* 注意如果在查询字符串或POST请求中存在多个参数，需要识别执行攻击中真正需要的一些或所有参数。测试者需要识别所有参数（甚至编码过或加密过的），识别出哪些是被应用程序处理的。指南后面章节会指导你如何测试这些参数，在这里，我们只需要确认识别出每一个参数即可。
+* 注意有些附加或自定义的头不是正常情况能发现的（比如debug=False）。
 
 
-**Responses:**
-*Identify where new cookies are set (Set-Cookie header), modified, or added to.
-*Identify where there are any redirects (3xx HTTP status code), 400 status codes, in particular 403 Forbidden, and 500 internal server errors during normal responses (i.e., unmodified requests).
-*Also note where any interesting headers are used. For example, "Server: BIG-IP" indicates that the site is load balanced. Thus, if a site is load balanced and one server is incorrectly configured, then the tester might have to make multiple requests to access the vulnerable server, depending on the type of load balancing used.
+**响应:**
+* 识别在哪里新cookies被设置（Set-Cookie头），修改或新增。
+* 识别出在正常访问过程中（未修改正常请求）。重定向跳转发生的地方（3xx HTTP 状态码），400 状态码，特别是403 禁止访问，和500 内部服务器错误。
+* 也注意有些有趣的HTTP头。比如, "Server: BIG-IP" 表明这个站点被负载均衡。因此，如果一个站点是负载均衡的，而且有一个服务器没有被正确配置，那么测试者需要请求多次来访问有漏洞的服务器，取决于使用了何种负载均衡设备。
 
 
 #### 黑盒测试
-**Testing for application entry points:** <br>
-The following are two examples on how to check for application entry points.<br>
+**测试应用入口点** <br>
+下面是如何测试应用入口点的两个例子。
 
 
-#####EXAMPLE 1
-This example shows a GET request that would purchase an item from an online shopping application.
+##### 例1
+这个例子展现一个从在线商店购买东西的GET请求。
 ```
  GET https://x.x.x.x/shoppingApp/buyme.asp?CUSTOMERID=100&ITEM=z101a&PRICE=62.50&IP=x.x.x.x
  Host: x.x.x.x
  Cookie: SESSIONID=Z29vZCBqb2IgcGFkYXdhIG15IHVzZXJuYW1lIGlzIGZvbyBhbmQgcGFzc3dvcmQgaXMgYmFy
 ```
 
-**Result Expected:**
+**期望结果：**
 
-Here the tester would note all the parameters of the request such as CUSTOMERID, ITEM, PRICE, IP, and the Cookie (which could just be encoded parameters or used for session state).
+这里测试者可能注意到了所有在请求中的参数如CUSTOMERID，ITEM，PRICE，IP和Cookie（用于会话状态，经过编码的参数）。
 
 
-#####EXAMPLE 2
-This example shows a POST request that would log you into an application.
+##### 例2
+这个例子展现了登陆一个应用的POST请求。
 ```
  POST https://x.x.x.x/KevinNotSoGoodApp/authenticate.asp?service=login
  Host: x.x.x.x
@@ -70,19 +70,19 @@ This example shows a POST request that would log you into an application.
  CustomCookie=00my00trusted00ip00is00x.x.x.x00
 ```
 
-Body of the POST message:
+POST请求消息主体：
 ```
  user=admin&pass=pass123&debug=true&fromtrustIP=true
 ```
 
-**Result Expected:**
+**期望结果：**
 
-In this example the tester would note all the parameters as they have before but notice that the parameters are passed in the body of the message and not in the URL.  Additionally, note that there is a custom cookie that is being used.
+在这个例子中测试者应该注意之前注意过的参数，但是请注意参数在消息的主体中传递，而不是URL中。此外，注意我们使用了一个自定义的cookie。
 
 
-#### Gray Box Testing
+#### 灰盒测试
 
-Testing for application entry points via a Gray Box methodology would consist of everything already identified above with one addition.  In cases where there are external sources from which the application receives data and processes it (such as SNMP traps, syslog messages, SMTP, or SOAP messages from other servers) a meeting with the application developers could identify any functions that would accept or expect user input and how they are formatted.  For example, the developer could help in understanding how to formulate a correct SOAP request that the application would accept and where the web service resides (if the web service or any other function hasn't already been identified during the black box testing).
+通过灰盒方法来测试应用入口点包括我们已经识别出来的上文部分，再加上另外一点。在从外部数据源获取数据并处理的情况中（如SNMP捕获，syslog消息，SMTP或其他服务器的SOAP信息）。与应用开发者进行一次会谈，来识别处理功能函数，用户输入期望和输入格式。例如，开发者能帮助理解如何编写一个应用接受的正确的SOAP请求，这些web服务或其他功能可能是我们没在黑盒测试中考虑到和识别出来的。
 
 
 ### 测试工具
