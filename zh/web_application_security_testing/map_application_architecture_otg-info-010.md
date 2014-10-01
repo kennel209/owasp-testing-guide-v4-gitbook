@@ -1,32 +1,32 @@
-# Map Application Architecture (OTG-INFO-010)
+# 映射应用架构 (OTG-INFO-010)
 
 
-### Summary
-The  complexity of interconnected and heterogeneous web server infrastructure  can include hundreds of web applications and makes configuration management and review a fundamental step in testing and deploying every single application. In fact it takes only a single vulnerability to undermine the security of the entire infrastructure, and even small and seemingly unimportant problems may evolve into severe risks for another application on the same server.
+### 综述
+错综复杂相互连通的web网络环境可能包括数以百计的web应用，这也使得配置管理和审查变成测试中的一个基本步骤，需要在每个应用中实施。事实上，只需一个漏洞就能破坏整个基础设施的安全。甚至于一个微小的，看似不重要的问题能在相同服务器上的另一个应用中演化成严重的风险。
 
 
-To address these problems, it is of utmost importance to perform an in-depth review of configuration and known security issues. Before performing an in-depth review it is necessary to map the network and application architecture. The different elements that make up the infrastructure need to be determined to understand how they interact with a web application and how they affect security.
+为了定位这些问题，实施深入的配置和已知安全问题审查时极其重要的。在实施深入评审之前，有必要映射网络和应用架构。每一个构成整个网络架构的不同元素都需要了解，并弄清楚他们是如何与web应用交互的，以及他们将对安全造成何种影响。
 
 
-### How to Test
+### 如何测试
 
-#### Map the application architecture
+#### 映射应用架构
 
-The application architecture needs to be mapped through some test to determine what different components are used to build the web application. In small setups, such as a simple CGI-based application, a single server might be used that runs the web server which executes the C, Perl, or Shell CGIs application, and perhaps also the authentication mechanism.
-
-
-On more complex setups, such as an online bank system, multiple servers might be involved. These may include a reverse proxy, a front-end web server, an application server and a database server or LDAP server. Each of these servers will be used for different purposes and might be even be divided in different networks with firewalls between them. This creates different DMZs so that access to the web server will not grant a remote user access to the authentication mechanism itself, and so that compromises of the different elements of the architecture can be isolated so that they will not compromise the whole architecture.
+映射应用架构需要通过测试来发现不同的构成应用的元件。在一些小型结构中，比如简单的基于CGI的应用，是单个服务器被用来运行web服务器，可能在上面会执行C、perl或者Shell CGI脚本，也许也有认证机制。
 
 
-Getting knowledge of the application architecture can be easy if this information is provided to the testing team by the application developers in document form or through interviews, but can also prove to be very difficult if doing a blind penetration test.
+在一些更加复杂的结构中，比如一个在线银行系统，可能涉及到多个服务器。他们可能包括一个反向代理服务器，一个前端web服务器，一个应用程序服务器和一个数据库服务器或LDAP服务器。每个服务器都有不同的用途，可能被划分成不同网络，之间还存在着防火墙。这创建了不同DMZ区域以便获得web服务器的权限也不能获得认证服务器的远程用户权限。如此不同元素即使被攻破沦陷也会被孤立，不会造成整个架构被控制。
 
 
-In the latter case, a tester will first start with the assumption that there is a simple setup (a single server). Then they will retrieve information from other tests and derive the different elements, question this assumption and extend the architecture map. The tester will start by asking simple questions such as: “Is there a firewalling system protecting the web server?”. This question will be answered based on the results of network scans targeted at the web server and the analysis of whether the network ports of the web server are being filtered in the network edge (no answer or ICMP unreachables are received) or if the server is directly connected to the Internet (i.e. returns RST packets for all non-listening ports). This analysis can be enhanced to determine the type of firewall used based on network packet tests. Is it a stateful firewall or is it an access list filter on a router? How is it configured? Can it be bypassed?
+获得应用架构的知识可能会很简单，如果这些信息已经在应用开发者用文档形式或访谈方式提供给测试团队。但是这些信息往往在一无所知的渗透测试中很难获得。
 
 
-Detecting a reverse proxy in front of the web server needs to be done by the analysis of the web server banner, which might directly disclose the existence of a reverse proxy (for example, if ‘WebSEAL’[1]  is returned). It can also be determined by obtaining the answers given by the web server to requests and comparing them to the expected answers. For example, some reverse proxies act as “intrusion prevention systems” (or web-shields) by blocking known attacks targeted at the web server. If the web server is known to answer with a 404 message to a request that targets an unavailable page and returns a different error message for some common web attacks like those done by CGI scanners, it might be an indication of a reverse proxy (or an application-level firewall) which is filtering the requests and returning a different error page than the one expected. Another example: if the web server returns a set of available HTTP methods (including TRACE) but the expected methods return errors then there is probably something in between blocking them.
+在后一种情况中，测试者往往从一个简单的架构开始做假设（比如单个服务器）。接着，从其他测试中接收信息并推断出不同的元素，质疑先前的假设，拓展架构图。测试者可能从询问简单的问题开始，如“服务器是否有防火墙保护？”。这些问题的结果可能基于网络扫描结果和分析网络边界服务器端口过滤情况（无应答或ICMP不可达），或者服务器直接接入互联网的结果（如向所有非开放端口返回RST包）得出。这些分析也能通过网络数据包测试加强来判断防火墙类型。如这是否是一个状态防火墙或者只是路由器上的接入过滤策略？如何被配置？是否能绕过？
 
-In some cases, even the protection system gives itself away:
+
+检测在web服务器前面的反向代理可以通过分析web服务器标志来判断，这可能直接暴露反向代理的存在（例如，返回 "WebSEAL0"[1]）。这也能通过向服务器发送请求并对比服务器应答和期望应答来判断。例如，一些反向代理会充当入侵防护系统（IPS）或网络防火墙角色，来阻挡针对服务器的一些已知攻击手段。使用一些常见的Web攻击，就像一些CGI扫描器发送的一些请求，如果已知web服务器应该对这些不可用资源的请求做出404消息应答，但是事实上却返回了一个不同的错误信息，这暗示了可能有反向代理的存在（或者应用层防火墙WAF存在），他们往往会过滤请求，并返回另一个不同的错误页面。另一个例子是，如果web服务器返回一系列可用的HTTP方法（包括TRACE），但是这些方法请求却发生了错误，这可能意味着中间有设备阻挡了他们。
+
+在一些例子中，甚至防护系统会直接给出自己信息：
 
 ```
 GET /web-console/ServerInfo.jsp%00 HTTP/1.0
@@ -44,23 +44,23 @@ FW-1 at XXXXXX: Access denied.</BODY>
 ```
 
 
-**Example of the security server of Check Point Firewall-1 NG AI “protecting” a web server**
+**Check Point Firewll-1 NG 安全服务器正在保护web服务器的例子**
 
-Reverse proxies can also be introduced as proxy-caches to accelerate the performance of back-end application servers. Detecting these proxies can be done based on the server header. They can also be detected by timing requests that should be cached by the server and comparing the time taken to server the first request with subsequent requests.
-
-
-Another element that can be detected is network load balancers. Typically, these systems will balance a given TCP/IP port to multiple servers based on different algorithms (round-robin, web server load, number of requests, etc.). Thus, the detection of this architecture element needs to be done by examining multiple requests and comparing results to determine if the requests are going to the same or different web servers. For example, based on the Date header if the server clocks are not synchronized. In some cases, the network load balance process might inject new information in the headers that will make it stand out distinctively, like the AlteonP cookie introduced by Nortel’s Alteon WebSystems load balancer.
+反向代理也能作为代理缓存服务器来增加后台应用的性能。可以通过服务器头来发现这些代理。也能通过请求时间来判断，比较一系列缓存的请求和最初的请求响应时间来发现反向代理。
 
 
-Application web servers are usually easy to detect. The request for several resources is handled by the application server itself (not the web server) and the response header will vary significantly (including different or additional values in the answer header). Another way to detect these is to see if the web server tries to set cookies which are indicative of an application web server being used (such as the JSESSIONID provided by some J2EE servers), or to rewrite URLs automatically to do session tracking.
+另一个能被检测到的系统是网络负载均衡设备。通常情况下，这些系统会通过不同的算法来将TCP/IP端口请求分配给多个服务器（轮询，web服务器负载情况，请求数量等算法）。因此检测这种架构需要检查多个请求是否被发送到相同或不同服务器上。例如，如果服务器时钟不同步可以基于Data头来判断。在一些案例中，网络负载设备可能会在HTTP头上加入新的信息来帮助他区分请求，比如AltomP cookie被Nortel的Alteon WebSystems负载均衡引入。
 
 
-Authentication back ends (such as LDAP directories, relational databases, or RADIUS servers) however, are not as easy to detect from an external point of view in an immediate way, since they will be hidden by the application itself.
+应用服务器通常是最容易检测的。一些资源的请求被应用服务器自己处理（不是web服务器），返回的请求头往往不同（包括不同或者额外的应答头部的值）。另一个探测这些服务器的方法是检测web服务器是否设置暗示应用服务器的cookies值（比如一些J2EE服务器提供的JSESSIONID），或者检测是否有重写URL情况来自动进行会话追踪。
 
 
-The use of a back end database can be determined simply by navigating an application. If there is highly dynamic content generated “on the fly," it is probably being extracted from some sort of database by the application itself. Sometimes the way information is requested might give insight to the existence of a database back-end. For example, an online shopping application that uses numeric identifiers (‘id’) when browsing the different articles in the shop.  However, when doing a blind application test, knowledge of the underlying database is usually only available when a vulnerability surfaces in the application, such as poor exception handling or susceptibility to SQL injection.
+认证后台（比如LDAP目录，相关数据库，或者RADIUS服务器）往往很难从外部简单检测到，因为他们往往被应用本身隐藏。
 
 
-### References
+判断后端数据库可以通过浏览应用简单实现。如果有任意即时生成的动态页面，那么他们往往是应用从通过数据库排序中抓取出来的。有时候这样的信息可能揭示出后段数据库的存在。例如一个在线商店应用使用序号鉴别（id）不同的文章。但是在对应用进行盲测时，后台数据库的情况往往是能够获得的，往往通过应用中的某些漏洞接口，比如糟糕的异常处理或者对于SQL注入的反馈。
+
+
+### 参考资料
 * [1] WebSEAL, also known as Tivoli Authentication Manager, is a reverse proxy from IBM which is part of the Tivoli framework.
 * [2] There are some GUI-based administration tools for Apache (like NetLoony) but they are not in widespread use yet.
