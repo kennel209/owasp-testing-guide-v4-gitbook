@@ -57,12 +57,12 @@ Tip: before starting dirbusting, it is recommended to check the robots.txt file 
 
 ![Image:Robots_info_disclosure.png](https://www.owasp.org/index.php?title=Special:Upload&wpDestFile=Robots_info_disclosure.png)
 
-Specific files and folders are different for each specific application. It is recommended to install the corresponding application during penetration tests in order to have better understanding of what infrastructure is presented and what files might be left on the server. However, several good file lists already exist and one good example is FuzzDB wordlists of predictable files/folders (http://code.google.com/p/fuzzdb/).
+每个特定框架都有不同特定文件和目录。推荐在渗透测试过程中自己搭建安装相关框架以便于更好理解框架的基础结构和明确服务器上的遗留文件。一些有用的文件类表已经存在，比如FuzzDB的预测文件和文件夹的字典（http://code.google.com/p/fuzzdb/ ）。
 
-### Common Application Identifiers
+### 常见应用识别
 #### Cookies
 
-| Framework    | Cookie name                       |
+| 框架    | Cookie 名称                       |
 |--------------|-----------------------------------|
 | phpBB        | phpbb3_                           |
 | Wordpress    | wp-settings                       |
@@ -86,9 +86,9 @@ Specific files and folders are different for each specific application. It is re
 | VIVVO        | VivvoSessionId                    |
 
 
-#### HTML source code
+#### HTML 源代码
 
-| Application | Keyword                                                                      |
+| 应用 | 关键字                                                                      |
 |-------------|------------------------------------------------------------------------------|
 | Wordpress   | `<meta name="generator" content="WordPress 3.9.2" />`                          |
 | phpBB       | `<body id="phpbb"   `                                                          |
@@ -99,36 +99,36 @@ Specific files and folders are different for each specific application. It is re
 
 
 
-### Tools
-A list of general and well-known tools is presented below. There are also a lot of other utilities, as well as framework-based fingerprinting tools.
+### 测试工具
+下面展示了一系列通用和知名的测试工具列表。出了框架识别外他们还有许多其他功能。
 
 
 #### WhatWeb
-Website:  http://www.morningstarsecurity.com/research/whatweb <br>
-Currently one of the best fingerprinting tools on the market. Included in a default [Kali Linux] build.
-Language: Ruby
-Matches for fingerprinting are made with:
-* Text strings (case sensitive)
-* Regular expressions
-* Google Hack Database queries (limited set of keywords)
-* MD5 hashes
-* URL recognition
-* HTML tag patterns
-* Custom ruby code for passive and aggressive operations
+网站:  http://www.morningstarsecurity.com/research/whatweb <br>
+现在市场上最好的识别工具之一。默认包括在[Kali Linux]之中。
+语言: Ruby
+使用下面技巧匹配指纹库：
+* 字符串 （大小写敏感）
+* 正则表达式
+* Google Hack数据库查询（有限关键字组）
+* MD5哈希值
+* URL 识别
+* HTML 标签模式
+* 自定义ruby代码，被动和主动操作.
 
 
-Sample output is presented on a screenshot below:
+下面的截屏展现一个输出样例：
 
 ![Image:whatweb-sample.png](https://www.owasp.org/images/8/8e/Whatweb-sample.png)
 
 
 
 #### BlindElephant
-Website: https://community.qualys.com/community/blindelephant <br>
-This great tool works on the principle of static file checksum based version difference thus providing a very high quality of fingerprinting.
-Language: Python
+网站: https://community.qualys.com/community/blindelephant <br>
+这个优秀的工具工作原理是基于不同版本的静态文件校验和，他提供了一个非常高质量的识别指纹库。T
+语言: Python
 
-Sample output of a successful fingerprint:
+一个成功识别的输出样例：
 ```
 pentester$ python BlindElephant.py http://my_target drupal
 Loaded /Library/Python/2.7/site-packages/blindelephant/dbs/drupal.pkl with 145 versions, 478 differentiating paths, and 434 version groups.
@@ -160,49 +160,49 @@ Best Guess: 7.14
 
 
 #### Wappalyzer
-Website: http://wappalyzer.com <br>
-Wapplyzer is a Firefox Chrome plug-in. It works only on regular expression matching and doesn't need anything other than the page to be loaded on browser. It works completely at the browser level and gives results in the form of icons. Although sometimes it has false positives, this is very handy to have notion of what technologies were used to construct a target website immediately after browsing a page.
+网站: http://wappalyzer.com <br>
+Wapplyzer是一个Firefox和Chrome插件。他只依赖于正则表达式，只需要一个浏览器上载入的页面就能工作。在浏览器层面工作并用图表形式给出结果。尽管有时候他会误报，但是在浏览一个网页后立刻能组织出目标站点使用技术信息也非常有用。
 
 
-Sample output of a plug-in is presented on a screenshot below.
+下面截图展示了一个输出样例：
 
 ![Image:Owasp-wappalyzer.png](https://www.owasp.org/images/a/a7/Owasp-wappalyzer.png)
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**<br>
 * Saumil Shah: "An Introduction to HTTP fingerprinting" - http://www.net-square.com/httprint_paper.html
 * Anant Shrivastava : "Web Application Finger Printing" - http://anantshri.info/articles/web_app_finger_printing.html
 
 
-### Remediation
-The general advice is to use several of the tools described above and check logs to better understand what exactly helps an attacker to disclose the web framework. By performing multiple scans after changes have been made to hide framework tracks, it's possible to achieve a better level of security and to make sure of the framework can not be detected by automatic scans. Below are some specific recommendations by framework marker location and some additional interesting approaches.
+### 整改措施
+通用的建议是使用上面描述的工具并查看日志理解攻击者如何暴露web框架。通过多次扫描修改隐藏框架操作，达到一个较好的安全等级和保证框架不会被自动化扫描检测出来。下面是一些关于框架标志位置的特定建议和一些额外的有趣的方法。
 
 
-#### HTTP headers
-Check the configuration and disable or obfuscate all HTTP-headers that disclose information the technologies used. Here is an interesting article about HTTP-headers obfuscation using Netscaler:
+#### HTTP 头
+检查配置和禁止或者混淆所有会暴露信息的HTTP头。这里有一篇有趣的文章关于使用NetScaler混淆HTTP头的文章：
 http://grahamhosking.blogspot.ru/2013/07/obfuscating-http-header-using-netscaler.html
 
 
 #### Cookies
-It is recommended to change cookie names by making changes in the corresponding configuration files.
+推荐通过修改相关配置文件来改变cookie名称。
 
 
-#### HTML source code
-Manually check the contents of the HTML code and remove everything that explicitly points to the framework.
+#### HTML 源代码
+手动检查HTML代码内容，移除所有明显指向框架的内容。
 
-General guidelines:
-* Make sure there are no visual markers disclosing the framework
-* Remove any unnecessary comments (copyrights, bug information, specific framework comments)
-* Remove META and generator tags
-* Use the companies own css or js files and do not store those in a framework-specific folders
-* Do not use default scripts on the page or obfuscate them if they must be used.
+通用指南:
+* 确保没有暴露框架可视标记；
+* 移除不需要的注释（版权，bug信息，特定框架注释）；
+* 移除生成的元标签；
+* 使用公司自己的css和js脚本文件，不要存放在框架相关的目录；
+* 不要使用页面默认的脚本，如果必须使用，混淆他们。
 
 
-#### Specific files and folders
-General guidelines:
-* Remove any unnecessary or unused files on the server. This implies text files disclosing information about versions and installation too.
-* Restrict access to other files in order to achieve 404-response when accessing them from outside. This can be done, for example, by modifying htaccess file and adding RewriteCond or RewriteRule there. An example of such restriction for two common WordPress folders is presented below.
+#### 特定文件和目录
+通用指南：
+* 在服务器上移除所有不需要的和无用的文件。这意味着也包括会暴露版本信息的文本文件和安装文件。
+* 使用404错误响应来限制从外部访问其他文件。例如这可以通过修改htaccess文件，加入重写规则 RewriteCond 和 RewriteRuleRestrict。例如，限制两个常见的WordPress文件夹的例子如下：
 ```
 RewriteCond %{REQUEST_URI} /wp-login\.php$ [OR]
 RewriteCond %{REQUEST_URI} /wp-admin/$
@@ -210,14 +210,14 @@ RewriteRule $ /http://your_website [R=404,L]
 ```
 
 
-However, these are not the only ways to restrict access. In order to automate this process, certain framework-specific plugins exist. One example for WordPress is StealthLogin (http://wordpress.org/plugins/stealth-login-page).
+当然，这不是唯一限制访问的方法，有相关特定框架的插件存在来自动化这个过程。一个WordPress的例子是StealthLogin (http://wordpress.org/plugins/stealth-login-page)。
 
 
-#### Additional approaches
-General guidelines:
-* Checksum management
-    - The purpose of this approach is to beat checksum-based scanners and not let them disclose files by their hashes. Generally, there are two approaches in checksum management:
-    - Change the location of where those files are placed (i.e. move them to another folder, or rename the existing folder)
-    - Modify the contents - even slight modification results in a completely different hash sum, so adding a single byte in the end of the file should not be a big problem.
-* Controlled chaos
-    - A funny and effective method that involves adding bogus files and folders from other frameworks in order to fool scanners and confuse an attacker. But be careful not to overwrite existing files and folders and to break the current framework!
+#### 其他措施
+通用指南：
+* 校验和管理
+    - 这个措施的目的是打败基于校验和的扫描器以及不让他们通过哈希值暴露文件。通常有两个方法进行校验和管理：
+    - 改变这些文件存在的位置（就是将他们移动到另一个文件夹，或者重命名文件夹）
+    - 修改文件内容 - 甚至细微的修改就能导致完全不同的哈希值，所以在文件末尾添加单个字节应该不是一个大问题。
+* 制造混乱
+    - 有个有趣且有效的方法需要从添加其他框架的伪装文件来愚弄工具盒混乱攻击者。但需要注意不要覆盖存在的文件和目录破坏现有框架。
