@@ -1,21 +1,21 @@
-# Fingerprint Web Application (OTG-INFO-009)
+# 识别Web应用程序 (OTG-INFO-009)
 
-### Summary
+### 综述
 
-There is nothing new under the sun, and nearly every web application that one may think of developing has already been developed. With the vast number of free and open source software projects that are actively developed and deployed around the world, it is very likely that an application security test will face a target site that is entirely or partly dependent on these well known applications (e.g. Wordpress, phpBB, Mediawiki, etc). Knowing the web application components that are being tested significantly helps in the testing process and will also drastically reduce the effort required during the test. These well known web applications have known HTML headers, cookies, and directory structures that can be enumerated to identify the application.
-
-
-### Test Objectives
-
-Identify the web application and version to determine known vulnerabilities and the appropriate exploits to use during testing.
+其实没有什么新鲜的事，几乎每个想开发的web应用基本都已经被开发过了。在世界上存在着巨大数量的免费和开源软件项目正在被积极开发和部署，很有可能一个应用安全测试将面对一个目标站点是完全或者部分依赖这些知名的应用程序（如Wedpress，phpBB，Mediawiki等等）。了解即将被测试的web应用组件将极大帮助测试过程，也会减少测试开销。这些知名的web应用程序拥有已知的HTML头，cookies，和目录结构可以被枚举来鉴别这些应用。
 
 
-### How to Test
+### 测试目标
+
+鉴别Web应用程序和其版本来确定已知漏洞和可能的利用方式。
+
+
+### 如何测试
 
 #### Cookies
-A relatively reliable way to identify a web application is by the application-specific cookies.
+一个相当可靠的方法来测试web应用是检查应用特定的cookies。
 
-Consider the following HTTP-request:
+考虑如下HTTP请求：
 
 ```
 GET / HTTP/1.1
@@ -28,32 +28,32 @@ Connection: keep-alive
 Host: blog.owasp.org
 ```
 
-The cookie *CAKEPHP* has automatically been set, which gives information about the framework being used. List of common cookies names is presented in Cpmmon Application Identifiers section. However, it is possible to change the name of the cookie.
+cookie *CAKEPHP* 被自动设置，指明了我们框架信息。在常见应用识别章节我们会列举一系列常见的cookies名称。不过，cookie名称还是有可能被改变的。
 
 
-#### HTML source code
-This technique is based on finding certain patterns in the HTML page source code. Often one can find a lot of information which helps a tester to recognize a specific web application. One of the common markers are HTML comments that directly lead to application disclosure. More often certain application-specific paths can be found, i.e. links to application-specific css and/or js folders. Finally, specific script variables might also point to a certain application.
+#### HTML 源代码
+这个技巧基于在HTLM页面源代码中搜寻特征模式。通常我们能找到许多能帮助测试者识别特定web应用的信息。一个常见的地方是HTML注释直接暴露了应用信息。更常见的是应用相关的路径信息，比如链接特定应用css或者js目录。最后，特定的脚本变量也能指明特定的应用信息。
 
-From the meta tag below, one can easily learn the application used by a website and its version. The comment, specific paths and script variables can all help an attacker to quickly determine an instance of an application.
+从下面的元标签，我们能轻易发现网站使用的应用程序和其版本。注释、特定路径和脚本变量都能帮助攻击者快速确定应用实例。
 
 ```
 <meta name="generator" content="WordPress 3.9.2" />
 ```
 
-More frequently such information is placed between `<head></head>` tags, in `<meta>` tags or at the end of the page. Nevertheless, it is recommended to check the whole document since it can be useful for other purposes such as inspection of other useful comments and hidden fields.
+更常见的是这些信息往往能在`<head></head>`标签，`<meta>`标签或页面底部发现。无论如何，推荐检查整个文档因为这也有助于检查有用的注释和隐藏字段。
 
-#### Specific files and folders
-Apart from information gathered from HTML sources, there is another approach which greatly helps an attacker to determine the application with high accuracy. Every application has its own specific file and folder structure on the server. It has been pointed out that one can see the specific path from the HTML page source but sometimes they are not explicitly presented there and still reside on the server.
+#### 特定文件和路径
+除了从HTML源代码里面收集到的信息，还有个方法能极大帮助攻击者确定应用程序。每个应用都有自己特定的文件和目录结构。事实表明我们能从HTML页面源代码中找到特定的路径信息，有时候他们并没有在代码中明显出现，但是仍然遗留在服务器上。
 
-In order to uncover them a technique known as dirbusting is used. Dirbusting is brute forcing a target with predictable folder and file names and monitoring HTTP-responses to emumerate server contents. This information can be used both for finding default files and attacking them, and for fingerprinting the web application. Dirbusting can be done in several ways, the example below shows a successful dirbusting attack against a WordPress-powered target with the help of defined list and intruder functionality of Burp Suite.
+为了发现他们，一个叫dirbusting的技巧被使用。Dirbusting是通过预测目录和文件名称并监视HTTP相应来暴力破解一个目标枚举服务内容。这些信息也可以用在发现默认文件和攻击系统以及识别web应用之中。Dirbusting可以通过很多方法实现，下面的例子展示了一个成功的攻击，通过Burp Suite的intruder功能和预先定义的列表来攻击一个基于WordPress的站点。
 
 ![Image:Wordpress_dirbusting.png](https://www.owasp.org/images/3/35/Wordpress_dirbusting.png)
 
-We can see that for some WordPress-specific folders (for instance, /wp-includes/, /wp-admin/ and /wp-content/) HTTP-reponses are 403 (Forbidden), 302 (Found, redirection to wp-login.php) and 200 (OK) respectively. This is a good indicator that the target is WordPress-powered. The same way it is possible to dirbust different application plugin folders and their versions. On the screenshot below one can see a typical CHANGELOG file of a Drupal plugin, which provides information on the application being used and discloses a vulnerable plugin version.
+我们能发现一些WordPress特定的目录（比如，/wp-includes/，/wp-admin/和/wp-content/）的HTTP响应是403（禁止访问），302（找到，并重定向到wp-login.php）和200（OK）。这很好指明了站点是基于WordPress开发的。同样的方法我们能暴力列举不同的应用插件目录和他们的版本信息。在下面的截图中，我们能发现一个典型的Drupal插件的CHANGELOG文件，这提供了应用程序的信息，并暴露了一个漏洞插件版本。
 
 ![Image:Drupal_botcha_disclosure.png](https://www.owasp.org/images/c/c9/Drupal_botcha_disclosure.png)
 
-Tip: before starting dirbusting, it is recommended to check the robots.txt file first. Sometimes application specific folders and other sensitive information can be found there as well. An example of such a robots.txt file is presented on a screenshot below.
+小提示：在开始暴力枚举前，推荐先检查robots.txt文件。有时候应用特定的目录和其他敏感信息也能在这里发现。下面是这样的一个例子截图：
 
 ![Image:Robots_info_disclosure.png](https://www.owasp.org/index.php?title=Special:Upload&wpDestFile=Robots_info_disclosure.png)
 
