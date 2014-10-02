@@ -67,7 +67,7 @@
 | OTG-CONFIG-004   | 备份、未链接文件测试                  |          |          |          |
 | OTG-CONFIG-005   | 枚举管理接口测试                      |          |          |          |
 | OTG-CONFIG-006   | HTTP方法测试                          |          |          |          |
-| OTG-CONFIG-007   | HTTP强制转换测试                      |          |          |          |
+| OTG-CONFIG-007   | HTTP严格传输安全测试                  |          |          |          |
 | OTG-CONFIG-008   | 应用跨域策略测试                      |          |          |          |
 |                  |                                       |          |          |          |
 |                  | **身份鉴别管理测试**                      |          |          |          |

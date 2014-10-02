@@ -1,44 +1,44 @@
-# Test HTTP Strict Transport Security (OTG-CONFIG-007)
+# HTTP严格传输安全测试 (OTG-CONFIG-007)
 
 
-### Summary
-The HTTP Strict Transport Security (HSTS) header is a mechanism that web sites have to communicate to the web browsers that all traffic exchanged with a given domain must always be sent over https, this will help protect the information from being passed over unencrypted requests.<br>
+### 综述
+HTTP严格传输安全（HTTP Strict Transport Security, HSTS）头是一项机制：在特定域名下，网站和浏览器之间通信必须都通过https传输。这有助于保护信息从非加密请求中泄露。
 
 
-Considering the importance of this security measure it is important to verify that the web site is using this HTTP header, in order to ensure that all the data travels encrypted from the web browser to the server.<br>
+考虑这个安全措施的重要意义，测试的关键在于验证网站是否使用这个HTTP头，来确保所有数据都是从浏览器加密传输到服务器端的。
 
 
-The HTTP Strict Transport Security (HSTS) feature lets a web application to inform the browser, through the use of a special response header, that it should never establish a connection to the the specified domain servers using HTTP. Instead it should automatically establish all connection requests to access the site through HTTPS.
+HTTP严格传输安全特征使得web应用能够通过使用特别的响应头告诉浏览器不要使用HTTP与特定服务器建立连接。相对的，所有访问请求都应该自动通过HTTPS建立连接。
 
 
-The HTTP strict transport security header uses two directives:
-* max-age: to indicate the number of seconds that the browser should  automatically convert all HTTP requests to HTTPS.
-* includeSubDomains:  to indicate that all web application’s sub-domains must use HTTPS.
+HSTS头使用两个指令：
+* max-age: 来指示浏览器应该自动转换所有HTTP请求为HTTPS的时间（秒）。
+* includeSubDomains:  来指明所有web应用的子域名也必须使用HTTPS。
 
 
-Here's an example of the HSTS header implementation:<br>
+下面是一个HSTS头实现的例子：
 ```
  Strict-Transport-Security: max-age=60000; includeSubDomains
 ```
 
-The use of this header by web applications must be checked to find if the following security issues could be produced:
-* Attackers sniffing the network traffic and accessing the information transferred through an unencrypted channel.
-* Attackers exploiting a man in the middle attack because of the problem of accepting certificates that are not trusted.
-* Users who mistakenly entered an address in the browser putting HTTP instead of HTTPS, or users who click on a link in a web application which mistakenly indicated the http protocol.
+使用HSTS头的应用必须检查如下几个可能产生的问题：
+* 攻击者可能嗅探网络浏览来访问未加密的信道获得信息。
+* 攻击者利用中间人攻击手段，因为证书可能不可信任。
+* 用户错误输入HTTP地址来替换HTTPS，或者用户点击了web应用中的错误使用HTTP协议的链接。
 
 
-### How to Test
-Testing for the presence of HSTS header can be done by checking for the existence of the HSTS header in the server's response in an interception proxy, or by using curl as follows: <br>
+### 如何测试
+可以使用劫持代理或者curl来测试HSTS头是否存在与服务器应答中，如下所示：
 ```
     $ curl -s -D- https://domain.com/ | grep Strict
 ```
 
-Result expected:<br>
+期望结果：
 ```
     Strict-Transport-Security: max-age=...
 ```
 
-### References
+### 参考资料
 * OWASP HTTP Strict Transport Security - https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
 * OWASP Appsec Tutorial Series - Episode 4: Strict Transport Security - http://www.youtube.com/watch?v=zEV3HOuM_Vw
 * HSTS Specification: http://tools.ietf.org/html/rfc6797

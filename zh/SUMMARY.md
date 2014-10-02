@@ -25,7 +25,7 @@
        * [备份、未链接文件测试 (OTG-CONFIG-004) ](web_application_security_testing/review_old,_backup_and_unreferenced_files_for_sensitive_information_otg-config-004.md)
        * [枚举管理接口测试 (OTG-CONFIG-005) ](web_application_security_testing/enumerate_infrastructure_and_application_admin_interfaces_otg-config-005.md)
        * [HTTP方法测试 (OTG-CONFIG-006) ](web_application_security_testing/test_http_methods_otg-config-006.md)
-       * [HTTP强制转换测试 (OTG-CONFIG-007) ](web_application_security_testing/test_http_strict_transport_security_otg-config-007.md)
+       * [HTTP严格传输安全测试 (OTG-CONFIG-007) ](web_application_security_testing/test_http_strict_transport_security_otg-config-007.md)
        * [应用跨域策略测试 (OTG-CONFIG-008) ](web_application_security_testing/test_ria_cross_domain_policy_otg-config-008.md)
    * [身份鉴别管理测试 ](web_application_security_testing/identity_management_testing.md)
        * [角色定义测试 (OTG-IDENT-001)](web_application_security_testing/test_role_definitions_otg-ident-001.md)
