@@ -1,33 +1,33 @@
-# Test RIA cross domain policy (OTG-CONFIG-008)
+# 应用程序跨域策略测试 (OTG-CONFIG-008)
 
 
-### Summary
-Rich Internet Applications (RIA) have adopted Adobe's crossdomain.xml policy files to allow for controlled cross domain access to data and service consumption using technologies such as Oracle Java, Silverlight, and Adobe Flash. Therefore, a domain can grant remote access to its services from a different domain. However, often the policy files that describe the access restrictions are poorly configured. Poor configuration of the policy files enables Cross-site Request Forgery attacks, and may allow third parties to access sensitive data meant for the user.
+### 综述
+富因特网应用程序（Rich Internet Applications, RIA）应该遵循Adobe的 crossdomian.xml 策略来控制跨域访问数据和使用服务，例如Oracle Java，Siverlight和Adobe Flash。因此，一个域名授予另一个不同域名远程访问自己的服务的能力。但是，这些策略文件中描述的访问控制被糟糕配置。糟糕的策略配置会导致跨站点伪造请求攻击（CSRF），也可能允许第三方机构访问只属于用户的敏感信息。
 
 
-#### What are cross-domain policy files?
-A cross-domain policy file specifies the permissions that a web client such as Java, Adobe Flash, Adobe Reader, etc. use to access data across different domains. For Silverlight, Microsoft adopted a subset of the Adobe's crossdomain.xml, and additionally created it's own cross-domain policy file: clientaccesspolicy.xml.
+#### 什么是跨域策略文件？
+一个跨域策略文件规定了一个web客户端如Java，Adobe Flash，Adobe Reader等访问不同域名站点数据的权限文件。对于Silverlight来说，微软采取接纳一部分crossdomain.xml配置，也额外创建了自己的跨域策略文件：clientaccesspolicy.xml文件。
 
 
-Whenever a web client detects that a resource has to be requested from other domain, it will first look for a policy file in the target domain to determine if performing cross-domain requests, including headers, and socket-based connections are allowed.
+当一个web客户端发现一个资源需要从另一个站点请求获得，他先查看目标站点的策略文件来决定是否进行跨域请求，包括http头和允许的基于socket的连接。
 
 
-Master policy files are located at the domain's root. A client may be instructed to load a different policy file but it will always check the master policy file first to ensure that the master policy file permits the requested policy file.
+主策略文件位于域名的根目录下。一个客户端可能被指示读取一个不同的策略文件，但他总会先检查主策略文件来确保主策略文件允许读取请求的我策略文件。
 
 
 ##### Crossdomain.xml vs. Clientaccesspolicy.xml
-Most RIA applications support crossdomain.xml. However in the case of Silverlight, it will only work if the crossdomain.xml specifies that access is allowed from any domain. For more granular control with Silverlight, clientaccesspolicy.xml must be used.
+许多应用程序支持 crossdomian.xml 文件。但是在Silverlight的例子中，他只接受被配置为允许任何域名站点访问的 crossdomain.xml 。为了更加精细控制Silverlight，必须使用 clientaccesspolicy.xml 文件。
 
 
-Policy files grant several types of permissions:
-* Accepted policy files (Master policy files can disable or restrict specific policy files)
-* Sockets permissions
-* Header permissions
-* HTTP/HTTPS access permissions
-* Allowing access based on cryptographic credentials
+策略文件可以授予如下几种控制权限：
+* 可接受的策略文件（主策略文件可以禁止或限制特定策略文件）
+* Sockets权限
+* HTTP头权限
+* HTTP/HTTPS 访问权限
+* 基于密码学凭证，来允许访问
 
 
-An example of an overly permissive policy file:
+一个过度（滥用）的权限控制策略文件例子：
 ```
 <?xml version="1.0"?>
 <!DOCTYPE cross-domain-policy SYSTEM
@@ -40,24 +40,27 @@ An example of an overly permissive policy file:
 ```
 
 
-#### How can cross domain policy files can be abused?
-* Overly permissive cross-domain policies.
-* Generating server responses that may be treated as cross-domain policy files.
-* Using file upload functionality to upload files that may be treated as cross-domain policy files.
+#### 跨域策略文件如何被滥用？
+* 过度的跨域权限策略。
+* 产生的服务器应答可能被当作跨域策略文件。
+* 使用文件上传功能上传的文件可能被当作跨域策略文件。
 
 
-#### Impact of abusing cross-domain access
-* Defeat CSRF protections.
-* Read data restricted or otherwise protected by cross-origin policies.
+#### 滥用跨域访问的影响
+* 破坏CSRF防护措施。
+* 读取限制的或被跨源（cross-origin）策略保护的数据。
 
 
-### How to Test
-**Testing for RIA policy files weakness:** <br>
-To test for RIA policy file weakness the tester should try to retrieve the policy files crossdomain.xml and clientaccesspolicy.xml from the application's root, and from every folder found.<br><br>
-For example, if the application's URL is http://www.owasp.org, the tester should try to download the files http://www.owasp.org/crossdomain.xml and http://www.owasp.org/clientaccesspolicy.xml.
-<br><br>
-After retrieving all the policy files, the permissions allowed should be be checked under the least privilege principle. Requests should only come from the domains, ports, or protocols that are necessary. Overly permissive policies should be avoided. Policies with "\*" in them should be closely examined.  <br><br>
-Example:
+### 如何测试
+**测试应用策略文件弱点：**
+
+为了测试RIA策略文件弱点，测试需要从应用程序根目录获得 crossdomain.xml 和 clientaccesspolicy.xml 策略文件，以及从每一个能够发现的目录。
+
+举例说明，如果一个应用的URL是 http://www.owasp.org ，测试应该尝试下载 http://www.owasp.org/crossdomain.xml 和 http://www.owasp.org/clientaccesspolicy.xml 。 
+
+在获取所有的策略文件之后，每个权限都应该检查是否遵循最低权限原则。请求应该从域名、端口或协议来做限制，过度的权限策略应该避免。存在“*”的策略应该被特别仔细检查。
+
+例子：
 ```
 <cross-domain-policy>
  <allow-access-from domain="*" />
@@ -65,19 +68,19 @@ Example:
 ```
 
 
-**Result Expected:**<br>
-* A list of policy files found. <br>
-* A weak settings in the policies.<br>
+**期望结果：**<br>
+* 一系列策略文件被发现。
+* 策略中发现脆弱设置。
 
 
-###Tools
+### 测试工具
 * Nikto
 * OWASP Zed Attack Proxy Project
 * W3af
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**<br>
 * UCSD: "Analyzing the Crossdomain Policies of Flash Applications" - http://cseweb.ucsd.edu/~hovav/dist/crossdomain.pdf
 * Adobe: "Cross-domain policy file specification" - http://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html
 * Adobe: "Cross-domain policy file usage recommendations for Flash Player" - http://www.adobe.com/devnet/flashplayer/articles/cross_domain_policy.html
