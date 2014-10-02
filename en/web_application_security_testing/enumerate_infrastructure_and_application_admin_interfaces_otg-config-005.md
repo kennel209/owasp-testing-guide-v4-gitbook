@@ -19,7 +19,7 @@ In many instances, such interfaces do not have sufficient controls to protect th
 
 ### How to Test
 #### Black Box Testing
-The following section describes vectors that may be used to test for the presence of administrative interfaces. These techniques may also be used to test for related issues including privilege escalation, and are described elsewhere in this guide(for example [Testing for bypassing authorization schema (OTG-AUTHZ-002)](https://www.owasp.org/index.php/Testing_for_Bypassing_Authorization_Schema_%28OTG-AUTHZ-002%29) and [Testing for Insecure Direct Object References (OTG-AUTHZ-004)](https://www.owasp.org/index.php/Testing_for_Insecure_Direct_Object_References_%28OTG-AUTHZ-004%29) in greater detail.
+The following section describes vectors that may be used to test for the presence of administrative interfaces. These techniques may also be used to test for related issues including privilege escalation, and are described elsewhere in this guide(for example [Testing for bypassing authorization schema (OTG-AUTHZ-002)](https://www.owasp.org/index.php/Testing_for_Bypassing_Authorization_Schema_%28OTG-AUTHZ-002%29) and [Testing for Insecure Direct Object References (OTG-AUTHZ-004)](https://www.owasp.org/index.php/Testing_for_Insecure_Direct_Object_References_%28OTG-AUTHZ-004%29)) in greater detail.
 
 
 * Directory and file enumeration. An administrative interface may be present but not visibly available to the tester. Attempting to guess the path of the administrative interface may be as simple as requesting: */admin or /administrator etc..* or in some scenarios can be revealed within seconds using [Google dorks](http://www.exploit-db.com/google-dorks) .
@@ -30,13 +30,13 @@ The following section describes vectors that may be used to test for the presenc
 * Publicly available information. Many applications such as wordpress have default administrative interfaces .
 * Alternative server port. Administration interfaces may be seen on a different port on the host than the main application. For example, Apache Tomcat's Administration interface can often be seen on port 8080.
 * Parameter tampering. A GET or POST parameter or a cookie variable may be required to enable the administrator functionality. Clues to this include the presence of hidden fields such as:
-```
- <input type="hidden" name="admin" value="no">
-```
-or in a cookie:
-```
- Cookie: session_cookie; useradmin=0
-```
+    ```
+    <input type="hidden" name="admin" value="no">
+    ```
+    or in a cookie:
+    ```
+    Cookie: session_cookie; useradmin=0
+    ```
 
 Once an administrative interface has been discovered, a combination of the above techniques may be used to attempt to bypass authentication. If this fails, the tester may wish to attempt a brute force attack. In such an instance the tester should be aware of the potential for administrative account lockout if such functionality is present.
 

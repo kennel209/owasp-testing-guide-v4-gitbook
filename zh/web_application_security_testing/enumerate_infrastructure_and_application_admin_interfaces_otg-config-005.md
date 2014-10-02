@@ -1,59 +1,59 @@
-# Enumerate Infrastructure and Application Admin Interfaces (OTG-CONFIG-005)
+# 枚举基础设施和应用程序管理接口测试 (OTG-CONFIG-005)
 
 
-### Summary
+### 综述
 
-Administrator interfaces may be present in the application or on the application server to allow certain users to undertake privileged activities on the site. Tests should be undertaken to reveal if and how this privileged functionality can be accessed by an unauthorized or standard user.
-
-
-An application may require an administrator interface to enable a privileged user to access functionality that may make changes to how the site functions. Such changes may include:
-
-* user account provisioning<br>
-* site design and layout<br>
-* data manipulation<br>
-* configuration changes<br>
+管理员接口可能存在与应用程序上或者应用服务器上来允许特定用户对网站进行权限操作行为。测试者应该试图去发现特权功能是否可以或者如何被非授权用户和普通用户使用。
 
 
-In many instances, such interfaces do not have sufficient controls to protect them from unauthorized access. Testing is aimed at discovering these administrator interfaces and accessing functionality intended for the privileged users.
+一个应用可能需要管理接口来允许特权用户来访问那些会改变站点行为的功能。这样的行为可能包括：
+
+* 用户帐号操作
+* 网站设计和布局操作
+* 数据操作
+* 配置改变
 
 
-### How to Test
-#### Black Box Testing
-The following section describes vectors that may be used to test for the presence of administrative interfaces. These techniques may also be used to test for related issues including privilege escalation, and are described elsewhere in this guide(for example [Testing for bypassing authorization schema (OTG-AUTHZ-002)](https://www.owasp.org/index.php/Testing_for_Bypassing_Authorization_Schema_%28OTG-AUTHZ-002%29) and [Testing for Insecure Direct Object References (OTG-AUTHZ-004)](https://www.owasp.org/index.php/Testing_for_Insecure_Direct_Object_References_%28OTG-AUTHZ-004%29) in greater detail.
+在很多例子中，这些接口并没有针对非授权使用作出有效的控制措施。这个测试目标是发现这些管理接口并使用这些为特权用户准备的功能。
 
 
-* Directory and file enumeration. An administrative interface may be present but not visibly available to the tester. Attempting to guess the path of the administrative interface may be as simple as requesting: */admin or /administrator etc..* or in some scenarios can be revealed within seconds using [Google dorks](http://www.exploit-db.com/google-dorks) .
-* There are many tools available to perform brute forcing of server contents, see the tools section below for more information.  * A tester may have to also identify the file name of the administration page. Forcibly browsing to the identified page may provide access to the interface.
-* Comments and links in source code. Many sites use common code that is loaded for all site users. By examining all source sent to the client, links to administrator functionality may be discovered and should be investigated.
-* Reviewing server and application documentation. If the application server or application is deployed in its default configuration it may be possible to access the administration interface using information described in configuration or help documentation. Default password lists should be consulted if an administrative interface is found and credentials are required.
-* Publicly available information. Many applications such as wordpress have default administrative interfaces .
-* Alternative server port. Administration interfaces may be seen on a different port on the host than the main application. For example, Apache Tomcat's Administration interface can often be seen on port 8080.
-* Parameter tampering. A GET or POST parameter or a cookie variable may be required to enable the administrator functionality. Clues to this include the presence of hidden fields such as:
-```
- <input type="hidden" name="admin" value="no">
-```
-or in a cookie:
-```
- Cookie: session_cookie; useradmin=0
-```
-
-Once an administrative interface has been discovered, a combination of the above techniques may be used to attempt to bypass authentication. If this fails, the tester may wish to attempt a brute force attack. In such an instance the tester should be aware of the potential for administrative account lockout if such functionality is present.
+### 如何测试
+#### 黑盒测试
+接下来的章节描述了一些用于测试管理接口的测试向量。这些技巧可能也能用于测试其他问题，包括权限提升，在指南的其他地方会更详细介绍（比如 [认证绕过测试 (OTG-AUTHZ-002)](https://www.owasp.org/index.php/Testing_for_Bypassing_Authorization_Schema_%28OTG-AUTHZ-002%29) 和 [不安全直接对象引用测试 (OTG-AUTHZ-004)](https://www.owasp.org/index.php/Testing_for_Insecure_Direct_Object_References_%28OTG-AUTHZ-004%29)）。
 
 
-#### Gray Box Testing
-A more detailed examination of the server and application components should be undertaken to ensure hardening (i.e. administrator pages are not accessible to everyone through the use of IP filtering or other controls), and where applicable, verification that all components do not use default credentials or configurations.
+* 目录和文件枚举。一个管理接口可能存在，但对测试者不可见。尝试猜测管理接口路径可能会很简单不如请求： */admin 或者 /administrator 等* 或者在一下场景可以通过使用[Google dorks](http://www.exploit-db.com/google-dorks)在几秒中内发现。
+* 有许多工具可以暴力浏览服务器内容，参见下面测试工具章节。
+* 测试人员可能不得不识别管理页面的文件名，强制访问这些识别出来的页面能访问管理接口。
+* 在源代码里的注释和链接。许多站点使用通用的页面提供给所有网站用户。通过检查所有源代码，通向管理功能的链接可能被发现，值得调查。
+* 审阅服务器和应用软件文档。如果应用或应用服务器是通过默认配置部署的，那么通过配置或帮助文档中描述的信息就能访问到管理接口。如果管理接口需要凭证，应该考虑默认密码。
+* 公开可用信息。许多应用比如wordpress存在默认的管理接口。
+* 可选的服务端口。管理接口还可能在另一个不同的端口被发现。例如，Apache Tomcat的管理接口常见于8080端口。
+* 参数伪造。GET或POST请求参数或特殊cookie变量可能被需要来开启管理功能。这些线索可能来自于隐藏字段，如：
+    ```
+    <input type="hidden" name="admin" value="no">
+    ```
+    或者cookie：
+    ```
+    Cookie: session_cookie; useradmin=0
+    ```
+
+一旦管理接口被发现，上面这些技巧的结合可能用于绕过认证。如果都失败了，测试人员可能试图使用暴力破解。在这样的例子中，测试人员应当注意管理帐号的锁定情况，如果存在这样的机制的话。
+
+
+#### 灰盒测试
+应该采取更加详细地对服务器和应用组件的检查来确保加固措施（也就是管理页面应该通过IP过滤或其他控制措施来保证不被其他任何人访问）。如果还是对外可用，那么应该验证所有组件没有使用默认凭证或者默认配置文件。
+
+源代码应该被审查来确保认证和授权模型明确了站点管理员和普通用户的权限责任区分。被普通用户的管理员用户共享的用户功能接口应该被审查来保证无法从这些接口中获得信息泄漏。
 <br>
 
-Source code should be reviewed to ensure that the authorization and authentication model ensures clear separation of duties between normal users and site administrators. User interface functions shared between normal and administrator users should be reviewed to ensure clear separation between the drawing of such components and information leakage from such shared functionality.
-<br>
+
+### 测试工具
+* [Dirbuster](https://www.owasp.org/index.php/Category:OWASP_DirBuster_Project)  这个当前未被积极开发的OWSAP项目依旧是一个用来暴力浏览服务器上的目录和文件的优秀工具。
+* [THC-HYDRA](https://www.thc.org/thc-hydra/)  是一个用于暴力访问许多接口的工具，功能支持基于表单的HTTP认证机制。
+* 在拥有好的字典的情况下，暴力破解工具能工作地更有效，一个好例子就是 [netsparker](https://www.netsparker.com/blog/web-security/svn-digger-better-lists-for-forced-browsing/) 字典。
 
 
-### Tools
-* [Dirbuster](https://www.owasp.org/index.php/Category:OWASP_DirBuster_Project)  This currently inactive OWASP project is still a great tool for brute forcing directories and files on the server.
-* [THC-HYDRA](https://www.thc.org/thc-hydra/)  is a tool that allows brute-forcing of many interfaces, including form-based HTTP authentication.
-* A brute forcer is much better when it uses a good dictionary, for example the [netsparker](https://www.netsparker.com/blog/web-security/svn-digger-better-lists-for-forced-browsing/)  dictionary.
-
-
-### References
-* Default Password list: http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php
-* Default Password list: http://www.cirt.net/passwords
+### 参考资料
+* 默认字典列表：http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php
+* 默认字典列表：http://www.cirt.net/passwords
