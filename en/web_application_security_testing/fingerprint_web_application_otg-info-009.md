@@ -28,7 +28,7 @@ Connection: keep-alive
 Host: blog.owasp.org
 ```
 
-The cookie *CAKEPHP* has automatically been set, which gives information about the framework being used. List of common cookies names is presented in Cpmmon Application Identifiers section. However, it is possible to change the name of the cookie.
+The cookie *CAKEPHP* has automatically been set, which gives information about the framework being used. List of common cookies names is presented in Common Application Identifiers section. However, it is possible to change the name of the cookie.
 
 
 #### HTML source code
