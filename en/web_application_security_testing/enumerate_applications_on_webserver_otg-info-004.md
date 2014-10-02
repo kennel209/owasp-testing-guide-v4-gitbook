@@ -237,4 +237,5 @@ Not applicable. The methodology remains the same as listed in Black Box testing 
 
 ### References
 **Whitepapers**
+
 [1] RFC 2616 – Hypertext Transfer Protocol – HTTP 1.1

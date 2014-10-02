@@ -23,7 +23,8 @@ The following section describes vectors that may be used to test for the presenc
 
 
 * Directory and file enumeration. An administrative interface may be present but not visibly available to the tester. Attempting to guess the path of the administrative interface may be as simple as requesting: */admin or /administrator etc..* or in some scenarios can be revealed within seconds using [Google dorks](http://www.exploit-db.com/google-dorks) .
-* There are many tools available to perform brute forcing of server contents, see the tools section below for more information.  * A tester may have to also identify the file name of the administration page. Forcibly browsing to the identified page may provide access to the interface.
+* There are many tools available to perform brute forcing of server contents, see the tools section below for more information.
+* A tester may have to also identify the file name of the administration page. Forcibly browsing to the identified page may provide access to the interface.
 * Comments and links in source code. Many sites use common code that is loaded for all site users. By examining all source sent to the client, links to administrator functionality may be discovered and should be investigated.
 * Reviewing server and application documentation. If the application server or application is deployed in its default configuration it may be possible to access the administration interface using information described in configuration or help documentation. Default password lists should be consulted if an administrative interface is found and credentials are required.
 * Publicly available information. Many applications such as wordpress have default administrative interfaces .

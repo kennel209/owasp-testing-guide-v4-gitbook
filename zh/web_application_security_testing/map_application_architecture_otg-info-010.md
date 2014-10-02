@@ -62,5 +62,5 @@ FW-1 at XXXXXX: Access denied.</BODY>
 
 
 ### 参考资料
-* [1] WebSEAL, also known as Tivoli Authentication Manager, is a reverse proxy from IBM which is part of the Tivoli framework.
-* [2] There are some GUI-based administration tools for Apache (like NetLoony) but they are not in widespread use yet.
+* [1] WebSEAL, 也叫做 Tivoli Authentication Manager, 是一个来自IBM的反向代理，也是Tivoli 框架的一部分。
+* [2] 有一些Apache的图形界面管理工具，但是他们并没有广泛使用。
