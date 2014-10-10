@@ -67,10 +67,10 @@ Content-Length: 0
 注意： 为了理解这个攻击的逻辑和目标，攻击者必须熟悉 [跨站脚本攻击（XSS）](https://www.owasp.org/index.php/XSS)。
 
 
-TRACE方法，看上去没有危害，但能在某些场景下成功被利用并盗取合法用户的凭证。这个攻击技巧被Jeremiah Grossman在2003年发现，一次企图绕过 [HTTPOnly](https://www.owasp.org/index.php/HTTPOnly) 标签，以及微软引进IE6 SP1来保护cookies被JavaScript访问。事实上，XSS上最常见的攻击模式是获取document.cookie，并将它 As a matter of fact, one of the most recurring attack patterns in Cross Site Scripting is to access the document.cookie object and send it to a web server controlled by the attacker so that he or she can hijack the victim's session. Tagging a cookie as httpOnly forbids JavaScript from accessing it, protecting it from being sent to a third party. However, the TRACE method can be used to bypass this protection and access the cookie even in this scenario.
+TRACE方法，看上去没有危害，但能在某些场景下成功被利用并盗取合法用户的凭证。这个攻击技巧被Jeremiah Grossman在2003年发现，一次企图绕过 [HTTPOnly](https://www.owasp.org/index.php/HTTPOnly) 标签，以及微软引进IE6 SP1来保护cookies被JavaScript访问。事实上，XSS上最常见的攻击模式是获取document.cookie，并将它发到攻击者控制的服务器，以便于攻击者能够劫持受害者的会话。标记为httponly的cookie禁止JavaScript访问，被保护无法发送给第三方。然而TRACE方法能用于绕过这层防护已经在上述场景里访问cookie。
 
 
-As mentioned before, TRACE simply returns any string that is sent to the web server. In order to verify its presence (or to double-check the results of the OPTIONS request shown above), the tester can proceed as shown in the following example:
+正如先前提到的，TRACE简单返回任何发送给服务器的字符串。为了证明方法可行（或使用OPTIONS请求），测试者像如下例子中操作：
 ```
 $ nc www.victim.com 80
 TRACE / HTTP/1.1
@@ -88,23 +88,23 @@ Host: www.victim.com
 ```
 
 
-The response body is exactly a copy of our original request, meaning that the target allows this method. Now, where is the danger lurking? If the tester instructs a browser to issue a TRACE request to the web server, and this browser has a cookie for that domain, the cookie will be automatically included in the request headers, and will therefore be echoed back in the resulting response. At that point, the cookie string will be accessible by JavaScript and it will be finally possible to send it to a third party even when the cookie is tagged as httpOnly.
+响应主体正好是我们原始请求的拷贝，意味着目标允许这个方法。现在哪里潜伏危机？如果测试者指示浏览器向web服务器发起TRACE请求，并且浏览器存在该域名的cookie，这个cookie会自动包含在请求头中，如此会在响应结果中回显。此时，cookie能被JavaScript访问并最后可能发送给第三方即使这个cookie是标记为httpOnly的。
 
 
-There are multiple ways to make a browser issue a TRACE request, such as the XMLHTTP ActiveX control in Internet Explorer and XMLDOM in Mozilla and Netscape. However, for security reasons the browser is allowed to start a connection only to the domain where the hostile script resides. This is a mitigating factor, as the attacker needs to combine the TRACE method with another vulnerability in order to mount the attack.
+有多种方式使浏览器发送TRACE请求，比如IE中的XMLHTTP ActiveX控件，Mozilla和Nescape的XMLDOM。然而，由于安全原因，浏览器只允许从恶意脚本存在的域名发起这样连接。这是一个缓解因素，因为攻击者需要结合其他漏洞和TRACE方法来完成攻击。
 
 
-An attacker has two ways to successfully launch a Cross Site Tracing attack:
-* Leveraging another server-side vulnerability: the attacker injects the hostile JavaScript snippet that contains the TRACE request in the vulnerable application, as in a normal Cross Site Scripting attack
-* Leveraging a client-side vulnerability: the attacker creates a malicious website that contains the hostile JavaScript snippet and exploits some cross-domain vulnerability of the browser of the victim, in order to make the JavaScript code successfully perform a connection to the site that supports the TRACE method and that originated the cookie that the attacker is trying to steal.
+一个攻击者有两种成功实施XST攻击的方法：
+* 利用其他服务器端漏洞：攻击者向漏洞应用注入包含TRACE请求的恶意JavaScript代码就像正常XSS攻击那样。
+* 利用客户端漏洞：攻击者创建一个恶意站点包含恶意JS代码和浏览器的跨域漏洞利用程序，使JS代码能成功发起支持TRACE方法和目标cookie的请求。
 
 
-More detailed information, together with code samples, can be found in the original whitepaper written by Jeremiah Grossman.<br>
+更多的信息和代码例子能从Jeremah Grossman的白皮书中找到。
 
 
-#### Testing for arbitrary HTTP methods
+#### 测试任意HTTP方法
 
-Find a page to visit that has a security constraint such that it would normally force a 302 redirect to a log in page or forces a log in directly. The test URL in this example works like this, as do many web applications. However, if a tester obtains a "200" response that is not a log in page, it is possible to bypass authentication and thus authorization.
+找到一个页面含有安全约束控制使通常访问强制返回302跳转到登陆页面或强制登陆。这个测试URL在下面例子中是这么工作的，如同许多web应用那样。然后，如果测试者获得一个200响应却又不是登陆页面，那么他可能绕过了认证和授权过程。
 
 ```
 $ nc www.example.com 80
@@ -118,22 +118,22 @@ Set-Cookie: PHPSESSID=K53QW...
 ```
 
 
-If the framework or firewall or application does not support the "JEFF" method, it should issue an error page (or preferably a 405 Not Allowed or 501 Not implemented error page). If it services the request, it is vulnerable to this issue.
+如果框架或者防火墙或应用不支持"JEFF"方法，那么他应该指向一个错误页面（更好的是返回405响应不允许，或者501响应未实现错误页面）。如果服务器产生正常应答，那么这可能是一个漏洞。
 
 
-If the tester feels that the system is vulnerable to this issue, they should issue CSRF-like attacks to exploit the issue more fully:
+如果测试者觉得系统存在这个漏洞，他们应该发起一些像CSRF一样的攻击来利用这个问题，比如：
 
 * FOOBAR /admin/createUser.php?member=myAdmin
 * JEFF /admin/changePw.php?member=myAdmin&passwd=foo123&confirm=foo123
 * CATS /admin/groupEdit.php?group=Admins&member=myAdmin&action=add
 
 
-With some luck, using the above three commands - modified to suit the application under test and testing requirements - a new user would be created, a password assigned, and made an administrator.
+如果足够幸运，使用上面三个命令 - 修改符合适合测试情况的需求 - 一个新的管理员用户将被建立，并分配了密码。
 
 
-#### Testing for HEAD access control bypass
+#### 测试HEAD访问控制绕过
 
-Find a page to visit that has a security constraint such that it would normally force a 302 redirect to a log in page or forces a log in directly. The test URL in this example works like this, as do many web applications. However, if the tester obtains a "200" response that is not a login page, it is possible to bypass authentication and thus authorization.
+找到一个页面含有安全约束控制使通常访问强制返回302跳转到登陆页面或强制登陆。这个测试URL在下面例子中是这么工作的，如同许多web应用那样。然后，如果测试者获得一个200响应却又不是登陆页面，那么他可能绕过了认证和授权过程。
 
 ```
 $ nc www.example.com 80
@@ -156,25 +156,25 @@ Content-Type: text/html; charset=ISO-8859-1
 ```
 
 
-If the tester gets a "405 Method not allowed" or "501 Method Unimplemented", the target (application/framework/language/system/firewall) is working correctly. If a "200" response code comes back, and the response contains no body, it's likely that the application has processed the request without authentication or authorization and further testing is warranted.
+如果攻击者得到 “405 方法不允许” 或 “501 方法未实现”，那么目标（应用/框架/语言/系统/防火墙）是正确工作的。如果返回200响应，而且不存在响应主体，那么很可能应用在没有认证和授权的情况下处理了请求，需要进一步测试。
 
-If the tester thinks that the system is vulnerable to this issue, they should issue CSRF-like attacks to exploit the issue more fully:
+如果测试者觉得系统存在这个漏洞，他们应该发起一些像CSRF一样的攻击来利用这个问题，比如：
 
 * HEAD /admin/createUser.php?member=myAdmin
 * HEAD /admin/changePw.php?member=myAdmin&passwd=foo123&confirm=foo123
 * HEAD /admin/groupEdit.php?group=Admins&member=myAdmin&action=add
 
 
-With some luck, using the above three commands - modified to suit the application under test and testing requirements - a new user would be created, a password assigned, and made an administrator, all using blind request submission.
+如果足够幸运，使用上面三个命令 - 修改符合适合测试情况的需求 - 一个新的管理员用户将被建立，并分配了密码，所有过程使用了盲请求提交。
 
 
-### Tools
+### 测试工具
 * NetCat - http://nc110.sourceforge.net
 * cURL - http://curl.haxx.se/
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**<br>
 * RFC 2616: "Hypertext Transfer Protocol -- HTTP/1.1"
 * RFC 2109 and RFC 2965: "HTTP State Management Mechanism"
 * Jeremiah Grossman: "Cross Site Tracing (XST)" - http://www.cgisecurity.com/whitehat-mirror/WH-WhitePaper_XST_ebook.pdf<br>
