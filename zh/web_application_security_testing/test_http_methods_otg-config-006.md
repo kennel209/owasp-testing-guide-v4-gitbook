@@ -1,10 +1,10 @@
-# Test HTTP Methods (OTG-CONFIG-006)
+# 测试HTTP方法 (OTG-CONFIG-006)
 
 
-### Summary
-HTTP offers a number of methods that can be used to perform actions on the web server. Many of theses methods are designed to aid developers in deploying and testing HTTP applications. These HTTP methods can be used for nefarious purposes if the web server is misconfigured. Additionally, Cross Site Tracing (XST), a form of cross site scripting using the server's HTTP TRACE method, is examined.<br>
+### 综述
+HTTP 提供了一系列的方法来与服务器交互。许多被设计来用作辅助开发者进行部署可测试HTTP应用。这些HTTP方法可能被用于邪恶的目的，如果web服务器被错误配置。此外跨站点追踪（Cross Site Tracing，XST），一种跨站脚本的形式使用了服务器的HTTP TRACE方法。
 
-While GET and POST are by far the most common methods that are used to access information provided by a web server, the Hypertext Transfer Protocol (HTTP) allows several other (and somewhat less known) methods. RFC  2616 (which describes HTTP version 1.1 which is the standard today) defines the following eight methods:
+虽然GET和POST是目前被用于访问web服务器提供的信息的常用方法，但超文本传输协议（Hypertext Transfer Protocol，HTTP）也允许一些其他方法（不那么知名）。RFC 2616（现在的标准，描述了HTTP 版本1.1）定义了下面8个方法：
 
 * HEAD
 * GET
@@ -16,36 +16,36 @@ While GET and POST are by far the most common methods that are used to access in
 * CONNECT
 
 
-Some of these methods can potentially pose a security risk for a web application, as they allow an attacker to modify the files stored on the web server and, in some scenarios, steal the credentials of legitimate users. More specifically, the methods that should be disabled are the following:
+上述的一些方法可能潜在造成web应用的安全风险，因为他们允许攻击者修改存储在web服务器上的文件，以及在一些场景中，可以盗取合法用户的凭证。特别是如下这些方法应该被禁止使用：
 
-* PUT: This method allows a client to upload new files on the web server. An attacker can exploit it by uploading malicious files (e.g.: an asp file that executes commands by invoking cmd.exe), or by simply using the victim's server as a file repository.
-* DELETE: This method allows a client to delete a file on the web server. An attacker can exploit it as a very simple and direct way to deface a web site or to mount a DoS attack.
-* CONNECT:  This method could allow a client to use the web server as a proxy.
-* TRACE: This method simply echoes back to the client whatever string has been sent to the server, and is used mainly for debugging purposes. This method, originally assumed harmless, can be used to mount an attack known as Cross Site Tracing, which has been discovered by Jeremiah Grossman (see links at the bottom of the page).
-
-
-If an application needs one or more of these methods, such as REST Web Services (which may require PUT or DELETE), it is important to check that their usage is properly limited to trusted users and safe conditions.
+* PUT: 这个方法允许客户端向web服务器上传新的文件。攻击者可以利用他来上传恶意文件（比如一个asp文件通过调用cmd.exe来执行命令），或者简单使用受害者服务器作为文件仓库。
+* DELETE: 这个方法允许客户端删除web服务器上的一个文件。攻击者能利用他简单直接破坏网站或者实施拒绝服务攻击。
+* CONNECT: 这个方法允许客户端使用web服务器作为代理。
+* TRACE: 这个方法简单返回客户端发送给服务器的所有信息，主要用于调试目的。这个方法最初被认为没有危害，被Jermiah Grossman发现能被用于实施XST（见最下面链接）。
 
 
-#### Arbitrary HTTP Methods
-
-Arshan Dabirsiaghi (see links) discovered that many web application frameworks allowed well chosen or arbitrary HTTP methods to bypass an environment level access control check:
-
-* Many frameworks and languages treat "HEAD" as a "GET" request, albeit one without any body in the response. If a security constraint was set on "GET" requests such that only "authenticatedUsers" could access GET requests for a particular servlet or resource, it would be bypassed for the "HEAD" version. This allowed unauthorized blind submission of any privileged GET request.
-
-* Some frameworks allowed arbitrary HTTP methods such as "JEFF" or "CATS" to be used without limitation. These were treated as if a "GET" method was issued, and were found not to be subject to method role based access control checks on a number of languages and frameworks, again allowing unauthorized blind submission of privileged GET requests.
+如果应用需要一个或多个上述方法，比如REST Web 服务（可能需要PUT或DELETE），检查他们被正确限于可信用户和安全条件下使用。
 
 
-In many cases, code which explicitly checked for a "GET" or "POST" method would be safe.
+#### 任意HTTP方法
+
+Arshan Dabirsiaghi（参见链接）发现许多web应用框架也允许自选的或者任意的HTTP方法来绕过环境级别的访问控制检查：
+
+* 许多框架和语言处理 "HEAD" 就如同 "GET" 一样，虽然可能响应中不带有任何信息。但是如果 "GET" 中设置了安全约束条件只允许认证用户访问特定容器或资源，那么这些约束可能被 "HEAD" 版本绕过。
+
+* 一些框架允许任意HTTP方法如 "JEFF" 或 "CATS"，没有任何使用限制，如果他们如同 "GET" 请求一样处理，那么他们可能不被基于角色的权限控制机制检查，再一次绕过了GET请求，获得特权。
 
 
-### How to Test
-
-**Discover the Supported Methods** <br>
-To perform this test, the tester needs some way to figure out which HTTP methods are supported by the web server that is being examined. The OPTIONS HTTP method provides the tester with the most direct and effective way to do that. RFC 2616 states that, "The OPTIONS method represents a request for information about the  communication options available on the request/response chain identified by the Request-URI".
+在很多例子中，显示检查 "GET" 和 "POST" 的代码风格才能更加安全。
 
 
-The testing method is extremely straightforward and we only need to fire up netcat (or telnet):
+### 如何测试
+
+**发现支持的方法** <br>
+测试者需要找出web服务器支持的HTTP方法。OPTIONS HTTP方法能提供测试者最直接的和便捷的方法。RFC 2616中这么写道：“OPTIONS方法代表一个请求，请求关于请求URI中用于请求/响应链的可用的通信选项的信息。
+
+
+这个测试很容易，我们只需要使用netcat（或telnet）：
 ```
 $ nc www.victim.com 80
 OPTIONS / HTTP/1.1
@@ -61,12 +61,13 @@ Content-Length: 0
 ```
 
 
-As we can see in the example, OPTIONS provides a list of the methods that are supported by the web server, and in this case we can see that TRACE method is enabled. The danger that is posed by this method is illustrated in the following section<br><br>
-**Test XST Potential**<br>
-Note: in order to understand the logic and the goals of this attack one must be familiar with [Cross Site Scripting attacks](https://www.owasp.org/index.php/XSS).
+如例子中所示，OPTIONS 提供了web服务器支持的HTTP方法列表，在这个例子中，我们发现服务器启用了TRACE方法。关于这个方法的危害将在后面章节中描述。
+
+**测试潜在的XST**<br>
+注意： 为了理解这个攻击的逻辑和目标，攻击者必须熟悉 [跨站脚本攻击（XSS）](https://www.owasp.org/index.php/XSS)。
 
 
-The TRACE method, while apparently harmless, can be successfully leveraged in some scenarios to steal legitimate users' credentials. This attack technique was discovered by Jeremiah Grossman in 2003, in an attempt to bypass the [HTTPOnly](https://www.owasp.org/index.php/HTTPOnly) tag that Microsoft introduced in Internet Explorer 6 SP1 to protect cookies from being accessed by JavaScript. As a matter of fact, one of the most recurring attack patterns in Cross Site Scripting is to access the document.cookie object and send it to a web server controlled by the attacker so that he or she can hijack the victim's session. Tagging a cookie as httpOnly forbids JavaScript from accessing it, protecting it from being sent to a third party. However, the TRACE method can be used to bypass this protection and access the cookie even in this scenario.
+TRACE方法，看上去没有危害，但能在某些场景下成功被利用并盗取合法用户的凭证。这个攻击技巧被Jeremiah Grossman在2003年发现，一次企图绕过 [HTTPOnly](https://www.owasp.org/index.php/HTTPOnly) 标签，以及微软引进IE6 SP1来保护cookies被JavaScript访问。事实上，XSS上最常见的攻击模式是获取document.cookie，并将它 As a matter of fact, one of the most recurring attack patterns in Cross Site Scripting is to access the document.cookie object and send it to a web server controlled by the attacker so that he or she can hijack the victim's session. Tagging a cookie as httpOnly forbids JavaScript from accessing it, protecting it from being sent to a third party. However, the TRACE method can be used to bypass this protection and access the cookie even in this scenario.
 
 
 As mentioned before, TRACE simply returns any string that is sent to the web server. In order to verify its presence (or to double-check the results of the OPTIONS request shown above), the tester can proceed as shown in the following example:
