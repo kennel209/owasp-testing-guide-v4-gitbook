@@ -1,67 +1,67 @@
-# Test Network/Infrastructure Configuration (OTG-CONFIG-001)
+# 测试网络基础设施配置 (OTG-CONFIG-001)
 
-### Summary
-The intrinsic complexity of interconnected and heterogeneous web server infrastructure, which can include hundreds of web applications, makes configuration management and review a fundamental step in testing and deploying every single application.
-It takes only a single vulnerability to undermine the security of the entire infrastructure, and even small and seemingly unimportant problems may evolve into severe risks for another application on the same server. In order to address these problems, it is of utmost importance to perform an in-depth review of configuration and known security issues, after having mapped the entire architecture.
-
-
-Proper configuration management of the web server infrastructure is very important in order to preserve the security of the application itself. If elements such as the web server software, the back-end database servers, or the authentication servers are not properly reviewed and secured, they might introduce undesired risks or introduce new vulnerabilities that might compromise the application itself.
+### 综述
+互相联系又多种多样的web服务器基础设施造成了内在固有的复杂情况，包括了数以百计的web应用，这使配置管理和审查变成了测试和部署每一个应用的的基础步骤。
+只需要一个漏洞就能破坏整个基础设施的安全性，有时甚至一下很小的看上去不太重要的问题也可能进化成针对同一个服务器上另一个应用的严重威胁。为了找出这些问题，在已经弄清楚整个架构的情况下，做一个对已知安全问题和配置的深入审查是非常重要的。
 
 
-For example, a web server vulnerability that would allow a remote attacker to disclose the source code of the application itself (a vulnerability that has arisen a number of times in both web servers or application servers) could compromise the application, as anonymous users could use the information disclosed in the source code to leverage attacks against the application or its users.
+为了保证自身应用的安全，web服务器基础设施的正确配置管理是十分重要的。如果其中一些元素，如web服务器软件，后台数据库服务器或者一些认证服务器没有被正确审查和加固，那么他们可能就会引入不希望看到的风险或者引入新的可能导致应用本身被攻破的漏洞。
 
 
-The following steps need to be taken to test the configuration management infrastructure:
-
-* The different elements that make up the infrastructure need to be determined in order to understand how they interact with a web application and how they affect its security.
-* All the elements of the infrastructure need to be reviewed in order to make sure that they don’t contain any known vulnerabilities.
-* A review needs to be made of the administrative tools used to maintain all the different elements.
-* The authentication systems, need to reviewed in order to assure that they serve the needs of the application and that they cannot be manipulated by external users to leverage access.
-* A list of defined ports which are required for the application should be maintained and kept under change control.
+举例说明，一个web服务器漏洞允许远程攻击者获得应用本身的源代码（一个在web服务器和应用服务器上发生很多次的漏洞）可能导致应用被攻破，因为匿名用户可以使用源代码中暴露出来的信息来对应用和他的用户进行攻击。
 
 
-After having mapped the different elements that make up the infrastructure (see [Map Network and Application Architecture](https://www.owasp.org/index.php/Map_Network_and_Application_Architecture_%28OTG-INFO-012%29)) it is possible to review the configuration of each element founded and test for any known vulnerabilities.
+下面的步骤可能在使用在测试配置管理基础设置中：
+
+* 组成基础设施的不同元素应该被确定，并弄清楚他们是如何与web应用相互交互工作的以及他们会对安全造成如何影响。
+* 所有组成基础设施的元素都应该被审查，保证他们未包含任何一直漏洞。
+* 维护这些所有不同的管理员工具需要被审查。
+* 认证系统需要被审查来确保他们满足应用的需求，并且不会被外部用户恶意操作获得权限。
+* 应用程序需要使用的端口应预先形成定义列表，并纳入维护管理和变更控制措施之中。
 
 
-### How to Test
-
-#### Known Server Vulnerabilities
-Vulnerabilities found in the different areas of the application architecture, be it in the web server or in the back end  database, can severely compromise the application itself. For example, consider a server vulnerability that allows a remote, unauthenticated user to upload files to the web server or even to replace files. This vulnerability could compromise the application, since a rogue user may be able to replace the application itself or introduce code that would affect the back end servers, as its application code would be run just like any other application.
+只有当识别完成组成基础设施的所有不同元素之后（参见 [Map Network and Application Architecture](https://www.owasp.org/index.php/Map_Network_and_Application_Architecture_%28OTG-INFO-012%29)），才能够审查每一个元素的配置，和测试任何已知漏洞。
 
 
-Reviewing server vulnerabilities can be hard to do if the test needs to be done through a blind penetration test. In these cases, vulnerabilities need to be tested from a remote site, typically using an automated tool. However, testing for some vulnerabilities can have unpredictable results on the web server, and testing for others (like those directly involved in denial of service attacks) might not be possible due to the service downtime involved if the test was successful.
+### 如何测试
+
+#### 已知服务器漏洞
+漏洞可能在应用架构的不同区域被发现，可能在web服务器中或支撑数据库中，都能严重导致应用本身被攻破。例如，考虑一个服务器漏洞，它允许远程，未认证用户向web服务器上传文件，甚至覆盖文件。这个漏洞可能攻破应用程序，因为一个淘气的用户可能替换应用程序本身，或者引入能够影响后台服务器的代码就像其他正常应用那样运行。
 
 
-Some automated tools will flag vulnerabilities based on the web server version retrieved. This leads to both false positives and false negatives. On one hand, if the web server version has been removed or obscured by the local site administrator the scan tool will not flag the server as vulnerable even if it is. On the other hand, if the vendor providing the software does not update the web server version when vulnerabilities are fixed, the scan tool will flag vulnerabilities that do not exist. The latter case is actually very common as some operating system vendors back port patches of security vulnerabilities to the software they provide in the operating system, but do not do a full upload to the latest software version. This happens in most GNU/Linux distributions such as Debian, Red Hat or SuSE. In most cases, vulnerability scanning of an application architecture will only find vulnerabilities associated with the “exposed” elements of the architecture (such as the web server) and will usually be unable to find vulnerabilities associated to elements which are not directly exposed, such as the authentication back ends, the back end database, or reverse proxies in use.
+如果通过盲测来审查服务器漏洞是非常困难的。在这种情况下，漏洞需要从远程站点来测试，通常使用自动化工具进行。然后，一些漏洞的测试仍然是无法预料的结果，一些取决于服务器宕机来判断测试成功与否的测试也难以操作（比如拒绝服务攻击等）。
 
 
-Finally, not all software vendors disclose vulnerabilities in a public way, and therefore these weaknesses do not become registered within publicly known vulnerability databases[2]. This information is only disclosed to customers or published through fixes that do not have accompanying advisories. This reduces the usefulness of vulnerability scanning tools. Typically, vulnerability coverage of these tools will be very good for common products (such as the Apache web server, Microsoft’s Internet Information Server, or IBM’s Lotus Domino) but will be lacking for lesser known products.
+一些自动化工具基于获取的服务器版本信息来标记漏洞情况。这可能带来误报和漏报。一方面，如果web服务器版本已经被除去或被本地管理员混淆，那么扫描器可能不会报告这个服务存在漏洞，即使事实上存在。在另一方面，生产商可能没有更新服务器版本号，但是已经修复了漏洞，扫描器可能会报告并不存在的漏洞。后一种情况往往很常见，一些操作系统开发者将一些安全漏洞补丁移植到自己的操作系统，但并没有将软件更新到最新版本。在大多数的GNU/Linux发行版中如Debian，Red Hat和SuSE中都很常见。在大多数情况下，针对应用程序架构的漏洞扫描只能发现架构中已经“暴露”出的元素的漏洞（比如web服务器），通常不能发现其他间接的元素，比如后台认证系统，支撑数据库系统或者在使用的反向代理。
 
 
-This is why reviewing vulnerabilities is best done when the tester is provided with internal information of the software used, including versions and releases used and patches applied to the software. With this information, the tester can retrieve the information from the vendor itself and analyze what vulnerabilities might be present in the architecture and how they can affect the application itself. When possible, these vulnerabilities can be tested to determine their real effects and to detect if there might be any external elements (such as intrusion detection or prevention systems) that might reduce or negate the possibility of successful exploitation. Testers might even determine, through a configuration review, that the vulnerability is not even present, since it affects a software component that is not in use.
+最后，不是所有软件生产者公开披露漏洞情况，所以很多脆弱点并未公开在公开已知漏洞数据库中[2]。这些信息通常只披露给客户或随补丁发布，并不会发布相关建议公告。这减少了漏洞扫描工具的有用程度。通常，这些工具的漏洞覆盖率只是对通用产品比较好（如Apache服务器，微软IIS，和IBM的Lotus Domino等），针对不那么知名的产品往往不怎么理想。
 
 
-It is also worthwhile to note that vendors will sometimes silently fix vulnerabilities and make the fixes available with new software releases. Different vendors will have different release cycles that determine the support they might provide for older releases. A tester with detailed information of the software versions used by the architecture can analyse the risk associated to the use of old software releases that might be unsupported in the short term or are already unsupported. This is critical, since if a vulnerability were to surface in an old software version that is no longer supported, the systems personnel might not be directly aware of it. No patches will be ever made available for it and advisories might not list that version as vulnerable as it is no longer supported. Even in the event that they are aware that the vulnerability is present and the system is vulnerable, they will need to do a full upgrade to a new software release, which might introduce significant downtime in the application architecture or might force the application to be re-coded due to incompatibilities with the latest software version.
+这就是为什么漏洞审查在被提供了软件的内部信息后（包括版本和补丁情况）才效果最好的原因。通过这些信息，测试这可以从开发商本身获得信息，分析在架构中存在的漏洞已经这些漏洞将如何影响应用本身。如果可能，这些漏洞应该被测试来确定真实影响和查看外部元素（如入侵检测、防护系统）能否减轻或消除漏洞成功利用的可能性。测试者甚至可以确定，通过配置审查，这些漏洞可能并不存在，因为所影响的软件组件可能并没有被使用。
+
+同样值得注意的是，开发商有时安静的修复了漏洞，包含在新软件的发布中。不同的开发商有不同的发布周期来提供支持旧的应用。拥有详细软件版本信息的测试者能分析相关旧版本软件的风险（可能不再被支持或马上要不被支持）。这是非常关键的，漏洞可能存在于不被支持的旧版本软件，系统管理人员可能不会直接注意到这一点。可能没有该版本的补丁，相关安全公告也可能不再列出该版本信息，因为不再被开发商支持。甚至在有的情况下，系统管理员意识到漏洞的存在，他们需要做一次全面的软件更新，可能需要长时间的应用宕机，甚至需要强制应用进行重新编码取决于是否和最新版本软件相容。
 
 
-#### Administrative tools
+#### 管理工具
 
-Any web server infrastructure requires the existence of administrative tools to maintain and update the information used by the application. This information includes static content (web pages, graphic files), application source code, user authentication databases, etc. Administrative tools will differ depending on the site, technology, or software used. For example, some web servers will be managed using administrative interfaces which are, themselves, web servers (such as the iPlanet web server) or will be administrated by plain text configuration files (in the Apache case[3]) or use operating-system GUI tools (when using Microsoft’s IIS server or ASP.Net). I
-
-
-n most cases the server configuration will be handled using different file maintenance tools used by the web server, which are managed through FTP servers, WebDAV, network file systems (NFS, CIFS) or other mechanisms. Obviously, the operating system of the elements that make up the application architecture will also be managed using other tools. Applications may also have administrative interfaces embedded in them that are used to manage the application data itself (users, content, etc.).
+任何web服务器基础设施需要管理工具来维护和更新应用。这些更新信息包括静态页面（web网页，图形文件），应用源代码，用户认证数据库等等。管理工具视不同站点、技术和使用的软件而不同。例如，有些web服务器通过管理接口进行管理，他们同时也是web服务器（如iPlanet web 服务器），或者通过明文文本配置文件进行管理（如Apache[3]），或使用操作系统图形工具（如微软IIS服务器和ASP.Net）。
 
 
-After having mapped the administrative interfaces used to manage the different parts of the architecture it is important to review them since if an attacker gains access to any of them he can then compromise or damage the application architecture. To do this it is important to:
-
-* Determine the mechanisms that control access to these interfaces and their associated susceptibilities. This information may be available online.
-* Change the default username and password.
+在大多数情况下服务器会使用不同的文件维护工具来处理配置，可能通过FTP服务器、WebDAV、网络文件系统（NFS、CIFS）或其他机制传输。显然，组成架构的元素的操作系统也能通过这些工具来管理。应用也可能存在内嵌的管理接口来管理自身数据（用户，内容等等）。
 
 
-Some companies choose not to manage all aspects of their web server applications, but may have other parties managing the content delivered by the web application. This external company might either provide only parts of the content (news updates or promotions) or might manage the web server completely (including content and code). It is common to find administrative interfaces available from the Internet in these situations, since using the Internet is cheaper than providing a dedicated line that will connect the external company to the application infrastructure through a management-only interface. In this situation, it is very important to test if the administrative interfaces can be vulnerable to attacks.
+在识别出管理架构中不同部分的管理接口后，审查这些接口是非常重要的，因为如果攻击者能够访问任一管理接口，那么他就可能攻破或破坏应用架构体系。审查时，做到下面这些是非常重要的：
+
+* 确定访问这些接口的控制机制。这些信息可能能在线访问到。
+* 改变默认用户名和密码。
 
 
-### References
-* [1] WebSEAL, also known as Tivoli Authentication Manager, is a reverse proxy from IBM which is part of the Tivoli framework.
-* [2] Such as Symantec’s Bugtraq, ISS’ X-Force, or NIST’s National Vulnerability Database (NVD).
-* [3] There are some GUI-based administration tools for Apache (like NetLoony) but they are not in widespread use yet.
+有些公司选择不管理他们的web服务器所有部分，但是让其他机构来管理web应用发布的内容。这些外部的公司可能提供部分web内容（更新或提升新闻）或能完全管理web服务器（包括内容和代码）。通常能在互联网上发现可用的管理接口，因为使用互联网比提供专线接入应用更加便宜。在这种情况下，测试管理接口是否存在漏洞是非常重要的。
+
+
+### 参考资料
+* [1] WebSEAL, 也叫做Tivoli Authentication Manager, 是一个来自IBM的反向代理，是Tivoli框架的一部分。
+* [2] 比如赛门铁克的Bugtraq，ISS的X-Force或NIST的国家漏洞数据库（NVD）。
+* [3] 也有一些Apache的图形管理界面（如NetLoony），但他们还没有广泛使用。
+
