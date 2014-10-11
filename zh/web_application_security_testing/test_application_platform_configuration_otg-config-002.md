@@ -1,35 +1,36 @@
-# Test Application Platform Configuration (OTG-CONFIG-002)
+# 测试应用平台配置 (OTG-CONFIG-002)
 
-### Summary
-Proper configuration of the single elements that make up an application architecture is important in order to prevent mistakes that might compromise the security of the whole architecture.
-
-
-Configuration review and testing is a critical task in creating and maintaining an architecture. This is because many different systems will be usually provided with generic configurations that might not be suited to the task they will perform on the specific site they're installed on.
+### 综述
+为了防止可能攻破整个架构安全的错误，正确配置每个组成架构的元素是非常重要的。
 
 
-While the typical web and application server installation will contain a lot of functionality (like application examples, documentation, test pages) what is not essential should be removed before deployment to avoid post-install exploitation.
-
-### How to Test
-#### Black Box Testing
-
-##### Sample and known files and directories
-Many web servers and application servers provide, in a default installation, sample applications and files that are provided for the benefit of the developer and in order to test that the server is working properly right after installation. However, many default web server applications have been later known to be vulnerable. This was the case, for example, for CVE-1999-0449 (Denial of Service in IIS when the Exair sample site had been installed), CAN-2002-1744 (Directory traversal vulnerability in CodeBrws.asp in Microsoft IIS 5.0), CAN-2002-1630 (Use of sendmail.jsp in Oracle 9iAS), or CAN-2003-1172 (Directory traversal in the view-source sample in Apache’s Cocoon).
+配置审查和测试在创建和维护架构中是一项关键任务。这是因为不同的系统通常在安装时提供了通用的配置，这些配置不一定适合特点网站任务要求。
 
 
-CGI scanners include a detailed list of known files and directory samples that are provided by different web or application servers and might be a fast way to determine if these files are present. However, the only way to be really sure is to do a full review of the contents of the web server or application server and determine of whether they are related to the application itself or not.
+典型的web应用和服务器安装过程可能包含一系列的功能（比如应用例子，文档，测试页面等），这些不必须的功能应该在部署前移除来避免被恶意利用。
+
+### 如何测试
+#### 黑盒测试
+
+##### 样本和已知文件/目录
+许多web服务器和应用在默认安装过程中提供样本应用和文件来帮助开发者测试服务器是否正常安装工作。然而一些web服务器默认应用被发现存在漏洞。例如，CVE-1999-0449 （Exair样本站点的拒绝服务漏洞）, CAN-2002-1744 （IIS5.0 CodeBrws.asp 目录便利漏洞）， CAN-2002-1630 （Oracle9iAS sendmail.jsp利用），或 CAN-2003-1172 （Apache Cocoon 查看源代码样本中的目录遍历漏洞）。
 
 
-##### Comment review
-It is very common, and even recommended, for programmers to include detailed comments on their source code in order to allow for other programmers to better understand why a given decision was taken in coding a given function. Programmers usually add comments when developing large web-based applications. However, comments included inline in HTML code might reveal internal information that should not be available to an attacker. Sometimes, even source code is commented out since a functionality is no longer required, but this comment is leaked out to the HTML pages returned to the users unintentionally.
+CGI扫描器包含一些许多不同web或应用服务器提供的样本文件和目录详细列表，可能是一个快速发现这些文件的方法。然而，真正确保这些文件的唯一方法是对web服务器和应用服务器的内容进行全面审查来决定是否与应用相关。
 
 
-Comment review should be done in order to determine if any information is being leaked through comments. This review can only be thoroughly done through an analysis of the web server static and dynamic content and through file searches. It can be useful to browse the site either in an automatic or guided fashion and store all the content retrieved. This retrieved content can then be searched in order to analyse any HTML comments available in the code.
+##### 注释审查
+通常很常见，甚至是推荐程序员在源代码中包含详细注释，来帮助其他程序员理解相关函数功能。程序员通常在开发大型web应用中加入注释。然而，包含在HTML源代码中的注释往往能揭露出不应该让攻击者获得信息。有时候有些不需要的功能在源代码中注释了，但是这些注释却通过HTML页面意外返回给用户。
 
 
-#### Gray Box Testing
+注释应该被审查来确定没有信息泄露。这个审查只能通过完全分析web服务器静态和动态和文件搜索完成。使用自动化或基于向导浏览网站，存储所有获得的内容是十分有用的。这些内容可以用于查询分析任何代码中的注释。
 
-##### Configuration review
 
+#### 灰盒测试
+
+##### 配置审查
+
+web服务器或应用配置
 The web server or application server configuration takes an important role in protecting the contents of the site and it must be carefully reviewed in order to spot common configuration mistakes. Obviously, the recommended configuration varies depending on the site policy, and the functionality that should be provided by the server software. In most cases, however, configuration guidelines (either provided by the software vendor or external parties) should be followed to determine if the server has been properly secured.
 
 
@@ -159,7 +160,7 @@ In order to analyze web server attacks the error log files of the server need to
 Log statistics or analysis should not be generated, nor stored, in the same server that produces the logs. Otherwise, an attacker might, through a web server vulnerability or improper configuration, gain access to them and retrieve similar information as would be disclosed by log files themselves.
 
 
-### References
+### 参考资料
 
 * Apache
     - Apache Security, by Ivan Ristic, O’reilly, March 2005.
@@ -184,12 +185,12 @@ Log statistics or analysis should not be generated, nor stored, in the same serv
 * WebSphere
 	- IBM WebSphere V5.0 Security, WebSphere Handbook Series, by Peter Kovari et al., IBM, December 2002.
 	- IBM WebSphere V4.0 Advanced Edition Security, by Peter Kovari et al., IBM, March 2002.
-* General
+* 通用
 	- [Logging Cheat Sheet](https://www.owasp.org/index.php/Logging_Cheat_Sheet), OWASP
 	- [SP 800-92](http://csrc.nist.gov/publications/nistpubs/800-92/SP800-92.pdf)  Guide to Computer Security Log Management, NIST
 	- [PCI DSS v2.0](https://www.pcisecuritystandards.org/security_standards/documents.php)  Requirement 10 and PA-DSS v2.0 Requirement 4, PCI Security Standards Council
 
-* Generic:
+* 其他
 	- CERT Security Improvement Modules: Securing Public Web Servers - http://www.cert.org/security-improvement/
 	- Apache Security Configuration Document, InterSect Alliance - http://www.intersectalliance.com/projects/ApacheConfig/index.html
 	- “How To: Use IISLockdown.exe” - http://msdn.microsoft.com/library/en-us/secmod/html/secmod113.asp
