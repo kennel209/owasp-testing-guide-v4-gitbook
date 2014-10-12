@@ -30,7 +30,7 @@
    * [身份鉴别管理测试 ](web_application_security_testing/identity_management_testing.md)
        * [角色定义测试 (OTG-IDENT-001)](web_application_security_testing/test_role_definitions_otg-ident-001.md)
        * [用户注册过程测试 (OTG-IDENT-002)](web_application_security_testing/test_user_registration_process_otg-ident-002.md)
-       * [用户选项测试 (OTG-IDENT-003)](web_application_security_testing/test_account_provisioning_process_otg-ident-003.md)
+       * [帐户权限变化测试 (OTG-IDENT-003)](web_application_security_testing/test_account_provisioning_process_otg-ident-003.md)
        * [帐户枚举测试 (OTG-IDENT-004) ](web_application_security_testing/testing_for_account_enumeration_and_guessable_user_account_otg-ident-004.md)
        * [弱用户名策略测试 (OTG-IDENT-005)](web_application_security_testing/testing_for_weak_or_unenforced_username_policy_otg-ident-005.md)
    * [认证测试 ](web_application_security_testing/authentication_testing.md)
