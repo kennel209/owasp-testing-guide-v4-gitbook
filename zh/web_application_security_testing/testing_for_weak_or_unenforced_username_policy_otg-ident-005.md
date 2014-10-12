@@ -1,24 +1,24 @@
-# Testing for Weak or unenforced username policy (OTG-IDENT-005)
+# 测试弱用户名策略 (OTG-IDENT-005)
 
 
-### Summary
+### 综述 
 
-User account names are often highly structured (e.g. Joe Bloggs account name is jbloggs and Fred Nurks account name is fnurks) and valid account names can easily be guessed.
-
-
-### Test objectives
-
-Determine whether a consistent account name structure renders the application vulnerable to account enumeration. Determine whether the application's error messages permit account enumeration.
+用户帐户名字结构往往非常有规律（如Joe Bloggs帐户名叫jblggs，Fred Nurks帐户名叫fnurks），合法的帐户名称可以轻易被简单猜测。
 
 
-### How to test
+### 测试目标
 
-* Determine the structure of account names.
-* Evaluate the application's response to valid and invalid account names.
-* Use different responses to valid and invalid account names to enumerate valid account names.
-* Use account name dictionaries to enumerate valid account names.
+确定应用程序帐户名结构渲染器是否存在帐户枚举漏洞。确定应用错误消息是否允许帐户枚举。
 
 
-### Remediation
+### 如何测试
 
-Ensure the application returns consistent generic error messages in response to invalid account name, password or other user credentials entered during the log in process.
+* 确定帐户名称结构。
+* 评估应用针对合法和非法帐户名称的响应。
+* 通过上条不同的响应结果来枚举合法帐户名称。
+* 使用帐户名称字典来枚举合法的帐户名称。
+
+
+### 整改措施
+
+确保应用程序在登录过程中，返回一致的通用错误信息来应对不合法的用户名称、密码或其他用户凭证信息。
