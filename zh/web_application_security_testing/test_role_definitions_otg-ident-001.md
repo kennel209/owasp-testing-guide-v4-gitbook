@@ -1,51 +1,51 @@
-# Test Role Definitions (OTG-IDENT-001)
+# 测试角色定义 (OTG-IDENT-001)
 
 
-### Summary
+### 综述
 
-It is common in modern enterprises to define system roles to manage users and authorization to system resources. In most system implementations it is expected that at least two roles exist, administrators and regular users. The first representing a role that permits access to privileged and sensitive functionality and information, the second representing a role that permits access to regular business functionality and information. Well developed roles should align with business processes which are supported by the application.
+在现代公司中通过定义系统角色来管理用户和授权访问系统资源。在大多数系统实现中，至少存在两个角色，管理员和普通用户。前者代表允许访问特权功能和敏感信息的角色，后者代表允许访问常规业务功能和信息的角色。良好开发的角色应该匹配应用支持的业务流程。
 
-It is important to remember that cold, hard authorization isn't the only way to manage access to system objects. In more trusted environments where confidentiality is not critical, softer controls such as application workflow and audit logging can support data integrity requirements while not restricting user access to functionality or creating complex role structures that are difficult to manage. Its important to consider the Goldilocks principle when role engineering, in that defining too few, broad roles (thereby exposing access to functionality users don't require) is as bad as too many, tightly tailored roles (thereby restricting access to functionality users do require).
-
-
-### Test objectives
-
-Validate the system roles defined within the application sufficiently define and separate each system and business role to manage appropriate access to system functionality and information.
+记住冷酷、困难的授权不是管理访问系统对象的唯一方法这一点是非常重要的。在一下可信度高的环境中，秘密性不是特别关键，更柔和的管理措施比如应用工作流程和审计记录措施能支持数据完整性要求，而并不限制用户接触这些功能或创建难以管理的负责角色结构。在角色工程中考虑金发姑娘原则（译注：凡事要有度，不要超越极限）是重要的。定义太少或泛泛的角色（这暴露了用户不需要访问的功能）和定义太多，太细的角色（这限制访问需要的功能）一样不好。
 
 
-### How to test
+### 测试目标
 
-Either with or without the help of the system developers or administrators, develop an role versus permission matrix. The matrix should enumerate all the roles that can be provisioned and explore the permissions that are allowed to be applied to the objects including any constraints. If a matrix is provided with the application it should be validated by the tester, if it doesn't exist, the tester should generate it and determine whether the matrix satisfies the desired access policy for the application.
+验证应用定义的系统角色是足够有效定义并区别了系统和业务角色来管理访问系统功能和应用的权限。
 
 
-#### Example
+### 如何测试
 
-| ROLE          | PERMISSION | OBJECT           | CONSTRAINTS                                                |
+通过或不通过系统开发者或管理员的帮助，做一个角色权限矩阵列表。这个矩阵应该枚举了所有有权限的角色和探索他们被赋予于对象的权限包括其中的约束条件。如果是应用提供的矩阵，那么应该被测试人员验证。如果没有，那么测试者应该创建一个，并确定矩阵满足应用所希望的访问控制策略。
+
+
+#### 测试例子
+
+| 角色          | 权限 | 对象           | 约束条件                                                |
 |---------------|------------|------------------|------------------------------------------------------------|
-| Administrator | Read       | Customer records |                                                            |
-| Manager       | Read       | Customer records | Only records related to business unit                      |
-| Staff         | Read       | Customer records | Only records associated with customers assigned by Manager |
-| Customer      | Read       | Customer record  | Only own record                                            |
+| 管理员 | 读取       | 客户记录（多个） |                                                            |
+| 经理       | 读取       | 客户记录（多个） | 只有业务单元的记录                      |
+| 职工         | 读取       | 客户记录（多个） | 只有被经理分配相关的记录 |
+| 客户      | 读取       | 客户记录  | 只有自己的记录                                            |
 
-A real world example of role definitions can be found in the [WordPress roles documentation](http://codex.wordpress.org/Roles_and_Capabilities). WordPress has six default roles ranging from Super Admin to a Subscriber.
-
-
-### Tools
-
-While the most thorough and accurate approach to completing this test is to conduct it manually, [spidering tools](http://code.google.com/p/zaproxy/wiki/HelpStartConceptsSpider) are also useful. Log on with each role in turn and spider the application (don't forget to exclude the logout link from the spidering).
+真实世界的角色定义例子可以参考[WordPress 角色文档](http://codex.wordpress.org/Roles_and_Capabilities)。WordPress有六个默认角色，从超级管理员到订阅者。
 
 
-### References
+### 测试工具
+
+虽然大部分完全和精准测试方法是使用手工测试，但是 [spidering tools](http://code.google.com/p/zaproxy/wiki/HelpStartConceptsSpider) 也非常有用。使用每个不同的角色登陆并爬行整个应用（不要忘记在使用过程中排除登出链接）。
+
+
+### 参考资料
 
 * [Role Engineering for Enterprise Security Management, E Coyne & J Davis, 2007](https://www.bookdepository.co.uk/Role-Engineering-for-Enterprise-Security-Management-Edward-Coyne/9781596932180)
 
 * [Role engineering and RBAC standards](http://csrc.nist.gov/groups/SNS/rbac/standards.html)
 
 
-### Remediation
+### 整改措施
 
-Remediation of the issues can take the following forms:
+这个问题的整改措施可以采取下面形式：
 
-* Role Engineering
-* Mapping of business roles to system roles
-* Separation of Duties
+* 角色工程
+* 将业务角色对应于系统角色
+* 权责分离
