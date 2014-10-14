@@ -1,33 +1,33 @@
-# Review Old, Backup and Unreferenced Files for Sensitive Information (OTG-CONFIG-004)
+# 审查旧文件、备份文件和未引用的文件中的敏感信息 (OTG-CONFIG-004)
 
 
-### Summary
-While most of the files within a web server are directly handled by the server itself, it isn't uncommon to find unreferenced or forgotten files that can be used to obtain important information about the infrastructure or the credentials.
+### 综述
+虽然大多数web服务器的文件被服务器自己处理，但是能找到未引用的或这遗忘的文件，这些文件可能会有助于获得基础设施的重要信息或有效登陆凭证。
 
 
-Most common scenarios include the presence of renamed old versions of modified files, inclusion files that are loaded into the language of choice and can be downloaded as source, or even automatic or manual backups in form of compressed archives. Backup files can also be generated automatically by the underlying file system the application is hosted on, a feature usually referred to as "snapshots".
+大多数场景包括重命名后的就版本修改文件，不同语言文件可以被当作源代码文件下载，或者自动或手动备份压缩文件。备份文件也可能由于文件系统的特性被自动生成，比如“文件快照”。
 
 
-All these files may grant the tester access to inner workings, back doors, administrative interfaces, or even credentials to connect to the administrative interface or the database server.
+所有这些文件给予了测试者访问内部网络、后门、管理接口甚至登陆凭证来连接管理接口或数据库服务器。
 
-An important source of vulnerability lies in files which have nothing to do with the application, but are created as a consequence of editing application files, or after creating on-the-fly backup copies, or by leaving in the web tree old files or unreferenced files.Performing in-place editing or other administrative actions on production web servers may inadvertently leave backup copies, either generated automatically by the editor while editing files, or by the administrator who is zipping a set of files to create a backup.
-
-
-It is easy to forget such files and this may pose a serious security threat to the application. That happens because backup copies may be generated with file extensions differing from those of the original files. A *.tar, .zip or .gz* archive that we generate (and forget...) has obviously a different extension, and the same happens with automatic copies created by many editors (for example, emacs generates a backup copy named *file~* when editing *file*). Making a copy by hand may produce the same effect (think of copying *file* to *file.old*). The underlying file system the application is on could be making "snapshots" of your application at different points in time without your knowledge, which may also be accessible via the web, posing a similar but different "backup file" style threat to your application.
+漏洞的重要来源在于这些文件，他们可能和应用程序本身无关，但是在编辑应用文件过程中产生或临时备份文件中产生，又或是遗留的旧文件或未引用文件。在生产服务器上实施在线修改或其他管理行为可能无意中留下备份的文件拷贝，或是自动被编辑器在编辑的过程产生，或被管理员存放在压缩备份文件中。
 
 
-As a result, these activities generate files that are not needed by the application and may be handled differently than the original file by the web server. For example, if we make a copy of *login.asp* named *login.asp.old*, we are allowing users to download the source code of *login.asp*. This is because *login.asp.old* will be typically served as text or plain, rather than being executed because of its extension. In other words, accessing *login.asp* causes the execution of the server-side code of *login.asp*, while accessing *login.asp.old* causes the content of *login.asp.old* (which is, again, server-side code) to be plainly returned to the user and displayed in the browser. This may pose security risks, since sensitive information may be revealed.
+这些文件很容易被遗忘，并导致严重的安全威胁。这是由于备份文件的文件扩展名可能区别于原始文件。我们生成了 *.tar，.zip 或.gz* 归档文件（被遗忘），显然是不同的扩展名，编辑器自动备份的也一样（比如emacs生成的临时文件 *file* 命名为 *file~* ）。手动备份也可能有这个问题（考虑复制 *file* 到 *file.old* 的情况）。应用的文件系统也可能在你不知道的时候为你的应用创建不同的时间点的 *快照* ，这些可能也能通过web访问到，对应用程序产生一个类似于备份文件但不同的威胁。
 
 
-Generally, exposing server side code is a bad idea. Not only are you unnecessarily exposing business logic, but you may be unknowingly revealing application-related information which may help an attacker (path names, data structures, etc.). Not to mention the fact that there are too many scripts with embedded username and password in clear text (which is a careless and very dangerous practice).
+总之，这些行为产生应用程序不需要的文件，可能会被web服务器不同方式处理。例如，如果我们复制 *login.asp* 为 *login.asp.old*，那么我们就允许用户下载 *login.asp* 的源代码。因为 *login.asp.old* 由于他的扩展名可能当作文本文件被处理，而不是被执行。换而言之，访问 *login.asp* 会引起服务器端执行 *login.asp* 的代码，然而访问 *login.asp.old* 导致 *login.asp.old* 的内容（事实上是服务器端代码）被当作文本返回给用户，并在浏览器中显示。这可能是安全风险，因为敏感信息被泄露了。
 
 
-Other causes of unreferenced files are due to design or configuration choices when they allow diverse kind of application-related files such as data files, configuration files, log files, to be stored in file system directories that can be accessed by the web server. These files have normally no reason to be in a file system space that could be accessed via web, since they should be accessed only at the application level, by the application itself (and not by the casual user browsing around).
+通常来说暴露服务器端代码是一个坏主意。不仅仅暴露了不必须的业务逻辑，同时也揭露了应用相关的信息（路径名称、数据结构等等），可能会给攻击者提供帮助。更不要说很多脚本直接内嵌明文的用户名和密码（这是一个粗心的非常危险的编码实践）。
 
 
-#### Threats
+其他引起未引用文件的情况取决于设计或这配置选择，当允许不同种类的应用相关文件，如数据文件、配置文件、日志文件存储在web服务器能够访问的文件系统目录时就会发生。正常情况下，这些文件没有放在能通过web访问的文件系统中的理由，因为他们只被应用层访问，只被应用程序本身使用（不是使用浏览器的不同用户）。
 
-Old, backup and unreferenced files present various threats to the security of a web application:
+
+#### 威胁
+
+备份文件和未引用文件可能对web应用程序的安全造成多种威胁：
 
 * Unreferenced files may disclose sensitive information that can facilitate a focused attack against the application; for example include files containing database credentials, configuration files containing references to other hidden content, absolute file paths, etc.
 * Unreferenced pages may contain powerful functionality that can be used to attack the application; for example an administration page that is not linked from published content but can be accessed by any user who knows where to find it.
@@ -39,8 +39,8 @@ Old, backup and unreferenced files present various threats to the security of a 
 * File system snapshots may contain copies of the code that contain vulnerabilities that have been fixed in more recent versions. For example */.snapshot/monthly.1/view.php* may contain a directory traversal vulnerability that has been fixed in */view.php* but can still be exploited by anyone who finds the old version.
 
 
-### How to Test
-#### Black Box Testing
+### 如何测试
+#### 黑盒测试
 
 Testing for unreferenced files uses both automated and manual techniques, and typically involves a combination of the following:
 
@@ -160,19 +160,19 @@ Example: Windows 8.3 filename expansion
 ```
 
 
-#### Gray Box Testing
+#### 灰盒测试
 
 Performing gray box testing against old and backup files requires examining the files contained in the directories belonging to the set of web directories served by the web server(s) of the web application infrastructure. Theoretically the examination should be performed by hand to be thorough. However, since in most cases copies of files or backup files tend to be created by using the same naming conventions, the search can be easily scripted. For example, editors leave behind backup copies by naming them with a recognizable extension or ending and humans tend to leave behind files with a “.old” or similar predictable extensions. A good strategy is that of periodically scheduling a background job checking for files with extensions likely to identify them as copy or backup files, and performing manual checks as well on a longer time basis.
 
 
-### Tools
+### 测试工具
 
 * Vulnerability assessment tools tend to include checks to spot web directories having standard names (such as “admin”, “test”, “backup”, etc.), and to report any web directory which allows indexing. If you can’t get any directory listing, you should try to check for likely backup extensions. Check for example Nessus (http://www.nessus.org), Nikto2(http://www.cirt.net/code/nikto.shtml) or its new derivative Wikto (http://www.sensepost.com/research/wikto/), which also supports Google hacking based strategies.
 * Web spider tools: wget (http://www.gnu.org/software/wget/,   http://www.interlog.com/~tcharron/wgetwin.html); Sam Spade (http://www.samspade.org); Spike proxy includes a web site crawler function (http://www.immunitysec.com/spikeproxy.html); Xenu (http://home.snafu.de/tilman/xenulink.html); curl (http://curl.haxx.se). Some of them are also included in standard Linux distributions.
 * Web development tools usually include facilities to identify broken links and unreferenced files.
 
 
-### Remediation
+### 整改措施
 To guarantee an effective protection strategy, testing should be compounded by a security policy which clearly forbids dangerous practices, such as:
 
 
