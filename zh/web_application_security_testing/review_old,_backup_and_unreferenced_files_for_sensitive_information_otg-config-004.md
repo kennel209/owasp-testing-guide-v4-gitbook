@@ -29,31 +29,31 @@
 
 备份文件和未引用文件可能对web应用程序的安全造成多种威胁：
 
-* Unreferenced files may disclose sensitive information that can facilitate a focused attack against the application; for example include files containing database credentials, configuration files containing references to other hidden content, absolute file paths, etc.
-* Unreferenced pages may contain powerful functionality that can be used to attack the application; for example an administration page that is not linked from published content but can be accessed by any user who knows where to find it.
-* Old and backup files may contain vulnerabilities that have been fixed in more recent versions; for example *viewdoc.old.jsp* may contain a directory traversal vulnerability that has been fixed in *viewdoc.jsp* but can still be exploited by anyone who finds the old version.
-* Backup files may disclose the source code for pages designed to execute on the server; for example requesting *viewdoc.bak* may return the source code for *viewdoc.jsp*, which can be reviewed for vulnerabilities that may be difficult to find by making blind requests to the executable page. While this threat obviously applies to scripted languages, such as Perl, PHP, ASP, shell scripts, JSP, etc., it is not limited to them, as shown in the example provided in the next bullet.
-* Backup archives may contain copies of all files within (or even outside) the webroot. This allows an attacker to quickly enumerate the entire application, including unreferenced pages, source code, include files, etc. For example, if you forget a file named *myservlets.jar.old* file containing (a backup copy of) your servlet implementation classes, you are exposing a lot of sensitive information which is susceptible to decompilation and reverse engineering.
-* In some cases copying or editing a file does not modify the file extension, but modifies the file name. This happens for example in Windows environments, where file copying operations generate file names prefixed with “Copy of “ or localized versions of this string. Since the file extension is left unchanged, this is not a case where an executable file is returned as plain text by the web server, and therefore not a case of source code disclosure. However, these files too are dangerous because there is a chance that they include obsolete and incorrect logic that, when invoked, could trigger application errors, which might yield valuable information to an attacker, if diagnostic message display is enabled.
-* Log files may contain sensitive information about the activities of application users, for example sensitive data passed in URL parameters, session IDs, URLs visited (which may disclose additional unreferenced content), etc. Other log files (e.g. ftp logs) may contain sensitive information about the maintenance of the application by system administrators.
-* File system snapshots may contain copies of the code that contain vulnerabilities that have been fixed in more recent versions. For example */.snapshot/monthly.1/view.php* may contain a directory traversal vulnerability that has been fixed in */view.php* but can still be exploited by anyone who finds the old version.
+* 未引用的文件可能暴露敏感信息有助于攻击行为；比如引用文件包含数据库凭证信息，配置文件包含其他隐藏的信息，比如绝对路径等等。
+* 未引用的页面可能能够包含攻击应用程序的强大功能函数；比如管理页面不应该从公开页面内容中获得，但是能够被已知路径的用户访问。
+* 旧文件和备份文件可能包含在近期版本中已经修复的漏洞；比如 *viewdoc.old.jsp* 可能包含目录遍历漏洞，而 *viewdoc.jsp* 中已经修复，但是这个漏洞仍然可能被发现旧版本的恶意人员利用。
+* 备份文件可能暴露页面源代码；比如请求 *viewdoc.bak* 可能返回 *viewdoc.jsp* 的源代码，通过评审源代码可能发现那些很难从盲目的请求中发现的漏洞。
+* 备份压缩文件可能包含web目录下的所有文件（甚至web根目录之外的文件）。这允许攻击者能快速枚举整个应用，包括未引用的页面、源代码和包含文件等等。例如如果你遗忘了一个名为 *myservlets.jar.old* 的文件，它包含了一个你实现 servlet类的备份，那么许多敏感信息可能被反编译和逆向工程中获得。
+* 在一些例子中，复制或编辑文件不修改文件扩展名，但是修改文件名。例如在windows环境下可能发生这个问题，当文件被复制时候，操作系统自动给文件加上本地语言化的“复制”字符。由于文件扩展名没有改变，可执行文件不会被服务器以明文方式返回，所以这种情况下不会暴露源代码。然而，这些文件也可能十分有害，因为他们可能已经被废弃或包含错误的逻辑，当被调用时候，可能引发应用程序错误，这些诊断信息或许能给攻击者带来有用的信息。
+* 日志文件可能包含关于用户的敏感信息，例如URL参数中传递敏感数据，会话ID，已访问URL（可能暴露一些未引用内容）等等。其他日志文件（如FTP日志）可能包含系统管理员维护系统情况的敏感信息。
+* 文件系统快照也可能包含那些已经修复的存在漏洞的代码拷贝。例如 */.snapshot/monthly.1/view.php* 可能包含已经修复的存在目录遍历楼的的 */view.php* 文件，这个漏洞能被任何能够访问就版本文件的人利用。
 
 
 ### 如何测试
 #### 黑盒测试
 
-Testing for unreferenced files uses both automated and manual techniques, and typically involves a combination of the following:
+测试未引用的文件包括自动化和手动技巧，通常需要以下一系列技巧的组合：
 
-##### Inference from the naming scheme used for published content
+##### 从发布的公开内容中推断文件命名模式
 
-Enumerate all of the application’s pages and functionality. This can be done manually using a browser, or using an application spidering tool. Most applications use a recognizable naming scheme, and organize resources into pages and directories using words that describe their function. From the naming scheme used for published content, it is often possible to infer the name and location of unreferenced pages. For example, if a page *viewuser.asp* is found, then look also for *edituser.asp*, *adduser.asp* and *deleteuser.asp*. If a directory */app/user* is found, then look also for */app/admin* and */app/manager*.
+枚举所有应用程序页面和功能。这能通过使用浏览器手动完成，或使用应用爬虫工具。许多应用使用可以识别的命名模式，或者使用可识别的词语来组织文件目录和资源。从已经发布的内容的命名模式，很有可能推断出未引用的页面的名称和目录。例如找到一个名字为 *viewuser.asp* ，那么可以试着找找 *edituser.asp*、*adduser.asp*和*deleteuser.asp*。如果找到一个 */app/user* 目录，可以试着找找 */app/admin* 和 */app/manager* 。
 
 
-##### Other clues in published content
+##### 已发布的内容中的其他线索
 
-Many web applications leave clues in published content that can lead to the discovery of hidden pages and functionality. These clues often appear in the source code of HTML and JavaScript files. The source code for all published content should be manually reviewed to identify clues about other pages and functionality. For example:
+许多web应用会在已发布的内容中留下通往隐藏页面和隐藏功能的线索。这些线索往往能在JavaScript文件和HTML源代码中发现。所有已经发布的内容中的源代码都应该被手动评审来鉴别关于其他页面和功能的线索。例如：
 
-Programmers’ comments and commented-out sections of source code may refer to hidden content:
+程序员的注释和注释掉的源代码部分可能指向隐藏内容：
 
 ```
 <!-- <A HREF="uploadfile.jsp">Upload a document to the server</A> -->
@@ -61,7 +61,7 @@ Programmers’ comments and commented-out sections of source code may refer to h
 ```
 
 
-JavaScript may contain page links that are only rendered within the user’s GUI under certain circumstances:
+JavaScript可能包含特定情况下的用户页面链接：
 
 ```
 var adminUser=false;
@@ -70,7 +70,7 @@ if (adminUser) menu.add (new menuItem ("Maintain users", "/admin/useradmin.jsp")
 ```
 
 
-HTML pages may contain FORMs that have been hidden by disabling the SUBMIT element:
+HTML页面可能包含禁用SUBMIT元素的隐藏表单：
 
 ```
 <FORM action="forgotPassword.jsp" method="post">
@@ -80,7 +80,7 @@ HTML pages may contain FORMs that have been hidden by disabling the SUBMIT eleme
 ```
 
 
-Another source of clues about unreferenced directories is the */robots.txt* file used to provide instructions to web robots:
+另一个包含未引用的目录的线索在*/robots.txt*文件之中，可能提供如下信息：
 
 ```
 User-agent: *
@@ -92,9 +92,9 @@ Disallow: /include
 ```
 
 
-##### Blind guessing
+##### 盲目猜测
 
-In its simplest form, this involves running a list of common file names through a request engine in an attempt to guess files and directories that exist on the server. The following netcat wrapper script will read a wordlist from stdin and perform a basic guessing attack:
+在最简单的一种方式就是通过请求一系列的常用文件名字来尝试猜测服务器上存在的文件和目录。下面包含netcat的包装脚本可以读取一个字典列表，并实施基本的猜测攻击：
 
 ```
 #!/bin/bash
@@ -111,27 +111,27 @@ done | tee outputfile
 ```
 
 
-Depending upon the server, GET may be replaced with HEAD for faster results. The output file specified can be grepped for “interesting” response codes. The response code 200 (OK) usually indicates that a valid resource has been found (provided the server does not deliver a custom “not found” page using the 200 code). But also look out for 301 (Moved), 302 (Found), 401 (Unauthorized), 403 (Forbidden) and 500 (Internal error), which may also indicate resources or directories that are worthy of further investigation.
+视服务器情况而定，GET请求可能用HEAD请求替代来加速攻击。输出文件可以通过grep过滤来获得有趣的响应。200响应码（OK）通常表明一个合法的自由被发现（假设服务器没有提供一个自定义的“未发现”200响应页面）。同时也查找301响应（Moved）、302响应（Found）、401响应（Unauthorized）、403响应（Forrbidden）和500响应（Internal error），这些响应也表明目录或自由值得深入调查。
 
 
-The basic guessing attack should be run against the webroot, and also against all directories that have been identified through other enumeration techniques. More advanced/effective guessing attacks can be performed as follows:
+基本的猜测攻击应该在web根目录中和其他被鉴别出来的（通过其他枚举手段）中运行。更多高级/有效的猜测攻击如下：
 
-* Identify the file extensions in use within known areas of the application (e.g. jsp, aspx, html), and use a basic wordlist appended with each of these extensions (or use a longer list of common extensions if resources permit).
-* For each file identified through other enumeration techniques, create a custom wordlist derived from that filename. Get a list of common file extensions (including ~, bak, txt, src, dev, old, inc, orig, copy, tmp, etc.) and use each extension before, after, and instead of, the extension of the actual file name.
-
-
-Note: Windows file copying operations generate file names prefixed with “Copy of “ or localized versions of this string, hence they do not change file extensions. While “Copy of ” files typically do not disclose source code when accessed, they might yield valuable information in case they cause errors when invoked.
+* 通过应用程序已知区域来鉴别扩展名（如jsp，aspx，html），使用基本字典加上这些扩展名（或使用更多的扩展名字典，如果条件允许）。
+* 对于每一个从其他枚举技巧中发现的文件，创建一个从这些文件衍生出的自定义的字典。使用一系列常见的文件修饰扩展（包括~，bak，txt，src，dev，old，inc，orig，copy，tmp等等），在实际文件名的前面、后面加入这些扩展，或直接替代文件名。
 
 
-##### Information obtained through server vulnerabilities and misconfiguration
+注意：在windows环境下，当文件被复制时候，操作系统自动给文件加上本地语言化的“复制”字符。由于文件扩展名没有改变，这种情况下不会暴露源代码。然而，这些文件可能引发应用程序错误，能给攻击者带来有用的信息。
 
-The most obvious way in which a misconfigured server may disclose unreferenced pages is through directory listing. Request all enumerated directories to identify any which provide a directory listing.
 
-Numerous vulnerabilities have been found in individual web servers which allow an attacker to enumerate unreferenced content, for example:
+##### 从服务器漏洞和错误配置中获得的信息
 
-* Apache ?M=D directory listing vulnerability.
-* Various IIS script source disclosure vulnerabilities.
-* IIS WebDAV directory listing vulnerabilities.
+最显而易见在错误配置的服务器中暴露未引用页面的方法是通过目录列举浏览。请求枚举获得的目录来鉴别那些目录提供目录列举功能。
+
+大多在个人web服务器中发现的漏洞能允许攻击者枚举未引用的内容，例如：
+
+* Apache ?M=D 目录列举漏洞
+* 不同的IIS脚本源代码暴露漏洞
+* IIS WebDAV 目录列举漏洞
 
 
 ##### Use of publicly available information
