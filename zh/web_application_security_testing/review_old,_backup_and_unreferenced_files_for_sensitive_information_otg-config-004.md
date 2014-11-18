@@ -134,53 +134,55 @@ done | tee outputfile
 * IIS WebDAV 目录列举漏洞
 
 
-##### Use of publicly available information
+##### 利用公开信息
 
-Pages and functionality in Internet-facing web applications that are not referenced from within the application itself may be referenced from other public domain sources. There are various sources of these references:
-* Pages that used to be referenced may still appear in the archives of Internet search engines. For example, *1998results.asp* may no longer be linked from a company’s website, but may remain on the server and in search engine databases. This old script may contain vulnerabilities that could be used to compromise the entire site. The *site:* Google search operator may be used to run a query only against the domain of choice, such as in: *site:www.example.com*. Using search engines in this way has lead to a broad array of techniques which you may find useful and that are described in the *Google Hacking* section of this Guide. Check it to hone your testing skills via Google. Backup files are not likely to be referenced by any other files and therefore may have not been indexed by Google, but if they lie in browsable directories the search engine might know about them.
-* In addition, Google and Yahoo keep cached versions of pages found by their robots. Even if *1998results.asp* has been removed from the target server, a version of its output may still be stored by these search engines. The cached version may contain references to, or clues about, additional hidden content that still remains on the server.
-* Content that is not referenced from within a target application may be linked to by third-party websites. For example, an application which processes online payments on behalf of third-party traders may contain a variety of bespoke functionality which can (normally) only be found by following links within the web sites of its customers.
-
-
-##### File name filter bypass
-
-Because blacklist filters are based on regular expressions, one can sometimes take advantage of obscure OS file name expansion features in which work in ways the developer didn't expect. The tester can sometimes exploit differences in ways that file names are parsed by the application, web server, and underlying  OS and it's file name conventions.
+一些面向互联网的应用页面和功能可能不被应用本身链接引用，但是很可能被外部公开主体引用。下面是一些不同引用源：
+* 页面可能出现在互联网的搜索引擎归档中。例如 *1998results.asp* 可能已经不再公司的网站上被链接，但是可能还存在于服务器上和搜索引擎数据库中。一些旧脚本可能包含攻破整个站点的漏洞。 *site:* Google搜索操作符可能用于查询相关域名，如 *site:www.example.com*。使用搜索引擎也有一系列的技巧，可以参照 本指南的 *Google Hacking* 部分。使用这些技巧来打磨你的测试技艺。备份文件可能不被任何其他文件引用，因此也可能没有被Google收录，但是如果他们存在于可列举浏览的目录中的话，搜索引擎可能也能收录他们。
+* 此外，Google和Yahoo可能缓存他们机器人发现的页面。甚至 *1998results.asp* 已经被目标服务器移除，搜索引擎中也可能存在其中的某个版本的输出内容。被缓存的版本也能包含引用其他隐藏内容的线索。
+* 没有被目标应用程序引用的一些内容可能被第三方的站点链接。例如，一个处理在线支付的应用可能包括一系列的定制的功能只能被站点的客户使用。
 
 
-Example: Windows 8.3 filename expansion
-"c:\program files" becomes "C:\PROGRA~1"
+##### 文件名过滤绕过
+
+因为一些黑名单过滤器是基于正则表达式的，有些可以利用操作系统文件名展开的特性（往往没有被开发者预料到）。测试者可以通过文件名被应用程序、web服务器、操作系统和操作系统文件名转换的不同差异来绕过过滤器。
+
+
+例子： Windows 8.3 文件名扩展。
 ```
-– Remove incompatible characters
-– Convert spaces to underscores
-- Take the first six characters of the basename
-– Add “~<digit>” which is used to distinguish files with names using the same six initial characters
-- This convention changes after the first 3 cname ollisions
-– Truncate  file extension to three characters
-- Make all the characters uppercase
+"c:\program files" 变成了 "C:\PROGRA~1"
+
+规则：
+* 移除不兼容字符
+* 将空格转换成下划线
+* 取文件名前六个字符
+* 加入“~<数字>”来区分相同6个初始字符的文件
+* 在最初的三个文件名冲突后转换将改变（？）
+* 截取文件扩展名前三位
+* 将所有字符大写
 ```
 
 
 #### 灰盒测试
 
-Performing gray box testing against old and backup files requires examining the files contained in the directories belonging to the set of web directories served by the web server(s) of the web application infrastructure. Theoretically the examination should be performed by hand to be thorough. However, since in most cases copies of files or backup files tend to be created by using the same naming conventions, the search can be easily scripted. For example, editors leave behind backup copies by naming them with a recognizable extension or ending and humans tend to leave behind files with a “.old” or similar predictable extensions. A good strategy is that of periodically scheduling a background job checking for files with extensions likely to identify them as copy or backup files, and performing manual checks as well on a longer time basis.
+实施灰盒测试需要检查web目录下被web服务器支持的所有目录文件。理论上，这个检查应该手动完成来确保完备。但是在大多数情况下，复制文件或者备份文件使用类似的命名模式，可以使用脚本来搜寻这些文件。例如，编辑器可能在备份拷贝上加入可识别的扩展或后缀，人们可能会加入“.old”或类似的可预测的扩展名字。一个好的策略是创建一个周期性的计划任务来检查这些文件扩展，并鉴别出是拷贝文件还是备份文件，并同时实施手动检测（更加耗时的）。
 
 
 ### 测试工具
 
-* Vulnerability assessment tools tend to include checks to spot web directories having standard names (such as “admin”, “test”, “backup”, etc.), and to report any web directory which allows indexing. If you can’t get any directory listing, you should try to check for likely backup extensions. Check for example Nessus (http://www.nessus.org), Nikto2(http://www.cirt.net/code/nikto.shtml) or its new derivative Wikto (http://www.sensepost.com/research/wikto/), which also supports Google hacking based strategies.
-* Web spider tools: wget (http://www.gnu.org/software/wget/,   http://www.interlog.com/~tcharron/wgetwin.html); Sam Spade (http://www.samspade.org); Spike proxy includes a web site crawler function (http://www.immunitysec.com/spikeproxy.html); Xenu (http://home.snafu.de/tilman/xenulink.html); curl (http://curl.haxx.se). Some of them are also included in standard Linux distributions.
-* Web development tools usually include facilities to identify broken links and unreferenced files.
+* 漏洞评估工具来发现有通用名字的web目录（如“admin”，“test”，“backup”等等），和一些允许目录浏览的目录。如果你无法获得目录列举，也应该检查可能存在的备份扩展名。考虑Nessus(http://www.nessus.org)， Nikto2(http://www.cirt.net/code/nikto.shtml) ，Wikto (http://www.sensepost.com/research/wikto/)的例子，这些也支持Google Hacking策略。
+* Web爬虫工具： wget (http://www.gnu.org/software/wget/,   http://www.interlog.com/~tcharron/wgetwin.html); Sam Spade (http://www.samspade.org); Spike proxy includes a web site crawler function (http://www.immunitysec.com/spikeproxy.html); Xenu (http://home.snafu.de/tilman/xenulink.html); curl (http://curl.haxx.se). 有些工具已经被标准Linux发布版本中集成。
+* Web开发工具通常包含识别错误链接和未引用文件的功能。
 
 
 ### 整改措施
-To guarantee an effective protection strategy, testing should be compounded by a security policy which clearly forbids dangerous practices, such as:
+为了保证一个有效的保护策略，测试应该被结合安全策略，这些策略应该明显地禁止危险的实践，比如：
 
 
-* Editing files in-place on the web server or application server file systems. This is a particular bad habit, since it is likely to unwillingly generate backup files by the editors. It is amazing to see how often this is done, even in large organizations. If you absolutely need to edit files on a production system, do ensure that you don’t leave behind anything which is not explicitly intended, and consider that you are doing it at your own risk.
-* Check carefully any other activity performed on file systems exposed by the web server, such as spot administration activities. For example, if you occasionally need to take a snapshot of a couple of directories (which you should not do on a production system), you may be tempted to zip them first. Be careful not to forget behind those archive files.
-* Appropriate configuration management policies should help not to leave around obsolete and unreferenced files.
-* Applications should be designed not to create (or rely on) files stored under the web directory trees served by the web server. Data files, log files, configuration files, etc. should be stored in directories not accessible by the web server, to counter the possibility of information disclosure (not to mention data modification if web directory permissions allow writing).
-* File system snapshots should not be accessible via the web if the document root is on a file system using this technology. Configure your web server to deny access to such directories, for example under apache a location directive such this should be used:
+* 在web服务器或应用程序的操作系统上原地修改文件。这是一个非常坏的习惯，因为他很有可能不经意产生编辑器的备份文件。令人惊奇的是这往往经常发生，甚至见于一些大组织。如果你确实需要在生产系统上编辑文件，确保你没有遗留下任何没有明显目地的文件，并认清这么做的风险。
+* 仔细检查web服务器暴露在外面的那些实施文件系统操作的活动，如管理员活动。例如，如果你偶尔需要给一系列目录做文件快照（当然你不应该在生产系统上这么做），你可能会压缩这些文件。小心不要忘了这些归档文件。
+* 合适的配置管理策略应该有助于管理这些遗留的和为引用的文件。
+* 应用程序应该被设计为不创建（或依赖于）在web目录树下被web服务器服务的文件。数据文件、日志文件、配置文件等等应该被存储与无法被web服务器访问的目录中，来对抗可能信息泄露情况（不要提供数据修改，如果web目录可写）。
+* 在一些文件系统中，如果文件根目录使用了快照技巧，那么文件系统快照不应该被web访问。配置web服务器来拒绝这些目录的访问，例如在apache下，可以如下配置：
 ```
 <Location ~ ".snapshot">
     Order deny,allow

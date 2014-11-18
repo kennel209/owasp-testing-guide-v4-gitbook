@@ -148,15 +148,16 @@ Because blacklist filters are based on regular expressions, one can sometimes ta
 
 
 Example: Windows 8.3 filename expansion
-"c:\program files" becomes "C:\PROGRA~1"
 ```
-– Remove incompatible characters
-– Convert spaces to underscores
-- Take the first six characters of the basename
-– Add “~<digit>” which is used to distinguish files with names using the same six initial characters
-- This convention changes after the first 3 cname ollisions
-– Truncate  file extension to three characters
-- Make all the characters uppercase
+"c:\program files" becomes "C:\PROGRA~1"
+
+* Remove incompatible characters
+* Convert spaces to underscores
+* Take the first six characters of the basename
+* Add “~<digit>” which is used to distinguish files with names using the same six initial characters
+* This convention changes after the first 3 name collisions
+* Truncate  file extension to three characters
+* Make all the characters uppercase
 ```
 
 
