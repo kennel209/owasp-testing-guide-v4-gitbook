@@ -1,7 +1,8 @@
 # 授权测试
 
-Authorization is the concept of allowing access to resources only to those permitted to use them. Testing for Authorization means understanding how the authorization process works, and using that information to circumvent the authorization mechanism.<br><br>
-Authorization is a process that comes after a successful authentication, so the tester will verify this point after he holds valid credentials, associated with a well-defined set of roles and privileges. During this kind of assessment, it should be verified if it is possible to bypass the authorization schema, find a path traversal vulnerability, or find ways to escalate the privileges assigned to the tester.
+授权是允许访问那些只能被允许访问的人访问的资源的概念。授权测试意味着理解授权过程如何产生作用，并只用这些信息来绕过授权机制。
+
+授权是一个接着成功认证后的过程，所以测试者首先必须验证已经有了一个合法的凭证和一些预设的角色和权限。在这类的评估测试中，应该验证是否能够绕过授权模式，找到一个路径遍历漏洞或发现提升权限的方法。
 
 * [目录遍历/文件包含测试 (OTG-AUTHZ-001)](./testing_directory_traversalfile_include_otg-authz-001.html)
 * [授权绕过测试 (OTG-AUTHZ-002)](./testing_for_bypassing_authorization_schema_otg-authz-002.html)
