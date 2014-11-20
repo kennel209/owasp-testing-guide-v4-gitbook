@@ -79,9 +79,10 @@ http://example.com/main.cgi?home=main.cgi
 ```
 
 The component called "*main.cgi*" is located in the same directory as the normal HTML static files used by the application.
+
 In some cases the tester needs to encode the requests using special characters (like the "**.**" dot, "**%00**" null, ...) in order to bypass file extension controls or to prevent script execution.
 
-<b>Tip</b>
+<b>Tip:</b>
 It's a common mistake by developers to not expect every form of encoding and therefore only do validation for basic encoded content. If at first the test string isn't successful, try another encoding scheme.
 
 
