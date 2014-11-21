@@ -1,24 +1,26 @@
-# Testing for Privilege Escalation (OTG-AUTHZ-003)
+# 测试权限提升 (OTG-AUTHZ-003)
 
-### Summary
-This section describes the issue of escalating privileges from one stage to another. During this phase, the tester should verify that it is not possible for a user to modify his or her privileges or roles inside the application in ways that could allow privilege escalation attacks.
+### 综述
+这部分描述权限提升问题。在这个阶段中，测试者应该验证用户是否可以修改自己在应用系统中的权限或角色来达成权限提升攻击。
 
-Privilege escalation occurs when a user gets access to more resources or functionality than they are normally allowed, and such elevation or changes should have been prevented by the application. This is usually caused by a flaw in the application. The result is that the application performs actions with more privileges than those intended by the developer or system administrator.
-
-
-The degree of escalation depends on what privileges the attacker is authorized to possess, and what privileges can be obtained in a successful exploit. For example, a programming error that allows a user to gain extra privilege after successful authentication limits the degree of escalation, because the user is already authorized to hold some privilege. Likewise, a remote attacker gaining superuser privilege without any authentication presents a greater degree of escalation.
+权限提升问题发生在当用户去的访问超出自己正常允许访问的资源或功能时候，而这种权限提升或改变的情况本应该被应用程序阻止。通常原因是应用程序存在漏洞。带来的后果是应用程序执行了更高权限的任务，而这些任务通常是给开发者或者系统管理员使用的。
 
 
-Usually, people refer to *vertical escalation* when it is possible to access resources granted to more privileged accounts (e.g., acquiring administrative privileges for the application), and to *horizontal escalation* when it is possible to access resources granted to a similarly configured account (e.g., in an online banking application, accessing information related to a different user).
+权限提升的程度取决于攻击者被授权了何种特权和什么特权能够被成功利用。例如，一个程序错误允许成功认证后的用户获得额外的权限，这个情况限制了权限提升程度，因为用户已经被授予了某些权限。类似的，一个远程攻击者不需要任何认证措施就能获得超级用户的权利表明了一个非常大的权限提升程度的例子。
 
 
-### How to test
-**Testing for role/privilege manipulation** <br>
-In every portion of the application where a user can create information in the database (e.g., making a payment, adding a contact, or sending a message), can receive information (statement of account, order details, etc.), or delete information (drop users, messages, etc.), it is necessary to record that functionality. The tester should try to access such functions as another user in order to verify if it is possible to access a function that should not be permitted by the user's role/privilege (but might be permitted as another user).
+通常，我们把取得更高权限账户资源的情况（如取得应用程序的管理员特权）认为是 *垂直权限提升*，把取得类似配置账户的资源的情况（如在在线银行应用程序中访问不同用户的信息）认为是 *水平权限提升* 。
 
 
-For example:<br>
-The following HTTP POST allows the user that belongs to grp001 to access order #0001:
+### 如何测试
+**测试角色/权限操纵**
+
+在应用程序的每一个用户可以向数据库创建信息（如，创建支付环节、添加通讯录或发送信息等等），能获取信息（账户状态，订单详情等等）或删除信息（删除用户、消息等等）的部分，都应该记录相关函数功能是否正常。测试者应该以其他用户的身份来尝试访问这些功能来验证是否可以访问这些被用户角色/权限限制的内容（可能被其他用户允许）。
+
+
+例如：
+
+下面的HTTP POST请求允许属于grp001的用户访问订单 #0001 ：
 ```
  POST /user/viewOrder.jsp HTTP/1.1
  Host: www.example.com
@@ -27,11 +29,12 @@ The following HTTP POST allows the user that belongs to grp001 to access order #
  groupID=grp001&orderID=0001
 ```
 
-Verify if a user that does not belong to grp001 can modify the value of the parameters ‘groupID’ and ‘orderID’ to gain access to that privileged data.
+验证不属于grp001的用户是否可以修改‘groupID’和‘orderID’参数来取得数据访问权限。
 
 
-For example:<br>
-The following server's answer shows a hidden field in the HTML returned to the user after a successful authentication.
+又例如：
+
+下面服务器应答表明返回用户成功认证后的HTML中的隐藏表单。
 ```
  HTTP/1.1 200 OK
  Server: Netscape-Enterprise/6.0
@@ -52,27 +55,29 @@ The following server's answer shows a hidden field in the HTML returned to the u
  </tr>
 ```
 
-What if the tester modifies the value of the variable "profile" to "SysAdmin"? Is it possible to become administrator?
+如果测试者修改自己'profile'参数的值为'SysAdmin'会发生什么？是否可能成为管理员？
 
 
-For example:<br>
-In an environment where the server sends an error message contained as a value in a specific parameter in a set of answer codes, as the following:
+例如：
+
+在一个情形下，服务器发送错误消息在参数中包含了一系列应答代码的值，如下所示：
 ```
  @0`1`3`3``0`UC`1`Status`OK`SEC`5`1`0`ResultSet`0`PVValid`-1`0`0` Notifications`0`0`3`Command  Manager`0`0`0` StateToolsBar`0`0`0`
  StateExecToolBar`0`0`0`FlagsToolBar`0
 ```
 
-The server gives an implicit trust to the user. It believes that the user will answer with the above message closing the session.
+服务器盲目信任用户。他认为用户将会用上面的消息来应答来结束会话。
 
 
-In this condition, verify that it is not possible to escalate privileges by modifying the parameter values. In this particular example, by modifying the `PVValid` value from '-1' to '0' (no error conditions), it may be possible to authenticate as administrator to the server.
-<br><br>
+在这个情形下，验证是否可以通过修改参数值来提升权限。在这个特别的例子中，通过修改 `PVValid`的值从 '-1' 到 '0'（没有错误条件），就能被服务器认证为管理员用户。
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**
+
 * Wikipedia - Privilege Escalation: http://en.wikipedia.org/wiki/Privilege_escalation<br>
 
 
 ### Tools
 * OWASP WebScarab: [OWASP WebScarab Project](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
+
