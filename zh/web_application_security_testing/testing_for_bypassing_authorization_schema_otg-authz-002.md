@@ -1,29 +1,30 @@
-# Testing for bypassing authorization schema (OTG-AUTHZ-002)
+# 测试授权绕过 (OTG-AUTHZ-002)
 
 
-### Summary
-This kind of test focuses on verifying how the authorization schema has been implemented for each role or privilege to get access to reserved functions and resources.
+### 综述
+这类测试注重于验证每个角色或访问限制文件的特权的授权模式是否良好实现。
 
 
-For every specific role the tester holds during the assessment, for every function and request that the application executes during the post-authentication phase, it is necessary to verify:
-* Is it possible to access that resource even if the user is not authenticated?
-* Is it possible to access that resource after the log-out?
-* Is it possible to access functions and resources that should be accessible to a user that holds a different role or privilege?
+对于评估中测试者拥有的每个不同角色，每个功能函数和应用在完成认证环节后的请求，都需要被验证：
+* 未认证用户是否可以访问资源？
+* 登出后是否可以访问资源？
+* 不同角色或权限的用户是否可以访问功能函数和资源？
 
 
-Try to access the application as an administrative user and track all the administrative functions.
-* Is it possible to access administrative functions also if the tester is logged as a user with standard privileges?
-* Is it possible to use these administrative functions as a user with a different role and for whom that action should be denied?
+尝试用管理员用户来访问应用并追踪记录所有的管理功能。
+* 普通权限用户是否可以访问管理功能？
+* 那些拥有不同权限的用户是否可以使用管理功能（没有该权限）？
 
 
-### How to test
-**Testing for access to administrative functions** <br>
-For example, suppose that the 'AddUser.jsp' function is part of the administrative menu of the application, and it is possible to access it by requesting the following URL:
+### 如何测试
+**测试访问管理功能**
+
+例如，假设'AddUser.jsp'功能是应用管理功能的一部分，而且他可以通过请求下列URL来访问：
 ```
   https://www.example.com/admin/addUser.jsp
 ```
 
-Then, the following HTTP request is generated when calling the AddUser function:
+然后，下列HTTP请求在调用AddUser功能函数时候被生产：
 ```
 POST /admin/addUser.jsp HTTP/1.1
 Host: www.example.com
@@ -32,14 +33,15 @@ Host: www.example.com
 userID=fakeuser&role=3&group=grp001
 ```
 
+如果一个非管理员用户尝试执行这个请求会发生什么事情？新用户能被创建么？如果能，新用户能否使用管理员特权？
 
-What happens if a non-administrative user tries to execute that request? Will the user be created? If so, can the new user use their privileges?
 
+**测试访问不同角色的资源**
 
-**Testing for access to resources assigned to a different role** <br>
-For example analyze an application that uses a shared directory to store temporary PDF files for different users. Suppose that documentABC.pdf should be accessible only by the user test1 with roleA. Verify if user test2 with roleB can access that resource.
+例如，应用程序使用一个共享目录来为不同的用户存储临时的PDF文件。假设documentABC.pdf应该仅能够被roleA角色的用户test1访问，验证如果角色roleB的用户test2能否访问这个资源。
 <br><br>
 
-### Tools
+### 测试工具
 * OWASP WebScarab: [OWASP WebScarab Project](https://www.owasp.org/index.php/OWASP_WebScarab_Project)<br>
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
+
