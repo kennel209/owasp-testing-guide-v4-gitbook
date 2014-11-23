@@ -1,69 +1,68 @@
-# Testing for Insecure Direct Object References (OTG-AUTHZ-004)
+# 测试不安全直接对象引用 (OTG-AUTHZ-004)
 
 
 
-### Summary
-Insecure Direct Object References occur when an application provides direct access to objects based on user-supplied input. As a result of this vulnerability attackers can bypass authorization and access resources in the system directly, for example database records or files.
-<br>
+### 综述
+不安全直接对象引用问题发生在应用程序基于用户提供输入来进行直接对象引用过程的时候。通过这个漏洞攻击者能绕过授权过程，直接访问系统资源，例如数据库记录或文件。
 
-Insecure Direct Object References allow attackers to bypass authorization and access resources directly by modifying the value of a parameter used to directly point to an object. Such resources can be database entries belonging to other users, files in the system, and more. This is caused by the fact that the application takes user supplied input and uses it to retrieve an object without performing sufficient authorization checks.
-<br>
+不安全的直接对象引用允许攻击者通过修改指向对象的参数值来直接操纵对象，从而绕过授权过程。这些对象可以是其他用户的数据库表单项、系统文件或其他东西。这种问题的产生原因是应用程序采用用户提供的输入，并使用这些输入来绕过授权检查来获得对象资源。
 
-### How to Test
-To test for this vulnerability the tester first needs to map out all locations in the application where user input is used to reference objects directly. For example, locations where user input is used to access a database row, a file, application pages and more. Next the tester should modify the value of the parameter used to reference objects and assess whether it is possible to retrieve objects belonging to other users or otherwise bypass authorization.
+### 如何测试
+测试者首先需要找出应用程序中所有直接引用对象的用户输入的位置。例如，用户输入被用于访问数据库数据行、文件和应用页面的地方等等。接下来测试者应该修改这些应用直接对象的值来判断是否能获得属于其他人的资源，也就是绕过授权过程。
 
 
-The best way to test for direct object references would be by having at least two (often more) users to cover different owned objects and functions. For example two users each having access to different objects (such as purchase information, private messages, etc.), and (if relevant) users with different privileges (for example administrator users) to see whether there are direct references to application functionality. By having multiple users the tester saves valuable testing time in guessing different object names as he can attempt to access objects that belong to the other user.
+测试直接对象应用最佳的办法需要最少两个（通常更多）用户来覆盖不同所有权和函数功能。例如两个用户访问不同的内容对象（比如购买信息、私人消息等等）和（相关的）不同权限用户（比如管理员用户）来查找是否有直接引用的对象。通过使用多个用户，测试者能够节约宝贵的测试时间用来猜测不同的对象名词，他们可以直接尝试访问数据其他用户的对象。
 
 
-Below are several typical scenarios for this vulnerability and the methods to test for each: <br> <br>
+下面是一些典型的漏洞场景和每一种测试方法：
 
-**The value of a parameter is used directly to retrieve a database record**
+**直接获得数据库数据的参数值**
 
-Sample request:
+请求样本：
 ```
 http://foo.bar/somepage?invoice=12345
 ```
-In this case, the value of the *invoice* parameter is used as an index in an invoices table in the database. The application takes the value of this parameter and uses it in a query to the database. The application then returns the invoice information to the user.
+在这个例子中，*invoice*参数值被用于索引数据库中的发票表。应用程序接受参数值并用于数据库查询。应用程序返回发票信息给用户。
 
 
-Since the value of *invoice* goes directly into the query, by modifying the value of the parameter it is possible to retrieve any invoice object, regardless of the user to whom the invoice belongs. To test for this case the tester should obtain the identifier of an invoice belonging to a different test user (ensuring he is not supposed to view this information per application business logic), and then check whether it is possible to access objects without authorization.
+由于*invoice*的值直接被用于查询中，通过修改这个参数可以获取任何发票对象，无视其拥有对象。为了测试这个案例，测试者应该获得一个属于其他测试用户的发票对象标识（确保在应用程序业务逻辑中这个对象是不应该被查看的），并检查是否可能绕过授权过程来访问该对象。
 
 
-**The value of a parameter is used directly to perform an operation in the system**
+**直接实施系统操作的参数值**
 
-Sample request:
+请求样本：
 ```
 http://foo.bar/changepassword?user=someuser
 ```
-In this case, the value of the *user* parameter is used to tell the application for which user it should change the password. In many cases this step will be a part of a wizard, or a multi-step operation. In the first step the application will get a request stating for which user's password is to be changed, and in the next step the user will provide a new password (without asking for the current one).
+在这个案例中，*user*参数值被用于告诉应用程序应该修改哪个用户的密码。在许多案例中这可能是向导中的一部分或者多个步骤操作中的一部分。在最初的步骤中应用程序会获得修改用户密码的请求，在下一个步骤中用户会提供一个新密码（并不询问当前密码）。
 
-The *user* parameter is used to directly reference the object of the user for whom the password change operation will be performed. To test for this case the tester should attempt to provide a different test username than the one currently logged in, and check whether it is possible to modify the password of another user.
+*user*参数被直接用于标识将要修改密码操作的用户对象。为了测试这个案例，测试者应该尝试提供一个不同测试用户的用户名，并检查是否能修改其他用户的密码。
 
 
-**The value of a parameter is used directly to retrieve a file system resource**
+**直接获得系统文件资源的参数值**
 
-Sample request:
+请求样本：
 ```
 http://foo.bar/showImage?img=img00011
 ```
-In this case, the value of the *file* parameter is used to tell the application what file the user intends to retrieve. By providing the name or identifier of a different file (for example file=image00012.jpg) the attacker will be able to retrieve objects belonging to other users.
+在这个例子中*file*参数值被用于告诉应用程序用户需要获取那个文件。通过提供不同名称或标识的文件（比如file=image00012.jpg），攻击者可能能够获得属于其他用户的文件。
 
 
-To test for this case, the tester should obtain a reference the user is not supposed to be able to access and attempt to access it by using it as the value of *file* parameter. Note: This vulnerability is often exploited in conjunction with a directory/path traversal vulnerability (see [Testing for Path Traversal]())
+为了测试这个案例，测试者应该获得一个该用户不应该能访问的对象标识，并将他作为*file*参数值来获取这个对象。注意：这个漏洞经常被结合目录/路径遍历漏洞中一起利用（参见相关[测试目录遍历章节]）。
 
 
-**The value of a parameter is used directly to access application functionality**
+**直接访问应用程序功能函数的参数值**
 
-Sample request:
+请求样本：
 ```
 http://foo.bar/accessPage?menuitem=12
 ```
-In this case, the value of the *menuitem* parameter is used to tell the application which menu item (and therefore which application functionality) the user is attempting to access. Assume the user is supposed to be restricted and therefore has links available only to access to menu items 1, 2 and 3. By modifying the value of *menuitem* parameter it is possible to bypass authorization and access additional application functionality. To test for this case the tester identifies a location where application functionality is determined by reference to a menu item, maps the values of menu items the given test user can access, and then attempts other menu items.
+在这个例子中，*menuitem*参数值被用于告诉应用程序用户希望访问哪个目录项（某个应用功能对象）。假设用户被限制，只有访问目录项1、2和3的链接。通过修改*menuitem*参数值，可能绕过授权过程并使用额外的程序功能。为了测试这个案例，测试者需要鉴别决定目录项的位置（功能），找出测试用户能使用的所有功能被尝试访问其他功能。
 
 
-In the above examples the modification of a single parameter is sufficient. However, sometimes the object reference may be split between more than one parameter, and testing should be adjusted accordingly.
+在上面这些例子中，修改单个参数就能起到很大作用。然而有时候对象引用可能被分割为多个参数，测试者需要做出相关调整。
 
 
-### References
+### 参考资料
 * [Top 10 2013-A4-Insecure Direct Object References](https://www.owasp.org/index.php/Top_10_2013-A4-Insecure_Direct_Object_References)
+
