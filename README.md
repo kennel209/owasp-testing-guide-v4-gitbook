@@ -33,8 +33,9 @@ This document is released under the [Creative Commons 2.5 License](http://creati
 
 ## CHANGELOG
 
-* 2014.09.21  Convert all Wiki pages to md files. v1.0
-* 2014.09.23  Translate CH1,CH2,CH3,CH5,APPENDIX to Chinese.
-* 2014.10.02  Translate CH4.1 CH4.2 to Chinese.
-* 2014.11.19  Translate CH4.3 CH4.4 to Chinese.
+* 2014.09.21  Converted all Wiki pages to md files. v1.0
+* 2014.09.23  Translated CH1,CH2,CH3,CH5,APPENDIX to Chinese.
+* 2014.10.02  Translated CH4.1 CH4.2 to Chinese.
+* 2014.11.19  Translated CH4.3 CH4.4 to Chinese.
+* 2014.11.23  Translated CH4.6 to Chinese.
 
