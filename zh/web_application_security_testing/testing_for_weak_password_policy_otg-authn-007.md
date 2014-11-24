@@ -1,31 +1,31 @@
-# Testing for Weak password policy (OTG-AUTHN-007)
+# 测试弱密码策略 (OTG-AUTHN-007)
 
-### Summary
+### 综述
 
-The most prevalent and most easily administered authentication mechanism is a static password. The password represents the keys to the kingdom, but is often subverted by users in the name of usability. In each of the recent high profile hacks that have revealed user credentials, it is lamented that most common passwords are still: 123456, password and qwerty.
-
-
-### Test objectives
-
-Determine the resistance of the application against brute force password guessing using available password dictionaries by evaluating the length, complexity, reuse and aging requirements of passwords.
+最流行和最容易执行的认证机制是静态密码。密码应该是整个王国的关键，但是常常被用户以易用的名义颠覆。在对每个最近的入侵事件揭示的用户凭证进行剖析，令人遗憾地发现最常用的密码仍然是：12345,password和qwerty。
 
 
-### How to Test
+### 测试目标
 
-1. What characters are permitted and forbidden for use within a password? Is the user required to use characters from different character sets such as lower and uppercase letters, digits and special symbols?
-2. How often can a user change their password? How quickly can a user change their password after a previous change? Users may bypass password history requirements by changing their password 5 times in a row so that after the last password change they have configured their initial password again.
-3. When must a user change their password? After 90 days? After account lockout due to excessive log on attempts?
-4. How often can a user reuse a password? Does the application maintain a history of the user's previous used 8 passwords?
-5. How different must the next password be from the last password?
-6. Is the user prevented from using his username or other account information (such as first or last name) in the password?
+通过评价密码长度、复杂度、复用情况和生存周期要求，确定应用程序对使用密码字典来暴力破解密码的抵抗能力。
 
 
-### References
+### 如何测试
+
+1. 在密码中允许使用什么字符或禁止使用什么字符？用户被要求从不同的字符标中使用字符么（如大小写字母，数字和特殊符合）？
+2. 用户可以改变密码的频率是什么？上次修改密码多久以后用户才能再次修改密码？用户可能通过连续修改5次密码来绕过密码历史要求么（再次变为原来的密码）？
+3. 何时用户必须修改他们的密码？90天后？大量登陆尝试导致账户锁定之后？
+4. 用户重复使用一个密码的频率是什么？应用程序维护用户密码历史么（如保持8个密码历史）？
+5. 上个密码和新密码之间区别有多大？
+6. 用户被阻止在密码中使用相关他的用户名信息或其他账户信息中（如姓名信息）么？
+
+
+### 参考资料
 
 * [Brute Force Attacks](https://www.owasp.org/index.php/Brute_force_attack)
 * [Password length & complexity](https://www.owasp.org/index.php/Password_length_%26_complexity)
 
 
-### Remediation
+### 整改措施
 
-To mitigate the risk of easily guessed passwords facilitating unauthorized access there are two solutions: introduce additional authentication controls (i.e. two-factor authentication) or introduce a strong password policy. The simplest and cheapest of these is the introduction of a strong password policy that ensures password length, complexity, reuse and aging.
+为了减轻可被简单猜测出的密码风险，这里有两个解决方案：引入额外的认证控制措施（如双因素认证）或引入强密码策略。最简单和低成本的方案是引入强密码策略来确保密码长度、复杂度、复用情况和生命周期。
