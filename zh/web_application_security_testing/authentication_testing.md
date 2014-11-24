@@ -1,9 +1,9 @@
 # 认证测试
 
-Authentication (Greek: αυθεντικός = real or genuine, from 'authentes' = author ) is the act of establishing or confirming something (or someone) as authentic, that is, that claims made by or about the thing are true. Authenticating an object may mean confirming its provenance, whereas authenticating a person often consists of verifying her identity. Authentication depends upon one or more authentication factors.
+认证（希腊语： αυθεντικός = 真实的， 从'authentes' = 作者 得来）是一种建立某些东西（或某些人）是可信的行为，也就是做出事物是真实的的声明。认证某个对象可能意味着确认他的出处，认证某个人通常是确认他的身份。认证依赖于一个或多个认证因素。
 
 
-In computer security, authentication is the process of attempting to verify the digital identity of the sender of a communication.  A common example of such a process is the log on process. Testing the authentication schema means understanding how the authentication process works and using that information to circumvent the authentication mechanism.
+在计算机安全领域，认证是尝试确认通信发起者的数字身份的过程。一个常见例子是登陆过程。测试认证模式意味着理解认证过程如何产生作用，并使用这些信息来绕过认证机制。
 
 * [口令信息加密传输测试 (OTG-AUTHN-001)](./testing_for_credentials_transported_over_an_encrypted_channel_otg-authn-001.html)
 * [默认口令测试 (OTG-AUTHN-002)](./testing_for_default_credentials_otg-authn-002.html)
