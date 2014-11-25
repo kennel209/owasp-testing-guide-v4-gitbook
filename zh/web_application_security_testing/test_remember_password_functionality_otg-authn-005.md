@@ -1,27 +1,27 @@
-# Test remember password functionality (OTG-AUTHN-005)
+# 测试记住密码功能 (OTG-AUTHN-005)
 
 
 
-### Summary
+### 综述
 
-Browsers will sometimes ask a user if they wish to remember the password that they just entered. The browser will then store the password, and automatically enter it whenever the same authentication form is visited. This is a convenience for the user.
-Additionally some websites will offer custom "remember me" functionality to allow users to persist log ins on a specific client system.
-
-
-Having the browser store passwords is not only a convenience for end-users, but also for an attacker. If an attacker can gain access to the victim's browser (e.g. through a Cross Site Scripting attack, or through a shared computer), then they can retrieve the stored passwords. It is not uncommon for browsers to store these passwords in an easily retrievable manner, but even if the browser were to store the passwords encrypted and only retrievable through the use of a master password, an attacker could retrieve the password by visiting the target web application's authentication form, entering the victim's username, and letting the browser to enter the password.
+浏览器有时候会询问用户是否想要浏览器记住他们刚刚输入的密码。然后，浏览器会存储密码，并自动在相同的认证表单中填充这些信息。这是方便用户的一项举措。此外有一些web站点可能会提供自定义的“记住我”功能来允许用户在一个特别的客户端系统中保持登陆状态。
 
 
-Additionally where custom "remember me" functions are put in place weaknesses in how the token is stored on the client PC (for example using base64 encoded credentials as the token) could expose the users passwords. Since early 2014 most major browsers will override any use of autocomplete="off" with regards to password forms and as a result previous checks for this are not required and recommendations should not commonly be given for disabling this feature. However this can still apply to things like secondary secrets which may be stored in the browser inadvertently.
+浏览器记住密码功能不仅仅方便了终端用户，也方便了攻击者。如果一个攻击者能访问受害者的浏览器（如通过跨站脚本攻击，或通过共享计算机），那么他们就能够获取存储的密码。浏览器通常以一种能简单获取的方式存储这些密码，甚至浏览器加密存储密码并只允许通过主密码来获取，攻击者仍然可以通过访问目标web应用的认证表单，输入受害者的用户名信息，让浏览器自动填充密码来获得。
 
 
-### How to Test
-
-* Look for passwords being stored in a cookie. Examine the cookies stored by the application. Verify that the credentials are not stored in clear text, but are hashed.
-* Examine the hashing mechanism: if it is a common, well-known algorithm, check for its strength; in homegrown hash functions, attempt several usernames to check whether the hash function is easily guessable.
-* Verify that the credentials are only sent during the log in phase, and not sent together with every request to the application.
-* Consider other sensitive form fields (e.g. an answer to a secret question that must be entered in a password recovery or account unlock form).
+此外，当自定义的“记住我”功能产生的被存储在客户端PC上的令牌存在脆弱性（如使用base64加密的用户凭证令牌），这也可能暴露用户密码。由于在2014年初期之后，大多数主要的浏览器会使用autocomplete="off"的选项来覆盖密码表单，因此检查这个选项不再是必须的，那些建议举措不应该仅仅常规地建议关闭这项功能。然而这个功能也可能被应用在像第二秘密等类似信息中，这些也会不经意存储在浏览器中。
 
 
-### Remediation
+### 如何测试
 
-Ensure that no credentials are stored in clear text or are easily retrievable in encoded or encrypted forms in cookies.
+* 查找被存储在cookie中的密码。检查应用程序存储的cookie。验证凭证信息没有被明文存储，已经经过哈希操作。
+* 检查哈希机制：如果是是否常见、著名的算法，检查他的强度；在一些自己研发的哈希功能时，尝试一下不同用户名，检查哈希功能是不是存在漏洞可以被轻易猜测出来。
+* 验证凭证信息只在登陆过程中被发送，并不会随着每一个请求一起发送给应用程序。
+* 考虑其他敏感表单域（如在密码找回功能中或账户解锁功能中的秘密问题问答信息）。
+
+
+### 整改措施
+
+确保没有敏感信息被明文存储或能被简单破解的编码和加密形式存储于cookie之中。
+
