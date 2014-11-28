@@ -1,89 +1,74 @@
-# Testing for default credentials (OTG-AUTHN-002)
+# 测试默认口令凭证 (OTG-AUTHN-002)
 
 
 
-### Summary
-<br>
-Nowadays web applications often make use of popular open source or commercial software that can be installed on servers with minimal configuration or customization by the server administrator. Moreover, a lot of hardware appliances (i.e. network routers and database servers) offer web-based configuration or administrative interfaces.
+### 综述
+现在web应用程序通常会使用服务器上预装的流行的开源或商业软件，这些软件通常被服务器管理员以最小配置或定制状态预装在服务上。更多的，许多硬件供应商（如网络路由器和数据库服务器）提供web页面的配置接口或管理接口。
+
+通常这些应用程序在安装后，没有正确配置，用于初次认证和配置的默认口令信息从来不改变。这些默认口令已经被渗透测试者熟知，同样不幸的，也被恶意攻击者熟知，他们能利用这些默认口令来访问不同的应用系统。
+
+甚至在许多情况下，当一个新用户被应用创建后，会提供一个默认密码（通常很有特点）。如果这些密码是可以被预测的，用户又不在初次访问时更改他们，那么这些密码可能导致攻击者获取为授权的访问。
+
+造成这个问题的主要原因可以被归结为以下几点：
+* 没有经验的IT人员，他们没有意识到更改安装的组件的默认密码的重要性，或为了“维护方便”使用默认密码。
+* 编程人员留下后门来轻易访问和测试应用程序，之后又忘了移除这些后门。
+* 应用程序内建的无法移除的默认账户（包括预设用户名和密码）。
+* 应用程序不强制用户在第一次登陆时修改默认口令。
+
+### 如何测试
+#### 测试常见应用系统的默认口令
+在黑盒测试中，测试者不了解应用程序和其支撑架构。在现实情况下，这通常不是真正情况，通常会已知一些应用程序相关信息。我们假设已经通过测试指南中的[信息收集](https://www.owasp.org/index.php/Testing_Information_Gathering)章节中描述的技巧鉴别出一个或更多的应用程序可访问的管理接口。
+
+当我们已经鉴别出应用接口，比如Cisco路由器的web接口或Weblogic管理入口，检查使用这些设备已知的用户名和口令是否可以成功登陆系统。为了达到这个目的，我们可以查询生产商的文档，或用一种更简单的方法，我们可以通过搜索引擎查找常见口令或使用下文参考资料部分中列出的网站和工具。
+
+当面对一些我们没有默认和常用用户列表（比如该应用没有广泛流传）的应用的情况下，我们尝试猜测合法的默认凭证信息。注意被测的应用程序可能拥有账户锁定策略，多次对已知用户名猜测密码可能引起该账户被锁定。如果管理账户被锁定，可能会麻烦系统管理员来重置他们。
+
+许多应用可能拥有详细的错误信息来通知网站用户来验证所输入的用户名。这些信息在测试默认或可猜测的用户账户时候非常有用。这功能可能在登陆页面、密码重置页面、忘记密码页面和注册页面等等找到。一旦发现了默认的用户名，我们就可以针对这个账户进行猜测密码。
+
+更多关于这个过程的信息可以在下面章节找到 [测试用户枚举和可猜测用户账户](https://www.owasp.org/index.php/Testing_for_User_Enumeration_and_Guessable_User_Account_%28OWASP-AT-002%29) 和 [测试弱密码策略](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29)。
+
+由于这些类型的默认凭证通常与管理员账户绑定，我们可以用如下方式进行尝试：
+* 尝试下面的用户名 "admin", "administrator", "root", "system", "guest", "operator", 或 "super"。这些名字在系统管理员中非常流行，使用频率很高。此外我们还可以尝试 "qa", "test", "test1", "testing" 和类似名字。尝试将上述字段组合起来，用于用户名和密码字段。如果应用程序存在用户名枚举漏洞，那么我们可能成功通过漏洞来鉴别出上述类似用户名，用同样方式尝试获取密码。同时也尝试空密码或下面密码 "password", "pass123", "password123", "admin", 或 "guest" 等等结合任意枚举出来的账户。尝试使用上面这些例子的排列组合形式。如果这些密码都失败了，可能使用一些列表中的常用文件名和密码，并并行进行尝试。当然使用脚本能节约时间。
+* 应用程序管理员用户通常以应用程序或者组织的名字来命名。这意味着如果我们正尝试测试一个叫"Obscurity"的应用，尝试使用obscurity/obscurity或其他类似用户名密码组合。
+* 当为客户实施测试时候，尝试使用通讯录上获得的名字作为用户名，同时结合常用密码进行猜测。用户email地址可能揭示用户账户名和命名规则：如果职员John Doe的email地址是 jdoe@example.com，那么我们可以试着发现在社交媒体下的系统管理员名字，并通过类似的命名机制来猜测他们的用户名。
+* 对所有上述用户名尝试空密码。
+* 通过代理或直接查看来审阅页面源代码和JavaScript脚本。找寻任何用户名和密码相关的引用。例如"If username='admin' then starturl=/admin.asp else /index.asp"(成功登陆与失败登陆情况）。同时，如果我们拥有一个合法账户，登录并检查每一个请求和响应，合法登录和失败的情况对比，如额外的隐藏域参数，有趣的GET请求（如login=yes）等等。
+* 从源代码中的注释中找寻账户名字和密码。同时在源代码中的备份目录（或备份代码）中寻找，也有可能找到有趣的注释和代码。
 
 
-Often these applications, once installed, are not properly configured and the default credentials provided for initial authentication and configuration are never changed. These default credentials are well known by penetration testers and, unfortunately, also by malicious attackers, who can use them to gain access to various types of applications.
+#### 测试新账户的默认密码
+有时，应用系统会创建一个新账户并为其分配默认密码。这些密码可能拥有一些标准的特性，并可以预测。如果用户没有在初次使用时修改密码（通常在不要求强制更新密码时发生）或用户还没有登录过新系统情况下，攻击者可能利用这一特性获得非授权访问系统能力。
+
+之前关于可能的密码锁定策略和详细的错误消息也同样在这里适用。
+
+这测试这类默认密码的时候可以使用以下步骤：
+* 查看用户注册页面可能能有助于确定期望的密码形式和最小最大用户名和密码长度。如果不存在用户注册页面，确定是否组织使用了标准的命名策略，如使用email地址"@"之前的名字部分作为用户名。
+* 尝试推断应用程序如何产生用户名。比如，用户是否可以选择他们的用户名或者系统通过用户提供的个人资料生成用户名或者使用可预测的序列？如果应用程序确实使用可预测的序列来生成用户名，如user7811等等，尝试模糊枚举测试所有可能的账户。如果我们能通过应用系统对合法用户名和非法密码的不同响应来鉴别，那么可以尝试对合法用户名进行暴力破解（或者快速尝试参考资料部分常见的密码）。
+* 尝试确定系统生成的密码是否可以预测。通过快速连续创建新用户比较密码来确定其是否可以预测。如果可以预测，尝试关联用户名或任何已经枚举出的账户，并基于此进行暴力破解攻击。
+* 如果我们已经识别出正确的用户名命名规则，尝试通过一些可预测的序列（如生日）来暴力破解密码。
+* 对所有上述用户名使用空密码或与用户名相同的密码进行尝试。
 
 
-Furthermore, in many situations, when a new account is created on an application, a default password (with some standard characteristics) is generated. If this password is predictable and the user does not change it on the first access, this can lead to an attacker gaining unauthorized access to the application.
+#### 灰盒测试
+下面的步骤依赖于完全的灰盒测试方法。如果我们只能获得其中的一部分信息，参照黑盒测试过程来填补缺少的信息。
+* 与IT人员交流讨论来确定他们管理使用的密码和应用程序采取的管理机制。
+* 询问IT人员是否必须修改默认密码和默认账户是否被禁用。
+* 同黑盒测试章节部分描述一样检查数据库的默认密码，同时检查空密码。
+* 检查代码中硬编码的用户名和密码。
+* 检查保护用户名和密码的配置文件。
+* 检查密码策略，以及如果应用程序为新用户生成密码，检查这个过程中使用的密码策略。
 
 
-The root cause of this problem can be identified as:
-* Inexperienced IT personnel, who are unaware of the importance of changing default passwords on installed infrastructure components, or leave the password as default for "ease of maintenance".
-* Programmers who leave back doors to easily access and test their application and later forget to remove them.
-* Applications with built-in non-removable default accounts with a preset username and password.
-* Applications that do not force the user to change the default credentials after the first log in.
-
-<br>
-### How to Test
-#### Testing for default credentials of common applications
-
-In black box testing the tester knows nothing about the application and its underlying infrastructure. In reality this is often not true, and some information about the application is known. We suppose that you have identified, through the use of the techniques described in this Testing Guide under the chapter [Information Gathering](https://www.owasp.org/index.php/Testing_Information_Gathering), at least one or more common applications that may contain accessible administrative interfaces.<br>
-
-
-When you have identified an application interface, for example a Cisco router web interface or a Weblogic administrator portal, check that the known usernames and passwords for these devices do not result in successful authentication. To do this you can consult the manufacturer’s documentation or, in a much simpler way, you can find common credentials using a search engine or by using one of the sites or tools listed in the Reference section. <br>
-
-
-When facing applications where we do not have a list of default and common user accounts (for example due to the fact that the application is not wide spread) we can attempt to guess valid default credentials. Note that the application being tested may have an account lockout policy enabled, and multiple password guess attempts with a known username may cause the account to be locked. If it is possible to lock the administrator account, it may be troublesome for the system administrator to reset it.
-
-
-Many applications have verbose error messages that inform the site users as to the validity of entered usernames. This information will be helpful when testing for default or guessable user accounts. Such functionality can be found, for example, on the log in page, password reset and forgotten password page, and sign up page. Once you have found a default username you could also start guessing passwords for this account.<br>
-
-
-More information about this procedure can be found in the section [Testing for User Enumeration and Guessable User Account](https://www.owasp.org/index.php/Testing_for_User_Enumeration_and_Guessable_User_Account_%28OWASP-AT-002%29) and in the section [Testing for Weak password policy](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29). <br>
-
-
-Since these types of default credentials are often bound to administrative accounts you can proceed in this manner:
-* Try the following usernames - "admin", "administrator", "root", "system", "guest", "operator", or "super". These are popular among system administrators and are often used. Additionally you could try "qa", "test", "test1", "testing" and similar names. Attempt any combination of the above in both the username and the password fields. If the application is vulnerable to username enumeration, and you manage to successfully identify any of the above usernames, attempt passwords in a similar manner. In addition try an empty password or one of the following "password", "pass123", "password123", "admin", or "guest" with the above accounts or any other enumerated accounts. Further permutations of the above can also be attempted. If these passwords fail, it may be worth using a common username and password list and attempting multiple requests against the application. This can, of course, be scripted to save time.
-* Application administrative users are often named after the application or organization. This means if you are testing an application named "Obscurity", try using obscurity/obscurity or any other similar combination as the username and password.
-* When performing a test for a customer, attempt using names of contacts you have received as usernames with any common passwords. Customer email addresses mail reveal the user accounts naming convention: if employee John Doe has the email address jdoe@example.com, you can try to find the names of system administrators on social media and guess their username by applying the same naming convention to their name.
-* Attempt using all the above usernames with blank passwords.
-* Review the page source and JavaScript either through a proxy or by viewing the source. Look for any references to users and passwords in the source. For example "If username='admin' then starturl=/admin.asp else /index.asp" (for a successful log in versus a failed log in). Also, if you have a valid account, then log in and view every request and response for a valid log in versus an invalid log in, such as additional hidden parameters, interesting GET request (login=yes), etc.
-* Look for account names and passwords written in comments in the source code. Also look in backup directories for source code (or backups of source code) that may contain interesting comments and code.
-
-
-#### Testing for default password of new accounts
-
-It can also occur that when a new account is created in an application the account is assigned a default password. This password could have some standard characteristics making it predictable. If the user does not change it on first usage (this often happens if the user is not forced to change it) or if the user has not yet logged on to the application, this can lead an attacker to gain unauthorized access to the application.<br>
-
-
-The advice given before about a possible lockout policy and verbose error messages are also applicable here when testing for default passwords.<br>
-
-
-The following steps can be applied to test for these types of default credentials:
-* Looking at the User Registration page may help to determine the expected format and minimum or maximum length of the application usernames and passwords. If a user registration page does not exist, determine if the organization uses a standard naming convention for user names such as their email address or the name before the "@" in the email.
-* Try to extrapolate from the application how usernames are generated. For example, can a user choose his/her own username or does the system generate an account name for the user based on some personal information or by using a predictable sequence? If the application does generate the account names in a predictable sequence, such as user7811, try fuzzing all possible accounts recursively. If you can identify a different response from the application when using a valid username and a wrong password, then you can try a brute force attack on the valid username (or quickly try any of the identified common passwords above or in the reference section).
-* Try to determine if the system generated password is predictable. To do this, create many new accounts quickly after one another so that you can compare and determine if the passwords are predictable. If predictable, try to correlate these with the usernames, or any enumerated accounts, and use them as a basis for a brute force attack.
-* If you have identified the correct naming convention for the user name, try to “brute force” passwords with some common predictable sequence like for example dates of birth.
-* Attempt using all the above usernames with blank passwords or using the username also as password value.
-
-
-<br>
-#### Gray Box testing
-<br>
-The following steps rely on an entirely Gray Box approach. If only some of this information is available to you, refer to black box testing to fill the gaps.
-* Talk to the IT personnel to determine which passwords they use for administrative access and how administration of the application is undertaken.
-* Ask IT personnel if default passwords are changed and if default user accounts are disabled.
-* Examine the user database for default credentials as described in the Black Box testing section. Also check for empty password fields.
-* Examine the code for hard coded usernames and passwords.
-* Check for configuration files that contain usernames and passwords.
-* Examine the password policy and, if the application generates its own passwords for new users, check the policy in use for this procedure.
-
-
-###Tools
+### 测试工具
 * Burp Intruder: http://portswigger.net/burp/intruder.html
 * THC Hydra: http://www.thc.org/thc-hydra/
 * Brutus: http://www.hoobie.net/brutus/
 * Nikto 2: http://www.cirt.net/nikto2
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**
 * CIRT http://www.cirt.net/passwords
 * Government Security - Default Logins and Passwords for Networked Devices http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php
 * Virus.org http://www.virus.org/default-password/<br>
+
