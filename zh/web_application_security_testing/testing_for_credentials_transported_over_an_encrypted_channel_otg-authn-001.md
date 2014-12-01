@@ -1,27 +1,23 @@
-# Testing for Credentials Transported over an Encrypted Channel (OTG-AUTHN-001)
+# 加密信道传输凭证测试 (OTG-AUTHN-001)
 
 
-### Summary
-Testing for credentials transport means verifying that the user's authentication data are transferred via an encrypted channel to avoid being intercepted by malicious users. The analysis focuses simply on trying to understand if the data travels unencrypted from the web browser to the server, or if the web application takes the appropriate security measures using a protocol like HTTPS. The HTTPS protocol is built on TLS/SSL to encrypt the data that is transmitted and to ensure that user is being sent towards the desired site.
+### 综述
+凭证传输测试意味着验证用户的认证数据是通过加密信道传输的，避免被恶意用户截获。测试分析着重于试着弄清楚数据是否未加密从浏览器传输到服务器或web应用是否已经采取了恰当的安全措施如使用HTTPS协议。HTTPS协议是建立在TLS/SSL之上，加密传输数据确保数据发送于用户期望的目的站点。
+
+明显的，数据流量被加密不代表他们是完全安全的。安全也依赖于使用的加密算法和应用程序使用的密钥的健壮性，但这个主题不是本章的重点。
+
+对于TLS/SSL通道的安全性更加详细的讨论请参考[弱SSL/TLS测试](https://www.owasp.org/index.php/Testing_for_Weak_SSL/TSL_Ciphers,_Insufficient_Transport_Layer_Protection_%28OWASP-EN-002%29)章节。在这里，测试者仅仅试着理解用户在web表单中填写的，为了登录站点的数据是否通过安全的协议传输来保护他们远离攻击者。
+
+现在关于这个主题最常见的例子是web应用程序的登录页面。测试者应该验证用户登录凭证是通过加密信道传输的。为了登录网站，用户通常需要填写一个简单的表单，通过POST方法提交给web应用程序。一个不明显的情况就是，数据可能通过HTTP协议发送，这导致了一个不安全的、明文的信息被传输；也可能通过HTTPS协议，这加密了传输数据。对于某些更加复杂的情况，有可能网站使用HTTP展示登录页面（让我们相信传输是不安全的），但是真正发送数据的时候又是使用HTTPS的。完成这个测试来确保攻击者不能够通过使用嗅探工具简单嗅探网络来获取敏感信息。
+
+### 如何测试
+#### 黑盒测试
+在下面的例子中，我们将使用WebScarab来捕获数据包头，并分析他们。你可以使用任何你喜欢的web代理。
 
 
-Clearly, the fact that traffic is encrypted does not necessarily mean that it's completely safe. The security also depends on the encryption algorithm used and the robustness of the keys that the application is using, but this particular topic will not be addressed in this section.
+##### 例1：通过HTTP使用POST方法发送数据
 
-
-For a more detailed discussion on testing the safety of TLS/SSL channels refer to the chapter [Testing for Weak SSL/TLS](https://www.owasp.org/index.php/Testing_for_Weak_SSL/TSL_Ciphers,_Insufficient_Transport_Layer_Protection_%28OWASP-EN-002%29). Here, the tester will just try to understand if the data that users put in to web forms in order to log in to a web site, are transmitted using secure protocols that protect them from an attacker.
-<br>
-
-
-Nowadays, the most common example of this issue is the log in page of a web application. The tester should verify that user's credentials are transmitted via an encrypted channel. In order to log in to a web site, the user usually has to fill a simple form that transmits the inserted data to the web application with the POST method. What is less obvious is that this data can be passed using the HTTP protocol, which transmits the data in a non-secure, clear text form, or using the HTTPS protocol, which encrypts the data during the transmission. To further complicate things, there is the possibility that the site has the login page accessible via HTTP (making us believe that the transmission is insecure), but then it actually sends data via HTTPS. This test is done to be sure that an attacker cannot retrieve sensitive information by simply sniffing the network with a sniffer tool.
-
-### How to Test
-#### Black Box testing
-In the following examples we will use WebScarab in order to capture packet headers and to inspect them. You can use any web proxy that you prefer.
-
-
-##### Example 1: Sending data with POST method through HTTP
-
-Suppose that the login page presents a form with fields User, Pass, and the Submit button to authenticate and give access to the application. If we look at the headers of our request with WebScarab, we can get something like this:<br>
+假设登录页面是一个用户字段、密码字段和提交按钮组成的表单。如果我们检查发送的请求的数据头，我们会发现像下面这样的信息：
 
 ```
 POST http://www.example.com/AuthenticationServlet HTTP/1.1
@@ -41,13 +37,12 @@ Content-length: 64
 delegated_service=218&User=test&Pass=test&Submit=SUBMIT
 ```
 
+从这个例子测试者可以明白POST请求通过HTTP向页面*www.example.com/AuthenticationServlet* 发送了数据。所以数据是未被加密的，恶意用户可能通过使用像Wireshark之类的工具简单嗅探网络来截获用户名和密码。
 
-From this example the tester can understand that the POST request sends the data to the page *www.example.com/AuthenticationServlet* using HTTP. Sothe data is transmitted without encryption and a malicious user could intercept the username and password by simply sniffing the network with a tool like Wireshark.
 
+##### 例2：通过HTTPS使用POST方法发送数据
 
-##### Example 2: Sending data with POST method through HTTPS
-
-Suppose that our web application uses the HTTPS protocol to encrypt the data we are sending (or at least for transmitting sensitive data like credentials). In this case, when logging on to the web application the header of our POST request would be similar to the following:
+假设我们的web应用程序使用HTTPS协议加密我们发送的数据（或至少加密传输敏感信息如登录凭证）。在这个例子中，我们登录的POST请求可能类似：
 
 ```
 POST https://www.example.com:443/cgi-bin/login.cgi HTTP/1.1
@@ -67,14 +62,12 @@ Content-length: 50
 Command=Login&User=test&Pass=test
 ```
 
-
-We can see that the request is addressed to
-*www.example.com:443/cgi-bin/login.cgi* using the HTTPS protocol. This ensures that our credentials are sent using an encrypted channel and that the credentials are not readable by a malicious user using a sniffer.
+我们可以发现请求目的地址是*www.example.com:443/cgi-bin/login.cgi* ，使用了HTTPS协议，他确保了我们的凭证信息通过加密信道传输，不能够被恶意用户使用嗅探软件读取。
 
 
-##### Example 3: sending data with POST method via HTTPS on a page reachable via HTTP
+##### 例3：在一个HTTP页面上通过HTTPS POST方法发送数据
 
-Now, imagine having a web page reachable via HTTP and that only data sent from the authentication form are transmitted via HTTPS. This situation occurs, for example, when we are on a portal of a big company that offers various information and services that are publicly available, without identification, but the site also has a private section accessible from the home page when users log in. So when we try to log in, the header of our request will look like the following example:
+现在，想象一下我们在一个可以HTTP访问的页面，但他仅通过HTTPS发送认证表单的数据。这个情况可能发生，例如，我们处于一个大公司的登录入口，这个公司对外公开提供多种信息和服务。同时这个公司也提供用户登录之后的私人访问页面。所以当我们尝试登录时候，我们的请求头部会类似如下：
 
 ```
 POST https://www.example.com:443/login.do HTTP/1.1
@@ -94,13 +87,12 @@ Content-length: 45
 User=test&Pass=test&portal=ExamplePortal
 ```
 
+我们可以发现请求通过HTTPS被发送到*www.example.com:443/login.do* 。但是如果我们仔细观察Referer-header（来自哪里的页面），可以发现正是 *www.example.com/homepage.do* ，可以通过简单HTTP访问。尽管我们通过HTTPS发送请求，这种部署方式可能允许[SSLStrip](http://www.thoughtcrime.org/software/sslstrip/)攻击（一种[Man-in-the-middle](http://en.wikipedia.org/wiki/Man-in-the-middle_attack)中间人攻击）。
 
-We can see that our request is addressed to *www.example.com:443/login.do* using HTTPS. But if we have a look at the Referer-header (the page from which we came), it is *www.example.com/homepage.do* and is accessible via simple HTTP. Although we are sending data via HTTPS, this deployment can allow [SSLStrip](http://www.thoughtcrime.org/software/sslstrip/)  attacks (a type of [Man-in-the-middle](http://en.wikipedia.org/wiki/Man-in-the-middle_attack)  attack)
 
+##### 例4：通过HTTPS使用GET方法发送数据
 
-##### Example 4: Sending data with GET method through HTTPS
-
-In this last example, suppose that the application transfers data using the GET method. This method should never be used in a form that transmits sensitive data such as username and password, because the data is displayed in clear text in the URL and this causes a whole set of security issues. For example, the URL that is requested is easily available from the server logs or from your browser history, which makes your sensitive data retrievable for unauthorized persons. So this example is purely demonstrative, but, in reality, it is strongly suggested to use the POST method instead.
+在最后一个例子中，假设应用程序通过GET方法发送数据。这种方法不应该用于传输敏感信息如用户名和密码，因为数据在URL中明文显示，并会引起一系列的安全问题。例如，请求的URL可以简单从服务器日志或浏览器历史记录中获得，这将导致你的敏感信息可能被未认证的用户获得。所以这个例子只是纯粹展示作用，在现实中，强烈推荐使用POST方法来替代。
 
 ```
 GET https://www.example.com/success.html?user=test&pass=test HTTP/1.1
@@ -117,20 +109,19 @@ If-Modified-Since: Mon, 30 Jun 2008 07:55:11 GMT
 If-None-Match: "43a01-5b-4868915f"
 ```
 
-
-You can see that the data is transferred in clear text in the URL and not in the body of the request as before. But we must consider that SSL/TLS is a level 5 protocol, a lower level than HTTP, so the whole HTTP packet is still encrypted making the URL unreadable to a malicious user using a sniffer. Nevertheless as stated before, it is not a good practice to use the GET method to send sensitive data to a web application, because the information contained in the URL can be stored in many locations such as proxy and web server logs.
-
-
-#### Gray Box testing
-Speak with the developers of the web application and try to understand if they are aware of the differences between HTTP and HTTPS protocols and why they should use HTTPS for transmitting sensitive information. Then, check with them if HTTPS is used in every sensitive request, like those in log in pages, to prevent unauthorized users to intercept the data.
+我们可以发现数据在URL中明文传输，并不是像之前一样的在请求主体之中。但是我们必须考虑SSL/TLS是一个第五层的协议，比HTTP低一层，所以整个HTTP数据包仍然是加密的，URL是无法被恶意用户使用嗅探工具读取的。但正如之前所说的，使用GET方法来向web应用程序传输敏感数据不是一个好的实践方法，因为这些URL信息可能被存储在许多地方比如代理和web服务的日志中。
 
 
-### Tools
+#### 灰盒测试
+与web应用开发者交流，试着弄清楚他们是否注意到了HTTP和HTTPS协议的区别，他们是否明白应该使用HTTPS来传输敏感信息。然后和他们一起检查是否在每一处存在敏感信息的地方都使用了HTTPS，比如登录页面，来防止未授权用户截获数据。
+
+
+### 测试工具
 * [WebScarab](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**
 * HTTP/1.1: Security Considerations - http://www.w3.org/Protocols/rfc2616/rfc2616-sec15.html
 * [SSL is not about encryption](http://www.troyhunt.com/2011/01/ssl-is-not-about-encryption.html) <br>
