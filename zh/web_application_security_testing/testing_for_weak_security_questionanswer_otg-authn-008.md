@@ -1,64 +1,59 @@
-# Testing for Weak security question/answer (OTG-AUTHN-008)
+# 测试安全问答脆弱性 (OTG-AUTHN-008)
+
+### 综述
+安全问题和答案通常使用在恢复遗忘的密码，或用于加强密码机制，也叫“秘密”问答（参见[测试弱密码修改和重置功能 (OTG-AUTHN-009)](https://www.owasp.org/index.php/Testing_for_weak_password_change_or_reset_functionalities_%28OTG-AUTHN-009%29)）。
+
+他们通常在用户创建时候生成，需要用户选择一些预设的问题，并提供大致的答案。他们允许用户生成自己问题和答案对。两种方法都有不安全性。理想来说，安全问题应该是只有用户知晓的答案，不可能被其他人猜到或发现。这只是说起来容易。
+
+安全问答依赖于答案的秘密性。问题和答案应该选择只有账户主人才知道的答案。然而，尽管许多答案可能不被公开，网站提供的大多数问题都是伪私密性的。
 
 
+**预生成的问题：**
 
-### Summary
-Often called "secret" questions and answers, security questions and answers are often used to recover forgotten passwords (see [Testing for weak password change or reset functionalities (OTG-AUTHN-009)](https://www.owasp.org/index.php/Testing_for_weak_password_change_or_reset_functionalities_%28OTG-AUTHN-009%29)), or as extra security on top of the password.
-<br>
-<br>
-They are typically generated upon account creation and require the user to select from some pre-generated questions and supply an appropriate answer. They may allow the user to generate their own question and answer pairs. Both methods are prone to insecurities.Ideally, security questions should generate answers that are only known by the user, and not guessable or discoverable by anybody else. This is harder than it sounds.
-<br>
+大部分预生成的问题都是非常自然简单的，可能导致不安全的答案。比如：
+* 答案可能被家庭成员或熟悉的朋友了解，比如“你母亲的乳名？”，“你的生日？”。
+* 答案可能很容易被猜到，比如“你最喜欢的颜色？”，“你最喜欢的棒球队？”。
+* 答案可能被暴力猜解，比如“你最喜欢的高中老师的姓？”，这种问题的答案能存在与一些非常容易下载到的常用姓名列表之中，因此可以通过编写脚本暴力破解。
+* 答案可能能在公开的地方找到，比如“你最喜欢的电影？”，在类问题的答案可能轻易在用户的社交媒体的页面中找到。
 
-Security questions and answers rely on the secrecy of the answer. Questions and answers should be chosen so that the answers are only known by the account holder. However, although a lot of answers may not be publicly known, most of the questions that websites implement promote answers that are pseudo-private.
-<br><br>
-**Pre-generated questions:**
-<br>
-The majority of pre-generated questions are fairly simplistic in nature and can lead to insecure answers. For example:
-* The answers may be known to family members or close friends of the user, e.g. "What is your mother's maiden name?", "What is your date of birth?"
-* The answers may be easily guessable, e.g. "What is your favorite color?", "What is your favorite baseball team?"
-* The answers may be brute forcible, e.g. "What is the first name of your favorite high school teacher?" - the answer is probably on some easily downloadable lists of popular first names, and therefore a simple brute force attack can be scripted.
-* The answers may be publicly discoverable, e.g. "What is your favorite movie?" - the answer may easily be found on the user's social media profile page.
-<br>
 
-**Self-generated questions:**
-<br>
-The problem with having users to generate their own questions is that it allows them to generate very insecure questions, or even bypass the whole point of having a security question in the first place. Here are some real world examples that illustrate this point:
-<br>
-* "What is 1+1?"
-* "What is your username?"
-* "My password is M3@t$p1N"
+**自生成的问题：**
 
-<br>
-### How to Test
-**Testing for weak pre-generated questions:**
-<br>
-Try to obtain a list of security questions by creating a new account or by following the “I don’t remember my password”-process. Try to generate as many questions as possible to get a good idea of the type of security questions that are asked. If any of the security questions fall in the categories described above, they are vulnerable to being attacked (guessed, brute-forced, available on social media, etc.).
-<br><br>
-**Testing for weak self-generated questions:**
-<br>
-Try to create security questions by creating a new account or by configuring your existing account’s password recovery properties. If the system allows the user to generate their own security questions, it is vulnerable to having insecure questions created. If the system uses the self-generated security questions during the forgotten password functionality and if usernames can be enumerated (see [Testing for Account Enumeration and Guessable User Account (OTG-IDENT-004)](https://www.owasp.org/index.php/Testing_for_Account_Enumeration_and_Guessable_User_Account_%28OTG-IDENT-004%29)), then it should be easy for the tester to enumerate a number of self-generated questions. It should be expected to find several weak self-generated questions using this method.
-<br><br>
-**Testing for brute-forcible answers:**
-<br>
-Use the methods described in [Testing for Weak lock out mechanism (OTG-AUTHN-003)](https://www.owasp.org/index.php/Testing_for_Weak_lock_out_mechanism_%28OTG-AUTHN-003%29) to determine if a number of incorrectly supplied security answers trigger a lockout mechanism.
-<br><br>
-The first thing to take into consideration when trying to exploit security questions is the number of questions that need to be answered. The majority of applications only need the user to answer a single question, whereas some critical applications may require the user to answer two or even more questions.
-<br>
-<br>
-The next step is to assess the strength of the security questions. Could the answers be obtained by a simple Google search or with social engineering attack? As a penetration tester, here is a step-by-step walk-through of exploiting a security question scheme:
-<br>
-* Does the application allow the end-user to choose the question that needs to be answered? If so, focus on questions which have:
-	- A “public” answer; for example, something that could be find with a simple search-engine query.
-	- A factual answer such as a “first school” or other facts which can be looked up.
-	- Few possible answers, such as “what model was your first car”. These questions would present the attacker with a short list of possible answers, and based on statistics the attacker could rank answers from most to least likely.
-* Determine how many guesses you have if possible.
-	- Does the password reset allow unlimited attempts?
-	- Is there a lockout period after X incorrect answers? Keep in mind that a lockout system can be a security problem in itself, as it can be exploited by an attacker to launch a Denial of Service against legitimate users.
-* Pick the appropriate question based on analysis from the above points, and do research to determine the most likely answers.
-<br>
+用户自己生成的问题导致的问题是他们可能生成非常不安全的问题，甚至根本上无视了安全问题的出发点。下面有一些真实世界的例子来说明这一点：
 
-The key to successfully exploiting and bypassing a weak security question scheme is to find a question or set of questions which give the possibility of easily finding the answers. Always look for questions which can give you the greatest statistical chance of guessing the correct answer, if you are completely unsure of any of the answers. In the end, a security question scheme is only as strong as the weakest question.
-<br><br>
-### References
+* “一加一等于几？”
+* “用户名是什么？”
+* “我的密码是M3@t$p1N”
+
+
+### 如何测试
+**测试脆弱的预生成问题：**
+
+尝试在创建新用户的安全问答或者跟随“忘记密码”过程中的一系列安全问题。尝试生成尽可能多的问题来发现他们问的安全问题的类型。如果有任何安全问题可以被分类与上面描述的类别中，那么他们可能存在漏洞（猜测，暴力破解，存在在社交媒体中等等）。
+
+**测试脆弱的自生成问题：**
+
+尝试在创建新账户或配置账户密码恢复设置中创建安全问题。如果系统允许用户生成他们自己的安全问题，那么可能存在不安全的漏洞。如果系统采用了用户自己生成的安全问题，并用于忘记密码功能中，而且用户名可以被枚举（参见[测试账户枚举 (OTG-IDENT-004)](https://www.owasp.org/index.php/Testing_for_Account_Enumeration_and_Guessable_User_Account_%28OTG-IDENT-004%29)），那么攻击者可能能轻易枚举一系列自生成的问题。通过这个办法可以期待找到一些不安全的问题和答案。
+
+**测试可暴力破解的问题：**
+
+使用在 [测试账户锁定机制(OTG-AUTHN-003)](https://www.owasp.org/index.php/Testing_for_Weak_lock_out_mechanism_%28OTG-AUTHN-003%29) 描述的方法来确定一系列不正确的安全问题答案是否会触发锁定机制。
+
+首先考虑的是尝试利用安全问题的地方是查看需要回答多少问题。大部分应用程序只需要用户问答单个问题，有些重要的系统需要用户回答两个或更多的问题。
+
+接着评估安全问题的强度。他们的答案能否通过简单的google搜索或使用社会工程学技巧获得？作为一个渗透测试人员，这里有一个手把手的攻略来利用安全问题模式：
+
+* 应用程序允许终端用户选择需要回答的问题么？如果是，注重拥有下列特点的问题：
+    - 拥有“公开”答案的；例如，可以通过搜索引擎查找到的。
+    - 拥有确实的答案的如“第一所学校”或能查找到的事实。
+    - 拥有可能的答案的，比如“第一辆车子的型号？”。这些问题给攻击者缩小了选择空间，基于统计分析，攻击者可能得到最可能的答案。
+* 如果可行，确定你需要的猜测次数。
+    - 密码重置是否允许无限次尝试？
+    - 是否在X次不正确答案后锁定？记住，锁定系统自身也可能是一个安全问题，会被攻击者利用发起对合法用户的拒绝服务攻击。
+* 从上述观点中选取基于分析后最合适的问题，通过研究确定最可能的答案。
+
+成功利用和绕过脆弱的安全问题模式的关键是发现一个或一系列的问题，这些问题使攻击者有机会轻易找到答案。如果不能完全确定问题的答案，总是寻找那些能带来很好的统计几率猜到正确答案的问题。最后，安全问题模式的强度取决于最脆弱的问题。
+
+### 参考资料
 * [The Curse of the Secret Question](http://www.schneier.com/essay-081.html)
-<br>
+
