@@ -1,104 +1,97 @@
-# Testing for Weaker authentication in alternative channel (OTG-AUTHN-010)
+# 测试其他脆弱的认证渠道 (OTG-AUTHN-010)
+
+### 综述
+
+有时甚至可能会发生主要的认证机制不包含任何漏洞，但是可能在其他合法的认证用户渠道中存在漏洞。测试应该被实施在识别其他的渠道，以及在测试范围内识别漏洞。
+
+其他用户交互渠道可能被利用绕过主要交互通道，或暴露一些有助于攻击者攻击主要通道的信息。有些渠道可能通过使用不同的主机名或路径来区分自己。例如：
+
+* 标准网站
+* 为移动或特定设备优化的网站
+* 为无障碍访问优化的网站
+* 其他国家和语言网站
+* 使用相同用户账号的平行网站（如同一个组织中提供不同功能的另一个网站，共享用户账户的伙伴网站）
+* 开发、测试、终端用户集成测试和标准站点的不同阶段版本的网站
+
+他们可能在其他类型的应用或业务逻辑中使用：
+
+* 移动设备APP
+* 桌面应用
+* 呼叫中心操作员
+* 交互语音服务或电话系统
+
+注意，这个测试注重于其他认证渠道，一些其他的认证可能以不同内容通过相同网站内访问到，也应该包含在测试范围之中。这里不再深入讨论，他们应该在信息收集中被识别，并在主要认证测试环节中被测试。例如：
+
+* 积极改进或维护降级导致的功能变化
+* 不使用cookies的站点
+* 不使用JavaScritp的站点
+* 不使用插件如Flash和Java的站点
+
+甚至有时测试范围不允许测试其他的认证渠道，他们的存在也应该写入测试文档之中。他们可能会破坏认证机制的可靠程度，可能成为下一次测试的前提。
 
 
+### 案例
 
-### Summary
-
-Even if the primary authentication mechanisms do not include any vulnerabilities, it may be that vulnerabilities exist in alternative legitimate authentication user channels for the same user accounts. Tests should be undertaken to identify alternative channels and, subject to test scoping, identify vulnerabilities.
-
-
-The alternative user interaction channels could be utilized to circumvent the primary channel, or expose information that can then be used to assist an attack against the primary channel. Some of these channels may themselves be separate web applications using different host names or paths. For example:
-
-* Standard website
-* Mobile, or specific device, optimized website
-* Accessibility optimized website
-* Alternative country and language websites
-* Parallel websites that utilize the same user accounts (e.g. another website offering different functionally of the same organization, a partner website with which user accounts are shared)
-* Development, test, UAT and staging versions of the standard website
-
-
-But they could also be other types of application or business processes:
-
-* Mobile device app
-* Desktop application
-* Call center operators
-* Interactive voice response or phone tree systems
-
-
-Note that the focus of this test is on alternative channels; some authentication alternatives might appear as different content delivered via the same website and would almost certainly be in scope for testing. These are not discussed further here, and should have been identified during information gathering and primary authentication testing. For example:
-
-* Progressive enrichment and graceful degradation that change functionality
-* Site use without cookies
-* Site use without JavaScript
-* Site use without plugins such as for Flash and Java
-
-
-Even if the scope of the test does not allow the alternative channels to be tested, their existence should be documented. These may undermine the degree of assurance in the authentication mechanisms and may be a precursor to additional testing.
-
-
-### Example
-
-The primary website is:
+主站点是：
 ```
  http://www.example.com
 ```
-and authentication functions always take place on pages using Transport Layer Security:
+认证功能总是在TLS层中发生：
 ```
  https://www.example.com/myaccount/
 ```
-However, a separate mobile-optimized website exists that does not use Transport Layer Security at all, and has a weaker password recovery mechanism:
+但是，有移动优化的网站的存在，他并使用TLS来访问，并且存在一个更加弱化的密码恢复机制：
 ```
  http://m.example.com/myaccount/
 ```
 
-### How to Test
+### 如何测试
 
-#### Understand the primary mechanism
+#### 理解主要的网站机制
 
-Fully test the website's primary authentication functions. This should identify how accounts are issued, created or changed and how passwords are recovered, reset, or changed. Additionally knowledge of any elevated privilege authentication and authentication protection measures should be known. These precursors are necessary to be able to compare with any alternative channels.
-
-
-#### Identify other channels
-
-Other channels can be found by using the following methods:
-
-* Reading site content, especially the home page, contact us, help pages, support articles and FAQs, T&Cs, privacy notices, the robots.txt file and any sitemap.xml files.
-* Searching HTTP proxy logs, recorded during previous information gathering and testing, for strings such as "mobile", "android", blackberry", "ipad", "iphone", "mobile app", "e-reader", "wireless", "auth", "sso", "single sign on" in URL paths and body content.
-* Use search engines to find different websites from the same organization, or using the same domain name, that have similar home page content or which also have authentication mechanisms.
+完整测试网站主要认证功能。这应该识别出如何账户被使用、创建或改变，密码如何被恢复、重置或改变。此外，任何提升权限的认证和认证保护措施应该被了解。这些是用来与其他访问渠道对比的前提。
 
 
-For each possible channel confirm whether user accounts are shared across these, or provide access to the same or similar functionality.
+#### 识别其他访问渠道
+
+其他访问渠道可以从下列方法中找到：
+
+* 读取站点内容，特别是主页、联系我们、帮助页面、技术支持和FAQ、买家须知、私人提示、robots.txt文件和任何sitemap.xml文件。
+* 搜索HTTP代理日志，先前信息收集和测试的记录，在URL路径或主体内容中搜索类似"mobile"、"android"、"blackberry"、"ipad"、"iphone"、"mobile app"、"e-reader"、"wireless"、"auth"、"sso"、"single sign on"之类的字符串。
+* 使用搜索引擎来查找相同组织的不同网站内容，或使用相同域名发现类似主页内容或存在认证机制的也没。
+
+对于每一个可能的访问渠道，确认他们是不是共享了用户账户，或提供相同或类似的访问功能。
 
 
-#### Enumerate authentication functionality
+#### 枚举认证功能
 
-For each alternative channel where user accounts or functionality are shared, identify if all the authentication functions of the primary channel are available, and if anything extra exists. It may be useful to create a grid like the one below:
+对于每一个用户账户和功能共享的其他访问渠道，识别出主要渠道的认证功能是否在这些地方也可用，或是有额外的方式存在。可能使用下面的表格来记录比较方便：
 
-| Primary        | Mobile          | Call Center | Partner Website |
+| 主要网站        | 移动设备          | 呼叫中心 | 伙伴网站 |
 |----------------|-----------------|-------------|-----------------|
-| Register       | Yes             | -           | -               |
-| Log in         | Yes             | Yes         | Yes (SSO)       |
-| Log out        | -               | -           | -               |
-| Password reset | Yes             | Yes         | -               |
-| -              | Change password | -           | -               |
+| 注册       | 是             | -           | -               |
+| 登录         | 是             | 是         | 是 (SSO)       |
+| 登出        | -               | -           | -               |
+| 密码重置 | 是             | 是         | -               |
+| -              | 密码修改 | -           | -               |
 
 
-In this example, mobile has an extra function "change password" but does not offer "log out". A limited number of tasks are also possible by phoning the call center. Call centers can be interesting, because their identity confirmation checks might be weaker than the website's, allowing this channel to be used to aid an attack against a user's account.
+在这里例子中，移动设备拥有额外的“修改密码”的功能，并不提供“登出”功能。有限的任务也能通过电话呼叫中心完成。呼叫中心非常有趣，因为他对于身份鉴别的核查可能弱与主要网站，可能被用于帮助攻击者对抗用户账户。
+
+在枚举这些渠道的同时，也值得注意会话管理情况，以防发生重叠现象（比如同一父域下的cookie发送范围，不同渠道的并行会话情况）。
 
 
-While enumerating these it is worth taking note of how session management is undertaken, in case there is overlap across any channels (e.g. cookies scoped to the same parent domain name, concurrent sessions allowed across channels, but not on the same channel).
+#### 审查并测试
+
+测试报告应该要提及这些其他的访问渠道，即使他们仅仅是标记为“仅信息”或“测试范围之外”。在一些情况下，测试范围可能包括这些访问渠道（如，因为他是目标主机名下另一个路径），或可能在与客户讨论之后加入测试范围。如果允许并收取测试，所有的在本篇指南中提到的额外访问渠道测试应该被实施，并与主要访问方式做对比。
 
 
-#### Review and test
+### 相关测试用例
 
-Alternative channels should be mentioned in the testing report, even if they are marked as "information only" and/or "out of scope". In some cases the test scope might include the alternative channel (e.g. because it is just another path on the target host name), or may be added to the scope after discussion with the owners of all the channels. If testing is permitted and authorized, all the other authentication tests in this guide should then be performed, and compared against the primary channel.
-
-
-### Related Test Cases
-
-The test cases for all the other authentication tests should be utilized.
+其他认证测试的测试用例应该被利用。
 
 
-### Remediation
+### 整改措施
 
-Ensure a consistent authentication policy is applied across all channels so that they are equally secure.
+确保认证策略被一致性地应用在所以访问渠道，保证他们相同程度的安全。
+
