@@ -1,64 +1,69 @@
-# Testing for weak password change or reset functionalities (OTG-AUTHN-009)
+# 测试密码修改或充值功能 (OTG-AUTHN-009)
+
+### 综述
+
+密码修改和重置功能是应用程序提供给用户的密码修改或重置的自助服务机制。这种自助服务允许用户快速修改或重置他们的密码，而不需要管理员参与。当密码被修改后，应用程序中也一般同时被修改。当密码被重置时，他们或是由应用程序生成或是发送邮件给用户告知。这可能会说明密码被明文存储或是以可解密的方式存储。
 
 
+### 测试目标
+
+1. 确定当某人修改用户时，应用程序对恶意破坏账户更改过程的抵抗能力。
+2. 确定对猜测或绕过密码重置功能的抵抗能力。
 
 
-### Summary
+### 如何测试 
 
-The password change and reset function of an application is a self-service password change or reset mechanism for users. This self-service mechanism allows users to quickly change or reset their password without an administrator intervening. When passwords are changed they are typically changed within the application. When passwords are reset they are either rendered within the application or emailed to the user. This may indicate that the passwords are stored in plain text or in a decryptable format.
-
-
-### Test objectives
-
-1. Determine the resistance of the application to subversion of the account change process allowing someone to change the password of an account.
-2. Determine the resistance of the passwords reset functionality against guessing or bypassing.
+对于密码修改和密码重置功能两者来说，都应该重点检查：
+1.  除了管理员之外的用户是否可以修改或重置其他人的账户。
+2.  用户是否可以操纵或破坏密码修改或重置过程来改变或重置他人密码或管理员密码。
+3.  密码重置或修改过程是否存在[CSRF](https://www.owasp.org/index.php/Testing_for_CSRF_%28OWASP-SM-005%29)漏洞。
 
 
-### How to Test
+#### 密码重置测试
 
-For both password change and password reset it is important to check:
-1.  if users, other than administrators, can change or reset passwords for accounts other than their own.
-2.  if users can manipulate or subvert the password change or reset process to change or reset the password of another user or administrator.
-3.  if the password change or reset process is vulnerable to [CSRF](https://www.owasp.org/index.php/Testing_for_CSRF_%28OWASP-SM-005%29).
+除了上面提供的检查，确认下面的情况也很重要：
+
+* 重置密码需要哪些信息？
+
+    第一步是检查是否需要回答安全问题。不询问安全问题就发送密码（或密码重置链接）到用户邮件地址意味着100%依赖邮件地址的安全性，可能不符合某些高等级的安全需求。
+
+    从另一方面来说，如果需要回答安全问题，第二步就是评估他们的强度。这部分特定测试在指南中[测试安全问题的脆弱性](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29)章节有深入描述。
+
+* 重置后的密码如何告知用户？
+
+    在这里，最不安全的场景是如果密码重置工具直接显示给我们密码，这给了攻击者登录账户的机会，除非应用程序提供关于上次登录的信息，否则受害者不知道他们的账户已经沦陷。
+
+    较为不安全的场景是入宫密码重置工具强制用户立刻修改他们的密码。这不像第一个场景那么隐蔽，这允许攻击者获得权限，并踢出真正的用户。
+
+    最安全的方法是通过向用户最初注册的或其他的电子邮件发送链接。这强制使攻击者不仅要猜测重置的密码被发送到哪个邮件账户（除非应用程序显示了这个信息），而且需要攻破邮箱账户来获取临时密码或密码重置链接。
+
+* 重置的密码是否是随机生成的？
+
+    在这里，最不安全的常见是如果应用程序明文发送或显示了旧密码，这意味者密码没有通过哈希形式存储，这本身就是一个安全问题。
+
+    最安全的方法是密码通过一个安全的算法随机生成，而且不能被推断出来。
+
+* 重置密码功能是否在修改密码前要求确认？
+
+    为了限制拒绝服务攻击，应用程序应该向用户发送邮箱链接时候附带随机令牌，并且只有当用户访问这个链接时，整个重置过程才算完成。这确保了当前的密码在重置请求被确认前依旧有效。
+
+#### 密码修改测试
+
+除了上个测试以外，还应该重点确认：
+
+* 在完成过程中是否要求提供旧密码？
+
+    最不安全的场景就是应用程序允许在没有旧密码的情况下修改密码。这时如果攻击者能够控制一个合法的会话，他们也就能轻易修改修改受害者的密码了。
+
+同时参考[测试弱密码策略](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29) 章节。
 
 
-#### Test Password Reset
-
-In addition to the previous checks it is important to verify the following:
-
-* What information is required to reset the password?
-The first step is to check whether secret questions are required. Sending the password (or a password reset link) to the user email address without first asking for a secret question means relying 100% on the security of that email address, which is not suitable if the application needs a high level of security.<br>
-On the other hand, if secret questions are used, the next step is to assess their strength. This specific test is discussed in detail in the [Testing for Weak security question/answer](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29) paragraph of this guide.
-<br>
-* How are reset passwords communicated to the user?
-The most insecure scenario here is if the password reset tool shows you the password; this gives the attacker the ability to log into the account, and unless the application provides information about the last log in the victim would not know that their account has been compromised.<br>
-A less insecure scenario is if the password reset tool forces the user to immediately change their password. While not as stealthy as the first case, it allows the attacker to gain access and locks the real user out.<br>
-The best security is achieved if the password reset is done via an email to the address the user initially registered with, or some other email address; this forces the attacker to not only guess at which email account the password reset was sent to (unless the application show this information) but also to compromise that email account in order to obtain the temporary password or the password reset link.
-<br>
-* Are reset passwords generated randomly?
-The most insecure scenario here is if the application sends or visualizes the old password in clear text because this means that passwords are not stored in a hashed form, which is a security issue in itself.<br>
-The best security is achieved if passwords are randomly generated with a secure algorithm that cannot be derived.
-<br>
-* Is the reset password functionality requesting confirmation before changing the password?
-To limit denial-of-service attacks the application should email a link to the user with a random token, and only if the user visits the link then the reset procedure is completed. This ensures that the current password will still be valid until the reset has been confirmed.
-<br><br>
-
-#### Test Password Change
-
-In addition to the previous test it is important to verify:
-
-* Is the old password requested to complete the change?
-The most insecure scenario here is if the application permits the change of the password without requesting the current password. Indeed if an attacker is able to take control of a valid session they could easily change the victim's password.<br>
-
-See also [Testing for Weak password policy](https://www.owasp.org/index.php/Testing_for_Weak_password_policy_%28OWASP-AT-008%29) paragraph of this guide.
-
-
-### References
+### 参考资料
 
 * [OWASP Forgot Password Cheat Sheet](https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet)
 * [OWASP Periodic Table of Vulnerabilities - Insufficient Password Recovery](https://www.owasp.org/index.php/OWASP_Periodic_Table_of_Vulnerabilities_-_Insufficient_Password_Recovery)
 
 
-### Remediation
+### 整改措施
 
-The password change or reset function is a sensitive function and requires some form of protection, such as requiring users to re-authenticate or presenting the user with confirmation screens during the process.
+密码修改或重置功能是一个敏感的操作功能，需要某种形式的保护，比如要求用户再次认证或在过程中提示用户确认界面。
