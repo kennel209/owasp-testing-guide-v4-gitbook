@@ -1,40 +1,36 @@
-# Testing for bypassing authentication schema (OTG-AUTHN-004)
+# 绕过认证模式测试 (OTG-AUTHN-004)
 
 
-### Summary
+### 综述
 
-While most applications require authentication to gain access to private information or to execute tasks, not every authentication method is able to provide adequate security. Negligence, ignorance, or simple understatement of security threats often result in authentication schemes that can be bypassed by simply skipping the log in page and directly calling an internal page that is supposed to be accessed only after authentication has been performed.
+尽管大多数应用程序需要认证来获得访问私有数据的权限或执行人物，但是不是每一个认证方法都能够提供适当的安全性。忽视、无视或低估安全威胁往往导致认证机制可以被轻易绕过，如通过简单跳过登录页面直接访问本需要登录后才能访问内部页面的行为。
 
+此外，通常也可能通过更改请求，欺骗应用程序，使他认为用户已经被认证来绕过认证机制。这可以通过修改URL参数、操纵表单或伪造会话来达到目的。
 
-In addition, it is often possible to bypass authentication measures by tampering with requests and tricking the application into thinking that the user is already authenticated.  This can be accomplished either by modifying the given URL parameter, by manipulating the form, or by counterfeiting sessions.
-
-
-Problems related to the authentication schema can be found at different stages of the software development life cycle (SDLC), like the design, development, and deployment phases:
-* In the design phase errors can include a wrong definition of application sections to be protected, the choice of not applying strong encryption protocols for securing the transmission of credentials, and many more.
-* In the development phase errors can include the incorrect implementation of input validation functionality or not following the security best practices for the specific language.
-* In the application deployment phase, there may be issues during the application setup (installation and configuration activities) due to a lack in required technical skills or due to the lack of good documentation.
+有关认证模式的问题可以在软件开发生命周期（SDLC）的各个阶段中发现，比如设计阶段、开发阶段和部署阶段：
+* 在设计阶段，发生的问题可以包括错误的应用区域保护定义、未选择强加密协议来保证凭证传输安全等等。
+* 在开发阶段，发生的问题可以包括错误的输入验证功能实现或未遵循相关语言的安全开发最佳实践。
+* 在应用部署阶段，可能在应用设置过程中（安装和配置）中发生问题，缺乏必须的技巧技能或缺乏良好的帮助文档。
 
 
-### How to Test
-#### Black Box testing
-There are several methods of bypassing the authentication schema that is used by a web application:
-* Direct page request ([forced browsing](https://www.owasp.org/index.php/Forced_browsing))
-* Parameter modification
-* Session ID prediction
-* SQL injection
+### 如何测试
+#### 黑盒测试
 
-<br>
-##### Direct page request
+有一些绕过web应用中的认证模式的：
+* 直接页面请求 ([forced browsing](https://www.owasp.org/index.php/Forced_browsing))
+* 修改参数
+* 会话ID预测
+* SQL注入
 
-If a web application implements access control only on the log in page, the authentication schema could be bypassed.  For example, if a user directly requests a different page via forced browsing, that page may not check the credentials of the user before granting access. Attempt to directly access a protected page through the address bar in your browser to test using this method.
+##### 直接页面请求
 
+如果web应用程序只在登录页面实现了访问控制，那么这种认证模式可以被绕过。例如，如果用户通过强制浏览技巧直接请求访问不同的页面，这个页面可能不会检查访问凭证。尝试在浏览器地址栏输入地址直接访问受保护的页面来测试这个绕过方法。
 
 <center>![Image:basm-directreq.jpg](https://www.owasp.org/images/7/7f/Basm-directreq.jpg)</center>
 
+##### 修改参数
 
-##### Parameter Modification
-
-Another problem related to authentication design is when the application verifies a successful log in on the basis of a fixed value parameters. A user could modify these parameters to gain access to the protected areas without providing valid credentials. In the example below, the "authenticated" parameter is changed to a value of "yes", which allows the user to gain access.  In this example, the parameter is in the URL, but a proxy could also be used to modify the parameter, especially when the parameters are sent as form elements in a POST request or when the parameters are stored in a cookie.
+另一个关于认证设计的问题是应用程序被设计为通过一个固定的参数来验证登录是否成功的情形。用户可以修改这些参数来获取访问保护区域的权限但不提供有效凭证。在下面的例子中"authenticated"参数被改为了"yes"，这使用户获得的权限。在这个例子中，参数是包含在URL中的，但是使用代理也可以修改参数，特别是当这些参数被放在表单中使用POST请求发送或存储在cookie时。
 
 ```
 http://www.site.com/page.asp?authenticated=no
@@ -60,43 +56,33 @@ Content-Type: text/html; charset=iso-8859-1
 <center>![Image:basm-parammod.jpg](https://www.owasp.org/images/8/8c/Basm-parammod.jpg)</center>
 
 
-##### Session ID Prediction
+##### 会话ID预测
 
-Many web applications manage authentication by using session identifiers (session IDs). Therefore, if session ID generation is predictable, a malicious user could be able to find a valid session ID and gain unauthorized access to the application, impersonating a previously authenticated user.
+许多web应用通过会话标识（session ID）来管理认证。因此，如果会话ID的生成是可以预测的话，恶意用户就可以找到一个合法的会话ID来获取非授权的访问，模仿先前的一个已经认证过的用户。
 
-
-In the following figure, values inside cookies increase linearly, so it could be easy for an attacker to guess a valid session ID.
-
+在下面的图示中，cookie中的数值是线性增长的，所以攻击者很容易就可以猜测出一个有效的会话ID。
 
 <center>![Image:basm-sessid.jpg](https://www.owasp.org/images/8/83/Basm-sessid.jpg)</center>
 
-
-In the following figure, values inside cookies change only partially, so it's possible to restrict a brute force attack to the defined fields shown below.
-
+在下面的图示中，cookie中的数值只有局部发生变化，可以通过有限的暴力攻击来猜测。
 
 <center>![Image:basm-sessid2.jpg](https://www.owasp.org/images/f/f4/Basm-sessid2.jpg)</center>
 
+##### SQL注入（HTML表单认证）
 
-##### SQL Injection (HTML Form Authentication)
-
-SQL Injection is a widely known attack technique. This section is not going to describe this technique in detail as there are several sections in this guide that explain injection techniques beyond the scope of this section.
-
+SQL注入是一个著名的攻击技巧。在这个章节不会详细描述这个技巧，指南中的一些章节将解释注入攻击技巧，作用范围不仅仅限于本章节内容。
 
 <center>![Image:basm-sqlinj.jpg](https://www.owasp.org/images/4/46/Basm-sqlinj.jpg)</center>
 
-
-The following figure shows that with a simple SQL injection attack, it is sometimes possible to bypass the authentication form.
-
+下面的图示展示了一个简单的SQL注入攻击，有时可以用来绕过认证表单。
 
 <center>![Image:basm-sqlinj2.gif](https://www.owasp.org/images/d/d1/Basm-sqlinj2.gif)</center>
 
+#### 灰盒测试
 
-#### Gray Box Testing
+如果攻击者已经能够获得应用程序源代码，通过之前发现的漏洞（如目录遍历），或通过web仓库（开源软件），那么就有可能对认证过程的实现进行精细的攻击。
 
-If an attacker has been able to retrieve the application source code by exploiting a previously discovered vulnerability (e.g., directory traversal), or from a web repository (Open Source Applications), it could be possible to perform refined attacks against the implementation of the authentication process.
-
-
-In the following example (PHPBB 2.0.13 - Authentication Bypass Vulnerability), at line 5 the unserialize() function parses a user supplied cookie and sets values inside the $row array. At line 10 the user's MD5 password hash stored inside the back end database is compared to the one supplied.
+在下面的例子中（PHPBB 2.0.13 - 认证绕过漏洞），在第5行，unserialize()函数解析用户提供的cookie，并设置$row数组中。在第10行，用户储存于后台数据库的MD5密码哈希与提供的进行比较。
 
 ```
 1.  if ( isset($HTTP_COOKIE_VARS[$cookiename . '_sid']) ||
@@ -115,19 +101,19 @@ In the following example (PHPBB 2.0.13 - Authentication Bypass Vulnerability), a
 14. }
 ```
 
-
-In PHP, a comparison between a string value and a boolean value (1 - "TRUE") is always "TRUE", so by supplying the following string (the important part is "b:1") to the unserialize() function, it is possible to bypass the authentication control:
+在PHP中，布尔变量（1 - 真）和字符串值进行比较结果总是为真，所以通过向unserialize()函数提供下面字符串（重点是"b:1"部分），就可能绕过认证控制：
 ```
  a:2:{s:11:"autologinid";b:1;s:6:"userid";s:1:"2";}
 ```
 
-### Tools
+### 测试工具
 * [WebScarab](https://www.owasp.org/index.php/OWASP_WebScarab_Project)
 * [WebGoat](https://www.owasp.org/index.php/OWASP_WebGoat_Project)
 * [OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**
+
 * Mark Roxberry: "PHPBB 2.0.13 vulnerability"
 * David Endler: "Session ID Brute Force Exploitation and Prediction" - http://www.cgisecurity.com/lib/SessionIDs.pdf

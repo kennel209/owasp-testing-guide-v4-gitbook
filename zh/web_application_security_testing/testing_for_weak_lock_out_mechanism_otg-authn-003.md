@@ -1,78 +1,68 @@
-# Testing for Weak lock out mechanism (OTG-AUTHN-003)
+# 测试弱账户锁定机制 (OTG-AUTHN-003)
+
+### 综述
+
+账户锁定机制被用于减轻暴力猜解密码攻击。账户通常在3到5次失败登录尝试后被锁定，只能够经过预设一段时间后解锁，通过自助的解锁机制或让管理员介入。账户锁定机制需要在保护未认证访问和保护用户被拒绝合法访问两者直接取得平衡。
+
+注意测试者应该覆盖所有需要锁定机制参与的认证方面，如在密码遗忘机制中的安全问题区域。（参见[测试安全问答脆弱性 (OTG-AUTHN-008)](https://www.owasp.org/index.php/Testing_for_Weak_security_question/answer_%28OTG-AUTHN-008%29)）
+
+如果没有一个强大的锁定机制，应用程序可能受到暴力破解攻击影响。在被成功暴力破解之后，恶意用户就能够获得如下信息访问权限：
+
+* 秘密的信息或数据：web应用的私人区域可能暴露秘密文档、用户档案数据、金融信息、银行账户详情、用户的人际关系等等。
+* 管理版面：这部分可能被web管理员用来管理（添加、修改、删除）web应用内容，管理用户账户情况、向用户分配不同权限等等。
+* 进一步攻击的机会：认证区域可能包含公共区域未呈现的漏洞，也可能存在不对公共用户开放的高级功能。
 
 
+### 测试目标
 
-### Summary
-
-Account lockout mechanisms are used to mitigate brute force password guessing attacks. Accounts are typically locked after 3 to 5 unsuccessful login attempts and can only be unlocked after a predetermined period of time, via a self-service unlock mechanism, or intervention by an administrator. Account lockout mechanisms require a balance between protecting accounts from unauthorized access and protecting users from being denied authorized access.<br>
-
-
-Note that this test should cover all aspects of authentication where lockout mechanisms would be appropriate, e.g. when the user is presented with security questions during forgotten password mechanisms (see [Testing for Weak security question/answer (OTG-AUTHN-008)](https://www.owasp.org/index.php/Testing_for_Weak_security_question/answer_%28OTG-AUTHN-008%29)).
+1. 评估账户锁定机制减轻暴力破解攻击的能力。
+2. 评估解锁机制对非授权账户解锁能力的抵抗程度。
 
 
-Without a strong lockout mechanism, the application may be susceptible to brute force attacks. After a successful brute force attack, a malicious user could have access to:
+### 如何测试
 
-* Confidential information or data: Private sections of a web application could disclose confidential documents, users' profile data, financial information, bank details, users' relationships, etc.
+通常为了测试锁定机制的强度，我们需要访问一个愿意被锁定也能够承担锁定结果的账户。如果你只拥有一个能够登录web应用的账户，那么将这个测试放在测试计划的最后部分来避免无法通过被锁定的账户进行其他测试工作。
 
-* Administration panels: These sections are used by webmasters to manage (modify, delete, add) web application content, manage user provisioning, assign different privileges to the users, etc.
+为了评价账户锁定机制减轻暴力密码猜测的能力，尝试多次使用不正确的密码进行非法登录，接着使用正确的密码来验证被锁定的账户。一个测试例子可能是如下情形：
+1. 尝试错误密码登录3次。
+2. 使用正确密码登录，因此表明3次错误认证尝试不会触发锁定机制。
+3. 尝试错误密码登录4次。
+4. 使用正确密码登录，因此表明4次错误认证尝试不会触发锁定机制。
+5. 尝试错误密码登录5次。
+6. 尝试使用正确密码登录。应用程序返回“你的账户已经被锁定”信息，因此确认5次错误认证尝试将锁定账户。
+7. 尝试在5分钟后使用正确密码登录。应用程序返回账户被锁定信息，因此表明锁定机制没有在5分钟内自动解锁。
+8. 尝试在10分钟后使用正确密码登录。应用程序返回账户被锁定信息，因此表明锁定机制没有在10分钟内自动解锁。
+9. 尝试在15分钟后使用正确密码登录。成功登录，因此表明锁定机制的解锁时间在10-15分钟之间。
 
-* Opportunities for further attacks: authenticated sections of a web application could contain vulnerabilities that are not present in the public section of the web application and could contain advanced functionality that is not available to public users.
+使用验证码也可能阻碍暴力破解攻击，但是他们有自己的脆弱性（参见 [Testing for CAPTCHA](https://www.owasp.org/index.php/Testing_for_Captcha_%28OWASP-AT-012%29)），不应该替代锁定机制。
 
+为了评估解锁机制对未授权账户解锁的抵抗能力，触发解锁机制，并找寻脆弱点。通常解锁机制需要秘密问题或邮件解锁链接。解锁链接应该是一次性的，来阻止攻击者猜测或重放链接来实行批量的暴力破解攻击。秘密问答应该足够健壮（参见[测试安全问答的脆弱性](https://www.owasp.org/index.php/Testing_for_Weak_security_question/answer_%28OTG-AUTHN-008%29)）。
 
-### Test objectives
+注意，解锁机制应该只适用在解锁账户上。不应该与密码回复机制相同。
 
-1. Evaluate the account lockout mechanism's ability to mitigate brute force password guessing.
-2. Evaluate the unlock mechanism's resistance to unauthorized account unlocking.
+在实现一个账户锁定机制时，应该考虑到以下因素：
 
-
-### How to Test
-
-Typically, to test the strength of lockout mechanisms, you will need access to an account that you are willing or can afford to lock. If you have only one account with which you can log on to the web application, perform this test at the end of you test plan to avoid that you cannot continue your testing due to a locked account.<br>
-<br>
-
-To evaluate the account lockout mechanism's ability to mitigate brute force password guessing, attempt an invalid log in by using the incorrect password a number of times, before using the correct password to verify that the account was locked out. An example test may be as follows:
-1. Attempt to log in with an incorrect password 3 times.
-2. Successfully log in with the correct password, thereby showing that the lockout mechanism doesn't trigger after 3 incorrect authentication attempts.
-3. Attempt to log in with an incorrect password 4 times.
-4. Successfully log in with the correct password, thereby showing that the lockout mechanism doesn't trigger after 4 incorrect authentication attempts.
-5. Attempt to log in with an incorrect password 5 times.
-6. Attempt to log in with the correct password. The application returns "Your account is locked out.", thereby confirming that the account is locked out after 5 incorrect authentication attempts.
-7. Attempt to log in with the correct password 5 minutes later. The application returns "Your account is locked out.", thereby showing that the lockout mechanism does not automatically unlock after 5 minutes.
-8. Attempt to log in with the correct password 10 minutes later. The application returns "Your account is locked out.", thereby showing that the lockout mechanism does not automatically unlock after 10 minutes.
-9. Successfully log in with the correct password 15 minutes later, thereby showing that the lockout mechanism automatically unlocks after a 10 to 15 minute period.
-<br>
-
-A CAPTCHA may hinder brute force attacks, but they can come with their own set of weaknesses (see [Testing for CAPTCHA](https://www.owasp.org/index.php/Testing_for_Captcha_%28OWASP-AT-012%29)), and should not replace a lockout mechanism.
-
-<br>
-To evaluate the unlock mechanism's resistance to unauthorized account unlocking, initiate the unlock mechanism and look for weaknesses. Typical unlock mechanisms may involve secret questions or an emailed unlock link. The unlock link should be a unique one-time link, to stop an attacker from guessing or replaying the link and performing brute force attacks in batches. Secret questions and answers should be strong (see [Testing for Weak Security Question/Answer](https://www.owasp.org/index.php/Testing_for_Weak_security_question/answer_%28OTG-AUTHN-008%29)).<br>
+1. 针对应用程序的暴力破解攻击会带来什么风险？
+2. 验证码机制足够减轻这个风险了么？
+3. 在锁定前失败登录的次数。如果一个锁定阀值设定太低可能使得合法用户被多次锁定。太高又会导致攻击者能在锁定前获得更多的暴力尝试机会。根据应用程序的用途，5-10次失败登录尝试是一个通常的锁定阀值。
+4. 账户如何解锁？
+    1. 管理员手动解锁：这是最安全的锁定方法，但是这可能导致用户的不便，并占用管理员“宝贵”的时间。
+        1. 注意，如果管理员自身账户被锁定，他应该拥有一个恢复办法。
+        2. 如果攻击者的目标仅仅是锁定应用程序所有的用户账户的话，这种解锁机制可能导致拒绝服务攻击。
+    2. 一段时间之后解锁：锁定的时长是多久？是否能够有效保护应用程序？比如，5-30分钟的锁定时长可能是对于减轻暴力破解攻击和给合法用户带来不便之间的良好妥协。
+    3. 通过自助服务机制：如同上文所述，这种自助服务机制必须足够安全来避免攻击者自己解锁账户。
 
 
-Note that an unlock mechanism should only be used for unlocking accounts. It is not the same as a password recovery mechanism.<br>
-<br>
-Factors to consider when implementing an account lockout mechanism:
+### 参考资料
 
-1. What is the risk of brute force password guessing against the application?
-2. Is a CAPTCHA sufficient to mitigate this risk?
-3. Number of unsuccessful log in attempts before lockout. If the lockout threshold is to low then valid users may be locked out too often. If the lockout threshold is to high then the more attempts an attacker can make to brute force the account before it will be locked. Depending on the application's purpose, a range of 5 to 10 unsuccessful attempts is typical lockout threshold.
-4. How will accounts be unlocked?
-    1. Manually by an administrator: this is the most secure lockout method, but may cause inconvenience to users and take up the administrator's "valuable" time.
-        1. Note that the administrator should also have a recovery method in case his account gets locked.
-        2. This unlock mechanism may lead to a denial-of-service attack if an attacker's goal is to lock the accounts of all users of the web application.
-    2. After a period of time: What is the lockout duration? Is this sufficient for the application being protected? E.g. a 5 to 30 minute lockout duration may be a good compromise between mitigating brute force attacks and inconveniencing valid users.
-    3. Via a self-service mechanism: As stated before, this self-service mechanism must be secure enough to avoid that the attacker can unlock accounts himself.
+参见OWASP关于暴力破解攻击的文章： [Brute Force](https://www.owasp.org/index.php/Brute_force_attack) 。
 
 
-### References
+### 整改措施
 
-See the OWASP article on [Brute Force](https://www.owasp.org/index.php/Brute_force_attack) Attacks.
+根据风险等级来应用账户解锁机制，按照最低到最高的情形：
 
-
-### Remediation
-
-Apply account unlock mechanisms depending on the risk level. In order from lowest to highest assurance:
-
-1. Time-based lockout and unlock.
-2. Self-service unlock (sends unlock email to registered email address).
-3. Manual administrator unlock.
-4. Manual administrator unlock with positive user identification.
+1. 基于时间的锁定和解锁。
+2. 自助解锁服务（向注册邮箱发送解锁邮件）。
+3. 管理员手动解锁。
+4. 管理员根据用户提供的身份信息手动解锁。
