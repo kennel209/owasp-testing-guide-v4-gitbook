@@ -22,7 +22,7 @@ This document is released under the [Creative Commons 2.5 License](http://creati
 
 ### ENGLISH version
 
-* 2 articles is missing? Waiting official group to link.
+* 2 articles are missing? Waiting official group to link.
 
     > 4.4.6     OTG-IDENT-006   Test Permissions of Guest/Training Accounts
 
