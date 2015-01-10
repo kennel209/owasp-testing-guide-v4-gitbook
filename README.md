@@ -25,6 +25,7 @@ This document is released under the [Creative Commons 2.5 License](http://creati
 * 2 articles is missing? Waiting official group to link.
 
     > 4.4.6     OTG-IDENT-006   Test Permissions of Guest/Training Accounts
+
     > 4.4.7     OTG-IDENT-007   Test Account Suspension/Resumption Process
 
 ### CHINESE version
@@ -39,4 +40,5 @@ This document is released under the [Creative Commons 2.5 License](http://creati
 * 2014.11.19  Translated CH4.3 CH4.4 to Chinese.
 * 2014.11.23  Translated CH4.6 to Chinese.
 * 2014.12.04  Translated CH4.5 to Chinese.
+* 2015.01.10  Translated CH4.9 to Chinese.
 
