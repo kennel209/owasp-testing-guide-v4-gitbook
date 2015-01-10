@@ -1,50 +1,46 @@
-# Analysis of Stack Traces (OTG-ERR-002)
+# 堆栈追踪分析 (OTG-ERR-002)
 
 
-### Summary
+### 综述
 
-Stack traces are not vulnerabilities by themselves, but they often reveal information that is interesting to an attacker. Attackers attempt to generate these stack traces by tampering with the input to the web application with malformed HTTP requests and other input data.
+堆栈回溯信息本身并不是漏洞，但是他们通常为攻击者揭露了有趣的信息。攻击者尝试通过恶意HTTP请求和改变输入数据来产生这些堆栈追踪信息。
 
+如果应用程序响应的堆栈回溯信息没有很好管理，他们可能为攻击者揭示有用的信息。这些信息可能被用于进一步的攻击中。基于多种原因，提供调试信息作为产出错误的页面返回结果被认为是一项不好的操作实践。例如，他们可能包含应用程序内部工作信息，如相对路径或对象是如何被内部引用等信息。
 
-If the application responds with stack traces that are not managed it could reveal information useful to attackers. This information could then be used in further attacks. Providing debugging information as a result of operations that generate errors is considered a bad practice due to multiple reasons. For example, it may contain information on internal workings of the application such as relative paths of the point where the application is installed or how objects are referenced internally.
+### 如何测试
+#### 黑盒测试
 
-### How to Test
-#### Black Box testing
+有许多技巧能导致HTTP响应中发送异常消息。注意，在大部分情况下，这些信息将组织为HTML页面返回，也有异常消息作为SOAP的一部分或者REST响应返回。
 
-There are a variety of techniques that will cause exception messages to be sent in an HTTP response. Note that in most cases this will be an HTML page, but exceptions can be sent as part of SOAP or REST responses too.
+可以尝试如下测试：
+* 非法输入（比如与应用逻辑不一致的输入）。
+* 包含非字母数字字符或不符合查询语法的输入。
+* 空输入。
+* 过长的输入。
+* 未认证情况下访问内部认证页面。
+* 绕过应用程序流程。
 
+所有的上述测试可能导致包含堆栈回溯信息的应用程序错误消息。在手工测试的同时推荐使用一些模糊测试工具。
 
-Some tests to try include:
-* invalid input (such as input that is not consistent with application logic.
-* input that contains non alphanumeric characters or query syntax.
-* empty inputs.
-* inputs that are too long.
-* access to internal pages without authentication.
-* bypassing application flow.
-
-
-All the above tests could lead to application errors that may contain stack traces. It is recommended to use a fuzzer in addition to any manual testing.
-
-
-Some tools, such as [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project ) and Burp proxy will automatically detect these exceptions in the response stream as you are doing other penetration and testing work.
+一些工具，比如[OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project )和Burp代理能在你做其他渗透或测试性工作中自动探测到响应数据流中的这些异常信息。
 
 
-#### Gray Box Testing
+#### 灰盒测试
 
-Search the code for the calls that cause an exception to be rendered to a String or output stream. For example, in Java this might be code in a JSP that looks like:
+搜索那些会被组织成字符串或输出流的可能发生异常的代码。比如，在JSP中的Java代码如同下面这样：
 
 ```
 <% e.printStackTrace( new PrintWriter( out ) ) >
 ```
 
-In some cases, the stack trace will be specifically formatted into HTML, so be careful of accesses to stack trace elements.
+在一些情况中，堆栈追踪信息可能被特别的组织成HTML格式，需要小心访问这些堆栈信息元素。
 
+搜索配置文件确认错误处理配置信息和使用的默认错误页面。比如，在Java中，可以在web.xml文件中找到这些配置信息。
 
-Search the configuration to verify error handling configuration and the use of default error pages.  For example, in Java this configuration can be found in web.xml.
-
-### Tools
+### 测试工具
 [1] ZAP Proxy - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
 
-### References
+### 参考资料
 
 * [1] [[RFC2616](http://www.ietf.org/rfc/rfc2616.txt?number=2616)] Hypertext Transfer Protocol -- HTTP/1.1
+
