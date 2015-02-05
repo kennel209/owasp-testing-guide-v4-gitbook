@@ -1,47 +1,46 @@
-# Testing for Session puzzling (OTG-SESS-008)
+# 测试会话变量重载问题 (OTG-SESS-008)
 
 
-### Summary
+### 综述
 
-Session Variable Overloading (also known as Session Puzzling) is an application level vulnerability which can enable an attacker to perform a variety of malicious actions, including by not limited to:
-* Bypass efficient authentication enforcement mechanisms, and impersonate legitimate users.
-* Elevate the privileges of a malicious user account, in an environment that would otherwise be considered foolproof.
-* Skip over qualifying phases in multi-phase processes, even if the process includes all the commonly recommended code level restrictions.
-* Manipulate server-side values in indirect methods that cannot be predicted or detected.
-* Execute traditional attacks in locations that were previously unreachable, or even considered secure.
+会话变量重载（也称为会话谜题Session Puzzling）是一个应用级别的漏洞，他会导致攻击者实施多种恶意行为，包括但不限于：
+* 绕过有效的认证过程，伪装合法用户。
+* 在自认为安全的环境下，不被发现的情况下提升恶意用户帐户权限。
+* 在多个需要多个阶段参与的过程中，跳过质量控制阶段，即使这个过程已经实施了严格的推荐代码控制。
+* 通过无法控制或删除的间接方法来操作服务器端的数值。
+* 针对被认为是安全的或无法接触到的地方进行传统攻击。
 
+这个漏洞在应用程序将相同的会话变量用于超过一个以上的目的。攻击者可以通过一个开发者没预料到的顺序访问页面，这样便可以使一个会话变量在一个上下文环境下设置，并在另一个环境下使用。
 
+举例来说，攻击者能够使用会话变量重载来绕过强制实施的认证阶段。比如那些通过对成功认证后的存储在会话变量中的身份相关变量进行验证的强制认证机制。这意味着攻击者首先访问设置会话上下文的页面，然后直接访问检查这些上下文的特权页面。
 
-This vulnerability occurs when an application uses the same session variable for more than one purpose. An attacker can potentially access pages in an order unanticipated by the developers so that the session variable is set in one context and then used in another.
+比如，一个认证绕过攻击向量可能通过访问一个公开的接入点（如，一个密码找回页面）来生产含有身份信息的会话，基于固定变量或者用户自身的输入。
 
+### 如何测试
+#### 黑盒测试
 
-For example, an attacker could use session variable overloading to bypass authentication enforcement mechanisms of applications that enforce authentication by validating the existence of session variables that contain identity–related values, which are usually stored in the session after a successful authentication process. This means an attacker first accesses a location in the application that sets session context and then accesses privileged locations that examine this context.
-
-
-For example - an authentication bypass attack vector could be executed by accessing a publicly accessible entry point (e.g. a password recovery page) that populates the session with an identical session variable, based on fixed values or on user originating input.
-
-### How to Test
-#### Black Box Testing
-
-This vulnerability can be detected and exploited by enumerating all of the session variables used by the application and in which context they are valid. In particular this is possible by accessing a sequence of entry points and then examining exit points. In case of black box testing this procedure is difficult and requires some luck since every different sequence could lead to a different result.
+这个漏洞可以通过枚举应用使用的所有会话变量以及检查他们的有效环境来检测和利用。特别是有可能已不同的顺序通过访问一系列的入口点，并仔细检查出口点。在黑盒测试中，这个过程非常困难，需要一些运气，因为每个不同的访问序列可能导致不同的结果。
 
 
-##### Examples
+##### 例子
 
-A very simple example could be the password reset functionality that, in the entry point, could request the user to provide  some identifying information such as the username or the e-mail address. This page might then populate the session with these identifying values, which are received directly from the client side, or obtained from queries or calculations based on the received input. At this point there may be some pages in the application that show private data based on this session object. In this manner the attacker could bypass the authentication process.
-
-
-#### Gray Box testing
-
-The most effective way to detect these vulnerabilities is via a source code review.
+一个非常简单的例子就是密码重置功能的入口点可能请求用户提供一些身份鉴别信息，比如用户名或者电子邮件的地址等。这个页面通常会生成含有这些身份信息的会话信息，这些会话信息可能通过客户端直接提供，亦或通过这些输入数据进行进行计算和查询得来。此时，就有可能应用程序中的一些页面只需要基于上面的会话信息就能展示私有的数据。通过这种方法，攻击者绕过了认证过程。
 
 
-###References
-**Whitepapers**<br>
+#### 灰盒测试
+
+最有效的方法是通过源代码评估来检测这些漏洞。
+
+
+### 参考资料
+
+**白皮书**
+
 * Session Puzzles: http://puzzlemall.googlecode.com/files/Session%20Puzzles%20-%20Indirect%20Application%20Attack%20Vectors%20-%20May%202011%20-%20Whitepaper.pdf
 * Session Puzzling and Session Race Conditions: http://sectooladdict.blogspot.com/2011/09/session-puzzling-and-session-race.html
 
 
-###Remediation
+### 整改措施
 
-Session variables should only be used for a single consistent purpose.
+会话变量应该只用于单个的一致性的目的上。
+
