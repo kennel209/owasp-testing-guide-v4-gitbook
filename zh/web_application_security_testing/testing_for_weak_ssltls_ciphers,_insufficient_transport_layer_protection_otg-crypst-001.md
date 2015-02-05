@@ -1,72 +1,59 @@
-# Testing for Weak SSL/TLS Ciphers, Insufficient Transport Layer Protection (OTG-CRYPST-001)
+# 测试脆弱的SSL/TLS加密算法，不充分的传输层保护 (OTG-CRYPST-001)
 
 
+### 综述
 
-### Summary
+敏感数据通过网络传输必须被保护。这样的数据包括用户凭证信息和信用卡号码。一般来说，如果数据在存储时候必须被保护，那么在传输过程中也必须被保护。
 
-Sensitive data must be protected when it is transmitted through the network. Such data can include user credentials and credit cards. As a rule of thumb, if data must be protected when it is stored, it must be protected also during transmission.
+HTTP是一个明文的协议，他需要通过SSL/TLS隧道转换成HTTPS流量来保证安全。使用这些协议不仅仅保证秘密性，同时也是一个认证过程。服务器可以使用数字证书进行认证，也允许使用客户端证书进行双向认证。
 
+甚至是现在使用的高级芯片，一些服务器端的错误配置可能被利用来强制使用一些弱的加密算法（甚至糟糕到没有加密），允许攻击者获得这个看上去安全的通信信道的访问能力。其他错误配置可能被用于发起拒绝服务攻击。
 
-HTTP is a clear-text protocol and it is normally secured via an SSL/TLS tunnel, resulting in HTTPS traffic [1]. The use of this protocol ensures not only confidentiality, but also authentication. Servers are authenticated using digital certificates and it is also possible to use client certificate for mutual authentication.
+### 常见问题
 
+一个常见的漏洞是使用HTTP协议发送敏感信息[2]（比如通过HTTP传输登陆口令[3]）。
 
-Even if high grade ciphers are today supported and normally used, some misconfiguration in the server can be used to force the use of a weak cipher - or at worst no encryption - permitting to an attacker to gain access to the supposed secure communication channel. Other misconfiguration can be used for a Denial of Service attack.
+当SSL/TLS服务正常工作时候，这是好事，但他也增加了攻击面，可能存在下列漏洞：
+* SSL/TLS协议、加密算法、密钥和协商过程必须正确配置。
+* 必须确保证书有效。
 
-
-### Common Issues
-A vulnerability occurs if the HTTP protocol is used to transmit sensitive information [2] (e.g. credentials transmitted over HTTP [3]).
-
-When the SSL/TLS service is present it is good but it increments the attack surface and the following vulnerabilities exist:
-* SSL/TLS protocols, ciphers, keys and renegotiation must be properly configured.
-* Certificate validity must be ensured.
-
-Other vulnerabilities linked to this are:
-* Software exposed must be updated due to possibility of known vulnerabilities [4].
-* Usage of Secure flag for Session Cookies [5].
-* Usage of HTTP Strict Transport Security (HSTS) [6].
-* The presence of HTTP and HTTPS both, which can be used to intercept traffic [7], [8].
-* The presence of mixed HTTPS and HTTP content in the same page, which can be used to Leak information.
+其他相关的注意点有：
+* 必须更新可能存在已知漏洞的软件[4]。
+* 为会话Cookies使用Secure标志[5]。
+* 使用HTTP严格传输安全（HSTS）头[6]。
+* 同时存在HTTP和HTTPS，可能能截获流量[7],[8]。
+* 同一个页面混合HTTPS和HTTP内容，可能导致信息泄露。
 
 
-####Sensitive data transmitted in clear-text
-The application should not transmit sensitive information via unencrypted channels. Typically it is possible to find basic authentication over HTTP, input password or session cookie sent via HTTP and, in general, other information considered by regulations, laws or organization policy.
+#### 明文传输敏感信息
+
+应用程序不应该通过非加密信道传输敏感信息。通常能找到那些基于HTTP的基本认证过程，通过HTTP传输密码或会话cookie，和一些规定、法律或组织策略要求的信息。
 
 
-####Weak SSL/TLS Ciphers/Protocols/Keys
-Historically, there have been limitations set in place by the U.S. government to allow cryptosystems to be exported only for key sizes of at most 40 bits, a key length which could be broken and would allow the decryption of communications. Since then cryptographic export regulations have been relaxed the maximum key size is 128 bits.
+#### 弱SSL/TLS密码算法/协议/密钥
+
+在历史上，美国政府曾经颁布限制条款只允许出口的密码系统最多使用40位加密密钥，这个密钥长度是严重不足的，允许通信被解密。从那以后，出口规定已经被放宽到最大加密密钥为128位。
+
+检查SSL配置避免使用那些已经轻易能够破解的密码算法是非常重要的。为了达到这个目的，基于SSL的服务不应该提供选择弱加密算法套件的选项。一个密码套件是指加密协议（如DES，RC4，AES），加密密钥长度（如40，56，或者128位），以及一个用于完整性检查的哈希算法（如SHA，MD5）。
+
+简单来说，密码套件选择的关键取决于下面这些内容：
+1. 客户端发送给服务器ClientHello消息中（与其他信息一起）规定了协议信息和能够处理的密码套件信息。注意客户端通常是一个web浏览器（现在最常见的SSL客户端），但是这不是必须的，客户端可以是任何支持SSL的应用程序；服务器端也是如此，不一定是web服务器，虽然大部分情况是web服务器[9]。
+2. 服务器通过ServerHello消息进行响应，包含已选择的协议和本次会话使用的密码套件（通常服务器选择客户端与服务端共同支持的强度最大的协议和密码套件）。能通过配置指示服务器支持的密码套组，通过这个方法可以控制是否与只支持40位加密的客户端进行通信。
 
 
-It is important to check the SSL configuration being used to avoid putting in place cryptographic support which could be easily defeated. To reach this goal SSL-based services should not offer the possibility to choose weak cipher suite. A cipher suite is specified by an encryption protocol (e.g. DES, RC4, AES), the encryption key length (e.g. 40, 56, or 128 bits), and a hash algorithm (e.g. SHA, MD5) used for integrity checking.
+#### SSL证书有效性 - 客户端和服务端
 
+当通过HTTPS协议访问web应用程序时候，服务端和客户端建立起来一条安全的通信通道。通过数字证书的方法确认一端的身份（服务端）或双方的身份（服务端和客户端）。因此，一旦加密算法套件确定了，SSL握手过程接下来做的工作就是交换证书。
+1. 服务器通过Certificate消息发送证书信息，如果需要验证客户端（双向认证），发送CertificateRequest消息给客户端。
+2. 服务器发送ServerHelloDone消息，等待客户端响应。
+3. 收到ServerHelloDone消息后，客户端验证服务端的数字证书的有效性。
 
-Briefly, the key points for the cipher suite determination are the following:
-1. The client sends to the server a ClientHello message specifying, among other information, the protocol and the cipher suites that it is able to handle. Note that a client is usually a web browser (most popular SSL client nowadays), but not necessarily, since it can be any SSL-enabled application; the same holds for the server, which needs not to be a web server, though this is the most common case [9].
-2. The server responds with a ServerHello message, containing the chosen protocol and cipher suite that will be used for that session (in general the server selects the strongest protocol and cipher suite supported by both the client and server).
+为了使得通信能够建立，需要对这些证书进行一些检查。讨论SSL和基于数字证书的认证过程超出了本测试指南的范围，这里只注重于讨论确认证书有效性的主要评判条件：
+* 检查CA是否是已知的（认为是可信任的）；
+* 检查证书目前是否有效；
+* 检查网站名称和证书中描述的名称是否一致。
 
-
-It is possible (for example, by means of configuration directives) to specify which cipher suites the server will honor. In this way you may control whether or not conversations with clients will support 40-bit encryption only.
-
-1. The server sends its Certificate message and, if client authentication is required, also sends a CertificateRequest message to the client.
-2. The server sends a ServerHelloDone message and waits for a client response.
-3. Upon receipt of the ServerHelloDone message, the client verifies the validity of the server's digital certificate.
-
-
-####SSL certificate validity – client and server
-
-When accessing a web application via the HTTPS protocol, a secure channel is established between the client and the server. The identity of one (the server) or both parties (client and server) is then established by means of digital certificates. So, once the cipher suite is determined, the “SSL Handshake” continues with the exchange of the certificates:
-1. The server sends its Certificate message and, if client authentication is required, also sends a CertificateRequest message to the client.
-2. The server sends a ServerHelloDone message and waits for a client response.
-3. Upon receipt of the ServerHelloDone message, the client verifies the validity of the server's digital certificate.
-
-
-In order for the communication to be set up, a number of checks on the certificates must be passed. While discussing SSL and certificate based authentication is beyond the scope of this guide, this section will focus on the main criteria involved in ascertaining certificate validity:
-
-* Checking if the Certificate Authority (CA) is a known one (meaning one considered trusted);
-* Checking that the certificate is currently valid;
-* Checking that the name of the site and the name reported in the certificate match.
-
-
-Let's examine each check more in detail.
+让我们来更详细深入每项检查：
 
 * Each browser comes with a pre-loaded list of trusted CAs, against which the certificate signing CA is compared (this list can be customized and expanded at will). During the initial negotiations with an HTTPS server, if the server certificate relates to a CA unknown to the browser, a warning is usually raised. This happens most often because a web application relies on a certificate signed by a self-established CA. Whether this is to be considered a concern depends on several factors. For example, this may be fine for an Intranet environment (think of corporate web email being provided via HTTPS; here, obviously all users recognize the internal CA as a trusted CA). When a service is provided to the general public via the Internet, however (i.e. when it is important to positively verify the identity of the server we are talking to), it is usually imperative to rely on a trusted CA, one which is recognized by all the user base (and here we stop with our considerations; we won’t delve deeper in the implications of the trust model being used by digital certificates).
 
@@ -84,7 +71,7 @@ The presence of a new service, listening in a separate tcp port may introduce vu
 Also there are some attacks that can be used to intercept traffic if the web server exposes the application on both HTTP and HTTPS [6], [7] or in case of mixed HTTP and HTTPS resources in the same page.
 
 
-### How to Test
+### 如何测试
 
 ####Testing for sensitive data transmitted in clear-text
 Various types of information which must be protected can be also transmitted in clear text. It is possible to check if this information is transmitted over HTTP instead of HTTPS. Please refer to specific tests for full details, for credentials [3] and other kind of data [2].
@@ -1245,7 +1232,7 @@ To check the cipher suites and protocols supported by the Apache2 web server, op
 ####Testing SSL certificate validity – client and server
 Examine the validity of the certificates used by the application at both server and client levels. The usage of certificates is primarily at the web server level, however, there may be additional communication paths protected by SSL (for example, towards the DBMS). Testers should check the application architecture to identify all SSL protected channels.
 
-###Tools
+### 测试工具
 * [21][Qualys SSL Labs - SSL Server Test|https://www.ssllabs.com/ssltest/index.html]: internet facing scanner
 * [27] [Tenable - Nessus Vulnerability Scanner|http://www.tenable.com/products/nessus]: includes some plugins to test different SSL related vulnerabilities, Certificates and the presence of HTTP Basic authentication without SSL.
 * [32] [TestSSLServer|http://www.bolet.org/TestSSLServer/]: a java scanner - and also windows executable - includes tests for cipher suites, CRIME and BEAST
@@ -1259,8 +1246,8 @@ Examine the validity of the certificates used by the application at both server 
 * [38] [testssl.sh| https://testssl.sh/ ]
 
 
-### References
-**OWASP Resources**
+### 参考资料
+**OWASP 资源**
 * [5] [OWASP Testing Guide - Testing for cookie attributes (OTG-SESS-002)|https://www.owasp.org/index.php/Testing_for_cookies_attributes_(OTG-SESS-002)]
 * [4] [OWASP Testing Guide - Test Network/Infrastructure Configuration (OTG-CONFIG-001)|https://www.owasp.org/index.php/Test_Network/Infrastructure_Configuration_(OTG-CONFIG-001)]
 * [6] [OWASP Testing Guide - Testing for HTTP_Strict_Transport_Security (OTG-CONFIG-007)|https://www.owasp.org/index.php/Test_HTTP_Strict_Transport_Security_(OTG-CONFIG-007)]
@@ -1273,7 +1260,7 @@ Examine the validity of the certificates used by the application at both server 
 * [26] [OWASP Application Security FAQ - Cryptography/SSL|https://www.owasp.org/index.php/OWASP_Application_Security_FAQ#Cryptography.2FSSL]
 
 
-**Whitepapers**
+**白皮书**
 * [1] [RFC5246 - The Transport Layer Security (TLS) Protocol Version 1.2 (Updated by RFC 5746, RFC 5878, RFC 6176)|http://www.ietf.org/rfc/rfc5246.txt]
 * [36] [RFC2817 - Upgrading to TLS Within HTTP/1.1|]
 * [34] [RFC6066 - Transport Layer Security (TLS) Extensions: Extension Definitions|http://www.ietf.org/rfc/rfc6066.txt]

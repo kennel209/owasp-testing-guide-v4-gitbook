@@ -1,7 +1,5 @@
 # Testing for Weak SSL/TLS Ciphers, Insufficient Transport Layer Protection (OTG-CRYPST-001)
 
-
-
 ### Summary
 
 Sensitive data must be protected when it is transmitted through the network. Such data can include user credentials and credit cards. As a rule of thumb, if data must be protected when it is stored, it must be protected also during transmission.
@@ -45,10 +43,6 @@ Briefly, the key points for the cipher suite determination are the following:
 
 
 It is possible (for example, by means of configuration directives) to specify which cipher suites the server will honor. In this way you may control whether or not conversations with clients will support 40-bit encryption only.
-
-1. The server sends its Certificate message and, if client authentication is required, also sends a CertificateRequest message to the client.
-2. The server sends a ServerHelloDone message and waits for a client response.
-3. Upon receipt of the ServerHelloDone message, the client verifies the validity of the server's digital certificate.
 
 
 ####SSL certificate validity – client and server
