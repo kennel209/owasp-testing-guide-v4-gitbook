@@ -1,50 +1,43 @@
-# Test Session Timeout (OTG-SESS-007)
+# 测试会话超时 (OTG-SESS-007)
+
+### 综述
+
+在这个阶段测试者检查应用程序在用户空闲一段时间后是否会自动登出，确保不可能重用相同的会话，并且没有敏感信息遗留在浏览器缓存中。
+
+所有应用程序应该实现会话空闲超时机制。这种超时时间定义为会话在没有用户活动下维持激活状态的一段时间，即在上次最后收到的该会话ID的HTTP请求之后经过一段预设的时间后结束并销毁会话的机制。大多数情况下，最合适的超时时间应该在安全（更短的超时时间）和可用（较长的超时时间）之间取得平衡，特别是依赖于应用程序处理的数据的敏感等级。例如，一个60分钟的超时设定对于一个公开论坛是合适的，但是如此的长时间可能对于网上银行应用来说太久了（一般建议最大超时时间为15分钟）。一般来说，任何应用程序没有强制实行超时登出机制应该被认为是不安全的，除非这种行为是一些特殊功能的要求。
+
+空闲超时机制限制了攻击者猜测和使用其他用户的合法会话ID，以及在一些情况下能够保护公用计算机的会话复用情况。然而，如果攻击者能够劫持指定的会话，超时机制无法限制攻击者的行为，因为攻击者能够定期产生活动行为来延长会话激活时间。
+
+会话超时管理和期限控制应该在服务器端进行。如果用户可以控制一些用于会话超时的数据，比如使用cookie或其他客户端参数来追踪时间（如，自登陆以来经过的分钟数），那么攻击者可以操纵这些数值来延长会话持续时间。所以应用程序必须在服务器端记录非活动时间，并在超时后自动销毁当前用户会话，并删除每一个存储在客户端上的数据。
+
+这这两个过程都必须仔细实现，来避免引入那些万一用户忘记登出应用而被攻击者利用获取未授权访问的弱点。更进一步，对于登出功能来说，确保所有会话令牌（如cookie）被正确销毁或无效化和在服务器端进行正确强制管理来防止会话令牌复用都是非常重要的。如果这些过程没有被正确实现，攻击者可能能够重放这些会话令牌来“捕获”合法用户的会话，并伪装为合法用户（通常这种攻击叫做cookie重放）。当然，一个限制因素是攻击者需要能够访问这些令牌（存储在受害者的PC中），在某些情况下，这一点可能难以做到。
+
+这种攻击最常见的场景是那些曾访问过私人信息（如网页版邮件，网银账户等）的公用计算机。如果用户没有显式登出就离开计算机，而应用又没有正确实现超时机制，那么攻击者可能能通过简单点击后退按钮就能访问相同账户。
+
+### 如何测试
+
+#### 黑盒测试
+
+在[测试登出功能 (OTG-SESS-006)](https://www.owasp.org/index.php/Testing_for_logout_functionality_%28OTG-SESS-006%29)中的相关测试测试超时登出的检测方法也适用于此。
+
+测试的方法论也非常类似。首先，测试这必须检查是否存在超时机制，如通过登陆系统，并等待自动超时登出触发。在登出功能中，超时后，所有的会话令牌应该被摧毁或不可用。
+
+接着，如果存在超时机制，测试者需要弄清楚是客户端实现还是服务器端（或者两者同时）。如果会话cookie是非持久的（或者，更通俗的说，会话cookie不存储任何关于时间的数据），测试者就可以假设是服务器端强制执行的超时机制。如果会话cookie中含有相关时间信息（如登陆时间或上次访问时间或持久化cookie的过期时间），那么有可能客户端也参与了超时机制。在这种情况下，测试者可以尝试修改cookie（如果没有加密措施），弄清楚过程中发生了什么。例如，测试者将设置cookie过期时间为未来的某个时间，检查这个会话是否能被延长。
+
+作为一个基本准则，所有东西都应该在服务器端被检查，不应该能够通过重设会话cookie值为过去的某个值来再次访问应用程序。
 
 
-### Summary
-In this phase testers check that the application automatically logs out a user when that user has been idle for a certain amount of time, ensuring that it is not possible to “reuse” the same session and that no sensitive data remains stored in the browser cache.
+#### 灰盒测试
+
+测试者需要检查：
+* 登出功能有效摧毁了所有会话令牌或至少使他们无效化。
+* 服务器正确检查会话状态，不允许攻击者重放上一个被摧毁的会话标识。
+* 超时机制从服务器端强制执行。如果服务器从客户端发回的会话令牌中（不推荐如此）中读取过期时间，那么这些令牌应该通过加密手段保护以防被篡改。
+
+注意最重要的事情是在服务器端摧毁会话。通常这意味着代码必须调用合适的方法（比如Java中的HttpSession.invalidate()，.NET中的Session.abandon()）。推荐在从浏览器清除cookie，这不是必须的，因为如果会话能够正确的在服务器端无效化，那么浏览器中存储的cookie对于攻击者帮助有限。
 
 
-All applications should implement an idle or inactivity timeout for sessions. This timeout defines the amount of time a session will remain active in case there is no activity by the user, closing and invalidating the session upon the defined idle period since the last HTTP request received by the web application for a given session ID. The most appropriate timeout should be a balance between security (shorter timeout) and usability (longer timeout) and heavily depends on the sensitivity level of the data handled by the application. For example, a 60 minute log out time for a public forum can be acceptable, but such a long time would be too much in a home banking application (where a maximum timeout of 15 minutes is recommended). In any case, any application that does not enforce a timeout-based log out should be considered not secure, unless such behavior is required by a specific functional requirement.
-
-
-The idle timeout limits the chances that an attacker has to guess and use a valid session ID from another user, and under certain circumstances could protect public computers from session reuse. However, if the attacker is able to hijack a given session, the idle timeout does not limit the attacker’s actions, as he can generate activity on the session periodically to keep the session active for longer periods of time.
-
-
-Session timeout management and expiration must be enforced server-side. If some data under the control of the client is used to enforce the session timeout, for example using cookie values or other client parameters to track time references (e.g. number of minutes since log in time), an attacker could manipulate these to extend the session duration. So the application has to track the inactivity time on the server side and, after the timeout is expired, automatically invalidate the current user's session and delete every data stored on the client.
-
-
-Both actions must be implemented carefully, in order to avoid introducing weaknesses that could be exploited by an attacker to gain unauthorized access if the user forgot to log out from the application. More specifically, as for the log out function, it is important to ensure that all session tokens (e.g. cookies) are properly destroyed or made unusable, and that proper controls are enforced at the server side to prevent the reuse of session tokens. If such actions are not properly carried out, an attacker could replay these session tokens in order to “resurrect” the session of a legitimate user and impersonate him/her (this attack is usually known as 'cookie replay'). Of course, a mitigating factor is that the attacker needs to be able to access those tokens (which are stored on the victim's PC), but, in a variety of cases, this may not be impossible or particularly difficult.
-
-
-The most common scenario for this kind of attack is a public computer that is used to access some private information (e.g., web mail, online bank account). If the user moves away from the computer without explicitly logging out and the session timeout is not implemented on the application, then an attacker could access to the same account by simply pressing the “back” button of the browser.
-
-###How to Test
-
-#### Black Box testing
-The same approach seen in the [Testing for logout functionality (OTG-SESS-006)](https://www.owasp.org/index.php/Testing_for_logout_functionality_%28OTG-SESS-006%29) section can be applied when measuring the timeout log out.
-<br>
-
-The testing methodology is very similar. First, testers have to check whether a timeout exists, for instance, by logging in and waiting for the timeout log out to be triggered. As in the log out function, after the timeout has passed, all session tokens should be destroyed or be unusable.
-
-
-Then, if the timeout is configured, testers need to understand whether the timeout is enforced by the client or by the server (or both). If the session cookie is non-persistent (or, more in general, the session cookie does not store any data about the time), testers can assume that the timeout is enforced by the server. If the session cookie contains some time related data (e.g., log in time, or last access time, or expiration date for a persistent cookie), then it's possible that the client is involved in the timeout enforcing. In this case, testers could try to modify the cookie (if it's not cryptographically protected) and see what happens to the session. For instance, testers can set the cookie expiration date far in the future and see whether the session can be prolonged.
-
-
-As a general rule, everything should be checked server-side and it should not be possible, by re-setting the session cookies to previous values, to access the application again.
-<br>
-
-#### Gray Box Testing
-<br>
-The tester needs to check that:
-* The log out function effectively destroys all session token, or at least renders them unusable,
-* The server performs proper checks on the session state, disallowing an attacker to replay previously destroyed session identifiers
-* A timeout is enforced and it is properly enforced by the server. If the server uses an expiration time that is read from a session token that is sent by the client (but this is not advisable), then the token must be cryptographically protected from tampering.
-
-
-Note that the most important thing is for the application to invalidate the session on the server side. Generally this means that the code must invoke the appropriate methods, e.g. HttpSession.invalidate() in Java and Session.abandon() in .NET. Clearing the cookies from the browser is advisable, but is not strictly necessary, since if the session is properly invalidated on the server, having the cookie in the browser will not help an attacker.
-
-
-### References
-**OWASP Resources**
+### 参考资料
+**OWASP 资源**
 * [Session Management Cheat Sheet](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet)
+
