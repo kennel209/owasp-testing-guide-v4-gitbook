@@ -48,11 +48,11 @@ All interaction between the client and application should be tested at least aga
 The first step required to manipulate the cookie is to understand how the application creates and manages cookies. For this task, testers have to try to answer the following questions:
 
 * How many cookies are used by the application?
-Surf the application. Note when cookies are created. Make a list of received cookies, the page that sets them (with the set-cookie directive), the domain for which they are valid, their value, and their characteristics.
+    - Surf the application. Note when cookies are created. Make a list of received cookies, the page that sets them (with the set-cookie directive), the domain for which they are valid, their value, and their characteristics.
 * Which parts of the the application generate and/or modify the cookie?
-Surfing the application, find which cookies remain constant and which get modified. What events modify the cookie?
+    - Surfing the application, find which cookies remain constant and which get modified. What events modify the cookie?
 * Which parts of the application require this cookie in order to be accessed and utilized?
-Find out which parts of the application need a cookie. Access a page, then try again without the cookie, or with a modified value of it. Try to map which cookies are used where.
+    - Find out which parts of the application need a cookie. Access a page, then try again without the cookie, or with a modified value of it. Try to map which cookies are used where.
 
 
 A spreadsheet mapping each cookie to the corresponding application parts and the related information can be a valuable output of this phase.
@@ -190,11 +190,11 @@ A long Session ID (or rather one with a great deal of variance) and a shorter va
 #### Gray Box testing and example
 If the tester has access to the session management schema implementation, they can check for the following:
 * Random Session Token
-The Session ID or Cookie issued to the client should not be easily predictable (don't use linear algorithms based on predictable variables such as the  client IP address). The use of cryptographic algorithms with key length of 256 bits is encouraged (like AES).
+    - The Session ID or Cookie issued to the client should not be easily predictable (don't use linear algorithms based on predictable variables such as the  client IP address). The use of cryptographic algorithms with key length of 256 bits is encouraged (like AES).
 * Token length
-Session ID will be at least 50 characters length.
+    - Session ID will be at least 50 characters length.
 * Session Time-out
-Session token should have a defined time-out (it depends on the criticality of the application managed data)
+    - Session token should have a defined time-out (it depends on the criticality of the application managed data)
 * Cookie configuration:
     - non-persistent: only RAM memory
 	- secure (set only on HTTPS channel):  `Set Cookie: cookie=data; path=/; domain=.aaa.it; secure`
