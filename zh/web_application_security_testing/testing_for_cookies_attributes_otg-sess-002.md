@@ -1,63 +1,56 @@
-# Testing for Cookies attributes (OTG-SESS-002)
+# 测试Cookies属性 (OTG-SESS-002)
+
+### 综述
+Cookie通常是恶意用户的重点攻击向量，应用程序需要尽力保护cookie。本章节注重于应用程序如何在分配cookie时采取必需的保护措施，以及如何测试这些属性被正确配置。
+
+安全使用Cookie的重要性常常不被理解，特别是在动态应用程序中，往往需要在如HTTP之类的无状态协议中维持一定的状态。为了理解cookie的重要性，首先必须理解他们的主要用途是什么。这些主要功能通常包括会话授权和认证令牌或者临时的数据容器。因此，如果攻击者获得了一个会话令牌（比如，通过跨站脚本漏洞或在未加密会话中嗅探），那么他们就能使用这些cookie劫持一个合法的会话。
+
+此外，cookie也用于在多个请求中维持状态。由于HTTP是无状态的，服务器在缺少某种鉴别标识时不能确定一个请求是当前会话的一部分或者是其他新的会话的开始。这些标识符通常就是cookie，其他方法也有可能。许多不同类型的应用程序需要在多个请求中维持会话状态。在线商店就是其中一种应用。用户添加多个商品进入购物车，这些数据必须在之后的请求中也使用到。cookie在这个场景下通常被采用，通过应用程序使用Set-Cookie指示符来设定，通常是 名字=内容 的形式（如果启用了cookie，并被支持，通常被所有的现代浏览器支持）。一旦应用程序告诉浏览器使用特定的cookie，浏览器就会在随后的请求中都带上该cookie。cookie能包含的数据可能是在线购物车的商品、价格、数量、个人信息、用户ID等等。
+
+取决于cookie的敏感属性，他们通常被编码或加密来包含其中的数据。通常多个cookie会在请求中设置（通过分号分隔）。比如在在线商店的例子中，当用户添加多个商品到购物车时候，一个新的cookie可能被设置。此外，通常当用户登录时也有一个cookie用于认证（比如前文的会话令牌），以及多个其他的cookie用于鉴别用户希望购买的商品和他们的辅助信息（如价格、数量）。
+
+一旦测试这理解cookie如何被设置，何时被设置，其用途是什么，为什么使用，以及其重要程度，那么测试者应该查看这些cookie设置了什么属性，以及如何测试他们的安全性。下面是一系列每个cookie能够被设置的属性以及其意义。下一章节会关注如何测试每个属性。
+
+* secure - 这个属性告诉浏览器该cookie只能通过安全的信道传输，如HTTPS。这将有助于防止从未加密信道进行请求传输。如果应用程序可以通过HTTP和HTTPS访问，那么cookie可能被明文发送。
+
+* HttpOnly - 这个属性被用于防止跨站脚本等攻击，因为他不允许通过客户端脚本如JavaScript获取Cookie。值得注意，不是所有的浏览器支持这项功能。
+
+* domain -  这个属性用于比较服务器请求的URL域名。如果该域名符合设置的domain或者是其子域，那么再检查path属性。
+
+    注意只有特定域名的主机才能设置cookie的domain属性。domain属性也不能是顶级域名（如.gov或.com）来防止为其他域设置任意属性。如果domain属性没有设置，那么产生cookie的服务器域名被用于作为默认domain属性。
+
+    举例说明，如果cookie在app.mydomain.com中设置，并且没有domian属性，那么cookie会在所有接下来的app.mydomain.com以及其子域（如hacker.app.mydomain.com）中提交，但不会在ptherapp.mydomain.com中出现。如果开发者希望宽松限制，那么他们应该将该domain属性设置为mydomain.com。在这个例子中，cookie能被发送到app.mydomain.com和其子域名，如hacker.app.mydomain.com，甚至是bank.mydomain.com。如果一个在子域上的漏洞服务器（如otherapp.mydomain.com），且domian属性过于宽松（如mydomain.com），那么漏洞服务器可以用来获取cookie（比如会话令牌）。
 
 
-### Summary
-Cookies are often a key attack vector for malicious users (typically targeting other users) and the application should always take due diligence to protect cookies.  This section looks at how an application can take the necessary precautions when assigning cookies, and how to test that these attributes have been correctly configured.
+* path - domain属性的额外部分，判断特定路径的合法URL。如果域名和路径都符合，请求中会附上该cookie。如同domain属性一样，如果path属性也过于宽松，可能导致相同服务器的其他应用程序获取该cookie的漏洞。比如，如果path属性被设置为服务器根目录 “/”，那么应用程序cookie可以在相同域名下的所有路径中发送。
+
+* expires - 这个属性用于设置持久性的cookie，cookie在设置日期前不会过期。持久化的cookie被用于浏览器会话和随后的会话，直到过期为止。一旦过期，浏览器会删除这个cookie。相对的，如果这个属性没有被设置，那么这个cookie仅仅在当前浏览器会话生命周期内才有效，当会话结束后将被删除。
+
+### 如何测试
+
+#### 黑盒测试
+**如何测试cookie属性漏洞:** 
+
+通过使用中间代理软件或流量劫持插件，捕获所有设置cookie的浏览器响应（使用Set-cookie指示符），检查下面的属性：
+
+* Secure 属性 - 当cookie包含敏感信息，或者是一个会话令牌的时候，他必须总是通过加密信道进行传输。例如，在应用程序登陆后，通过cookie设置了一个会话令牌，接着验证是否标记了“;secure”标志。如果没有这个标志，浏览器会将他通过不加密的信道，如HTTP，进行传输，可能导致攻击者获得用户提交的cookie。
+
+* HttpOnly 属性 - 这个属性应该总是存在，即使不是所有浏览器都支持。他阻止cookie被客户端脚本获得，虽然不能消除跨站脚本风险但可以消除一些攻击向量。检查是否存在“;HttpOnly”标识。
+
+* Domain 属性 - 验证domain属性没有被设置过分宽松。正如上面提到的，应该仅仅设置为服务器需要接收cookie的域名。比如，app.mysite.com应该设置为"; domain=app.mysite.com" 而不是 "; domain=.mysite.com" ，因为这会允许潜在漏洞服务器获得cookie。
+
+* Path 属性 - 验证path属性也没有设置过分宽松，如domain属性一样。甚至如果Domain属性被设置非常严格，path属性却是"/"根目录，那么可能被服务器上部分低安全的应用程序发现漏洞。例如，应用程序部署在"/myapp/"，验证path被设置为"; path=/myapp/" 而不是 "; path=/" 或者 "; path=/myapp"。注意，尾斜杠"/"必须使用，否则，浏览器会将cookie发送给任何匹配"myapp"，比如"myapp-exploited"。
+
+* Expires 属性 - 如果这个属性被设置为未来的时刻，验证cookie是否包含任何敏感信息。例如，如果cookie设置为"; expires=Sun, 31-Jul-2016 13:45:29 GMT"而现在是2014年7月31日，那么测试者应该检查这个cookie。如果cookie是会话令牌，并存储在用户磁盘中，攻击者或者是本地用户（比如管理员）就能读取这个cookie，并在过期日期使用这个令牌来访问应用系统。
 
 
-The importance of secure use of Cookies cannot be understated, especially within dynamic web applications, which need to maintain state across a stateless protocol such as HTTP.  To understand the importance of cookies it is imperative to understand what they are primarily used for.  These primary functions usually consist of being used as a session authorization and authentication token or as a temporary data container.  Thus, if an attacker were able to acquire a session token (for example, by exploiting a cross site scripting vulnerability or by sniffing an unencrypted session), then they could use this cookie to hijack a valid session.
+### 测试工具
 
-
-Additionally, cookies are set to maintain state across multiple requests.  Since HTTP is stateless, the server cannot determine if a request it receives is part of a current session or the start of a new session without some type of identifier.  This identifier is very commonly a cookie although other methods are also possible.  There are many different types of applications that need to keep track of session state across multiple requests.  The primary one that comes to mind would be an online store.  As a user adds multiple items to a shopping cart, this data needs to be retained in subsequent requests to the application.  Cookies are very commonly used for this task and are set by the application using the Set-Cookie directive in the application's HTTP response, and is usually in a name=value format (if cookies are enabled and if they are supported, as is the case for all modern web browsers).  Once an application has told the browser to use a particular cookie, the browser will send this cookie in each subsequent request.  A cookie can contain data such as items from an online shopping cart, the price of these items, the quantity of these items, personal information, user IDs, etc.
-
-
-Due to the sensitive nature of information in cookies, they are typically encoded or encrypted in an attempt to protect the information they contain.  Often, multiple cookies will be set (separated by a semicolon) upon subsequent requests. For example, in the case of an online store, a new cookie could be set as the user adds multiple items to the shopping cart.  Additionally, there will typically be a cookie for authentication (session token as indicated above) once the user logs in, and multiple other cookies used to identify the items the user wishes to purchase and their auxiliary information (i.e., price and quantity) in the online store type of application.
-
-
-Once the tester has an understanding of how cookies are set, when they are set, what they are used for, why they are used, and their importance, they should take a look at what attributes can be set for a cookie and how to test if they are secure.  The following is a list of the attributes that can be set for each cookie and what they mean.  The next section will focus on how to test for each attribute.
-
-* secure - This attribute tells the browser to only send the cookie if the request is being sent over a secure channel such as HTTPS.  This will help protect the cookie from being passed over unencrypted requests. If the application can be accessed over both HTTP and HTTPS, then there is the potential that the cookie can be sent in clear text.
-
-* HttpOnly - This attribute is used to help prevent attacks such as cross-site scripting, since it does not allow the cookie to be accessed via a client side script such as JavaScript.  Note that not all browsers support this functionality.
-
-* domain -  This attribute is used to compare against the domain of the server in which the URL is being requested.  If the domain matches or if it is a sub-domain, then the path attribute will be checked next.
-
-
-Note that only hosts within the specified domain can set a cookie for that domain.  Also the domain attribute cannot be a top level domain (such as .gov or .com) to prevent servers from setting arbitrary cookies for another domain.  If the domain attribute is not set, then the host name of the server that generated the cookie is used as the default value of the domain.
-
-
-For example, if a cookie is set by an application at app.mydomain.com with no domain attribute set, then the cookie would be resubmitted for all subsequent requests for app.mydomain.com and its sub-domains (such as hacker.app.mydomain.com), but not to otherapp.mydomain.com.  If a developer wanted to loosen this restriction, then he could set the domain attribute to mydomain.com.  In this case the cookie would be sent to all requests for app.mydomain.com and its sub domains, such as hacker.app.mydomain.com, and even bank.mydomain.com. If there was a vulnerable server on a sub domain (for example, otherapp.mydomain.com) and the domain attribute has been set too loosely (for example, mydomain.com), then the vulnerable server could be used to harvest cookies (such as session tokens).
-
-
-* path - In addition to the domain, the URL path that the cookie is valid for can be specified. If the domain and path match, then the cookie will be sent in the request. Just as with the domain attribute, if the path attribute is set too loosely, then it could leave the application vulnerable to attacks by other applications on the same server.  For example, if the path attribute was set to the web server root "/", then the application cookies will be sent to every application within the same domain.
-
-* expires - This attribute is used to set persistent cookies, since the cookie does not expire until the set date is exceeded.  This persistent cookie will be used by this browser session and subsequent sessions until the cookie expires.  Once the expiration date has exceeded, the browser will delete the cookie.  Alternatively, if this attribute is not set, then the cookie is only valid in the current browser session and the cookie will be deleted when the session ends.
-
-### How to Test
-
-#### Black Box Testing
-**Testing for cookie attribute vulnerabilities:** <br>
-
-By using an intercepting proxy or traffic intercepting browser plug-in, trap all responses where a cookie is set by the application (using the Set-cookie directive) and inspect the cookie for the following:
-
-* Secure Attribute - Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted tunnel.  For example, after logging into an application and a session token is set using a cookie, then verify it is tagged using the ";secure" flag.  If it is not, then the browser would agree to pass it via an unencrypted channel such as using HTTP, and this could lead to an attacker leading users into submitting their cookie over an insecure channel.
-
-* HttpOnly Attribute - This attribute should always be set even though not every browser supports it. This attribute aids in securing the cookie from being accessed by a client side script, it does not eliminate cross site scripting risks but does eliminate some exploitation vectors. Check to see if the ";HttpOnly" tag has been set.
-
-* Domain Attribute - Verify that the domain has not been set too loosely.  As noted above, it should only be set for the server that needs to receive the cookie.  For example if the application resides on server app.mysite.com, then it should be set to "; domain=app.mysite.com" and NOT "; domain=.mysite.com" as this would allow other potentially vulnerable servers to receive the cookie.
-
-* Path Attribute - Verify that the path attribute, just as the Domain attribute, has not been set too loosely.  Even if the Domain attribute has been configured as tight as possible, if the path is set to the root directory "/" then it can be vulnerable to less secure applications on the same server.  For example, if the application resides at /myapp/, then verify that the cookies path is set to "; path=/myapp/" and NOT "; path=/" or "; path=/myapp".  Notice here that the trailing "/" must be used after myapp.  If it is not used, the browser will send the cookie to any path that matches "myapp" such as "myapp-exploited".
-
-* Expires Attribute - If this attribute is set to a time in the future verify that the cookie does not contain any sensitive information.  For example, if a cookie is set to "; expires=Sun, 31-Jul-2016 13:45:29 GMT" and it is currently July 31st 2014, then the tester should inspect the cookie.  If the cookie is a session token that is stored on the user's hard drive then an attacker or local user (such as an admin) who has access to this cookie can access the application by resubmitting this token until the expiration date passes.
-
-
-### Tools
-
-**Intercepting Proxy:**
+**代理工具:**
 
 * **[OWASP Zed Attack Proxy Project](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)**
 
-**Browser Plug-in:**
+**浏览器插件:**
 
 * "TamperIE" for Internet Explorer -
 http://www.bayden.com/TamperIE/
@@ -66,8 +59,8 @@ http://www.bayden.com/TamperIE/
 https://addons.mozilla.org/en-US/firefox/addon/966
 
 
-### References
-**Whitepapers**<br>
+### 参考资料
+**白皮书**
 
 * RFC 2965 - HTTP State Management Mechanism - http://tools.ietf.org/html/rfc2965
 
@@ -76,3 +69,4 @@ https://addons.mozilla.org/en-US/firefox/addon/966
 * The important "expires" attribute of Set-Cookie http://seckb.yehg.net/2012/02/important-expires-attribute-of-set.html
 
 * HttpOnly Session ID in URL and Page Body http://seckb.yehg.net/2012/06/httponly-session-id-in-url-and-page.html
+
