@@ -55,30 +55,27 @@ HTTP是一个明文的协议，他需要通过SSL/TLS隧道转换成HTTPS流量�
 
 让我们来更详细深入每项检查：
 
-* Each browser comes with a pre-loaded list of trusted CAs, against which the certificate signing CA is compared (this list can be customized and expanded at will). During the initial negotiations with an HTTPS server, if the server certificate relates to a CA unknown to the browser, a warning is usually raised. This happens most often because a web application relies on a certificate signed by a self-established CA. Whether this is to be considered a concern depends on several factors. For example, this may be fine for an Intranet environment (think of corporate web email being provided via HTTPS; here, obviously all users recognize the internal CA as a trusted CA). When a service is provided to the general public via the Internet, however (i.e. when it is important to positively verify the identity of the server we are talking to), it is usually imperative to rely on a trusted CA, one which is recognized by all the user base (and here we stop with our considerations; we won’t delve deeper in the implications of the trust model being used by digital certificates).
+* 每一个浏览器都有一系列预置的信任CA，用来进行签名CA的判断（这个列表可以被自定义和任意扩展）。在与HTTPS服务器进行初始协商阶段，如果服务器证书是浏览器未知的CA相关签署的，通常浏览器会发出一个警告。这通常会发生在web应用程序依赖于一个自己设置的CA签名的证书的情况中。这可以涉及到多个方面。举例来说，这种情况发生可能在一个内网环境是正常的（比如HTTPS下的公司web邮件服务；在这里，显然所有用户能够将内部CA标记为可信CA）。当服务在互联网上向公众公开，显然（当确认我们交流的服务器的身份是非常重要的情况下），依赖于可信CA往往是必须的，这些CA应该被所有的用户识别出来（这里我们为了简化迷信，我们暂时不深入挖掘数字证书中的信任模型的实现情况）。
+
+* 证书分配有有效时间段，因此他们会过期。同样，浏览器会对此发出警告。一个公开服务需要当前的有效证书；否则意味着虽然我们访问的服务器证书是被我们信任的某人签署，但是已经失效，需要更新。
+
+* 万一证书的名字和服务器名字不匹配会发生什么？如果这种现象发生了，听上去好像是多虑了。由于一系列的原因下，其实这种情况不罕见。一个系统可能托管了许多基于名字的虚拟主机，他们共享同样的IP地址，并通过HTTP 1.1中的Host头的信息进行识别。在这种情况下，由于SSL握手对于服务器证书的检测是在在HTTP请求处理之前完成的，他不可能分配给不同虚拟主机的不同的证书。因此，如果站点的名称和证书上的名称不匹配，服务器可能会给我们一个标志告诉我们这一情况。为了避免这种现象，必须使用基于IP的虚拟服务器。[33]和[34]描述了处理这个问题的技巧以及如何允许基于名字的虚拟主机被正确指向问题。
 
 
-* Certificates have an associated period of validity, therefore they may expire. Again, we are warned by the browser about this. A public service needs a temporally valid certificate; otherwise, it means we are talking with a server whose certificate was issued by someone we trust, but has expired without being renewed.
+#### 其他漏洞
+由于新服务的存在，监听不同的tcp端口可能会引入漏洞，比如软件没有即使更新导致的基础设施漏洞[4]。此外，为了正确保护传输过程中的数据安全，会话cookie必须使用Secure标志[5]以及使用一些指示符来应该被设置来保证浏览器只接受安全的数据流（如HSTS[6]，CSP）。
 
-
-* What if the name on the certificate and the name of the server do not match? If this happens, it might sound suspicious. For a number of reasons, this is not so rare to see. A system may host a number of name-based virtual hosts, which share the same IP address and are identified by means of the HTTP 1.1 Host: header information. In this case, since the SSL handshake checks the server certificate before the HTTP request is processed, it is not possible to assign different certificates to each virtual server. Therefore, if the name of the site and the name reported in the certificate do not match, we have a condition which is typically signaled by the browser. To avoid this, IP-based virtual servers must be used. [33] and [34] describe techniques to deal with this problem and allow name-based virtual hosts to be correctly referenced.
-
-
-####Other vulnerabilities
-The presence of a new service, listening in a separate tcp port may introduce vulnerabilities such as infrastructure vulnerabilities if the software is not up to date [4]. Furthermore,  for the correct protection of data during transmission the Session Cookie must use the Secure flag [5] and some directives should be sent to the browser to accept only secure traffic (e.g. HSTS [6], CSP).
-
-
-Also there are some attacks that can be used to intercept traffic if the web server exposes the application on both HTTP and HTTPS [6], [7] or in case of mixed HTTP and HTTPS resources in the same page.
+同样的，也有一下通过截获通信数据流来发起的攻击，比如在web服务器同时在HTTP和HTTPS上同时提供服务[6],[7]或在同一个页面混合HTTP和HTTPS资源的情况下。
 
 
 ### 如何测试
 
-####Testing for sensitive data transmitted in clear-text
-Various types of information which must be protected can be also transmitted in clear text. It is possible to check if this information is transmitted over HTTP instead of HTTPS. Please refer to specific tests for full details, for credentials [3] and other kind of data [2].
+#### 测试明文传输的敏感信息
+不同类型的需要保护的敏感信息可能被明文方式传输。可以通过使用HTTP替换HTTPS协议来确认这个情况。参见下面具体的案例来了解细节，比如凭证[3]和其他数据[2]。
 
 
-#####Example 1. Basic Authentication over HTTP
-A typical example is the usage of Basic Authentication over HTTP because with Basic Authentication, after log in, credentials are encoded - and not encrypted - into HTTP Headers.
+##### 例1： 通过HTTP的基本认证
+一个典型的例子是在HTTP上使用基本认证（Basic Authentication）。因为基本认证系统中，在登陆后，登陆凭证是通过编码，而不是加密在HTTP头中发送。
 
 ```
 $ curl -kis http://example.com/restricted/
@@ -100,40 +97,37 @@ Invalid login credentials!
 ```
 
 
-####Testing for Weak SSL/TLS Ciphers/Protocols/Keys vulnerabilities
-The large number of available cipher suites and quick progress in cryptanalysis makes testing an SSL server a non-trivial task.
+#### 测试弱SSL/TLS加密算法/协议/密钥漏洞
+由于存在巨大数量的加密套件，快速的密码学分析使得测试SSL服务器成为较重要的人物。
 
-At the time of writing these criteria are widely recognized as minimum checklist:
-* Weak ciphers must not be used (e.g. less than 128 bits [10]; no NULL ciphers suite, due to no encryption used; no Anonymous Diffie-Hellmann, due to not provides authentication).
-* Weak protocols must be disabled (e.g. SSLv2 must be disabled, due to known weaknesses in protocol design [11]).
-* Renegotiation must be properly configured (e.g. Insecure Renegotiation must be disabled, due to MiTM attacks [12] and Client-initiated Renegotiation must be disabled, due to Denial of Service vulnerability [13]).
-* No Export (EXP) level cipher suites, due to can be easly broken [10].
-* X.509 certificates key length must be strong (e.g. if RSA or DSA is used the key must be at least 1024 bits).
-* X.509 certificates must be signed only with secure hashing algoritms (e.g. not signed using MD5 hash, due to known collision attacks on this hash).
-* Keys must be generated with proper entropy (e.g, Weak Key Generated with Debian) [14].
+在编写这片测试准则的时候，下面这些别认为是最小的检查列表：
+* 弱加密算法不应该被使用（比如，密钥小于128比特[10]；不使用加密算法，因为没有使用任何加密；没有匿名DH，因为不能提供认证过程）。
+* 必须禁止弱加密协议（如，SSLv2必须禁止，因为该协议设计上存在已知漏洞[11]）。
+* 协商过程必须被正确配置（如，不安全的协商过程必须禁止，因为存在中间人攻击[12]以及由客户端开始的初始协商必须禁止，因为存在拒绝服务攻击漏洞[13]）。
+* 不存在出口级的密码套件，因为他们很容易被破解[10]。
+* X.509 证书密钥长度必须健壮（如，RSA或DSA使用的密钥至少1024比特）。
+* X.509 证书必须只被安全的哈兮算法所签名（如，不要使用MD5算法，因为该算法存在已知的冲突攻击）。
+* 密钥必须通过正确的熵中生成（如，Debian生成的弱密钥）[14]。
 
-A more complete checklist includes:
-* Secure Renegotiation should be enabled.
-* MD5 should not be used, due to known collision attacks. [35]
-* RC4 should not be used, due to crypto-analytical attacks [15].
-* Server should be protected from BEAST Attack [16].
-* Server should be protected from CRIME attack, TLS compression must be disabled [17].
-* Server should support Forward Secrecy [18].
+更加完整的检查列表包括：
+* 应该开启安全的协商过程。
+* 由于已知冲突攻击，MD5不应该被使用。[35]
+* 由于密码学分析攻击，RC4不应该被使用。[15]
+* 服务器应该防止BEAST攻击[16]。
+* 服务器应该防止CRIME攻击，禁止TLS压缩[17]。
+* 服务器应该支持前向安全性[18]。
 
+下面标准可以作为部署SSL服务器的参考资料：
+* PCI-DSS v2.0 在4.1中要求相关机构必须使用“健壮加密措施”，但是没有精确定义密钥长度和算法。通常的解释是，部分基于该标准的上一个版本，至少128位密钥长度，没有出口级的算法强度，以及不使用SSLv2 [19]。
+* Qualys SSL 实验室的服务器评价指南[14]，部署最佳实践[10]和SSL威胁模型[20]被设计为标准化SSL服务器评估和配置标准。但是没有SSL服务器工具一样更新[21]。
+* OWASP 也有许多关于SSL/TLS安全的自由[22]，[23]，[24]，[25]，[26]。
 
-The following standards can be used as reference while assessing SSL servers:
-* PCI-DSS v2.0 in point 4.1 requires compliant parties to use "strong cryptography" without precisely defining key lengths and algorithms. Common interpretation, partially based on previous versions of the standard, is that at least 128 bit key cipher, no export strength algorithms and no SSLv2 should be used [19].
-* Qualys SSL Labs Server Rating Guide [14], Depoloyment best practice [10] and SSL Threat Model [20] has been proposed to standardize SSL server assessment and configuration. But is less updated than the SSL Server tool [21].
-* OWASP has a lot of resources about SSL/TLS Security [22], [23], [24], [25]. [26].
+一些工具和扫描器有免费的（如SSLAudit[28]和SSLScan[29]），也有商业的（如Tenable的Nessus[27]），可以被用来评估SSL/TLS漏洞。但是由于这些漏洞是不断发展的，一个好办法是通过openssl[30]来手动检查，或使用工具的输出来作为人工评估的输入依据。
 
-
-Some tools and scanners both free (e.g. SSLAudit [28] or SSLScan [29]) and commercial (e.g. Tenable Nessus [27]),  can be used to assess SSL/TLS vulnerabilities. But due to evolution of these vulnerabilities a good way to test is to check them manually with openssl [30] or use the tool’s output as an input for manual evaluation using the references.
-
-
-Sometimes the SSL/TLS enabled service is not directly accessible and the tester can access it only via a HTTP proxy using CONNECT method [36]. Most of the tools will try to connect to desired tcp port to start SSL/TLS handshake. This will not work since desired port is accessible only via HTTP proxy. The tester can easily circumvent this by using relaying software such as socat [37].
+有时，SSL/TLS服务不能直接访问，测试人员只能通过使用HTTP代理中的CONNECT方法进行访问[36]。大多数工具会尝试希望的tcp端口来开始SSL/TLS握手。但这可能无法在HTTP代理中起作用。测试人员可以简单通过一下中转软件如socat[37]来绕过这种情况。
 
 
-#####Example 2. SSL service recognition via nmap
+##### 例2：通过nmap发现SSL服务
 
 The first step is to identify ports which have SSL/TLS wrapped services. Typically tcp ports with SSL for web and mail services are -  but not limited to - 443 (https), 465 (ssmtp), 585 (imap4-ssl), 993 (imaps), 995 (ssl-pop).
 
