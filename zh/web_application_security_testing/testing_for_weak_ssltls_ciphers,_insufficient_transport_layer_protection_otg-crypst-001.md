@@ -129,9 +129,9 @@ Invalid login credentials!
 
 ##### 例2：通过nmap发现SSL服务
 
-The first step is to identify ports which have SSL/TLS wrapped services. Typically tcp ports with SSL for web and mail services are -  but not limited to - 443 (https), 465 (ssmtp), 585 (imap4-ssl), 993 (imaps), 995 (ssl-pop).
+第一步是识别被SSL/TLS包装服务的端口。通常通过SSL的web或邮件服务端口是 - 443（https），465（ssmtp），585（imap4-ssl），993（imaps），995（ssl-pop）。
 
-In this example we search for SSL services using nmap with “-sV” option, used to identify services and it is also able to identify SSL services [31]. Other options are for this particular example and must be customized. Often in a Web Application Penetration Test scope is limited to port 80 and 443.
+在下面的例子中，我们通过使用nmap的“-sV”选项来搜寻SSL服务，这个选项用于识别服务，所以也能够识别出SSL服务[31]。这个例子中其他选项也进行了定制。通常在web应用渗透测试中的测试范围端口限定在80和443。
 
 ```
 $ nmap -sV --reason -PN -n --top-ports 100 www.example.com
@@ -158,8 +158,9 @@ Nmap done: 1 IP address (1 host up) scanned in 131.38 seconds
 ```
 
 
-#####Example 3. Checking for Certificate information, Weak Ciphers and SSLv2 via nmap
-Nmap has two scripts for checking Certificate information, Weak Ciphers and SSLv2 [31].
+##### 例3： 通过nmap检查证书信息，弱加密算法以及SSLv2
+
+Nmap有两个相关脚本来检测证书信息和弱加密算法[31]。
 
 ```
 $ nmap --script ssl-cert,ssl-enum-ciphers -p 443,465,993,995 www.example.com
@@ -272,9 +273,9 @@ Nmap done: 1 IP address (1 host up) scanned in 8.64 seconds
 ```
 
 
-#####Example 4 Checking for Client-initiated Renegotiation and Secure Renegotiation via openssl (manually)
+##### 例4： 通过openssl手动检查客户端发起的协商和安全协商过程
 
-Openssl [30] can be used for testing manually SSL/TLS. In this example the tester tries to initiate a renegotiation by client [m] connecting to server with openssl. The tester then writes the fist line of an HTTP request and types “R” in a new line. He then waits for renegotiaion and completion of the HTTP request and checks if secure renegotiaion is supported by looking at the  server output. Using manual requests it is also possible to see if Compression is enabled for TLS and to check for CRIME [13], for ciphers and for other vulnerabilities.
+Openssl[30]可以用来人工测试SSL/TLS。在这个例子中，测试者尝试通过客户端初始化一个协商过程来连接服务器。然后写下HTTP请求第一行以及在新的一行写下“R”类型。接着等待协商以及HTTP请求的完成，从服务器的输出来检查是否支持安全协商过程。同时使用人工请求也能够检测是否开启了TLS压缩，检测CRIME[13]，以及一些其他的加密算法和漏洞。
 
 ```
 $ openssl s_client -connect www2.example.com:443
@@ -323,14 +324,14 @@ SSL-Session:
 ---
 ```
 
-
-Now the tester can write the first line of an HTTP request and then R in a new line.
+现在测试者可以写下HTTP请求，以及在新的一行写下R。
 ```
 HEAD / HTTP/1.1
 R
 ```
 
-Server is renegotiating
+服务器正在协商中
+
 ```
 RENEGOTIATING
 depth=2 C******
@@ -338,7 +339,8 @@ verify error:num=20:unable to get local issuer certificate
 verify return:0
 ```
 
-And the tester can complete our request, checking for response.
+测试者可以完成请求，检查响应
+
 ```
 HEAD / HTTP/1.1
 
@@ -352,15 +354,14 @@ Content-Length: 1792
 read:errno=0
 ```
 
-Even if the HEAD is not permitted, Client-intiated renegotiaion is permitted.
+甚至当HEAD请求是不允许，客户端初始的协商仍是被允许的。
 
 
-#####Example 5. Testing supported Cipher Suites, BEAST and CRIME attacks via TestSSLServer
+##### 例5： 通过TestSSLServer测试支持的加密套件，BEAST和CRIME攻击
 
-TestSSLServer [32] is a script which permits the tester to check the cipher suite and also for BEAST and CRIME attacks. BEAST (Browser Exploit Against SSL/TLS)  exploits a vulnerability of CBC in TLS 1.0. CRIME (Compression Ratio Info-leak Made Easy) exploits a vulnerability of TLS Compression, that should be disabled. What is interesting is that the first fix for BEAST was the use of RC4, but this is now discouraged due to a crypto-analytical attack to RC4 [15].
+TestSSLServer[32]是一个脚本，他使测试者可以检查加密套件和检测BEAST、CRIME攻击。BEAST（Browser Exploit Against SSL/TLS）利用TLS 1.0中CBC模式的漏洞。CRIME（Compression Ratio Info-leak Made Easy）利用TLS压缩中的漏洞，这个选项应该被禁用。有趣的是BEAST的第一个修复方案是使用RC4，但是RC4是不推荐的，因为存在密码分析攻击[15]。
 
-
-An online tool to check for these attacks is SSL Labs, but can be used only for internet facing servers. Also consider that target data will be stored on SSL Labs server and also will result some connection from SSL Labs server [21].
+一个在线检测工具是SSL Labs，但是只能用在面向互联网的服务器。同时要考虑目标站点数据可能会存在SSL Labs服务器中，也会有来自该服务器的链接[21]。
 
 ```
 $ java -jar TestSSLServer.jar www3.example.com 443
@@ -417,8 +418,9 @@ CRIME status: protected
 ```
 
 
-#####Example 6.  Testing SSL/TLS vulnerabilities with sslyze
-Sslyze [33] is a python script which permits mass scanning and XML output. The following is an example of a regular scan. It is one of the most complete and versatile tools for SSL/TLS testing.
+##### 例6： 通过sslyze特使SSL/TLS漏洞
+
+sslyze [33] 是一个python脚本用来进行大量测试和XML输出。下面例子展示了一个常规扫描。这是SSL/TLS测试较为完整和全面的工具之一。
 
 ```
 ./sslyze.py --regular example.com:443
@@ -544,11 +546,12 @@ Sslyze [33] is a python script which permits mass scanning and XML output. The f
 ```
 
 
-#####Example 7.  Testing SSL/TLS with testssl.sh
-Testssl.sh [38] is a Linux shell script which provides clear output to facilitate good decision making. It can not only check web servers but also services on other ports, supports STARTTLS, SNI, SPDY and does a few check on the HTTP header as well.
+##### 例7： 通过testssl.sh测试SSL/TLS
 
+Testssl.sh [38] 是一个Linux shell脚本提供了清晰的输出来帮助做决策。他不仅可以检测web服务器而且可以其他端口的服务，支持STARTTLS，SNI，SPDY和一些HTTP头部检测。
 
-It's a very easy to use tool. Here's some sample output (without colors):
+这个工具很容易使用，下面是一些样本输出：
+
 ```
 user@myhost: % testssl.sh owasp.org
 
@@ -638,19 +641,19 @@ user@myhost: %
 
 ```
 
+STARTTLS 可以通过 `testssl.sh -t smtp.gmail.com:587  smtp` 来测试，`testssl -e <target>`来测试加密算法，`testssl -E <target>`来测试加密算法的每种协议。可以通过`testssl -V`查看本地openssl支持和安装的加密套件。
 
-STARTTLS would be tested via `testssl.sh -t smtp.gmail.com:587  smtp`, each ciphers with `testssl -e <target>`, each ciphers per protocol with `testssl -E <target>`. To just display what local ciphers that are installed for openssl see `testssl -V`. For a thorough check it is best to dump the supplied OpenSSL binaries in the path or the one of testssl.sh.
+最有意思的是，测试者可以通过学习源代码来了解如何测试相关特性，参考例4。更有意思的是，他使用纯bash和/dev/tcp 套接字来完成heartbleed的整个握手过程。
 
-
-The interesting thing is if a tester looks at the sources they learn how features are tested, see e.g. Example 4. What is even better is that it does the whole handshake for heartbleed in pure /bin/bash with /dev/tcp sockets -- no piggyback perl/python/you name it.
-
-
-Additionally it provides a prototype (via "testssl.sh -V") of mapping to RFC cipher suite names to OpenSSL ones. The tester needs the file mapping-rfc.txt in same directory.
+此外，他也提供RFC加密套件到OpenSSL套件的映射（通过“testssl.sh -V”）。测试者可以参考同一目录下mapping-rfc.txt文件。
 
 
-#####Example 8.  Testing SSL/TLS with SSL Breacher
-This tool [99] is combination of several other tools plus some additional checks in complementing most comprehensive SSL tests.
-It supports the following checks:
+##### 例8： 通过SSL Breacher测试SSL/TLS
+
+这个工具 [99] 组合了其他一些工具，并加入了一些额外的检测过程来完成最复杂的SSL测试。
+
+他支持如下检测：
+
 ```
 #HeartBleed
 #ChangeCipherSpec Injection
@@ -1128,115 +1131,119 @@ Checking localhost:443 for TLS Compression support against CRIME (CVE-2012-4929)
 
 ```
 
-####Testing SSL certificate validity – client and server
-Firstly upgrade the browser because CA certs expire and in every release of the browser these are renewed. Examine the validity of the certificates used by the application. Browsers will issue a warning when encountering expired certificates, certificates issued by untrusted CAs, and certificates which do not match name wise with the site to which they should refer.
+#### 测试SSL证书有效性 - 客户端和服务端
+
+首先升级浏览器，因为随着浏览器每个版本的发布，CA证书可能过期或更新。检查应用程序使用的证书的有效性。浏览器在遇到证书过期、证书不可信以及证书名字不匹配时会发出警告。
+
+在访问HTTPS站点时，通过点击浏览器窗口中的小锁标志，测试人员可以查看证书信息包括发布者、有效时间、加密特性等等。如果应用程序需要客户端证书，测试人员可能需要安装一个来访问应用。证书信息可以在浏览器的已安装证书列表中找到。
+
+这些检测应该应用在所有的SSL包装的信道中。不仅是443端口上的常见HTTPS服务，也可能有额外的服务被web应用架构或部署中使用（如HTTPS管理端口，HTTPS服务在非标准化端口等等）。因此需要将所有的检测应用于所有发现的SSL包装的服务中。例如，nmap扫描器有一种扫描模式（通过-sV选项）来识别SSL包装服务。Nessus漏洞扫描器也能够在所有SSL/TLS包装服务中实施SSL检测。
 
 
-By clicking on the padlock that appears in the browser window when visiting an HTTPS site, testers can look at information related to the certificate – including the issuer, period of validity, encryption characteristics, etc. If the application requires a client certificate, that tester has probably installed one to access it. Certificate information is available in the browser by inspecting the relevant certificate(s) in the list of the installed certificates.
+##### 例9： 人工测试证书有效性
 
+除了提供人工创造的例子，这个指南也包括匿名的现实中的例子来强调HTTPS站点的证书名字问题是多么频繁。下面的截图展示了一个IT公司的例子。
 
-These checks must be applied to all visible SSL-wrapped communication channels used by the application. Though this is the usual https service running on port 443, there may be additional services involved depending on the web application architecture and on deployment issues (an HTTPS administrative port left open, HTTPS services on non-standard ports, etc.). Therefore, apply these checks to all SSL-wrapped ports which have been discovered. For example, the nmap scanner features a scanning mode (enabled by the –sV command line switch) which identifies SSL-wrapped services. The Nessus vulnerability scanner has the capability of performing SSL checks on all SSL/TLS-wrapped services.
-
-
-#####Example 1. Testing for certificate validity (manually)
-Rather than providing a fictitious example, this guide includes an anonymized real-life example to stress how frequently one stumbles on https sites whose certificates are inaccurate with respect to naming. The following screenshots refer to a regional site of a high-profile IT company.
-
-We are visiting a .it site and the certificate was issued to a .com site. Internet Explorer warns that the name on the certificate does not match the name of the site.
+我们访问.it站点，但是证书被赋予.com站点。IE浏览器提示了我们证书名字不匹配。
 
 ![Image:SSL Certificate Validity Testing IE Warning.gif](https://www.owasp.org/images/7/70/SSL_Certificate_Validity_Testing_IE_Warning.gif)
 
-*Warning issued by Microsoft Internet Explorer*
+*IE浏览器发出的警告*
 
-The message issued by Firefox is different. Firefox complains because it cannot ascertain the identity of the .com site the certificate refers to because it does not know the CA which signed the certificate. In fact, Internet Explorer and Firefox do not come pre-loaded with the same list of CAs. Therefore, the behavior experienced with various browsers may differ.
+Firefox发出消息却不同。Firefox抱怨无法确定.com站点的身份，因为签署证书的CA未知。事实上，IE和Firefox没有预置相同的CA列表。因此不同浏览器的行为可能不一致。
 
 ![Image:SSL Certificate Validity Testing Firefox Warning.gif](https://www.owasp.org/images/8/87/SSL_Certificate_Validity_Testing_Firefox_Warning.gif)
 
-*Warning issued by Mozilla Firefox*
+*Firefox发出的警告*
 
-####Testing for other vulnerabilities
-As mentioned previously, there are other types of vulnerabilities that are not related with the SSL/TLS protocol used, the cipher suites or Certificates. Apart from other vulnerabilities discussed in other parts of this guide, a vulnerability exists  when the server provides the website both with the HTTP and HTTPS protocols, and permits an attacker to force a victim into using a non-secure channel instead of a secure one.
+#### 测试其他漏洞
 
+正如先前提到的，存在与SSL/TLS协议、加密算法或证书无关的其他类型的漏洞。除了本指南其他部分讨论的漏洞，当服务器同时提供HTTP和HTTPS服务时候，漏洞可能存在，使得攻击者能够强制受害者使用不安全的信道来替代安全信道。
 
-#####Surf Jacking
-The Surf Jacking attack [7] was first presented by Sandro Gauci and permits to an attacker to hijack an HTTP session even when the victim’s connection is encrypted using SSL or TLS.
+##### Surf Jacking
 
+Surf Jacking攻击 [7] 最初是Sandro Gauci展示的，他允许攻击者在受害者的连接使用SSL或TLS加密的情况下劫持HTTP会话。
 
-The following is a scenario of how the attack can take place:
-* Victim logs into the secure website at https://somesecuresite/.
-* The secure site issues a session cookie as the client logs in.
-* While logged in, the victim opens a new browser window and goes to http:// examplesite/
-* An attacker sitting on the same network is able to see the clear text traffic to http://examplesite.
-* The attacker sends back a "301 Moved Permanently" in response to the clear text traffic to http://examplesite. The response contains the header “Location: http://somesecuresite /”, which makes it appear that examplesite is sending the web browser to somesecuresite. Notice that the URL scheme is HTTP not HTTPS.
-* The victim's browser starts a new clear text connection to http://somesecuresite/ and sends an HTTP request containing the cookie in the HTTP header in clear text
-* The attacker sees this traffic and logs the cookie for later use.
+下面是攻击如何发生的场景：
+* 受害者登陆安全的站点 https://somesecuresite/ 。
+* 安全站点在客户登陆后分配了会话cookie。
+* 当登陆后，受害者打开了新的浏览窗口，并访问http://examplesite/ 。
+* 一个攻击者在同样的网络中，可以得到http://examplesite 的明文流量。
+* 攻击者可以在劫持http://examplesite返回响应中发回 "301 Moved Permanently" 响应。在响应的HTTP头中包括“Location: http://somesecuresite /”头，使web浏览器请求http://somesecuresite/ ，注意现在我们是走HTTP而不是HTTPS。
+* 受害者发起了通向 http://somesecuresite/ 的明文请求，并在HTTP头中包含了明文的cookie。
+* 攻击者可以嗅探流量，记录cookie。
 
-
-To test if a website is vulnerable carry out the following tests:
-1. Check if website supports both HTTP and HTTPS protocols
-2. Check if cookies do not have the “Secure” flag
-
-
-#####SSL Strip
-Some applications supports both HTTP and HTTPS, either for usability or so users can type both addresses and get to the site. Often users go into an HTTPS website from link or a redirect. Typically personal banking sites have a similar configuration with an iframed log in or a form with action attribute over HTTPS but the page under HTTP.
+测试网站是否存在该漏可以进行如下检测：
+1. 检测网站是否同时支持HTTP和HTTPS协议
+2. 检测cookie是否包含“Secure”标志
 
 
-An attacker in a privileged position - as described in SSL strip [8] - can intercept traffic when the user is in the http site and manipulate it to get a Man-In-The-Middle attack under HTTPS. An application is vulnerable if it supports both HTTP and HTTPS.
+##### SSL Strip
+
+一些应用程序同时支持HTTP和HTTPS，为了可用性或者便于用户能输入两者而抵达站点。通常用户通过链接或者跳转进入HTTPS站点。典型的个人网银站点就是类似的配置，通过HTTP页面中内嵌的HTTPS登陆页面或表单属性进行。
+
+攻击者处于一个特权位置 - 如同SSL strip [8] 中描述的 - 能够截获用户进入HTTP站点的流量，并操作该流量在HTTPS下进行中间人攻击。同时支持HTTP和HTTPS的应用程序存在该漏洞。
 
 
-####Testing via HTTP proxy
+#### 通过HTTP代理测试
 
-Inside corporate environments testers can see services that are not directly accessible and they can access them only via HTTP proxy using the CONNECT method [36]. Most of the tools will not work in this scenario because they try to connect to the desired tcp port to start the SSL/TLS handshake. With the help of relaying software such as socat [37] testers can enable those tools for use with services behind an HTTP proxy.
+在公司内部环境中，测试者可能发现无法直接访问服务，他们需要通过HTTP代理的CONNECT方法来访问[36]。许多工具在这种场景下无法正常使用，因为他们尝试直接访问响应TCP端口来进行SSL/TLS握手。通过中继程序的帮助如socat[37]，测试者可以在HTTP代理之后使用这些工具。
 
 
-#####Example 8. Testing via HTTP proxy
+##### 例10： 通过HTTP代理测试
 
-To connect to destined.application.lan:443 via proxy 10.13.37.100:3128 run socat as follows:
+为了通过10.13.37.100:3128的代理来连接destined.application.lan:443，按照如下运行socat：
+
 ```
 $ socat TCP-LISTEN:9999,reuseaddr,fork PROXY:10.13.37.100:destined.application.lan:443,proxyport=3128
 ```
 
+接着就可以将所有目标指向localhost:9999：
 
-Then the tester can target all other tools to localhost:9999:
 ```
 $ openssl s_client -connect localhost:9999
 ```
 
-
-All connections to localhost:9999 will be effectively relayed by socat via proxy to destined.application.lan:443.
-
-
-### Configuration Review
-
-####Testing for Weak SSL/TLS Cipher Suites
-Check the configuration of the web servers that provide https services. If the web application provides other SSL/TLS wrapped services, these should be checked as well.
+所有指向localhost:9999的连接就能被socat通过代理高效的连接到destined.application.lan:443了。
 
 
-#####Example 9. Windows Server
-Check the configuration on a Microsoft Windows Server (2000, 2003 and 2008) using the registry key:
+### 配置审查
+
+#### 测试弱SSL/TLS加密套件
+
+检查提供HTTPS服务的web服务器配置。如果web应用程序提供其他SSL/TLS包装服务，同样也需要检查。
+
+
+##### 例11： Windows 服务器
+
+通过注册表项检查微软Windows服务器（2000,2003,2008）的配置：
+
 ```
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\
 ```
-that has some sub-keys including Ciphers, Protocols and KeyExchangeAlgorithms.
+
+包括一些子项目，含有加密算法，协议以及密钥交换算法。
 
 
-#####Example 10: Apache
-To check the cipher suites and protocols supported by the Apache2 web server, open the ssl.conf file and search for the SSLCipherSuite, SSLProtocol, SSLHonorCipherOrder,SSLInsecureRenegotiation and SSLCompression directives.
+##### 例12： Apache
 
+为了检查Apache2服务器支持的加密套件和协议，打开ssl.conf文件，查找SSLCipherSuite，SSLProtocol，SSLHonorCipherOrder，SSLInsecureRenegotiation和SSLCompression项目。
 
-####Testing SSL certificate validity – client and server
-Examine the validity of the certificates used by the application at both server and client levels. The usage of certificates is primarily at the web server level, however, there may be additional communication paths protected by SSL (for example, towards the DBMS). Testers should check the application architecture to identify all SSL protected channels.
+#### 测试SSL证书有效性 - 客户端和服务端
+
+在服务端和客户端同时检查应用程序使用的证书的有效性。虽然证书主要使用在web服务器中，但是也可能有额外的SSL保护的交流通道（如访问DBMS）。测试者应该检查应用程序架构来识别出所有SSL保护的信道。
 
 ### 测试工具
-* [21][Qualys SSL Labs - SSL Server Test|https://www.ssllabs.com/ssltest/index.html]: internet facing scanner
-* [27] [Tenable - Nessus Vulnerability Scanner|http://www.tenable.com/products/nessus]: includes some plugins to test different SSL related vulnerabilities, Certificates and the presence of HTTP Basic authentication without SSL.
-* [32] [TestSSLServer|http://www.bolet.org/TestSSLServer/]: a java scanner - and also windows executable - includes tests for cipher suites, CRIME and BEAST
-* [33] [sslyze|https://github.com/iSECPartners/sslyze]: is a python script to check vulnerabilities in SSL/TLS.
-* [28] [SSLAudit|https://code.google.com/p/sslaudit/]: a perl script/windows executable scanner which follows Qualys SSL Labs Rating Guide.
-* [29] [SSLScan|http://sourceforge.net/projects/sslscan/] with [SSL Tests|http://www.pentesterscripting.com/discovery/ssl_tests]: a SSL Scanner and a wrapper in order to enumerate SSL vulnerabilities.
-* [31] [nmap|http://nmap.org/]: can be used primary to identify SSL-based services and then to check Certificate and SSL/TLS vulnerabilities. In particular it has some scripts to check [Certificate and SSLv2|http://nmap.org/nsedoc/scripts/ssl-cert.html] and supported [SSL/TLS protocols/ciphers|http://nmap.org/nsedoc/scripts/ssl-enum-ciphers.html] with an internal rating.
-* [30] [curl|http://curl.haxx.se/] and [openssl|http://www.openssl.org/]: can be used to query manually SSL/TLS services
-* [9] [Stunnel|http://www.stunnel.org]: a noteworthy class of SSL clients is that of SSL proxies such as stunnel available at which can be used to allow non-SSL enabled tools to talk to SSL services)
-* [37] [socat| http://www.dest-unreach.org/socat/]: Multipurpose relay
+* [21][Qualys SSL Labs - SSL Server Test|https://www.ssllabs.com/ssltest/index.html]: 面向互联网的在线扫描工具。
+* [27] [Tenable - Nessus Vulnerability Scanner|http://www.tenable.com/products/nessus]: 包含一些测试SSL相关漏洞、证书漏洞以及HTTP基本认证方面的插件。
+* [32] [TestSSLServer|http://www.bolet.org/TestSSLServer/]: windows可执行的一个java扫描器，包括测试加密套件、CRIME和BEAST。
+* [33] [sslyze|https://github.com/iSECPartners/sslyze]: 一个检测SSL/TLS漏洞的python脚本。
+* [28] [SSLAudit|https://code.google.com/p/sslaudit/]: 一个参照Qualys SSL Labs评估指南的perl/windows扫描器。
+* [29] [SSLScan|http://sourceforge.net/projects/sslscan/] with [SSL Tests|http://www.pentesterscripting.com/discovery/ssl_tests]: 一个SSL扫描器和用来枚举SSL漏洞的SSL包装器。
+* [31] [nmap|http://nmap.org/]: 主要用来识别基于SSL的服务以及检查证书和SSL/TLS漏洞。特别是包含了检测 [Certificate and SSLv2|http://nmap.org/nsedoc/scripts/ssl-cert.html] 的脚本，以及支持 [SSL/TLS protocols/ciphers|http://nmap.org/nsedoc/scripts/ssl-enum-ciphers.html]的内部评估。
+* [30] [curl|http://curl.haxx.se/] and [openssl|http://www.openssl.org/]: 可以用来手动查询SSL/TLS服务。
+* [9] [Stunnel|http://www.stunnel.org]: 一个值得关注的SSL客户端，SSL代理，允许不支持SSL的工具能使用SSL服务。
+* [37] [socat| http://www.dest-unreach.org/socat/]: 多用途中继程序。
 * [38] [testssl.sh| https://testssl.sh/ ]
 
 
