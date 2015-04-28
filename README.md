@@ -41,4 +41,6 @@ This document is released under the [Creative Commons 2.5 License](http://creati
 * 2014.11.23  Translated CH4.6 to Chinese.
 * 2014.12.04  Translated CH4.5 to Chinese.
 * 2015.01.10  Translated CH4.9 to Chinese.
+* 2015.04.28  Translated CH4.10 to Chinese.
+
 
