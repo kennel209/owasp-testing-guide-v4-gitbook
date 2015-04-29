@@ -1,40 +1,47 @@
-# Testing for JavaScript Execution (OTG-CLIENT-002)
+# 测试JavaScript脚本执行 (OTG-CLIENT-002)
 
 
-### Summary
-A JavaScript Injection vulnerability is a subtype of Cross Site Scripting (XSS) that involves the ability to inject arbitrary JavaScript code that is executed by the application inside the victim's browser. This vulnerability can have many consequences, like disclosure of a user's session cookies that could be used to impersonate the victim, or, more generally, it can allow the attacker to modify the page content seen by the victims or the application behavior.
+### 综述
+
+JavaScript注入漏洞是跨站脚本（XSS）的一个子类，需要在受害者浏览器执行注入任意JavaScript代码的能力。这个漏洞可能产生许多问题，像是用户会话cookie暴露可以被用于模仿受害者，或者，更加普通的，他允许攻击者修改受害者能看到的页面内容或者应用程序行为。
 
 
-### How to Test
-Such vulnerability occurs when the application lacks of a proper user supplied input and output validation. JavaScript is used to dynamically populate web pages, this injection occur during this content processing phase and consequently affect the victim.
+### 如何测试
 
+这样的漏洞发生在应用程序缺乏正确用户输入和输出验证。JavaScript用于动态更新web页面，这个注入发生在页面处理阶段，接着影响受害者。
 
-When trying to exploit this kind of issues, consider that some characters are treated differently by different browsers. For reference see the DOM XSS Wiki.
+当尝试利用这种问题，考虑一些被不同浏览器不同对待的特殊字符。参见参考资料中的DOM XSS维基。
 
-
-The following script does not perform any validation of the variable rr that contains the user supplied input via the query string and additionally does not apply any form of encoding:
+下面的脚本没有对变量rr的验证过程，rr变量通过查询字符串来得到用户提供的输入，而且没有任何编码：
 
 ```
 var rr = location.search.substring(1);
 if(rr)
   window.location=decodeURIComponent(rr);
-This implies that an attacker could inject JavaScript code simply by submitting the following query string: www.victim.com/?javascript:alert(1)
+```
+
+这表示攻击者能够通过如下查询字符串注入JavaScript：
+
+```
+www.victim.com/?javascript:alert(1)
 ```
 
 
-#### Black Box testing
-Black box testing for  JavaScript Execution is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.<br>
+#### 黑盒测试
 
+JavaScript执行测试通常不进行黑盒测试，因为需要客户端执行注入的代码，而且源代码总是可以获得的。
 
-#### Gray Box testing
-**Testing for JavaScript Execution vulnerabilities:**
+#### 灰盒测试
 
-For example, looking at the following URL:
+**测试JavaScript脚本执行漏洞:**
+
+例如，查看下面URL：
+
 ```
 http://www.domxss.com/domxss/01_Basics/04_eval.html
 ```
 
-The page contains the following scripts:
+这个页面包含下面的脚本：
 
 ```
 <script>
@@ -50,15 +57,18 @@ else
 </script>
 ```
 
+上面的脚本包含 '`location.hash`' ，而且可以被攻击者控制，在 '`message`' 值注入 JavaScript 代码来控制用户浏览器。
 
-The above code contains a source '`location.hash`' that is controlled by the attacker that can inject directly in the '`message`' value a JavaScript Code to take the control of the user browser.
 
+### 参考资料
 
-### References
-**OWASP Resources**
+**OWASP 资源**
+
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS.com - http://www.domxss.com
 
-**Whitepapers**<br>
+**白皮书**
+
 * Browser location/document URI/URL Sources - https://code.google.com/p/domxsswiki/wiki/LocationSources
     - i.e., what is returned when the user asks the browser for things like document.URL, document.baseURI, location, location.href, etc.
+

@@ -18,7 +18,12 @@ The following script does not perform any validation of the variable rr that con
 var rr = location.search.substring(1);
 if(rr)
   window.location=decodeURIComponent(rr);
-This implies that an attacker could inject JavaScript code simply by submitting the following query string: www.victim.com/?javascript:alert(1)
+```
+
+This implies that an attacker could inject JavaScript code simply by submitting the following query string: 
+
+```
+www.victim.com/?javascript:alert(1)
 ```
 
 
