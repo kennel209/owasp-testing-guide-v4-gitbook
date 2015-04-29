@@ -1,26 +1,23 @@
-# Testing for HTML Injection (OTG-CLIENT-003)
+# 测试HTML代码注入 (OTG-CLIENT-003)
 
 
-### Summary
-HTML injection is a type of injection issue that occurs when a user is able to control an input point and is able to inject arbitrary HTML code into a vulnerable web page. This vulnerability can have many consequences, like disclosure of a user's session cookies that could be used to impersonate the victim, or, more generally, it can allow the attacker to modify the page content seen by the victims.
+### 综述
 
+HTML注入是一种发生在用户可以控制输入点，并且向有漏洞的网页可以注入任意HTML代码的注入漏洞。这个漏洞能导致很多后果，比如用户会话ID暴露导致的身份模仿问题，或者，更加普通的，他允许攻击者修改用户看到的页面内容。
 
-### How to Test
-This vulnerability occurs when the user input is not correctly sanitized and the output is not encoded. An injection allows the attacker to send a malicious HTML page to a victim. The targeted browser will not be able to distinguish (trust) the legit from the malicious parts and consequently will parse and execute all as legit in the victim context.
+### 如何测试
 
+当用户输入没有正确审查而输出没有被编码的情况下，漏洞就会发生。注入攻击使攻击者能够发送恶意HTML页面给受害者。目标浏览器无法分辨页面内容是否有恶意，后果就是解析并执行所有内容。
 
-There is a wide range of methods and attributes that could be used to render HTML content. If these methods are provided with an untrusted input, then there is an high risk of XSS, specifically an HTML injection one. Malicious HTML code could be injected for example via innerHTML, that is used to render user inserted HTML code. If strings are not correctly sanitized the problem could lead to XSS based HTML injection. Another method could be document.write()
+有大量的方法和属性可以用来渲染HTML内容。如果这些方法由不可信的输入提供，那么就有很大的几率导致XSS风险，特别是HTML注入。比如恶意的HTML代码可以通过innerHTML进行注入，这被用于渲染用户插入的HTML代码。如果字符串没有正确审查，这个问题就会导致基于HTML注入的XSS。另一个方法可能是document.write()。
 
+当尝试进行此类问题的利用时候，考虑一些被不同浏览器不同对待的特殊字符。参见参考资料中的DOM XSS维基。
 
-When trying to exploit this kind of issues, consider that some characters are treated differently by different browsers. For reference see the DOM XSS Wiki.
+innerHTML属性设置了内部HTML元素。不正确使用这个特性，也就是对不可信输入缺少审查措施，而且对输出未进行编码，就允许攻击者注入恶意的HTML代码。
 
+**漏洞代码例子：**
 
-The innerHTML property sets or returns the inner HTML of an element. An improper usage of this property, that means lack of sanitization from untrusted input and missing output encoding, could allow an attacker to inject malicious HTML code.
-
-
-Example of Vulnerable Code:
-
-The following example shows a snippet of vulnerable code that allows an unvalidated input to be used to create dynamic html in the page context:
+下面例子展示了一小段漏洞代码，允许未验证的输入在页面动态创建HTML：
 
 ```
 var userposition=location.href.indexOf("user=");
@@ -28,8 +25,7 @@ var user=location.href.substring(userposition+5);
 document.getElementById("Welcome").innerHTML=" Hello, "+user;
 ```
 
-
-In the same way, the following example shows a vulnerable code using the document.write() function:
+同样的，下面的例子展示了使用document.write()功能的漏洞代码：
 
 ```
 var userposition=location.href.indexOf("user=");
@@ -37,28 +33,29 @@ var user=location.href.substring(userposition+5);
 document.write("<h1>Hello, " + user +"</h1>");
 ```
 
+在这两个例子中，使用如下输入：
 
-In both examples, an input like the following:
 ```
  http://vulnerable.site/page.html?user=<img%20src='aaa'%20onerror=alert(1)>
 ```
 
-will add to the page the image tag that will execute an arbitrary JavaScript code inserted by the malicious user in the HTML context.
+就可以向HTML上下文中注入执行任意JavaScript代码的恶意图片标签。
 
+#### 黑盒测试
 
-#### Black Box testing
-Black box testing for  HTML Injection is not usually performed since access to the source code is always available as it needs to be sent to the client to be executed.<br>
+HTML注入通常不进行黑盒测试，因为需要客户端执行注入的代码，而且源代码总是可以获得的。
 
+#### 灰盒测试
 
-#### Gray Box testing
+**测试HTML注入漏洞：**
 
-Testing for HTML Injection vulnerabilities:
-For example, looking at the following URL:
+例如，在下面的URL例子中：
+
 ```
  http://www.domxss.com/domxss/01_Basics/06_jquery_old_html.html
 ```
 
-The HTML code will contains the following script:
+HTML代码包括如下脚本：
 
 ```
 <script src="../js/jquery-1.7.1.js"></script>
@@ -77,15 +74,17 @@ $(window).bind("hashchange",setMessage)
 </body>
 ```
 
+这里就能够注入HTML代码。
 
-It is possible to inject HTML code.
+### 参考资料
 
+**OWASP 资源**
 
-### References
-**OWASP Resources**
 * [DOM based XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet)
 * DOMXSS.com - http://www.domxss.com
 
-**Whitepapers**<br>
+**白皮书**
+
 * Browser location/document URI/URL Sources - https://code.google.com/p/domxsswiki/wiki/LocationSources
     - i.e., what is returned when the user asks the browser for things like document.URL, document.baseURI, location, location.href, etc.
+
