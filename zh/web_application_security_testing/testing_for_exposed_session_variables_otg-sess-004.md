@@ -1,66 +1,63 @@
-# Testing for Exposed Session Variables (OTG-SESS-004)
+# 测试会话变量泄露 (OTG-SESS-004)
 
 
-### Summary
+### 综述
 
-The Session Tokens (Cookie, SessionID, Hidden Field), if exposed, will usually enable an attacker to impersonate a victim and access the application illegitimately.  It is important that they are protected from eavesdropping at all times, particularly whilst in transit between the client browser and the application servers.
-<br>
+会话令牌（cookie，会话ID，隐藏域），如果泄露，可能允许攻击者模仿受害者并非法访问系统。重要的是这些令牌应该无时无刻被保护，防止窃听，特别是在传输过程中。
 
+这里的信息关注于对敏感的会话ID数据的传输安全更胜于通常的数据，可能在缓存和传输策略上更加严格。
 
-The information here relates to how transport security applies to the transfer of sensitive Session ID data rather than data in general, and may be stricter than the caching and transport policies applied to the data served by the site.
+使用个人代理，就有可能确认每个请求与响应：
+* 使用的协议（如HTTP与HTTPS）
+* HTTP头
+* 消息主题（如POST或页面内容）
 
-
-Using a personal proxy, it is possible to ascertain the following about each request and response:
-* Protocol used (e.g., HTTP vs. HTTPS)
-* HTTP Headers
-* Message Body (e.g., POST or page content)
-
-
-Each time Session ID data is passed between the client and the server, the protocol, cache, and privacy directives and body should be examined. Transport security here refers to Session IDs passed in GET or POST requests, message bodies, or other means over valid HTTP requests.
+每当会话ID在客户端与服务器中传递的时候，协议、缓存、隐私指示符、和消息主体都应该检查。传输安全这里指的是通过GET或POST请求、消息主体或其他方法在合法的HTTP请求中传输会话ID。
 
 
-###How to Test
+### 如何测试
 
-**Testing for Encryption & Reuse of Session Tokens vulnerabilities:** <br>
-Protection from eavesdropping is often provided by SSL encryption, but may incorporate other tunneling or encryption. It should be noted that encryption or cryptographic hashing of the Session ID should be considered separately from transport encryption, as it is the Session ID itself being protected, not the data that may be represented by it.
+**测试会话令牌的加密和复用漏:**
 
+防止窃听的的方法通常是提供SSL加密，但是可能无法和其他隧道或加密一起使用。应当注意的是加密或其他密码学散列算法处理会话ID应该考虑与传输加密分开，正如应该保护的是会话ID本身，而不是其中的数据。
 
-If the Session ID could be presented by an attacker to the application to gain access, then it must be protected in transit to mitigate that risk. It should therefore be ensured that encryption is both the default and enforced for any request or response where the Session ID is passed, regardless of the mechanism used (e.g., a hidden form field). Simple checks such as replacing https:// with http:// during interaction with the application should be performed, together with modification of form posts to determine if adequate segregation between the secure and non-secure sites is implemented.<br>
+如果会话ID能够被攻击者直接获得访问权限，那么他必须在传输中被保护来减轻风险。因此当会话ID传递时，应该确保加密措施在任何请求和响应中都是默认和强制执行的，无论是使用何种机制（如隐藏域）。简单的检查是https://用http://替代，同时修改表单来确定在安全和不安全的站点中是否有足够的隔离措施。
 
-
-Note that if there is also an element to the site where the user is tracked with Session IDs but security is not present (e.g., noting which public documents a registered user downloads) it is essential that a different Session ID is used.  The Session ID should therefore be monitored as the client switches from the secure to non-secure elements to ensure a different one is used.<br>
-
-
-**Result Expected:**<br>
-Every time the authentication is successful, the user should expect to receive:
-* A different session token
-* A token sent via encrypted channel every time they make an HTTP Request
+注意，如果站点存在用户使用会话ID追踪的一个元素，然而没有安全措施（如注册用户可下载的公开文件），有必要使用一个不同的会话ID。会话ID应该在客户端切换安全与非安全的元素时候被监控，来确保使用的不同的ID。
 
 
-**Testing for Proxies & Caching vulnerabilities:** <br>
-Proxies must also be considered when reviewing application security.  In many cases, clients will access the application through corporate, ISP, or other proxies or protocol aware gateways (e.g., Firewalls). The HTTP protocol provides directives to control the behavior of downstream proxies, and the correct implementation of these directives should also be assessed.
+**期待结果:**
+
+每次成功进行认证之后，用户应该期待能获取：
+* 一个不同的会话令牌
+* 发起HTTP请求时，令牌通过加密信道传输
 
 
-In general, the Session ID should never be sent over unencrypted transport and should never be cached.  The application should be examined to ensure that encrypted communications are both the default and enforced for any transfer of Session IDs.  Furthermore, whenever the Session ID is passed, directives should be in place to prevent its caching by intermediate and even local caches.<br>
+**测试代理和缓存漏洞:**
+
+在评估应用程序安全时，必须将代理考虑进去。在许多情况下，客户端可能通过公司、ISP、或其他代理或协议分析网关（如防火墙）访问应用程序。HTTP协议提供了控制下游代理行为的指示符，应该评估这些指示符被正确实现。
+
+通常，会话ID不应该通过未加密信道发送，也不应该被缓存。应用程序必须检查并确保加密通信在传输任何会话ID时是默认和强制。更进一步，无论何时会话ID被传输，指示符也应该一同传输来防止中间缓存甚至本地缓存。
+
+应用程序也应该被配置为确保在HTTP 1.0 和HTTP 1.1（RFC 2616）同样确保缓存数据安全。 HTTP 1.1 提供一系列的缓存控制措施。Cache-Control: no-cache 指示代理必须不复用任何数据。而 Cache-Control: Private 看上去是一个更加合适的指示符，允许不共享的代理缓存数据。在网吧或其他共享系统的情况中，显然这是一个风险点。甚至单用户工作机缓存的会话ID也可能通过文件系统或网络存储暴露给其他人。HTTP 1.0缓存无法识别Cache-Control: no-cache 指示符。
+
+**期待结果:**
+
+“Expires: 0” 和 Cache-Control: max-age=0 指示符应该被使用来进一步确保缓存不泄露数据。
+
+每一个传输会话ID的请求/响应都应该检查是否含有正确的缓存指示符。
+
+**测试GET和POST漏洞:**
+
+通常，不应该使用GET请求，因为会话ID可能在代理或防火墙日志中泄露。而且与其他类型的传输相比，也更加非常容易操纵，尽管任何机制都可以在客户端用合适的工具来操纵。进一步来说，[跨站脚本 (XSS)](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29) 攻击最容易通过该方式发送构造的GET请求链接给受害者来利用。通过使用POST发送数据更加不容易发生。
 
 
-The application should also be configured to secure data in caches over both HTTP/1.0 and HTTP/1.1 – RFC 2616 discusses the appropriate controls with reference to HTTP. HTTP/1.1 provides a number of cache control mechanisms.  Cache-Control: no-cache indicates that a proxy must not re-use any data.  Whilst Cache-Control: Private appears to be a suitable directive, this still allows a non-shared proxy to cache data.  In the case of web-cafes or other shared systems, this presents a clear risk.  Even with single-user workstations the cached Session ID may be exposed through a compromise of the file-system or where network stores are used.  HTTP/1.0 caches do not recognise the Cache-Control: no-cache directive.
+**期待结果:**
 
+所有服务器端使用POST接受数据的代码都应该被测试确保不能使用GET传输。
 
-**Result Expected:**<br>
-The “Expires: 0” and Cache-Control: max-age=0 directives should be used to further ensure caches do not expose the data.
-Each request/response passing Session ID data should be examined to ensure appropriate cache directives are in use.
-<br>
+例如，考虑如下登陆页面的POST请求。
 
-
-**Testing for GET & POST vulnerabilities:** <br>
-In general, GET requests should not be used, as the Session ID may be exposed in Proxy or Firewall logs.  They are also far more easily manipulated than other types of transport, although it should be noted that almost any mechanism can be manipulated by the client with the right tools. Furthermore, [Cross-site Scripting (XSS)](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29) attacks are most easily exploited by sending a specially constructed link to the victim.  This is far less likely if data is sent from the client as POSTs.
-<br>
-
-
-**Result Expected:**<br>
-All server side code receiving data from POST requests should be tested to ensure it does not accept the data if sent as a GET.
-For example, consider the following POST request generated by a log in page.
 ```
 POST http://owaspapp.com/login.asp HTTP/1.1
 Host: owaspapp.com
@@ -77,26 +74,30 @@ Content-Length: 34
 Login=Username&password=Password&SessionID=12345678
 ```
 
+如果login.asp没有很好实现，可能能通过如下URL进行登陆：
 
-If login.asp is badly implemented, it may be possible to log in using the following URL:
+```
 http://owaspapp.com/login.asp?Login=Username&password=Password&SessionID=12345678
+```
+
+能通过检查每一个POST请求来识别潜在的不完全服务器端脚本。
+
+**测试传输漏洞:**
+
+所有客户端和应用程序的交互至少要按以下标准进行测试：
+* 会话ID是如何传输的？如，GET，POST，表单（包括隐藏域）
+* 会话ID总是默认通过加密传输的么？
+* 是否可能操纵应用程序不加密传输会话ID？如，通过将HTTPS改为HTTP？
+* 在传输会话ID的请求/响应中使用了什么缓存控制指示符？
+* 这些指示符总是存在么？如果不是，哪里有特例？
+* 会话ID使用了GET请求了么？
+* 如果使用POST，是否可以使用GET替代？
 
 
-Potentially insecure server-side scripts may be identified by checking each POST in this way.<br>
+### 参考资料
 
+**白皮书**
 
-**Testing for Transport vulnerabilities:** <br>
-All interaction between the Client and Application should be tested at least against the following criteria.
-* How are Session IDs transferred? e.g., GET, POST, Form Field (including hidden fields)
-* Are Session IDs always sent over encrypted transport by default?
-* Is it possible to manipulate the application to send Session IDs unencrypted? e.g., by changing HTTP to HTTPS?
-* What cache-control directives are applied to requests/responses passing Session IDs?
-* Are these directives always present?  If not, where are the exceptions?
-* Are GET requests incorporating the Session ID used?
-* If POST is used, can it be interchanged with GET?
-
-
-### References
-**Whitepapers**<br>
 * RFCs 2109 & 2965 – HTTP State Management Mechanism [D. Kristol, L. Montulli] - http://www.ietf.org/rfc/rfc2965.txt, http://www.ietf.org/rfc/rfc2109.txt
 * RFC 2616 – Hypertext Transfer Protocol -- HTTP/1.1 - http://www.ietf.org/rfc/rfc2616.txt
+
