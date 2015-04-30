@@ -126,30 +126,30 @@ The following are some common tool types that can be useful in identifying busin
 **Miscellaneous Test Tools**<br>
 
 * Web Developer toolbar - https://chrome.google.com/webstore/detail/bfbameneiokkgbdmiekhjnmfkcnldhhm
-The Web Developer extension adds a toolbar button to the browser with various web developer tools. This is the official port of the Web Developer extension for Firefox.
+    - The Web Developer extension adds a toolbar button to the browser with various web developer tools. This is the official port of the Web Developer extension for Firefox.
 
 * HTTP Request Maker - https://chrome.google.com/webstore/detail/kajfghlhfkcocafkcjlajldicbikpgnp?hl=en-US
-Request Maker is a tool for penetration testing. With it you can easily capture requests made by web pages, tamper with the URL, headers and POST data and, of course, make new requests
+    - Request Maker is a tool for penetration testing. With it you can easily capture requests made by web pages, tamper with the URL, headers and POST data and, of course, make new requests
 
 * Cookie Editor - https://chrome.google.com/webstore/detail/fngmhnnpilhplaeedifhccceomclgfbg?hl=en-US
-Edit This Cookie is a cookie manager. You can add, delete, edit, search, protect and block cookies
+    - Edit This Cookie is a cookie manager. You can add, delete, edit, search, protect and block cookies
 
 * Session Manager - https://chrome.google.com/webstore/detail/bbcnbpafconjjigibnhbfmmgdbbkcjfi
-With Session Manager you can quickly save your current browser state and reload it whenever necessary. You can manage multiple sessions, rename or remove them from the session library. Each session remembers the state of the browser at its creation time, i.e. the opened tabs and windows. Once a session is opened, the browser is restored to its state.
+    - With Session Manager you can quickly save your current browser state and reload it whenever necessary. You can manage multiple sessions, rename or remove them from the session library. Each session remembers the state of the browser at its creation time, i.e. the opened tabs and windows. Once a session is opened, the browser is restored to its state.
 
 * Cookie Swap - https://chrome.google.com/webstore/detail/dffhipnliikkblkhpjapbecpmoilcama?hl=en-US
-Swap My Cookies is a session manager, it manages your cookies, letting you login on any website with several different accounts. You can finally  login into Gmail, yahoo, hotmail, and just any website you use, with all your accounts; if you want to use another account just swap profile!
+    - Swap My Cookies is a session manager, it manages your cookies, letting you login on any website with several different accounts. You can finally  login into Gmail, yahoo, hotmail, and just any website you use, with all your accounts; if you want to use another account just swap profile!
 
 * HTTP Response Browser - https://chrome.google.com/webstore/detail/mgekankhbggjkjpcbhacjgflbacnpljm?hl=en-US
-Make HTTP requests from your browser and browse the response (HTTP headers and source). Send HTTP method, headers and body using XMLHttpRequest from your browser then view the HTTP status, headers and source. Click links in the headers or body to issue new requests. This plug-in formats XML responses and uses Syntax Highlighter < http://alexgorbatchev.com/ >.
+    - Make HTTP requests from your browser and browse the response (HTTP headers and source). Send HTTP method, headers and body using XMLHttpRequest from your browser then view the HTTP status, headers and source. Click links in the headers or body to issue new requests. This plug-in formats XML responses and uses [Syntax Highlighter](http://alexgorbatchev.com/).
 
 * Firebug lite for Chrome - https://chrome.google.com/webstore/detail/bmagokdooijbeehmkpknfglimnifench
-Firebug Lite is not a substitute for Firebug, or Chrome Developer Tools. It is a tool to be used in conjunction with these tools. Firebug Lite provides the rich visual representation we are used to see in Firebug when it comes to HTML elements, DOM elements, and Box Model shading. It provides also some cool features like inspecting HTML elements with your mouse, and live editing CSS properties.
+    - Firebug Lite is not a substitute for Firebug, or Chrome Developer Tools. It is a tool to be used in conjunction with these tools. Firebug Lite provides the rich visual representation we are used to see in Firebug when it comes to HTML elements, DOM elements, and Box Model shading. It provides also some cool features like inspecting HTML elements with your mouse, and live editing CSS properties.
 
 
 ###References
 
-**Whitepapers**<br>
+**Whitepapers**
 
 * Business Logic Vulnerabilities in Web Applications - http://www.google.com/url?sa=t&rct=j&q=BusinessLogicVulnerabilities.pdf&source=web&cd=1&cad=rja&ved=0CDIQFjAA&url=http%3A%2F%2Faccorute.googlecode.com%2Ffiles%2FBusinessLogicVulnerabilities.pdf&ei=2Xj9UJO5LYaB0QHakwE&usg=AFQjCNGlAcjK2uz2U87bTjTHjJ-T0T3THg&bvm=bv.41248874,d.dmg
 
@@ -174,7 +174,7 @@ Firebug Lite is not a substitute for Firebug, or Chrome Developer Tools. It is a
 * 2012 Web Session Intelligence & Security Report: Business Logic Abuse (UK) Edition, Dr. Ponemon - http://buzz.silvertailsystems.com/Ponemon_UK.htm
 
 
-**OWASP Related**<br>
+**OWASP Related**
 
 * Business Logic Attacks – Bots and Bats, Eldad Chai - http://www.imperva.com/resources/adc/pdfs/AppSecEU09_BusinessLogicAttacks_EldadChai.pdf
 
@@ -183,7 +183,7 @@ Firebug Lite is not a substitute for Firebug, or Chrome Developer Tools. It is a
 * How to Prevent Business Flaws Vulnerabilities in Web Applications, Marco Morana -  http://www.slideshare.net/marco_morana/issa-louisville-2010morana
 
 
-**Useful Web Sites**<br>
+**Useful Web Sites**
 
 * Abuse of Functionality - http://projects.webappsec.org/w/page/13246913/Abuse-of-Functionality
 
