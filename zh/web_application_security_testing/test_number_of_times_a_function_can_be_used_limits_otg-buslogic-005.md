@@ -1,37 +1,32 @@
-# Test Number of Times a Function Can be Used Limits (OTG-BUSLOGIC-005)
+# 测试功能使用次数限制 (OTG-BUSLOGIC-005)
 
 
-### Summary
+### 综述
 
-Many of the problems that applications are solving require limits to the number of times a function can be used or action can be executed. Applications must be “smart enough” to not allow the user to exceed their limit on the use of these functions since in many cases each time the function is used the user may gain some type of benefit that must be accounted for to properly compensate the owner. For example: an eCommerce site may only allow a users apply a discount once per transaction, or some applications may be on a subscription plan and only allow users to download three complete documents monthly.
+应用程序需要解决的许多问题需要限制功能的使用次数或者操作的执行次数。应用程序必须“足够聪明”来限制用户使用超过他们的限额。因为在许多情况下，用户每使用一次某功能就能获得某种形式的利益，并需要支付合适的报酬。举例来说，一个电子金融站点可能只允许用户在一笔交易中使用一次折扣政策，或者有些应用程序可能有一种订阅计划，只允许用户每月下载三个完整的文档。
 
+功能限制的相关漏洞可能与应用本身关系密切，设计误用用例必须符合当前应用/功能/动作的允许次数。
 
-Vulnerabilities related to testing for the function limits are application specific and misuse cases must be created that strive to exercise parts of the application/functions/ or actions more than the allowable number of times.
+攻击者可能可以绕过业务逻辑，执行比“允许”次数更多的功能来利用应用程序获得利益。
 
+### 例子
 
-Attackers may be able to circumvent the business logic and execute a function more times than “allowable” exploiting the application for personal gain.
+假设一个电子商务站点允许用户在他们的购物总价上应用许多折扣中一种，接着再进行结算和交易。万一攻击者在完成一次“允许”的折扣之后返回折扣页面后，能否再次利用其他的折扣？或是能否多次利用相同的折扣？
 
+### 如何测试
 
-### Example
-
-Suppose an eCommerce site allows users to take advantage of any one of many discounts on their total purchase and then proceed to checkout and tendering. What happens of the attacker navigates back to the discounts page after taking and applying the one “allowable” discount? Can they take advantage of another discount? Can they take advantage of the same discount multiple times?
-
-
-###How to Test
-
-• Review the project documentation and use exploratory testing looking for functions or features in the application or system that should not be executed more that a single time or specified number of times during the business logic workflow.
-
-• For each of the functions and features found that should only be executed a single time or specified number of times during the business logic workflow, develop abuse/misuse cases that may allow a user to execute more than the allowable number of times. For example, can a user navigate back and forth through the pages multiple times executing a function that should only execute once? or can a user load and unload shopping carts allowing for additional discounts.
+* 评估项目文档，搜寻此类在系统或应用程序的工作流中不应该被执行一次或指定次数以上的功能。
+* 对于每一个这样的功能，开发出误用/滥用测试用例来测试超出允许的使用次数的情况。例如，在只能执行一次功能的地方使用导航来回访问多次？或者用户能否添加删除购物车内容来使用额外的折扣？
 
 
-### Related Test Cases
+### 相关测试用例
 
-[ Testing for Account Enumeration and Guessable User Account (OTG-IDENT-004) ](https://www.owasp.org/index.php/Testing_for_cookies_attributes_%28OTG-SESS-002%29)
+[ 测试账户枚举和可猜测用户账户 (OTG-IDENT-004) ](https://www.owasp.org/index.php/Testing_for_cookies_attributes_%28OTG-SESS-002%29)
 
-[ Testing for Weak lock out mechanism (OTG-AUTHN-003)](https://www.owasp.org/index.php/Test_Session_Timeout_%28OTG-SESS-007%29)
+[ 测试弱账户锁定机制 (OTG-AUTHN-003)](https://www.owasp.org/index.php/Test_Session_Timeout_%28OTG-SESS-007%29)
 
 
-### References
+### 参考资料
 
 InfoPath Forms Services business logic exceeded the maximum limit of operations Rule - http://mpwiki.viacode.com/default.aspx?g=posts&t=115678
 
@@ -39,6 +34,7 @@ Gold Trading Was Temporarily Halted On The CME This Morning -
 http://www.businessinsider.com/gold-halted-on-cme-for-stop-logic-event-2013-10
 
 
-### Remediation
+### 整改措施
 
-The application should have checks to ensure that the business logic is being followed and that if a function/action can only be executed a certain number of times, when the limit is reached the user can no longer execute the function. To prevent users from using a function over the appropriate number of times the application may use mechanisms such as cookies to keep count or through sessions not allowing users to access to execute the function additional times.
+应用程序应该存在检查功能来确保业务逻辑正确执行，如果有功能或动作只能执行指定次数，那么当限制次数达到后，用户应该不能再使用该功能。为了防止用户超出功能使用限制，应用程序应该使用cookie等机制来计数或贯穿会话中不允许用户访问额外的功能。
+
