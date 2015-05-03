@@ -1,62 +1,55 @@
-# Test for Process Timing (OTG-BUSLOGIC-004)
+# 测试处理用时 (OTG-BUSLOGIC-004)
 
 
-### Summary
+### 综述
 
-It is possible that attackers can gather information on an application by monitoring the time it takes to complete a task or give a respond. Additionally, attackers may be able to manipulate and break designed business process flows by simply keeping active sessions open and not submitting their transactions in the "expected" time frame.
+攻击者有可能通过监视应用程序完成任务或返回响应的用时来收集额外信息。攻击者可能能够通过简单保持活动会话开启，并不在“期待”的时间内提交事务来操作和打破业务处理流程。
 
+处理用时逻辑漏洞是非常独特的漏洞，误用测试用例应该考虑执行和事务用时需要，并且与应用程序/系统密切相关。
 
-Process timing logic vulnerabilities is unique in that these manual misuse cases should be created considering execution and transaction timing that are application/system specific.
-
-
-Processing timing may give/leak information on what is being done in the application/system background processes. If an application allows users to guess what the particulate next outcome will be by processing time variations, users will be able to adjust accordingly and change behavior based on the expectation and "game the system".
+处理用时信息可能会给予/泄露应用程序/系统后台进程的信息。如果应用程序允许用户猜测不同的处理时长会导致不同的结果，那么用户有可能能通过精心调整行为来赢得利益。
 
 
-### Example
+### 例子
 
-#### Example 1
+#### 例1
 
-Video gambling/slot machines may take longer to process a transaction just prior to a large payout. This would allow astute gamblers to gamble minimum amounts until they see the long process time which would then prompt them to bet the maximum.
-
-
-#### Example 2
-
-Many system log on processes ask for the user name and password. If you look closely you may be able to see that entering an invalid user name and invalid user password takes more time to return an error than entering a valid username and invalid user password. This may allow the attacker to know if they have a valid username and not need to rely on the GUI message.
+视频赌博机可能会花更大的处理时间在处理大奖励时。这可能允许聪明的赌博者不断投入最小数量的赌资，直到他们发现可能会使他们获得最大利益的长时间的处理的情况。
 
 
-#### Example 3
+#### 例2
 
-Most Arenas or travel agencies have ticketing applications that allow users to purchase tickets and reserve seats. When the user requests the tickets seats are locked or reserved pending payment. What if an attacker keeps reserving seats but not checking out? Will the seats be released, or will no tickets be sold? Some ticket vendors now only allow users 5 minutes to complete a transaction or the transaction is invalidated.
-
-
-#### Example 4
-
-Suppose a precious metals e-commerce site allows users to make purchases with a price quote based on market price at the time they log on. What if an attacker logs on and places an order but does not complete the transaction until later in the day only of the price of the metals goes up? Will the attacker get the initial lower price?
+许多登陆系统需要用户名和密码。如果你仔细观察，你可能发现输入错误用户名和错误密码，返回错误页面花费的时间比输入合法用户名和错误密码会更久。这可能会允许攻击者在不依赖于GUI消息的情况下分辨自己是否拥有合法用户名。
 
 
-### How to Test
+#### 例3
 
-• Review the project documentation and use exploratory testing looking for application/system functionality that may be impacted by time. Such as execution time or actions that help users predict a future outcome or allow one to circumvent any part of the business logic or workflow. For example, not completing transactions in an expected time.
-
-• Develop and execute the mis-use cases ensuring that attackers can not gain an advantage based on any timing.
+许多体育场馆或旅行代理商有自己的票务系统来允许用户购买票务或预定座位。当用户请求已经锁定的位置或者待支付的预定席位时，万一攻击者一直维持预定席位而不完成支付会怎么样？席位会释放还是票无法发售？有些票务运营商现在只允许用户在5分钟内完成交易，否则交易将视为无效。
 
 
-### Related Test Cases
+#### 例4
 
-[ Testing for Cookies attributes (OTG-SESS-002)](https://www.owasp.org/index.php/Testing_for_cookies_attributes_%28OTG-SESS-002%29)
+假设前面那个电子金融金属交易站点允许用户购买他登陆时间那一刻的市场价格的一定份额的商品。万一攻击者登陆，并提交订单但不完成交易，等待当天的金属价格走高，攻击者还能使用先前的较低的价格么？
 
-[ Test Session Timeout (OTG-SESS-007)](https://www.owasp.org/index.php/Test_Session_Timeout_%28OTG-SESS-007%29)
+### 如何测试
 
-
-
-### References
-
-None
+* 审查项目文档，寻找可能被时间影响的应用程序/系统功能。比如执行时间或动作有助于用户预测输出或允许用户绕过任何业务逻辑或工作流。举例来说，不在期待的时间内完成交易。
+* 开发并执行误用测试用例确保攻击者无法通过时间来获取任何利益。
 
 
-### Remediation
+### 相关测试用例
 
-Develop applications with processing time in mind. If attackers could possibly gain some type of advantage from knowing the different processing times and results add extra steps or processing so that no matter the results they are provided in the same time frame.
+[ 测试Cookie属性 (OTG-SESS-002)](https://www.owasp.org/index.php/Testing_for_cookies_attributes_%28OTG-SESS-002%29)
 
+[ 测试会话超时 (OTG-SESS-007)](https://www.owasp.org/index.php/Test_Session_Timeout_%28OTG-SESS-007%29)
 
-Additionally, the application/system must have mechanism in place to not allow attackers to extend transactions over an "acceptable" amount of time. This may be done by cancelling or resetting transactions after a specified amount of time has passed like some ticket vendors are now using.
+### 参考资料
+
+无
+
+### 整改措施
+
+用心设计有关处理时间的应用程序。如果攻击者可能能通过处理时间的区别来获取某种利益，加入额外的处理步骤来确保返回结果在同样的时间帧内。
+
+此外，应用程序/系统必须有适当的机制来不允许攻击者延长交易超过“可接受”的时间。这能通过在特定时间之后重置或取消交易来完成，如同某些票务运营商做的那样。
+

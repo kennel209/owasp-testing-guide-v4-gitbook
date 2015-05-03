@@ -36,9 +36,9 @@ Suppose a precious metals e-commerce site allows users to make purchases with a 
 
 ### How to Test
 
-• Review the project documentation and use exploratory testing looking for application/system functionality that may be impacted by time. Such as execution time or actions that help users predict a future outcome or allow one to circumvent any part of the business logic or workflow. For example, not completing transactions in an expected time.
+* Review the project documentation and use exploratory testing looking for application/system functionality that may be impacted by time. Such as execution time or actions that help users predict a future outcome or allow one to circumvent any part of the business logic or workflow. For example, not completing transactions in an expected time.
 
-• Develop and execute the mis-use cases ensuring that attackers can not gain an advantage based on any timing.
+* Develop and execute the mis-use cases ensuring that attackers can not gain an advantage based on any timing.
 
 
 ### Related Test Cases
