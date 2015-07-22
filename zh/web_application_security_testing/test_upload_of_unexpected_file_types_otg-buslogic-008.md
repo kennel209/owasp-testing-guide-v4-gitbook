@@ -26,17 +26,17 @@
 
 #### 特定测试方法
 
-*	学习应用程序的逻辑需求。
-*	准备一系列的不被支持的文件用于上传，可能包括：jsp，exe，或htmlPrepare a library of files that are “not approved” for upload that may contain files such as: jsp, exe, or html files containing script.
-*	In the application navigate to the file submission or upload mechanism.
-*	Submit the “not approved” file for upload and verify that they are properly prevented from uploading
+* 学习应用程序的逻辑需求。
+* 准备一系列的不被支持的文件用于上传，可能包括：jsp，exe，或包含脚本的html文件。
+* 在应用程序中找到文件提交页面或文件上传页面。
+* 尝试上传一系列“不被支持”的文件，确认他们没有被成功上传。
 
 
 ### 相关测试用例
 
-[ Test File Extensions Handling for Sensitive Information (OTG-CONFIG-003) ](https://www.owasp.org/index.php/Test_File_Extensions_Handling_for_Sensitive_Information_%28OTG-CONFIG-003%29)
+[ 测试敏感信息的文件扩展处理 (OTG-CONFIG-003) ](https://www.owasp.org/index.php/Test_File_Extensions_Handling_for_Sensitive_Information_%28OTG-CONFIG-003%29)
 
-[ Test Upload of Malicious Files (OTG-BUSLOGIC-009)](https://www.owasp.org/index.php/Test_Upload_of_Malicious_Files_%28OTG-BUSLOGIC-009%29)
+[ 测试恶意文件上传 (OTG-BUSLOGIC-009)](https://www.owasp.org/index.php/Test_Upload_of_Malicious_Files_%28OTG-BUSLOGIC-009%29)
 
 
 ### 参考资料
