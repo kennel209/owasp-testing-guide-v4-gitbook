@@ -34,9 +34,8 @@
 
 ### 相关测试用例
 
-[ 测试敏感信息的文件扩展处理 (OTG-CONFIG-003) ](https://www.owasp.org/index.php/Test_File_Extensions_Handling_for_Sensitive_Information_%28OTG-CONFIG-003%29)
-
-[ 测试恶意文件上传 (OTG-BUSLOGIC-009)](https://www.owasp.org/index.php/Test_Upload_of_Malicious_Files_%28OTG-BUSLOGIC-009%29)
+* [ 测试敏感信息的文件扩展处理 (OTG-CONFIG-003) ](https://www.owasp.org/index.php/Test_File_Extensions_Handling_for_Sensitive_Information_%28OTG-CONFIG-003%29)
+* [ 测试恶意文件上传 (OTG-BUSLOGIC-009)](https://www.owasp.org/index.php/Test_Upload_of_Malicious_Files_%28OTG-BUSLOGIC-009%29)
 
 
 ### 参考资料
