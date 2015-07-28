@@ -223,4 +223,4 @@ See the [OWASP Code Review Guide](https://www.owasp.org/index.php/Category:OWASP
 
 #### How to Prevent CSRF Vulnerabilites
 
-See the [OWASP CSRF Prevention Cheat Sheet](http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet) for prevention measures.
+See the [OWASP CSRF Prevention Cheat Sheet](http://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet) for prevention measures.
