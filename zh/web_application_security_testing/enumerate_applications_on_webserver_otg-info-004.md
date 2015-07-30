@@ -203,9 +203,7 @@ http://www.net-square.com/mspawn.html
 
 下面例子展示了关于216.48.3.18的反向IP查找结果，这个IP是www.owasp.org的地址。例子中揭示了其他三个该IP地址下的不明显的域名。
 
-<center>
 ![Image:Owasp-Info.jpg](https://www.owasp.org/images/3/3e/Owasp-Info.jpg)
-</center>
 
 
 *Googling*<br>

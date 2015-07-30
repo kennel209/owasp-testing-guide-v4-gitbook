@@ -21,7 +21,7 @@ CSRF依赖于下面条件：
 
 为了化简情况，我们假设使用使用GET请求的URL（这些讨论情况也适用于POST请求情形）。如果 *victim* 已经进行认证，之后的请求就会自动带上认证的cookie（如图）。
 
-<center>![Image: session_riding.GIF](https://www.owasp.org/images/f/f3/Session_riding.GIF)</center>
+![Image: session_riding.GIF](https://www.owasp.org/images/f/f3/Session_riding.GIF)
 
 
 GET请求可以通过多种方法触发：
@@ -85,7 +85,7 @@ GET请求可以通过多种方法触发：
 
 这个例子非常简单，但是也展示了CSRF漏洞的危险之处。
 
-<center>![Image: Session Riding Firewall Management.gif](https://www.owasp.org/images/c/ca/Session_Riding_Firewall_Management.gif)</center>
+![Image: Session Riding Firewall Management.gif](https://www.owasp.org/images/c/ca/Session_Riding_Firewall_Management.gif)
 
 因此，如果我们输入‘*’，并点击删除按钮，将会发起下列请求。
 ```
@@ -93,7 +93,7 @@ GET请求可以通过多种方法触发：
 ```
 这将删除所有的防火墙规则（导致不正常的情况发生）。
 
-<center>![Image: Session Riding Firewall Management 2.gif](https://www.owasp.org/images/f/f8/Session_Riding_Firewall_Management_2.gif)</center>
+![Image: Session Riding Firewall Management 2.gif](https://www.owasp.org/images/f/f8/Session_Riding_Firewall_Management_2.gif)
 
 这不是唯一的场景，用户可能通过提交URL请求来得到同样的结果：
 ```

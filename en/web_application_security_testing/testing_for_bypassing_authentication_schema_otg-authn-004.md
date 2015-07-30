@@ -29,7 +29,7 @@ There are several methods of bypassing the authentication schema that is used by
 If a web application implements access control only on the log in page, the authentication schema could be bypassed.  For example, if a user directly requests a different page via forced browsing, that page may not check the credentials of the user before granting access. Attempt to directly access a protected page through the address bar in your browser to test using this method.
 
 
-<center>![Image:basm-directreq.jpg](https://www.owasp.org/images/7/7f/Basm-directreq.jpg)</center>
+![Image:basm-directreq.jpg](https://www.owasp.org/images/7/7f/Basm-directreq.jpg)
 
 
 ##### Parameter Modification
@@ -57,7 +57,7 @@ Content-Type: text/html; charset=iso-8859-1
 </BODY></HTML>
 ```
 
-<center>![Image:basm-parammod.jpg](https://www.owasp.org/images/8/8c/Basm-parammod.jpg)</center>
+![Image:basm-parammod.jpg](https://www.owasp.org/images/8/8c/Basm-parammod.jpg)
 
 
 ##### Session ID Prediction
@@ -68,13 +68,13 @@ Many web applications manage authentication by using session identifiers (sessio
 In the following figure, values inside cookies increase linearly, so it could be easy for an attacker to guess a valid session ID.
 
 
-<center>![Image:basm-sessid.jpg](https://www.owasp.org/images/8/83/Basm-sessid.jpg)</center>
+![Image:basm-sessid.jpg](https://www.owasp.org/images/8/83/Basm-sessid.jpg)
 
 
 In the following figure, values inside cookies change only partially, so it's possible to restrict a brute force attack to the defined fields shown below.
 
 
-<center>![Image:basm-sessid2.jpg](https://www.owasp.org/images/f/f4/Basm-sessid2.jpg)</center>
+![Image:basm-sessid2.jpg](https://www.owasp.org/images/f/f4/Basm-sessid2.jpg)
 
 
 ##### SQL Injection (HTML Form Authentication)
@@ -82,13 +82,13 @@ In the following figure, values inside cookies change only partially, so it's po
 SQL Injection is a widely known attack technique. This section is not going to describe this technique in detail as there are several sections in this guide that explain injection techniques beyond the scope of this section.
 
 
-<center>![Image:basm-sqlinj.jpg](https://www.owasp.org/images/4/46/Basm-sqlinj.jpg)</center>
+![Image:basm-sqlinj.jpg](https://www.owasp.org/images/4/46/Basm-sqlinj.jpg)
 
 
 The following figure shows that with a simple SQL injection attack, it is sometimes possible to bypass the authentication form.
 
 
-<center>![Image:basm-sqlinj2.gif](https://www.owasp.org/images/d/d1/Basm-sqlinj2.gif)</center>
+![Image:basm-sqlinj2.gif](https://www.owasp.org/images/d/d1/Basm-sqlinj2.gif)
 
 
 #### Gray Box Testing

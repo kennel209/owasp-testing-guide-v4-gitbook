@@ -26,7 +26,7 @@
 
 如果web应用程序只在登录页面实现了访问控制，那么这种认证模式可以被绕过。例如，如果用户通过强制浏览技巧直接请求访问不同的页面，这个页面可能不会检查访问凭证。尝试在浏览器地址栏输入地址直接访问受保护的页面来测试这个绕过方法。
 
-<center>![Image:basm-directreq.jpg](https://www.owasp.org/images/7/7f/Basm-directreq.jpg)</center>
+![Image:basm-directreq.jpg](https://www.owasp.org/images/7/7f/Basm-directreq.jpg)
 
 ##### 修改参数
 
@@ -53,7 +53,7 @@ Content-Type: text/html; charset=iso-8859-1
 </BODY></HTML>
 ```
 
-<center>![Image:basm-parammod.jpg](https://www.owasp.org/images/8/8c/Basm-parammod.jpg)</center>
+![Image:basm-parammod.jpg](https://www.owasp.org/images/8/8c/Basm-parammod.jpg)
 
 
 ##### 会话ID预测
@@ -62,21 +62,21 @@ Content-Type: text/html; charset=iso-8859-1
 
 在下面的图示中，cookie中的数值是线性增长的，所以攻击者很容易就可以猜测出一个有效的会话ID。
 
-<center>![Image:basm-sessid.jpg](https://www.owasp.org/images/8/83/Basm-sessid.jpg)</center>
+![Image:basm-sessid.jpg](https://www.owasp.org/images/8/83/Basm-sessid.jpg)
 
 在下面的图示中，cookie中的数值只有局部发生变化，可以通过有限的暴力攻击来猜测。
 
-<center>![Image:basm-sessid2.jpg](https://www.owasp.org/images/f/f4/Basm-sessid2.jpg)</center>
+![Image:basm-sessid2.jpg](https://www.owasp.org/images/f/f4/Basm-sessid2.jpg)
 
 ##### SQL注入（HTML表单认证）
 
 SQL注入是一个著名的攻击技巧。在这个章节不会详细描述这个技巧，指南中的一些章节将解释注入攻击技巧，作用范围不仅仅限于本章节内容。
 
-<center>![Image:basm-sqlinj.jpg](https://www.owasp.org/images/4/46/Basm-sqlinj.jpg)</center>
+![Image:basm-sqlinj.jpg](https://www.owasp.org/images/4/46/Basm-sqlinj.jpg)
 
 下面的图示展示了一个简单的SQL注入攻击，有时可以用来绕过认证表单。
 
-<center>![Image:basm-sqlinj2.gif](https://www.owasp.org/images/d/d1/Basm-sqlinj2.gif)</center>
+![Image:basm-sqlinj2.gif](https://www.owasp.org/images/d/d1/Basm-sqlinj2.gif)
 
 #### 灰盒测试
 

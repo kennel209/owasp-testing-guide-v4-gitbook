@@ -35,8 +35,8 @@ This document is designed to help organizations understand what comprises a test
 #### When to Test?
 Most people today don’t test software until it has already been created and is in the deployment phase of its life cycle (i.e., code has been created and instantiated into a working web application). This is generally a very ineffective and cost-prohibitive practice. One of the best methods to prevent security bugs from appearing in production applications is to improve the Software Development Life Cycle (SDLC) by including security in each of its phases. An SDLC is a structure imposed on the development of software artefacts. If an SDLC is not currently being used in your environment, it is time to pick one! The following figure shows a generic SDLC model as well as the (estimated) increasing cost of fixing security bugs in such a model.
 
-<center>![Image:SDLC.jpg](https://www.owasp.org/images/8/84/SDLC.jpg)<br>
-*Figure 1: Generic SDLC Model* </center>
+![Image:SDLC.jpg](https://www.owasp.org/images/8/84/SDLC.jpg)<br>
+*Figure 1: Generic SDLC Model* 
 
 Companies should inspect their overall SDLC to ensure that security is an integral part of the development process. SDLCs should include security tests to ensure security is adequately covered and controls are effective throughout the development process.
 
@@ -70,8 +70,8 @@ Vulnerability studies [7] have shown that with the reaction time of attackers wo
 There are several incorrect assumptions in the patch-and-penetrate model. Many users believe that patches interfere with normal operations and might break existing applications. It is also incorrect to assume that all users are aware of newly released patches. Consequently not all users of a product will apply patches, either because they think patching may interfere with how the software works or because they lack knowledge about the existence of the patch.<br>
 
 
-<center>![Image:WindowExposure.jpg](https://www.owasp.org/images/9/90/WindowExposure.jpg)<br>
-*Figure 2: Window of Vulnerability*</center>
+![Image:WindowExposure.jpg](https://www.owasp.org/images/9/90/WindowExposure.jpg)<br>
+*Figure 2: Window of Vulnerability*
 
 It is essential to build security into the Software Development Life Cycle (SDLC) to prevent reoccurring security problems within an application. Developers can build security into the SDLC  by developing standards, policies, and guidelines that fit and work within the development methodology. Threat modeling and other techniques should be used to help assign appropriate resources to those parts of a system that are most at risk.
 
@@ -225,15 +225,15 @@ The correct approach is a balanced approach that includes several techniques, fr
 Of course there are times and circumstances where only one technique is possible. For example, a test on a web application that has already been created, but where the testing party does not have access to the source code. In this case, penetration testing is clearly better than no testing at all. However, the testing parties should be encouraged to challenge assumptions, such as no access to source code, and to explore the possibility of more complete testing.
 
 A balanced approach varies depending on many factors, such as the maturity of the testing process and corporate culture. It is recommended that a balanced testing framework should look something like the representations shown in Figure 3 and Figure 4. The following figure shows a typical proportional representation overlaid onto the software development life cycle. In keeping with research and experience, it is essential that companies place a higher emphasis on the early stages of development.
-<center>
+
 ![Image:ProportionSDLC.png](https://www.owasp.org/images/3/31/ProportionSDLC.png)
 <br>*Figure 3: Proportion of Test Effort in SDLC*
-</center>
+
 The following figure shows a typical proportional representation overlaid onto testing techniques. <br>
-<center>
+
 ![Image:ProportionTest.png](https://www.owasp.org/images/5/5c/ProportionTest.png)
 <br>*Figure 4: Proportion of Test Effort According to Test Technique*
-</center>
+
 
 ##### A Note about Web Application Scanners
 Many organizations have started to use automated web application scanners. While they undoubtedly have a place in a testing program, some fundamental issues need to be highlighted about why it is believed that automating black box testing is not (or will ever be) effective. However, highlighting these issues should not discourage the use of web application scanners. Rather, the aim is to ensure the limitations are understood and testing frameworks are planned appropriately.
@@ -353,6 +353,7 @@ To derive security requirements from use and misuse case [20] it is important to
 * Step 2: Describe the Negative Scenario:  Attacker breaks the authentication through a brute force or dictionary attack of passwords and account harvesting vulnerabilities in the application. The validation errors provide specific information to an attacker to guess which accounts are actually valid registered accounts (usernames). Then the attacker will try to brute force the password for such a valid account. A brute force attack to four minimum length all digit passwords can succeed with a limited number of attempts (i.e., 10^4).
 
 * Step 3: Describe Functional and Negative Scenarios With Use and Misuse Case: The graphical example in Figure below depicts the derivation of security requirements via use and misuse cases. The functional scenario consists of the user actions (enteringa username and password) and the application actions (authenticating the user and providing an error message if validation fails). The misuse case consists of the attacker actions, i.e. trying to break authentication by brute forcing the password via a dictionary attack and by guessing the valid usernames from error messages. By graphically representing the threats to the user actions (misuses), it is possible to derive the countermeasures as the application actions that mitigate such threats.
+
 ![Image:UseAndMisuseCase.jpg|640px](https://www.owasp.org/images/thumb/9/94/UseAndMisuseCase.jpg/640px-UseAndMisuseCase.jpg)
 
 * Step 4: Elicit The Security Requirements. In this case, the following security requirements for authentication are derived:

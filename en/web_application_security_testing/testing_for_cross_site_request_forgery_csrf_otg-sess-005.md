@@ -28,7 +28,7 @@ Points 1, 2, and 3 are essential for the vulnerability to be present, while poin
 Suppose, for simplicity's sake, to refer to GET-accessible URLs (though the discussion applies as well to POST requests). If *victim* has already authenticated himself, submitting another request causes the cookie to be automatically sent with it (see picture, where the user accesses an application on www.example.com).
 
 
-<center>![Image: session_riding.GIF](https://www.owasp.org/images/f/f3/Session_riding.GIF)</center>
+![Image: session_riding.GIF](https://www.owasp.org/images/f/f3/Session_riding.GIF)
 
 
 The GET request could be originated in several different ways:
@@ -102,7 +102,7 @@ Let's suppose the firewall web management application has a function that allows
 
 The example is purposely quite naive, but shows in a simple way the dangers of CSRF.
 
-<center>![Image: Session Riding Firewall Management.gif](https://www.owasp.org/images/c/ca/Session_Riding_Firewall_Management.gif)</center>
+![Image: Session Riding Firewall Management.gif](https://www.owasp.org/images/c/ca/Session_Riding_Firewall_Management.gif)
 
 
 Therefore, if we enter the value ‘*’ and press the Delete button, the following GET request is submitted.
@@ -112,7 +112,7 @@ Therefore, if we enter the value ‘*’ and press the Delete button, the follow
 
 with the effect of deleting all firewall rules (and ending up in a possibly inconvenient situation).
 
-<center>![Image: Session Riding Firewall Management 2.gif](https://www.owasp.org/images/f/f8/Session_Riding_Firewall_Management_2.gif)</center>
+![Image: Session Riding Firewall Management 2.gif](https://www.owasp.org/images/f/f8/Session_Riding_Firewall_Management_2.gif)
 
 
 Now, this is not the only possible scenario. The user might have accomplished the same results by manually submitting the URL

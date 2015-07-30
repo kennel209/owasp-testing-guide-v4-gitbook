@@ -207,9 +207,7 @@ http://www.net-square.com/mspawn.html
 
 The following example shows the result of a query to one of the above reverse-IP services to 216.48.3.18, the IP address of www.owasp.org. Three additional non-obvious symbolic names mapping to the same address have been revealed.
 
-<center>
 ![Image:Owasp-Info.jpg](https://www.owasp.org/images/3/3e/Owasp-Info.jpg)
-</center>
 
 
 *Googling*<br>
