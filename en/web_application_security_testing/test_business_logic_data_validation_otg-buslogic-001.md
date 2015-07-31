@@ -1,6 +1,6 @@
 # Test Business Logic Data Validation (OTG-BUSLOGIC-001)
 
-###Summary
+### Summary
 
 The application must ensure that only logically valid data can be entered at the front end as well as directly to the server side of an application of system. Only verifying data locally may leave applications vulnerable to server injections through proxies or at handoffs with other systems. This is different from simply performing Boundary Value Analysis (BVA) in that it is more difficult and in most cases cannot be simply verified at the entry point, but usually requires checking some other system.
 
@@ -30,29 +30,23 @@ Many credit card systems are now downloading account balances nightly so the cus
 
 #### Generic Test Method
 
-• Review the project documentation and use exploratory testing looking for data entry points or hand off points between systems or software.
-
-• Once found try to insert logically invalid data into the application/system.
+* Review the project documentation and use exploratory testing looking for data entry points or hand off points between systems or software.
+* Once found try to insert logically invalid data into the application/system.
 
 
 #### Specific Testing Method:
 
-•	Perform front-end GUI Functional Valid testing on the application to ensure that the only "valid" values are accepted.
-
-•	Using an intercepting proxy observe the HTTP POST/GET looking for places that variables such as cost and quality are passed. Specifically, look for "hand-offs" between application/systems that may be possible injection of tamper points.
-
-•	Once variables are found start interrogating the field with logically "invalid" data, such as social security numbers or unique identifiers that do not exist or that do not fit the business logic. This testing verifies that the server functions properly and does not accept logically invalid data them.
+* Perform front-end GUI Functional Valid testing on the application to ensure that the only "valid" values are accepted.
+* Using an intercepting proxy observe the HTTP POST/GET looking for places that variables such as cost and quality are passed. Specifically, look for "hand-offs" between application/systems that may be possible injection of tamper points.
+* Once variables are found start interrogating the field with logically "invalid" data, such as social security numbers or unique identifiers that do not exist or that do not fit the business logic. This testing verifies that the server functions properly and does not accept logically invalid data them.
 
 
 ### Related Test Cases
 
-All [Input Validation](https://www.owasp.org/index.php/Testing_for_Input_Validation) test cases
-
-[Testing for Account Enumeration and Guessable User Account (OTG-IDENT-004)](https://www.owasp.org/index.php/Testing_for_Account_Enumeration_and_Guessable_User_Account_%28OTG-IDENT-004%29)
-
-[Testing for Bypassing Session Management Schema (OTG-SESS-001)](https://www.owasp.org/index.php/Testing_for_Session_Management_Schema_%28OTG-SESS-001%29)
-
-[Testing for Exposed Session Variables  (OTG-SESS-004)](https://www.owasp.org/index.php/Testing_for_Exposed_Session_Variables_%28OTG-SESS-004%29)
+* All [Input Validation](https://www.owasp.org/index.php/Testing_for_Input_Validation) test cases
+* [Testing for Account Enumeration and Guessable User Account (OTG-IDENT-004)](https://www.owasp.org/index.php/Testing_for_Account_Enumeration_and_Guessable_User_Account_%28OTG-IDENT-004%29)
+* [Testing for Bypassing Session Management Schema (OTG-SESS-001)](https://www.owasp.org/index.php/Testing_for_Session_Management_Schema_%28OTG-SESS-001%29)
+* [Testing for Exposed Session Variables  (OTG-SESS-004)](https://www.owasp.org/index.php/Testing_for_Exposed_Session_Variables_%28OTG-SESS-004%29)
 
 
 ### Tools
