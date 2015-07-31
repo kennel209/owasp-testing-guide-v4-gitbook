@@ -1,86 +1,71 @@
-# Test Ability to Forge Requests (OTG-BUSLOGIC-002)
+# 伪造请求能力测试 (OTG-BUSLOGIC-002)
 
-### Summary
+### 综述
 
-Forging requests is a method that attackers use to circumvent the front end GUI application to directly submit information for back end processing. The goal of the attacker is to send HTTP POST/GET requests through an intercepting proxy with data values that is not supported, guarded against or expected by the applications business logic. Some examples of forged requests include exploiting guessable or predictable parameters or expose “hidden” features and functionality such as enabling debugging or presenting special screens or windows that are very useful during development but may leak information or bypass the business logic.
+伪造请求是一种攻击者用来绕过前端应用程序限制，直接向后端处理程序提交信息的方法。攻击者的目的在于通过中间代理发送带有在业务逻辑之外的非支持的、受保护的或者预期意外数据的HTTP POST/GET请求。伪造请求的例子包括利用可猜测的或可预测的参数和一些“隐藏”特性功能（如调试功能、特殊开发界面）来得到额外信息或者绕过业务逻辑。
 
+伪造请求相关漏洞在不同应用及其业务逻辑数据验证方式中各不相同。着重于打破业务逻辑工作流。
 
-Vulnerabilities related to the ability to forge requests is unique to each application and different from business logic data validation in that it s focus is on breaking the business logic workflow.
+应用程序必须有逻辑检查机制来对抗伪造请求，以防攻击者有机会利用伪造请求来破坏应用程序业务逻辑或者工作流程。伪造请求并不是新的技术手段；攻击者通过使用劫持代理来发送HTTP请求。通过伪造该请求中发现的、可预测的参数来绕过业务逻辑，错使应用程序以为任务或过程已经发生或没有发生。
 
-
-Applications should have logic checks in place to prevent the system from accepting  forged requests that may allow attackers the opportunity to exploit the business logic, process, or flow of the application. Request forgery is nothing new; the attacker uses an intercepting proxy to send HTTP POST/GET requests to the application. Through request forgeries attackers may be able to circumvent the business logic or process by finding, predicting and manipulating parameters to make the application think a process or task has or has not taken place.
-
-
-Also, forged requests may allow subvention of programmatic or business logic flow by invoking “hidden” features or functionality such as debugging initially used by developers and testers sometimes referred to as an ”Easter egg”. “An Easter egg is an intentional inside joke, hidden message, or feature in a work such as a computer program, movie, book, or crossword. According to game designer Warren Robinett, the term was coined at Atari by personnel who were alerted to the presence of a secret message which had been hidden by Robinett in his already widely distributed game, Adventure. The name has been said to evoke the idea of a traditional Easter egg hunt.” http://en.wikipedia.org/wiki/Easter_egg_(media)
+此外，伪造请求可能会颠覆程序或者业务逻辑流，比如通过调用“隐藏”特性或功能（如调试模式、开发者模式、系统”彩蛋“）。”彩蛋“是一种故意的内部玩笑、隐藏消息或者特性，比如一段程序、影片、文章或者谜语。根据游戏设计者 Warren Robinett，这个名词是在 Atari 公司创造，某人被提示在 Robinett的广泛发行的游戏Adventure中隐藏的一段秘密消息。这个名字据称是传统的寻找复活节彩蛋的活动引发的想法。（http://en.wikipedia.org/wiki/Easter_egg_(media)）。
 
 
-### Examples
+### 测试案例
 
-#### Example 1
+#### 案例 1
 
-Suppose an e-commerce theater site allows users to select their ticket, apply a onetime 10% Senior discount on the entire sale, view the subtotal and tender the sale. If an attacker is able to see through a proxy that the application has a hidden field (of 1 or 0) used by the business logic to determine if a discount has been taken or not. The attacker is then able to submit the 1 or “no discount has been taken” value multiple times to take advantage of the same discount multiple times.
+假设一个电子影院允许用户选择电影票，并允许一次性的10%额外折扣。如果攻击者能够通过代理发现应用程序存在一个隐藏表单域（1或0）来确定折扣是否已经使用。攻击者通过递交’1‘来表明没有应用折扣从而进行多次折扣获得利益。
 
+#### 案例 2
 
-#### Example 2
+假设在线视频游戏中心在每次游戏关卡完成后将获得的积分转化为游戏券，这些游戏券可以兑换奖品。此外，每关游戏有等同于该关卡级别的分数累乘器。如果攻击者通过代理发现应用程序使用隐藏表单域来进入开发测试模式，就能快速跳到最高级别游戏关卡来快速累积游戏分数。
 
-Suppose an online video game pays out tokens for points scored for finding pirates treasure and pirates and for each level completed. These tokens can later be that can later be exchanged for prizes. Additionally each level's points have a multiplier value equal to the level. If an attacker was able to see through a proxy that the application has a hidden field used during development and testing to quickly get to the highest levels of the game they could quickly get to the highest levels and accumulate unearned points quickly.
-
-
-Also, if an attacker was able to see through a proxy that the application has a hidden field used during development and testing to enabled a log that indicated where other online players, or hidden treasure were in relation to the attacker, they would then be able to quickly go to these locations and score points.
+同时，如果攻击者能够通过调试的隐藏功能获得其他在线玩家的数据或者自身关卡数据，那么就能迅速完成关卡获得游戏分数。
 
 
-### How to Test
+### 如何测试
 
-#### Generic Testing Method
+#### 通用测试方法
 
-• Review the project documentation and use exploratory testing looking for guessable, predictable or hidden functionality of fields.
-
-• Once found try to insert logically valid data into the application/system allowing the user go through the application/system against the normal busineess logic workflow.
-
-
-#### Specific Testing Method 1
-
-•	Using an intercepting proxy observe the HTTP POST/GET looking for some indication that values are incrementing at a regular interval or are easily guessable.
-
-•	If it is found that some value is guessable this value may be changed and one may gain unexpected visibility.
+* 通览项目文档寻找可猜测、可预测或者隐藏的功能区域。
+* 一旦发现这样的地方，尝试插入逻辑有效的数据，允许用户绕过正常业务逻辑工作流来使用系统。
 
 
-#### Specific Testing Method 2
+#### 特定测试方法 1
 
-•	Using an intercepting proxy observe the HTTP POST/GET looking for some indication of hidden features such as debug that can be switched on or activated.
-
-•	If any are found try to guess and change these values to get a different application  response or behavior.
-
-
-### Related Test Cases
-
-[ Testing for Exposed Session Variables (OTG-SESS-004)](https://www.owasp.org/index.php/Testing_for_Exposed_Session_Variables_%28OTG-SESS-004%29)
-
-[ Testing for Cross Site Request Forgery (CSRF) (OTG-SESS-005)](https://www.owasp.org/index.php/Testing_for_CSRF_%28OTG-SESS-005%29)
-
-[ Testing for Account Enumeration and Guessable User Account (OTG-IDENT-004) ](https://www.owasp.org/index.php/Testing_for_Account_Enumeration_and_Guessable_User_Account_%28OTG-IDENT-004%29)
+* 使用劫持代理来观察HTTP GET/POST 请求，寻找容易猜测的数据或者以特定频率递增的数据。
+* 如果找到这样的参数，试着改变其数值获得预期以外的结果。
 
 
-### Tools
+#### 特定测试方法 2
+
+* 使用劫持代理来观察HTTP GET/POST 请求，寻找暗示隐藏特性如调制开关的地方。
+* 如果找到这样的地方，试着猜测并改变其数值来获得不同应用程序响应和行为。
+
+
+### 相关测试用例
+
+* [ 会话变量暴露测试 (OTG-SESS-004)](https://www.owasp.org/index.php/Testing_for_Exposed_Session_Variables_%28OTG-SESS-004%29)
+* [ CSRF测试 (OTG-SESS-005)](https://www.owasp.org/index.php/Testing_for_CSRF_%28OTG-SESS-005%29)
+* [ 账户枚举测试 (OTG-IDENT-004) ](https://www.owasp.org/index.php/Testing_for_Account_Enumeration_and_Guessable_User_Account_%28OTG-IDENT-004%29)
+
+
+### 测试工具
 
 * *OWASP Zed Attack Proxy (ZAP)* - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
 
-ZAP is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications. It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing. ZAP provides automated scanners as well as a set of tools that allow you to find security vulnerabilities manually.
+ZAP是一个非常容易使用的web应用程序渗透测试整合工具。他被设计为符合不同安全经验的人员使用，特别是新接触渗透测试的开发人员和功能测试人员的理想工具。ZAP在提供一系列的用于手工漏洞检测的工具的同时也提供了自动化扫描器。
 
 
-### References
+### 参考资料
 
-Cross Site Request Forgery - Legitimizing Forged Requests -
-http://fragilesecurity.blogspot.com/2012/11/cross-site-request-forgery-legitimazing.html
-
-Debugging features which remain present in the final game -
-http://glitchcity.info/wiki/index.php/List_of_video_games_with_debugging_features#Debugging_features_which_remain_present_in_the_final_game
-
-Easter egg - http://en.wikipedia.org/wiki/Easter_egg_(media)
-
-Top 10 Software Easter Eggs - http://lifehacker.com/371083/top-10-software-easter-eggs
+* Cross Site Request Forgery - Legitimizing Forged Requests - http://fragilesecurity.blogspot.com/2012/11/cross-site-request-forgery-legitimazing.html
+* Debugging features which remain present in the final game - http://glitchcity.info/wiki/index.php/List_of_video_games_with_debugging_features#Debugging_features_which_remain_present_in_the_final_game
+* Easter egg - http://en.wikipedia.org/wiki/Easter_egg_(media)
+* Top 10 Software Easter Eggs - http://lifehacker.com/371083/top-10-software-easter-eggs
 
 
-### Remediation
+### 整改措施
 
-The application must be smart enough and designed with business logic that will prevent attackers from predicting and manipulating parameters to subvert programmatic or business logic flow, or exploiting hidden/undocumented functionality such as debugging.
+应用程序应该设计的足够健壮来阻止攻击者预测和操纵可能颠覆业务逻辑的参数，或者如调试模式等利用隐藏/未公开的功能。
