@@ -41,32 +41,27 @@ Many systems include logging for auditing and troubleshooting purposes. But, how
 
 #### Generic Testing Method
 
-• Review the project documentation and use exploratory testing looking for parts of the application/system (components i.e. For example, input fields, databases or logs) that move, store or handle data/information.
-
-• For each identified component determine what type of data/information is logically acceptable and what types the application/system should guard against. Also, consider who according to the business logic is allowed to  insert, update and delete data/information and in each component.
-
-• Attempt to insert, update or edit delete the data/information values with invalid data/information into each component (i.e. input, database, or log) by users that .should not be allowed per the busines logic workflow.
+* Review the project documentation and use exploratory testing looking for parts of the application/system (components i.e. For example, input fields, databases or logs) that move, store or handle data/information.
+* For each identified component determine what type of data/information is logically acceptable and what types the application/system should guard against. Also, consider who according to the business logic is allowed to  insert, update and delete data/information and in each component.
+* Attempt to insert, update or edit delete the data/information values with invalid data/information into each component (i.e. input, database, or log) by users that .should not be allowed per the busines logic workflow.
 
 
 #### Specific Testing Method 1
 
-•	Using a proxy capture and HTTP traffic looking for hidden fields.
-
-•	If a hidden field is found see how these fields compare with the GUI application and start interrogating this value through the proxy by submitting different data values trying to circumvent the business process and manipulate values you were not intended to have access to.
+* Using a proxy capture and HTTP traffic looking for hidden fields.
+* If a hidden field is found see how these fields compare with the GUI application and start interrogating this value through the proxy by submitting different data values trying to circumvent the business process and manipulate values you were not intended to have access to.
 
 
 #### Specific Testing Method 2
 
-•	Using a proxy capture and HTTP traffic looking a place to insert information into areas of the application that are non-editable.
-
-•	If it is found see how these fields compare with the GUI application and start interrogating this value through the proxy by submitting different data values trying to circumvent the business process and manipulate values you were not intended to have access to.
+* Using a proxy capture and HTTP traffic looking a place to insert information into areas of the application that are non-editable.
+* If it is found see how these fields compare with the GUI application and start interrogating this value through the proxy by submitting different data values trying to circumvent the business process and manipulate values you were not intended to have access to.
 
 
 #### Specific Testing Method 3
 
-•       List components of the application or system that could be edited, for example logs or databases.
-
-•       For each component identified, try to read, edit or remove its information. For example log files should be identified and Testers should try to manipulate the data/information being collected.
+* List components of the application or system that could be edited, for example logs or databases.
+* For each component identified, try to read, edit or remove its information. For example log files should be identified and Testers should try to manipulate the data/information being collected.
 
 
 ### Related Test Cases
@@ -74,27 +69,21 @@ Many systems include logging for auditing and troubleshooting purposes. But, how
 All [Input Validation](https://www.owasp.org/index.php/Testing_for_Input_Validation) test cases
 
 
-
 ### Tools
 
-• Various system/application tools such as editors and file manipulation tools.
-
-• *OWASP Zed Attack Proxy (ZAP)* - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
+* Various system/application tools such as editors and file manipulation tools.
+* *OWASP Zed Attack Proxy (ZAP)* - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
 
 ZAP is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications. It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing. ZAP provides automated scanners as well as a set of tools that allow you to find security vulnerabilities manually.
 
 
 ### References
 
-Implementing Referential Integrity and Shared Business Logic in a RDB - http://www.agiledata.org/essays/referentialIntegrity.html
-
-On Rules and Integrity Constraints in Database Systems - http://www.comp.nus.edu.sg/~lingtw/papers/IST92.teopk.pdf
-
-Use referential integrity to enforce basic business rules in Oracle - http://www.techrepublic.com/article/use-referential-integrity-to-enforce-basic-business-rules-in-oracle/
-
-Maximizing Business Logic Reuse with Reactive Logic - http://architects.dzone.com/articles/maximizing-business-logic
-
-Tamper Evidence Logging - http://tamperevident.cs.rice.edu/Logging.html
+* Implementing Referential Integrity and Shared Business Logic in a RDB - http://www.agiledata.org/essays/referentialIntegrity.html
+* On Rules and Integrity Constraints in Database Systems - http://www.comp.nus.edu.sg/~lingtw/papers/IST92.teopk.pdf
+* Use referential integrity to enforce basic business rules in Oracle - http://www.techrepublic.com/article/use-referential-integrity-to-enforce-basic-business-rules-in-oracle/
+* Maximizing Business Logic Reuse with Reactive Logic - http://architects.dzone.com/articles/maximizing-business-logic
+* Tamper Evidence Logging - http://tamperevident.cs.rice.edu/Logging.html
 
 
 ### Remediation

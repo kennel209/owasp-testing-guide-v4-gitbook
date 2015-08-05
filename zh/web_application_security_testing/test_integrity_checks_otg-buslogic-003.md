@@ -1,102 +1,84 @@
-# Test Integrity Checks (OTG-BUSLOGIC-003)
+# 完整性检测 (OTG-BUSLOGIC-003)
 
-### Summary
+### 综述
 
-Many applications are designed to display different fields depending on the user of situation by leaving some inputs hidden. However, in many cases it is possible to submit values hidden field values to the server using a proxy. In these cases the server side controls must be smart enough to perform relational or server side edits to ensure that the proper data is allowed to the server based on user and application specific business logic.
+许多应用程序被设计为通过部分隐藏输入表单来确定用户当前状态而展示不同的页面。但是，在许多情况下，有可能通过代理提交此类隐藏表单的值。在这些案例中，服务器端控制措施必须足够健壮来确保正确的业务逻辑数据。
 
+此外，应用程序必须不依赖于不可编辑元素，下拉框列表或者业务逻辑处理过程的隐藏表单域，因为这些只是在浏览器的环境中不可编辑。用户可以使用代理工具来编辑这些参数并尝试操纵业务逻辑。如果应用程序对外暴露了业务规则数据如商品数量等作为不可编辑域，那么必须在服务器端存在同样的副本来共同作用在业务逻辑处理中。最后，作为应用程序/系统数据，日志系统必须足够安全来阻止读写更新操作。
 
-Additionally, the application must not depend on non-editable controls, drop-down menus or hidden fields for business logic processing because these fields remain non-editable only in the context of the browsers. Users may be able to edit their values using proxy editor tools and try to manipulate business logic. If the application exposes values related to business rules like quantity, etc. as non-editable fields it must maintain a copy on the server side and use the same for business logic processing. Finally, aside application/system data, log systems must be secured to prevent read, writing and updating.
+业务逻辑完整性检查漏洞独特在相关的误用案例是应用程序相关的，如果用户可以改变某些功能，那么他们应该仅能在业务逻辑中的特定时刻进行写或者更新/编辑相关操作。
 
-
-Business logic integrity check vulnerabilities is unique in that these misuse cases are application specific and if users are able to make changes one should only be able to write or update/edit specific artifacts at specific times per the business process logic.
-
-
-The application must be smart enough to check for relational edits and not allow users to submit information directly to the server that is not valid, trusted because it came from a non-editable controls or the user is not authorized to submit through the front end. Additionally, system artifacts such as logs must be “protected” from unauthorized read, writing and removal.
+应用程序必须对编辑拥有足够的检查，不允许用户直接向服务器提交无效信息，不信任不可编辑域的信息或是未授权操作用户提交的信息。此外，系统关键组件如日志系统，应受到“保护”，不能被非授权读取、写入和移除。
 
 
-### Example
+### 测试案例
+
+#### 案例 1
+
+想象一个ASP.NET应用只允许管理员用户来修改其他用户的密码。管理员用户能看到其他用户用户名和密码区域，而其他用户不能。但是，如果非管理员用户通过代理提交该该区域的用户名和密码，就有可能“欺骗”服务器来相信那些请求来自管理员用户，并为其他用户更改密码。
+
+#### 案例 2
+
+大多数web应用使用下拉列表帮助用户进行快速选择状态、生日等等。假设一个项目管理应用允许用户登录，并将他们拥有权限的项目作为下拉框呈现。万一攻击者能找到没有权限的其他项目，并通过代理提交相关信息会如何？应用程序会通过访问请求么？他们不应该被允许，即使已经绕过了授权阶段的业务逻辑检查。
+
+#### 案例 3
+
+假设摩托载具管理系统要求员工最初在市民申请标示或者驾驶许可证时验证每个市民资料和信息。在此时，业务处理过程创建了高级别数据完整性的数据，因为提交的数据被应用程序检查。现在假设应用程序移到了互联网之中，员工可以登录进行全业务服务，用户也可能登录进行自助服务来更新部分信息。此时，攻击者可以使用劫持代理来添加或更新他们没有权限进行控制的数据，并破坏数据完整性（比如给未婚市民提供配偶名字）。这种类型的插入/更新未确认的数据可能摧毁数据完整性，应该被阻止。
+
+#### 案例 4
+
+许多系统包括用于审计和问题处理的日志系统。但是这些日志信息有多少是好的/有效的。他们能被攻击者有意无意改变来破坏完整性么？
 
 
-#### Example 1
+### 如何测试
 
-Imagine an ASP.NET application GUI application that only allows the admin user to change the password for other users in the system. The admin user will see the username and password fields to enter a username and password while other users will not see either field. However, if a non admin user submits information in the username and password field through a proxy they may be able to “trick” the server into believing that the request has come from an admin user and change password of other users.
+#### 通用测试方法
 
-
-#### Example 2
-
-Most web applications have dropdown lists making it easy for the user to quickly select their state, month of birth, etc. Suppose a Project Management application allowed users to login and depending on their privileges presented them with a drop down list of projects they have access to. What happens if an attacker finds the name of another project that they should not have access to and submits the information via a proxy. Will the application give access to the project? They should not have access even though they skipped an authorization business logic check.
-
-
-#### Example 3
-
-Suppose the motor vehicle administration system required an employee initially verify each citizens documentation and information when they issue an identification or driver's license. At this point the business process has created data with a high level of integrity as the integrity of submitted data is checked by the application. Now suppose the application is moved to the Internet so employees can log on for full service or citizens can log on for a reduced self-service application to update certain information. At this point an attacker may be able to use an intercepting proxy to add or update data that they should not have access to and they could destroy the integrity of the data by stating that the citizen was not married but supplying data for a spouse’s name. This type of inserting or updating of unverified data destroys the data integrity and might have been prevented if the business process logic was followed.
+* 通览项目文档寻找应用程序组件（如输入域、数据库或日志）中移动、存储或处理数据/信息的部分。
+* 对于每一个这样的组件，确定那一部分的数据/信息是需要进行逻辑防护的。同时，考虑允许进行逻辑操作（插入、更新、删除）的角色情况。
+* 尝试在每个组件（输入、数据库、日志）中插入、更新、删除不合法的数据/信息。特别使用那些没有权限的用户进行操作。
 
 
-#### Example 4
+#### 特定测试方法 1
 
-Many systems include logging for auditing and troubleshooting purposes. But, how good/valid is the information in these logs? Can they be manipulated by attackers either intentionally or accidentially having their integrity destroyed?
-
-
-### How to Test
-
-#### Generic Testing Method
-
-• Review the project documentation and use exploratory testing looking for parts of the application/system (components i.e. For example, input fields, databases or logs) that move, store or handle data/information.
-
-• For each identified component determine what type of data/information is logically acceptable and what types the application/system should guard against. Also, consider who according to the business logic is allowed to  insert, update and delete data/information and in each component.
-
-• Attempt to insert, update or edit delete the data/information values with invalid data/information into each component (i.e. input, database, or log) by users that .should not be allowed per the busines logic workflow.
+* 使用代理捕获HTTP流量寻找隐藏域。
+* 如果发现隐藏域，弄清楚这些域的功能，使用代理提交不同的数据来尝试绕过业务处理流程，操纵这些无法控制的数值。
 
 
-#### Specific Testing Method 1
+#### 特定测试方法 2
 
-•	Using a proxy capture and HTTP traffic looking for hidden fields.
-
-•	If a hidden field is found see how these fields compare with the GUI application and start interrogating this value through the proxy by submitting different data values trying to circumvent the business process and manipulate values you were not intended to have access to.
-
-
-#### Specific Testing Method 2
-
-•	Using a proxy capture and HTTP traffic looking a place to insert information into areas of the application that are non-editable.
-
-•	If it is found see how these fields compare with the GUI application and start interrogating this value through the proxy by submitting different data values trying to circumvent the business process and manipulate values you were not intended to have access to.
+* 使用代理捕获HTTP流量寻找能够插入那些不可编辑区域的地方。
+* 一旦发现，弄清楚这些域的功能，使用代理提交不同数据进行比较，尝试绕过业务处理流程，控制这些不可编辑域的数据。
 
 
-#### Specific Testing Method 3
+#### 特定测试方法 3
 
-•       List components of the application or system that could be edited, for example logs or databases.
-
-•       For each component identified, try to read, edit or remove its information. For example log files should be identified and Testers should try to manipulate the data/information being collected.
-
-
-### Related Test Cases
-
-All [Input Validation](https://www.owasp.org/index.php/Testing_for_Input_Validation) test cases
+* 列举出可以进行编辑的应用程序组件，比如日志、数据库等。
+* 对于每一个识别出来的组件，尝试读取、修改或移除其中数据。比如识别出来的日志文件，测试人员应该试试操纵其收集的数据。
 
 
+### 相关测试用例
 
-### Tools
-
-• Various system/application tools such as editors and file manipulation tools.
-
-• *OWASP Zed Attack Proxy (ZAP)* - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
-
-ZAP is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications. It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing. ZAP provides automated scanners as well as a set of tools that allow you to find security vulnerabilities manually.
+所有 [输入验证](https://www.owasp.org/index.php/Testing_for_Input_Validation) 相关的测试用例。
 
 
-### References
+### 测试工具
 
-Implementing Referential Integrity and Shared Business Logic in a RDB - http://www.agiledata.org/essays/referentialIntegrity.html
+* 不同的系统/应用工具如编辑器、文件管理工具。
+* *OWASP Zed Attack Proxy (ZAP)* - https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project
 
-On Rules and Integrity Constraints in Database Systems - http://www.comp.nus.edu.sg/~lingtw/papers/IST92.teopk.pdf
-
-Use referential integrity to enforce basic business rules in Oracle - http://www.techrepublic.com/article/use-referential-integrity-to-enforce-basic-business-rules-in-oracle/
-
-Maximizing Business Logic Reuse with Reactive Logic - http://architects.dzone.com/articles/maximizing-business-logic
-
-Tamper Evidence Logging - http://tamperevident.cs.rice.edu/Logging.html
+ZAP是一个非常容易使用的web应用程序渗透测试整合工具。他被设计为符合不同安全经验的人员使用，特别是新接触渗透测试的开发人员和功能测试人员的理想工具。ZAP在提供一系列的用于手工漏洞检测的工具的同时也提供了自动化扫描器。
 
 
-### Remediation
+### 参考资料
 
-The application must be smart enough to check for relational edits and not allow users to submit information directly to the server that is not valid, trusted because it came from a non-editable controls or the user is not authorized to submit through the front end. Additionally, any component that can be edited must have mechanisms in place to prevent unintentional/intentional writing or updating.
+* Implementing Referential Integrity and Shared Business Logic in a RDB - http://www.agiledata.org/essays/referentialIntegrity.html
+* On Rules and Integrity Constraints in Database Systems - http://www.comp.nus.edu.sg/~lingtw/papers/IST92.teopk.pdf
+* Use referential integrity to enforce basic business rules in Oracle - http://www.techrepublic.com/article/use-referential-integrity-to-enforce-basic-business-rules-in-oracle/
+* Maximizing Business Logic Reuse with Reactive Logic - http://architects.dzone.com/articles/maximizing-business-logic
+* Tamper Evidence Logging - http://tamperevident.cs.rice.edu/Logging.html
+
+
+### 整改措施
+
+应用程序必须对编辑拥有足够的检查，不允许用户直接向服务器提交无效信息，不信任不可编辑域的信息或是未授权操作用户提交的信息。此外，任何可能被编辑修改的组件必须拥有对抗有意或无意的修改和升级措施。
