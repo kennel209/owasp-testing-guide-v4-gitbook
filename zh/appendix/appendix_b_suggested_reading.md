@@ -145,6 +145,8 @@
 
 * Damn Vulnerable Web App - http://www.ethicalhack3r.co.uk/damn-vulnerable-web-app/
 
+* Pentest-Ground - https://pentest-ground.com
+
 * Hacme Series from McAfee:
 
     - Hacme Travel - http://www.mcafee.com/us/downloads/free-tools/hacmetravel.aspx
